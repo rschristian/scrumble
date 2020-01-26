@@ -1,3 +1,3 @@
 # Web Visualisations
 
-## Lauren Smells
+## Lauren Smeels
