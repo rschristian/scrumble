@@ -5,12 +5,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc && rollup -c",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src/**/*.{js,ts,tsx} --quiet --fix"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "^2.17.0",
     "@typescript-eslint/parser": "^2.17.0",
     "eslint": "^6.8.0",
@@ -19,7 +18,6 @@
     "eslint-plugin-react": "^7.17.0",
     "preact": "^10.2.1",
     "prettier": "^1.19.1",
-    "rollup": "^1.29.1",
     "typescript": "^3.6.4"
   },
   "peerDependencies": {
