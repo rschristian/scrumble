@@ -1,0 +1,33 @@
+{
+    "name": "test-application",
+    "description": "Application used to test various components like the Gantt Chart",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "serve:dev": "cross-env PORT=3000 preact watch",
+        "serve:prod": "preact build && preact serve",
+        "build": "preact build --analyze",
+        "info": "preact info",
+        "lint": "eslint src/**/*.{js,ts,tsx} --quiet --fix"
+    },
+    "dependencies": {
+        "bulma": "^0.8.0",
+        "cross-env": "^7.0.0",
+        "gantt_chart": "file:../../gantt-chart",
+        "preact": "^10.2.1"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^2.3.1",
+        "@typescript-eslint/parser": "^2.3.1",
+        "eslint": "^6.0.1",
+        "eslint-config-prettier": "^6.9.0",
+        "eslint-plugin-prettier": "^3.1.2",
+        "eslint-plugin-react": "^7.17.0",
+        "node-sass": "^4.13.1",
+        "preact-cli": "^3.0.0-next.19",
+        "prettier": "^1.19.1",
+        "sass-loader": "^7.3.1",
+        "ts-loader": "^6.2.1",
+        "typescript": "^3.7.4"
+    }
+}
