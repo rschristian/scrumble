@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "serve:dev": "PORT=3000 preact watch",
+        "serve:dev": "cross-env PORT=3000 preact watch",
         "serve:prod": "preact build && preact serve",
         "build": "preact build --analyze",
         "info": "preact info",
@@ -22,6 +22,7 @@
         "@types/webpack-env": "^1.15.0",
         "@typescript-eslint/eslint-plugin": "^2.3.1",
         "@typescript-eslint/parser": "^2.3.1",
+        "cross-env": "^7.0.0",
         "eslint": "^6.0.1",
         "eslint-config-prettier": "^6.9.0",
         "eslint-plugin-prettier": "^3.1.2",
