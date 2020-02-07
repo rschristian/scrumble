@@ -1,6 +1,6 @@
 {
-  "name": "Monmouthshire IoT",
-  "short_name": "Monmouthshire IoT",
+  "name": "BT GitLab Issue Boards",
+  "short_name": "BT Boards",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
