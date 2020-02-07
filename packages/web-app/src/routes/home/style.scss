@@ -1,6 +1,7 @@
 .home-page {
-    img {
-        padding: 5px;
-        border: 1px solid #ccc;
+    .navbar-item {
+      img {
+        max-height: 2.5rem;
+      }
     }
 }
