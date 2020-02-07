@@ -2,7 +2,7 @@ import preact, { h } from 'preact';
 import { useState } from 'preact/hooks';
 import { Link } from 'preact-router';
 
-import avatar from 'assets/avatar.png';
+import btIcon from 'assets/icons/icon-1200x1200.png';
 import Footer from 'components/Footer';
 
 import './style.scss';
@@ -18,7 +18,7 @@ const Home: preact.FunctionalComponent = () => {
                         <div class="container">
                             <div class="navbar-brand">
                                 <a class="navbar-item" href="../">
-                                    <img src={avatar} alt="He-Man" />
+                                    <img src={btIcon} alt="BT Logo" />
                                 </a>
                                 <span
                                     class={'navbar-burger burger' + (burgerClicked ? ' is-active' : '')}
