@@ -34,7 +34,7 @@ const Home: preact.FunctionalComponent = () => {
                                     <div class="tabs is-right">
                                         <ul>
                                             <li class="is-active">
-                                                <a>Home</a>
+                                                <Link href="/">Home</Link>
                                             </li>
                                             <li>
                                                 <Link href="/login">Log Out</Link>
