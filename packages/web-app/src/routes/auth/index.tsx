@@ -11,10 +11,10 @@ import Register from 'routes/auth/register';
 import './style.scss';
 
 const Auth: preact.FunctionalComponent = observer(() => {
-    const [title, setTitle] = useState('');
-    const [subtitle, setSubtitle] = useState('');
-    const [form, setForm] = useState(null);
-    const [links, setLinks] = useState(null);
+    const [title, setTitle] = useState<string>('');
+    const [subtitle, setSubtitle] = useState<string>('');
+    const [form, setForm] = useState<preact.ComponentChild>(null);
+    const [links, setLinks] = useState<preact.ComponentChild>(null);
 
     useEffect(() => {
         switch (getCurrentUrl()) {
