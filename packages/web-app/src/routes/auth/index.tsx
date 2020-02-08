@@ -10,11 +10,6 @@ import Register from 'routes/auth/register';
 
 import './style.scss';
 
-enum AuthType {
-    login = '/login',
-    register = '/register',
-}
-
 const Auth: preact.FunctionalComponent = observer(() => {
     const [title, setTitle] = useState('');
     const [subtitle, setSubtitle] = useState('');
@@ -23,7 +18,7 @@ const Auth: preact.FunctionalComponent = observer(() => {
 
     useEffect(() => {
         switch (getCurrentUrl()) {
-            case AuthType.login:
+            case '/login':
                 setTitle('Login');
                 setSubtitle('Please provide your credentials to proceed.');
                 setForm(<Login />);
@@ -33,7 +28,7 @@ const Auth: preact.FunctionalComponent = observer(() => {
                     </Fragment>,
                 );
                 break;
-            case AuthType.register:
+            case '/register':
                 setTitle('Register');
                 setSubtitle('Please provide your details to proceed.');
                 setForm(<Register />);
