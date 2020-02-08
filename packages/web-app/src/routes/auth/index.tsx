@@ -5,8 +5,8 @@ import { observer } from 'mobx-react-lite';
 
 import avatar from 'assets/avatar.png';
 import Footer from 'components/Footer';
-import Login from 'components/Login';
-import Register from 'components/Register';
+import Login from 'routes/auth/login';
+import Register from 'routes/auth/register';
 
 import './style.scss';
 
@@ -25,7 +25,7 @@ const Auth: preact.FunctionalComponent = observer(() => {
         switch (getCurrentUrl()) {
             case AuthType.login:
                 setTitle('Login');
-                setSubtitle('Please login to proceed.');
+                setSubtitle('Please provide your credentials to proceed.');
                 setForm(<Login />);
                 setLinks(
                     <Fragment>
