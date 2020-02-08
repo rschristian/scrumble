@@ -1,0 +1,30 @@
+﻿As a,I want to,So that
+Admin,"Define a new 'Workspace' with a name, description ",I can group projects
+Admin,Associate one or more GitLab projects with a workspace,I can group projects
+Admin,List workspaces,I can see what workspaces are configured
+Admin,Edit a workspace's name or description,I can change names or descriptions after creation
+Admin,Edit a workspaces' list of GitLab projects,I can adjust the makeup of GitLab projects after creation
+Admin,Associate the application with a specific GitLab instance,The application knows which physical instance it should reach out to to retrieve and update GitLab information
+Admin,Set up Users and Passwords,Access to workspaces can be controlled at user level
+Admin,Grant access rights of workspaces to particular users,Workspaces are not 'free to all'
+Admin,Associate GitLab credentials with workspaces/projects,The application can securely call the appropriate GitLab APIs
+Admin,Define a concept of 'Story Points' mapped from GitLab 'labels',It is possible to reason with story points as a concept
+Admin,Define a concept of 'Status' mapped from GitLab 'labels',"It is possible to reason with Status (such as In Progress, TO DO) as a concept"
+Admin,Define a concept of 'Sprint' mapped from GitLab milestone,It is possible to reason with Sprint as a concept
+User,"Create a new Sprint, causing a milestone to be created on GitLab",Sprint is available to assign to issues
+User,Delete a Sprint causing a milestone to be removed on GitLab,Sprints can be cleaned up
+User,Rename a Sprint causing the milestone to be renamed on GitLab,Sprints can be renamed most creation
+User,List workspaces I have access to,User's workspaces can be accessed
+User,"List all the Sprints, together with summary info on count of issues and summed story points in that sprint grouped by status",All Sprints for the workspace can be viewed
+User,"List issues for the workspace showing project name, status, sprint, title, description, story points","A summary view of the Sprint, current and historic can be viewed"
+User,Show a planning view of issues - all issues for a sprint with no story points set,The planning session (estimating new work in the backlog) can be conducted
+User,Update an issue's story points on the planning view causing a corresponding label update on GitLab,The planning session's output can directly update the source GitLab info
+User,Update an issue's status on the planning view causing a corresponding label update on GitLab,The planning session's output (changing status from Open to ToDO for example) can directly update the source GitLab info
+User,Ability to move an issue to a particular Sprint (drag and drop?) causing corresponding milestone to be set on the issue in GitLab,The planning session can assign issues to particular sprints
+User,Show & Tell view of issues - all issues for a sprint that have been Closed,The show and tell session has a clear list of closed tasks that need to be demonstrated
+User,Ad-hoc filtering of issues table,Ad-hoc queries against the issues table can be performed
+User,Ability to add a new issue (with corresponding add onto GitLab),New issues arising from the show&tell can be captured to the backlog
+User,Burn down chart for a Sprint - showing progress against plan,SCRUM Master can evaluate progress of the Sprint daily
+User,"Sprint Metrics view - showing by sprint, metrics showing the total issues completed, issues planned but not completed, and total story points",Current and historic sprints can be evaluated
+User,"Workspace Metrics view - showing key metrics for the workspace - total projects, average velocity etc",Overall workspace metrics can be seen at a glance
+User,Sprint Metrics - expected story points vs actual (worked out from calculating time spent on the card),A judgement on the accuracy of the estimation process can be made
