@@ -14,6 +14,7 @@ const Register: preact.FunctionalComponent = observer(() => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [accessToken, setAccessToken] = useState('');
 
     const [errors, setErrors] = useState('');
     const [inProgress, setInProgress] = useState(false);
@@ -80,6 +81,19 @@ const Register: preact.FunctionalComponent = observer(() => {
                         onInput={(e): void => {
                             setErrors('');
                             setPassword((e.target as HTMLInputElement).value);
+                        }}
+                    />
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input
+                        class="input is-large"
+                        type="text"
+                        placeholder="Your Personal Access Token"
+                        value={accessToken}
+                        onInput={(e): void => {
+                            setAccessToken((e.target as HTMLInputElement).value);
                         }}
                     />
                 </div>
