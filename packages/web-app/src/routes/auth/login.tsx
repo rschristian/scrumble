@@ -35,7 +35,7 @@ const Login: preact.FunctionalComponent = observer(() => {
                     <input
                         class="input is-large"
                         type="email"
-                        placeholder="Your Email"
+                        placeholder="Email"
                         value={email}
                         onInput={(e): void => {
                             setErrors('');
@@ -49,7 +49,7 @@ const Login: preact.FunctionalComponent = observer(() => {
                     <input
                         class="input is-large"
                         type="password"
-                        placeholder="Your Password"
+                        placeholder="Password"
                         value={password}
                         onInput={(e): void => {
                             setErrors('');

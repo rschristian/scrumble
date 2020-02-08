@@ -40,7 +40,7 @@ const Register: preact.FunctionalComponent = observer(() => {
                     <input
                         class="input is-large"
                         type="text"
-                        placeholder="Your First Name"
+                        placeholder="First Name"
                         value={firstName}
                         onInput={(e): void => setFirstName((e.target as HTMLInputElement).value)}
                     />
@@ -51,7 +51,7 @@ const Register: preact.FunctionalComponent = observer(() => {
                     <input
                         class="input is-large"
                         type="text"
-                        placeholder="Your Last Name"
+                        placeholder="Last Name"
                         value={lastName}
                         onInput={(e): void => setLastName((e.target as HTMLInputElement).value)}
                     />
@@ -62,7 +62,7 @@ const Register: preact.FunctionalComponent = observer(() => {
                     <input
                         class="input is-large"
                         type="email"
-                        placeholder="Your Email"
+                        placeholder="Email"
                         value={email}
                         onInput={(e): void => {
                             setErrors('');
@@ -76,7 +76,7 @@ const Register: preact.FunctionalComponent = observer(() => {
                     <input
                         class="input is-large"
                         type="password"
-                        placeholder="Your Password"
+                        placeholder="Password"
                         value={password}
                         onInput={(e): void => {
                             setErrors('');
@@ -90,7 +90,7 @@ const Register: preact.FunctionalComponent = observer(() => {
                     <input
                         class="input is-large"
                         type="text"
-                        placeholder="Your Personal Access Token"
+                        placeholder="Personal Access Token"
                         value={accessToken}
                         onInput={(e): void => {
                             setAccessToken((e.target as HTMLInputElement).value);
