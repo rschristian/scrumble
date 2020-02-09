@@ -1,50 +1,16 @@
 import preact, { h } from 'preact';
-import { useState } from 'preact/hooks';
-import { Link } from 'preact-router';
 
-import btIcon from 'assets/icons/icon-1200x1200.png';
 import Footer from 'components/Footer';
+import Navbar from 'components/Navbar';
 
 import './style.scss';
 
 const Home: preact.FunctionalComponent = () => {
-    const [burgerClicked, setBurgerClicked] = useState(false);
-
     return (
         <div class="home-page">
             <section class="hero is-fullheight is-default is-bold">
                 <div class="hero-head">
-                    <nav class="navbar">
-                        <div class="container">
-                            <div class="navbar-brand">
-                                <a class="navbar-item" href="../">
-                                    <img src={btIcon} alt="BT Logo" />
-                                </a>
-                                <span
-                                    class={'navbar-burger burger' + (burgerClicked ? ' is-active' : '')}
-                                    onClick={(): void => setBurgerClicked(!burgerClicked)}
-                                >
-                                    <span />
-                                    <span />
-                                    <span />
-                                </span>
-                            </div>
-                            <div class={'navbar-menu' + (burgerClicked ? ' is-active' : '')}>
-                                <div class="navbar-end">
-                                    <div class="tabs is-right">
-                                        <ul>
-                                            <li class="is-active">
-                                                <Link href="/">Home</Link>
-                                            </li>
-                                            <li>
-                                                <Link href="/login">Log Out</Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </nav>
+                    <Navbar />
                 </div>
                 <div class="hero-body">
                     <div class="container has-text-centered">
