@@ -1,5 +1,6 @@
 import preact, { h } from 'preact';
 
+import kanbanBoardExample from 'assets/kanban-board-example.png';
 import Footer from 'components/Footer';
 import Navbar from 'components/Navbar';
 
@@ -17,15 +18,15 @@ const Home: preact.FunctionalComponent = () => {
                         <div class="columns is-vcentered">
                             <div class="column is-5">
                                 <figure class="image is-4by3">
-                                    <img src="https://picsum.photos/800/600/?random" alt="Description" />
+                                    <img src={kanbanBoardExample} alt="Example of a Kanban Board" />
                                 </figure>
                             </div>
                             <div class="column is-6 is-offset-1">
-                                <h1 class="title is-2">Superhero Scaffolding</h1>
-                                <h2 class="subtitle is-4">Let this cover page describe a product or service.</h2>
+                                <h1 class="title is-2">It Appears that you do not have any work spaces</h1>
+                                <h2 class="subtitle is-4">Want to get started?</h2>
                                 <br />
                                 <p class="has-text-centered">
-                                    <a class="button is-medium is-info is-outlined">Learn more</a>
+                                    <a class="button is-medium is-info is-outlined">Begin</a>
                                 </p>
                             </div>
                         </div>
