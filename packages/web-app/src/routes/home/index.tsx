@@ -1,4 +1,4 @@
-import preact, { h } from 'preact';
+import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 
 import Footer from 'components/Footer';
@@ -8,7 +8,7 @@ import Initial from 'routes/home/initial';
 
 import './style.scss';
 
-const Home: preact.FunctionalComponent = () => {
+const Home: FunctionalComponent = () => {
     const [newUser, setNewUser] = useState(true);
 
     const handleBegin = (): void => {

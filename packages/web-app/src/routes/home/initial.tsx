@@ -1,4 +1,4 @@
-import preact, { h, Fragment } from 'preact';
+import { h, Fragment, FunctionalComponent} from 'preact';
 import { useState } from 'preact/hooks';
 
 import kanbanBoardExample from 'assets/kanban-board-example.png';
@@ -8,7 +8,7 @@ interface IProps {
     show: boolean;
 }
 
-const Initial: preact.FunctionalComponent<IProps> = (props: IProps) => {
+const Initial: FunctionalComponent<IProps> = (props: IProps) => {
     const [hiding, setHiding] = useState(false);
     const [hidden, setHidden] = useState(!props.show);
 

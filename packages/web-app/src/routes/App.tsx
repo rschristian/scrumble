@@ -1,4 +1,4 @@
-import preact, { h } from 'preact';
+import { FunctionalComponent, h } from 'preact';
 import { useContext, useState } from 'preact/hooks';
 import { getCurrentUrl, route, Route, Router, RouterOnChangeArgs } from 'preact-router';
 
@@ -6,7 +6,7 @@ import Auth from 'routes/auth';
 import Home from 'routes/home';
 import { AuthStoreContext } from 'stores';
 
-const App: preact.FunctionalComponent = () => {
+const App: FunctionalComponent = () => {
     const authStore = useContext(AuthStoreContext);
 
     const [currentUrl, setCurrentUrl] = useState<string>(getCurrentUrl());

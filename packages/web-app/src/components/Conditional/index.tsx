@@ -1,11 +1,11 @@
-import preact from 'preact';
+import { FunctionalComponent, VNode } from 'preact';
 
 interface IProps {
     if: boolean;
-    children: preact.VNode;
+    children: VNode;
 }
 
-const Conditional: preact.FunctionalComponent<IProps> = (props: IProps) => {
+const Conditional: FunctionalComponent<IProps> = (props: IProps) => {
     return props.if ? props.children : null;
 };
 

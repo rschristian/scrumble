@@ -1,4 +1,4 @@
-import preact, { h, Fragment } from 'preact';
+import { Fragment, FunctionalComponent, h } from 'preact';
 
 import icon from 'assets/icons/icon-1200x1200.png';
 
@@ -6,7 +6,7 @@ interface IProps {
     show: boolean;
 }
 
-const CreateWorkspace: preact.FunctionalComponent<IProps> = (props: IProps) => {
+const CreateWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
     return (
         <Fragment>
             <div class={'column is-5' + (props.show ? '' : ' is-hidden')}>

@@ -1,4 +1,4 @@
-import preact, { h, Fragment } from 'preact';
+import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { getCurrentUrl, Link } from 'preact-router';
 import { observer } from 'mobx-react-lite';
@@ -9,7 +9,7 @@ import Register from 'routes/auth/register';
 
 import './style.scss';
 
-const Auth: preact.FunctionalComponent = observer(() => {
+const Auth: FunctionalComponent = observer(() => {
     const [title, setTitle] = useState<string>('');
     const [subtitle, setSubtitle] = useState<string>('');
     const [form, setForm] = useState<preact.ComponentChild>(null);

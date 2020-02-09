@@ -1,4 +1,4 @@
-import preact, { h } from 'preact';
+import { FunctionalComponent, h } from 'preact';
 import { useContext, useEffect, useState } from 'preact/hooks';
 import { route } from 'preact-router';
 import { observer } from 'mobx-react-lite';
@@ -7,7 +7,7 @@ import { LogIn } from 'react-feather';
 import { LoginUser } from 'models/User';
 import { AuthStoreContext } from 'stores';
 
-const Login: preact.FunctionalComponent = observer(() => {
+const Login: FunctionalComponent = observer(() => {
     const authStore = useContext(AuthStoreContext);
 
     const [email, setEmail] = useState('');
