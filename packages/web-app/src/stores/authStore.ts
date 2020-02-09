@@ -7,14 +7,21 @@ class AuthStore {
     @observable user: User | undefined;
     @observable isAuthenticated = false;
 
+    isUser = (result: User | string): result is User => {
+        return !!(result as User).token;
+    };
+
     @action async login(credentials: LoginUser): Promise<string | void> {
         return await login(credentials).then((result) => {
-            if (typeof result == 'string') {
-                return result;
-            } else {
+            if (this.isUser(result)) {
                 this.user = result;
                 this.isAuthenticated = true;
                 return;
+            }
+            if (typeof result == 'string') {
+                return result;
+            } else {
+                return 'Unknown Server Error';
             }
         });
     }
@@ -27,12 +34,15 @@ class AuthStore {
 
     @action async register(credentials: RegistrationUser): Promise<string | void> {
         return await register(credentials).then((result) => {
-            if (typeof result == 'string') {
-                return result;
-            } else {
+            if (this.isUser(result)) {
                 this.user = result;
                 this.isAuthenticated = true;
                 return;
+            }
+            if (typeof result == 'string') {
+                return result;
+            } else {
+                return 'Unknown Server Error';
             }
         });
     }
