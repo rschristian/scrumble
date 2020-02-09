@@ -3,7 +3,6 @@ import { useEffect, useState } from 'preact/hooks';
 import { getCurrentUrl, Link } from 'preact-router';
 import { observer } from 'mobx-react-lite';
 
-import avatar from 'assets/avatar.png';
 import Footer from 'components/Footer';
 import Login from 'routes/auth/login';
 import Register from 'routes/auth/register';
@@ -54,7 +53,7 @@ const Auth: preact.FunctionalComponent = observer(() => {
                             <h5 class="subtitle">{subtitle}</h5>
                             <div class="box">
                                 <figure class="avatar">
-                                    <img src={avatar} alt="he-man" />
+                                    <img src="https://picsum.photos/800/600/?random" alt="Random Image" />
                                 </figure>
                                 {form}
                             </div>
