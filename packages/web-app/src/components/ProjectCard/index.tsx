@@ -3,6 +3,8 @@ import { useState } from 'preact/hooks';
 
 import { Project } from 'models/Project';
 
+import './style.scss';
+
 interface IProps {
     projectKey: number;
     project: Project;
