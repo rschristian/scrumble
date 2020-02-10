@@ -1,4 +1,4 @@
-import { Fragment, FunctionalComponent, h } from 'preact';
+import { ComponentChild, Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { getCurrentUrl, Link } from 'preact-router';
 import { observer } from 'mobx-react-lite';
@@ -12,8 +12,8 @@ import './style.scss';
 const Auth: FunctionalComponent = observer(() => {
     const [title, setTitle] = useState<string>('');
     const [subtitle, setSubtitle] = useState<string>('');
-    const [form, setForm] = useState<preact.ComponentChild>(null);
-    const [links, setLinks] = useState<preact.ComponentChild>(null);
+    const [form, setForm] = useState<ComponentChild>(null);
+    const [links, setLinks] = useState<ComponentChild>(null);
 
     useEffect(() => {
         switch (getCurrentUrl()) {
