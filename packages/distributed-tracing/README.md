@@ -31,7 +31,7 @@ This will start the Postgres DB in the background. To populate the database, run
 docker run --rm \
     -v "$PWD:/volume" \
     -w /volume \
-    --network="rust-rocket-template_default" \
+    --network="distributed-tracing_default" \
     -it ryanchristian4427/diesel-cli migration run
 ```
 
