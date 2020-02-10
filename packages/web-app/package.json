@@ -9,6 +9,21 @@
         "info": "preact info",
         "lint": "eslint src/**/*.{js,ts,tsx} --quiet --fix"
     },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{css,md,scss}": [
+            "prettier --write",
+            "git add"
+        ],
+        "*.{js,jsx,ts,tsx}": [
+            "eslint --fix",
+            "git add"
+        ]
+    },
     "dependencies": {
         "bulma": "^0.8.0",
         "mobx": "^5.15.4",
@@ -26,6 +41,8 @@
         "eslint-config-prettier": "^6.10.0",
         "eslint-plugin-prettier": "^3.1.2",
         "eslint-plugin-react": "^7.18.3",
+        "husky": "^4.2.1",
+        "lint-staged": "^10.0.7",
         "node-sass": "^4.13.1",
         "preact-cli": "^3.0.0-next.19",
         "prettier": "^1.19.1",
