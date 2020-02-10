@@ -1,0 +1,25 @@
+[package]
+name = "distributed-tracing"
+version = "1.0.0"
+authors = ["Ryan Christian <ryanchristian4427@gmail.com>"]
+description = "A RESTful API template with authentication"
+edition = "2018"
+
+[dependencies]
+chrono = {version = "0.4.10", features = ["serde"]}
+diesel = {version = "1.4.3", features = ["postgres", "chrono"]}
+frank_jwt = "3.1.2"
+serde = {version = "1.0.104", features = ["derive"]}
+serde_json = "1.0.47"
+rocket = { version = "0.4.2"}
+rust-crypto = "0.2.36"
+validator = "0.10.0"
+validator_derive = "0.10.0"
+
+[dependencies.rocket_contrib]
+version = "0.4.2"
+default-features = false
+features = ["json", "diesel_postgres_pool"]
+
+[dev-dependencies]
+once_cell = "1.3.1"
