@@ -1,4 +1,4 @@
-import { h, Fragment, FunctionalComponent} from 'preact';
+import { h, Fragment, FunctionalComponent } from 'preact';
 import { useState } from 'preact/hooks';
 
 import kanbanBoardExample from 'assets/kanban-board-example.png';

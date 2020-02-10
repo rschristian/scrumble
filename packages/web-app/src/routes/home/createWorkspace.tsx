@@ -1,15 +1,15 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-
-import icon from 'assets/icons/icon-1200x1200.png';
-import { Project } from 'models/Project';
 import { useState } from 'preact/hooks';
+
 import ProjectCard from 'components/ProjectCard';
+import { Project } from 'models/Project';
 
 interface IProps {
     show: boolean;
 }
 
 const tempProjectDataList: Array<Project> = [
+    // prettier-ignore
     { id: 1, name: 'Lauren\'s Bees', ownerId: 1, ownerName: 'Lauren Heymer', url: '', avatarUrl: null },
     { id: 2, name: 'Context Switching', ownerId: 2, ownerName: 'Lauren Heymer', url: '', avatarUrl: null },
     { id: 3, name: 'Fox Gloves', ownerId: 3, ownerName: 'Lauren Heymer', url: '', avatarUrl: null },
