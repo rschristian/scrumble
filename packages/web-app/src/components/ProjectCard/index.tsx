@@ -19,9 +19,9 @@ const ProjectCard: FunctionalComponent<IProps> = (props: IProps) => {
     return (
         <div className={'card is-clickable ' + (props.active ? 'active' : '')} onClick={handleOnClick}>
             <div>
-                <img src={props.project.avatar_url} alt="Project's Avatar" />
+                <img src={props.project.avatarUrl} alt="Project's Avatar" />
                 <span>
-                    <small>Project Owner: {props.project.owner_name}</small>
+                    <small>Project Owner: {props.project.ownerName}</small>
                 </span>
                 <strong>{props.project.name}</strong>
             </div>
