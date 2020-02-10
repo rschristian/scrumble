@@ -1,5 +1,9 @@
 @charset "utf-8";
 @import 'variables';
 
+.is-clickable {
+  cursor: pointer;
+}
+
 // Importing all of Bulma
 @import '~bulma/bulma.sass';
