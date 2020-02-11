@@ -48,7 +48,7 @@ pub fn from_env() -> Config {
     let mut database_config = HashMap::new();
     let mut databases = HashMap::new();
     let database_url =
-        env::var("DATABASE_URL").expect("No DATABASE_URL environment variable found");
+        env::var("ROCKET_DATABASE_URL").expect("No DATABASE_URL environment variable found");
     database_config.insert("url", Value::from(database_url));
     databases.insert("diesel_postgres_pool", Value::from(database_config));
 
