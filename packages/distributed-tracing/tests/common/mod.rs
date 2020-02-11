@@ -5,7 +5,7 @@
 use once_cell::sync::OnceCell;
 use rocket::http::{ContentType, Header, Status};
 use rocket::local::{Client, LocalResponse};
-use rust_rocket_template;
+use distributed_tracing;
 use serde_json::Value;
 
 pub const FIRST_NAME: &'static str = "smoke";
@@ -26,7 +26,7 @@ pub type Token = String;
 pub fn test_client() -> &'static Client {
     static INSTANCE: OnceCell<Client> = OnceCell::new();
     INSTANCE.get_or_init(|| {
-        let rocket = rust_rocket_template::rocket();
+        let rocket = distributed_tracing::rocket();
         Client::new(rocket).expect("valid rocket instance")
     })
 }
