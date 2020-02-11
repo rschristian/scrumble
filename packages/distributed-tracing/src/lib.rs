@@ -17,6 +17,7 @@ mod models;
 mod schema;
 mod services;
 
+use dotenv::dotenv;
 use rocket::{Rocket, Route};
 use rocket_contrib::json::JsonValue;
 
@@ -29,7 +30,7 @@ fn not_found() -> JsonValue {
 }
 
 fn rocket_instance(mounts: Vec<(&str, Vec<Route>)>) -> Rocket {
-    let mut instance = rocket::ignite();
+    let mut instance = rocket::custom(config::from_env());
 
     for (path, methods) in mounts {
         instance = instance.mount(path, methods);
@@ -37,6 +38,7 @@ fn rocket_instance(mounts: Vec<(&str, Vec<Route>)>) -> Rocket {
 
     instance
         .attach(db::Conn::fairing())
+        .attach(config::AppState::manage())
         .register(catchers![not_found])
 }
 
@@ -45,5 +47,6 @@ fn mounts() -> Vec<(&'static str, Vec<Route>)> {
 }
 
 pub fn rocket() -> rocket::Rocket {
+    dotenv().ok();
     rocket_instance(mounts())
 }

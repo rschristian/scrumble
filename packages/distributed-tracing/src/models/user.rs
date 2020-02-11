@@ -26,14 +26,14 @@ pub struct UserAuth<'a> {
 }
 
 impl User {
-    pub fn to_user_auth(&self) -> UserAuth {
+    pub fn to_user_auth(&self, secret: &[u8]) -> UserAuth {
         let exp = config::token_expire_time();
         let token = Auth {
             id: self.id,
             email: self.email.clone(),
             exp: exp.timestamp(),
         }
-        .token();
+        .token(secret);
 
         UserAuth {
             email: &self.email,
