@@ -110,21 +110,21 @@ mod tests {
     }
 
     // TODO: Move to integrations tests, can't test token here if the secret is handled by Rocket
-//    #[test]
-//    fn test_decode_token() {
-//        let auth: Auth = decode_token(JWT_TOKEN).unwrap();
-//
-//        assert_eq!(2, auth.id);
-//        assert_eq!("ryan@gmail.com", auth.email);
-//    }
-//
-//    #[test]
-//    fn test_decode_token_bad_signature() {
-//        const JWT_TOKEN_BAD_SIGNATURE: &'static str =
-//            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNtb2tldGVzdEBleGFtcGxlL\
-//            mNvbSIsImV4cCI6MTY4NjAyNzUxNCwiaWQiOjF9.6k4orw9QbAJ9r8Si8LwIQwfz15Efx2QPH2mvMHrDq8E";
-//
-//        let auth: Option<Auth> = decode_token(JWT_TOKEN_BAD_SIGNATURE);
-//        assert!(auth.is_none());
-//    }
+    //    #[test]
+    //    fn test_decode_token() {
+    //        let auth: Auth = decode_token(JWT_TOKEN).unwrap();
+    //
+    //        assert_eq!(2, auth.id);
+    //        assert_eq!("ryan@gmail.com", auth.email);
+    //    }
+    //
+    //    #[test]
+    //    fn test_decode_token_bad_signature() {
+    //        const JWT_TOKEN_BAD_SIGNATURE: &'static str =
+    //            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNtb2tldGVzdEBleGFtcGxlL\
+    //            mNvbSIsImV4cCI6MTY4NjAyNzUxNCwiaWQiOjF9.6k4orw9QbAJ9r8Si8LwIQwfz15Efx2QPH2mvMHrDq8E";
+    //
+    //        let auth: Option<Auth> = decode_token(JWT_TOKEN_BAD_SIGNATURE);
+    //        assert!(auth.is_none());
+    //    }
 }

@@ -2,10 +2,10 @@
 
 //! This file contains utility functions used by all tests.
 
+use distributed_tracing;
 use once_cell::sync::OnceCell;
 use rocket::http::{ContentType, Header, Status};
 use rocket::local::{Client, LocalResponse};
-use distributed_tracing;
 use serde_json::Value;
 
 pub const FIRST_NAME: &'static str = "smoke";
