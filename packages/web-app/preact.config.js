@@ -1,3 +1,6 @@
+import purgeCssModule from '@fullhuman/postcss-purgecss';
+import tailwindCss from 'tailwindcss';
+
 export default {
     /**
      * Function that mutates the original webpack config.
@@ -9,6 +12,22 @@ export default {
      * @param {object} options - this is mainly relevant for plugins (will always be empty in the config), default to an empty object
      **/
     webpack(config, env, helpers, options) {
+        const purgecss = purgeCssModule({
+            content: ['./src/**/*.js'],
+            defaultExtractor: (content) => content.match(params.regex) || [],
+        });
+
+        const postCssLoaders = helpers.getLoadersByName(config, 'postcss-loader');
+        postCssLoaders.forEach(({ loader }) => {
+            const plugins = loader.options.plugins;
+            plugins.unshift(tailwindCss);
+
+            // Add PurgeCSS only in production.
+            if (env.production) {
+                plugins.push(purgecss);
+            }
+        });
+
         const css = helpers.getLoadersByName(config, 'css-loader')[0];
         css.loader.options.modules = false;
 
