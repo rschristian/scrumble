@@ -23,7 +23,6 @@
         ]
     },
     "dependencies": {
-        "bulma": "^0.8.0",
         "mobx": "^5.15.4",
         "mobx-react-lite": "^1.5.2",
         "preact": "^10.3.1",
