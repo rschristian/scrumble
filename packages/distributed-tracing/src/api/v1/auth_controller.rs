@@ -58,9 +58,11 @@ pub struct LoginUser {
     user: LoginUserData,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Validate)]
 struct LoginUserData {
+    #[validate(email)]
     email: Option<String>,
+    #[validate(length(min = 8))]
     password: Option<String>,
 }
 
