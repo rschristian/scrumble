@@ -73,7 +73,7 @@ pub fn users_login(
 
     let user = user.into_inner().user;
 
-    let mut extractor = FieldValidator::default();
+    let mut extractor = FieldValidator::validate(&user);
     let email = extractor.extract("email", user.email);
     let password = extractor.extract("password", user.password);
     extractor.check()?;
