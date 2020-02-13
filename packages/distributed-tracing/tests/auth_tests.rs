@@ -81,7 +81,6 @@ fn test_register_with_invalid_email() {
     assert_eq!(response.status(), Status::UnprocessableEntity);
 
     let value = common::response_json_value(response);
-    println!("{}", value);
     let error = value
         .get("errors")
         .and_then(|errors| errors.get("email"))
@@ -104,7 +103,6 @@ fn test_register_with_invalid_password() {
     assert_eq!(response.status(), Status::UnprocessableEntity);
 
     let value = common::response_json_value(response);
-    println!("{}", value);
     let error = value
         .get("errors")
         .and_then(|errors| errors.get("password"))
