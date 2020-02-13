@@ -7,6 +7,8 @@ use rocket::State;
 use rocket_contrib::json::{Json, JsonValue};
 use serde::Deserialize;
 use validator::Validate;
+use rustracing_jaeger::Tracer;
+use rustracing::sampler::AllSampler;
 
 #[derive(Deserialize)]
 pub struct NewUser {
@@ -29,6 +31,7 @@ pub fn users_register(
     conn: Conn,
     state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
+    let tracer = Tracer::with_sender(AllSampler, state.sender_context.clone());
     let parent_span = tracer.span("Register::handle_request").start();
 
     let new_user = new_user.into_inner().user;
@@ -77,6 +80,7 @@ pub fn users_login(
     conn: Conn,
     state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
+    let tracer = Tracer::with_sender(AllSampler, state.sender_context.clone());
     let parent_span = tracer.span("Login::handle_request").start();
 
     let user = user.into_inner().user;
