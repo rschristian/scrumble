@@ -4,6 +4,7 @@ use crate::schema::users;
 
 use diesel::prelude::*;
 use diesel::result::{DatabaseErrorKind, Error};
+use rustracing_jaeger::{Span, Tracer};
 
 #[derive(Insertable)]
 #[table_name = "users"]
@@ -35,7 +36,14 @@ pub fn register(
     email: &str,
     hashed_password: &str,
     conn: Conn,
+    tracer: &Tracer,
+    span: Span,
 ) -> Result<User, UserCreationError> {
+    let _span = tracer
+        .span("Register::repository_layer")
+        .child_of(&span)
+        .start();
+
     diesel::insert_into(users::table)
         .values(NewUser {
             first_name,
@@ -47,7 +55,12 @@ pub fn register(
         .map_err(Into::into)
 }
 
-pub fn login(email: &str, conn: Conn) -> Option<User> {
+pub fn login(email: &str, conn: Conn, tracer: &Tracer, span: Span) -> Option<User> {
+    let _span = tracer
+        .span("Login::repository_layer")
+        .child_of(&span)
+        .start();
+
     users::table
         .filter(users::email.eq(email))
         .get_result::<User>(&*conn)

@@ -29,7 +29,7 @@ pub fn users_register(
     conn: Conn,
     state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
-    let _span = state.tracer.span("Register::handle_request").start();
+    let parent_span = tracer.span("Register::handle_request").start();
 
     let new_user = new_user.into_inner().user;
 
@@ -40,14 +40,22 @@ pub fn users_register(
     let password = extractor.extract("password", new_user.password);
     extractor.check()?;
 
-    auth_service::register(&first_name, &last_name, &email, &password, conn)
-        .map(|user| json!({ "user": user.to_user_auth(&state.secret) }))
-        .map_err(|error| {
-            let _field = match error {
-                UserCreationError::DuplicatedEmail => "email",
-            };
-            Errors::new(&[(_field, "has already been taken")])
-        })
+    auth_service::register(
+        &first_name,
+        &last_name,
+        &email,
+        &password,
+        conn,
+        &tracer,
+        parent_span,
+    )
+    .map(|user| json!({ "user": user.to_user_auth(&state.secret) }))
+    .map_err(|error| {
+        let _field = match error {
+            UserCreationError::DuplicatedEmail => "email",
+        };
+        Errors::new(&[(_field, "has already been taken")])
+    })
 }
 
 #[derive(Deserialize)]
@@ -69,7 +77,7 @@ pub fn users_login(
     conn: Conn,
     state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
-    let _span = state.tracer.span("Login::handle_request").start();
+    let parent_span = tracer.span("Login::handle_request").start();
 
     let user = user.into_inner().user;
 
@@ -78,7 +86,7 @@ pub fn users_login(
     let password = extractor.extract("password", user.password);
     extractor.check()?;
 
-    auth_service::login(&email, &password, conn)
+    auth_service::login(&email, &password, conn, &tracer, parent_span)
         .map(|user| json!({ "user": user.to_user_auth(&state.secret) }))
         .ok_or_else(|| Errors::new(&[("email or password", "is invalid")]))
 }
