@@ -11,10 +11,6 @@ pub struct User {
     pub email: String,
     #[serde(skip_serializing)]
     pub hashed_password: String,
-    //TODO Figure out how authentication tokens should be handled
-    //    pub activated: bool,
-    //    pub authentication_token: String,
-    //    pub expiry_datetime: DateTime<Utc>
 }
 
 #[derive(Serialize)]
