@@ -77,11 +77,3 @@ pub fn users_login(
         .map(|user| json!({ "user": user.to_user_auth(&state.secret) }))
         .ok_or_else(|| Errors::new(&[("email or password", "is invalid")]))
 }
-
-#[get("/")]
-pub fn hello_world(state: State<AppState>) -> JsonValue {
-    let _span = state.tracer
-        .span("Hello::handle_request")
-        .start();
-    json!("Hello World!")
-}
