@@ -1,6 +1,7 @@
 use chrono::{DateTime, Duration, Utc};
 use rocket::config::{Config, Environment, Value};
 use rocket::fairing::AdHoc;
+use rustracing_jaeger::Tracer;
 use std::collections::HashMap;
 use std::env;
 
@@ -16,10 +17,11 @@ pub fn token_expire_time() -> DateTime<Utc> {
 
 pub struct AppState {
     pub secret: Vec<u8>,
+    pub tracer: Tracer,
 }
 
 impl AppState {
-    pub fn manage() -> AdHoc {
+    pub fn manage(tracer: Tracer) -> AdHoc {
         AdHoc::on_attach("Manage config", |rocket| {
             let secret = env::var("SECRET_KEY").unwrap_or_else(|err| {
                 if cfg!(debug_assertions) {
@@ -31,6 +33,7 @@ impl AppState {
 
             Ok(rocket.manage(AppState {
                 secret: secret.into_bytes(),
+                tracer,
             }))
         })
     }
