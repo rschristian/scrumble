@@ -69,8 +69,8 @@ fn test_register_with_duplicated_email() {
 }
 
 #[test]
-/// Registration with an invalid email must fail
-fn test_register_with_invalid_email() {
+/// Registration with an invalid email format must fail
+fn test_register_with_invalid_email_format() {
     let client = common::test_client();
     let response = &mut client
         .post("/api/v1/users/register")
@@ -91,8 +91,8 @@ fn test_register_with_invalid_email() {
 }
 
 #[test]
-/// Registration with an invalid password must fail
-fn test_register_with_invalid_password() {
+/// Registration with an invalid password format must fail
+fn test_register_with_invalid_password_format() {
     let client = common::test_client();
     let response = &mut client
         .post("/api/v1/users/register")
@@ -132,7 +132,7 @@ fn test_incorrect_login() {
     let response = &mut client
         .post("/api/v1/users/login")
         .header(ContentType::JSON)
-        .body(json_string!({"user": {"email": EMAIL, "password": "foo"}}))
+        .body(json_string!({"user": {"email": EMAIL, "password": "foobarfoobar"}}))
         .dispatch();
 
     assert_eq!(response.status(), Status::UnprocessableEntity);
@@ -148,6 +148,52 @@ fn test_incorrect_login() {
         .as_str();
 
     assert_eq!(login_error, Some("is invalid"));
+}
+
+#[test]
+/// Login with an invalid email format must fail
+fn test_login_with_invalid_email_format() {
+    let client = common::test_client();
+    let response = &mut client
+        .post("/api/v1/users/login")
+        .header(ContentType::JSON)
+        .body(json_string!({"user": {"email": "smoketest", "password": PASSWORD}}))
+        .dispatch();
+
+    assert_eq!(response.status(), Status::UnprocessableEntity);
+
+    let value = common::response_json_value(response);
+    println!("{}", value);
+    let error = value
+        .get("errors")
+        .and_then(|errors| errors.get("email"))
+        .and_then(|errors| errors.get(0))
+        .and_then(|error| error.as_str());
+
+    assert_eq!(error, Some("email"))
+}
+
+#[test]
+/// Login with an invalid password format must fail
+fn test_login_with_invalid_password_format() {
+    let client = common::test_client();
+    let response = &mut client
+        .post("/api/v1/users/login")
+        .header(ContentType::JSON)
+        .body(json_string!({"user": {"email": EMAIL, "password": "pw"}}))
+        .dispatch();
+
+    assert_eq!(response.status(), Status::UnprocessableEntity);
+
+    let value = common::response_json_value(response);
+    println!("{}", value);
+    let error = value
+        .get("errors")
+        .and_then(|errors| errors.get("password"))
+        .and_then(|errors| errors.get(0))
+        .and_then(|error| error.as_str());
+
+    assert_eq!(error, Some("length"))
 }
 
 // Utility
