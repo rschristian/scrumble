@@ -22,7 +22,9 @@ pub enum UserCreationError {
 impl From<Error> for UserCreationError {
     fn from(err: Error) -> UserCreationError {
         if let Error::DatabaseError(DatabaseErrorKind::UniqueViolation, info) = &err {
-            if let Some("unique_email") = info.constraint_name() { return UserCreationError::DuplicatedEmail }
+            if let Some("unique_email") = info.constraint_name() {
+                return UserCreationError::DuplicatedEmail;
+            }
         }
         panic!("Error creating user: {:?}", err)
     }

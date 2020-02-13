@@ -22,8 +22,8 @@ mod services;
 use dotenv::dotenv;
 use rocket::{Rocket, Route};
 use rocket_contrib::json::JsonValue;
-use rustracing_jaeger::{reporter::JaegerCompactReporter, Tracer};
 use rustracing::sampler::AllSampler;
+use rustracing_jaeger::{reporter::JaegerCompactReporter, Tracer};
 
 #[catch(404)]
 fn not_found() -> JsonValue {

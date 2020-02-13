@@ -29,9 +29,7 @@ pub fn users_register(
     conn: Conn,
     state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
-    let _span = state.tracer
-        .span("Register::handle_request")
-        .start();
+    let _span = state.tracer.span("Register::handle_request").start();
 
     let new_user = new_user.into_inner().user;
 
@@ -40,7 +38,6 @@ pub fn users_register(
     let last_name = extractor.extract("last_name", new_user.last_name);
     let email = extractor.extract("email", new_user.email);
     let password = extractor.extract("password", new_user.password);
-
     extractor.check()?;
 
     auth_service::register(&first_name, &last_name, &email, &password, conn)
@@ -72,9 +69,8 @@ pub fn users_login(
     conn: Conn,
     state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
-    let _span = state.tracer
-        .span("Login::handle_request")
-        .start();
+    let _span = state.tracer.span("Login::handle_request").start();
+
     let user = user.into_inner().user;
 
     let mut extractor = FieldValidator::default();
