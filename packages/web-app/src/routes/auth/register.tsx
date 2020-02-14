@@ -1,7 +1,14 @@
 import { FunctionalComponent, h } from 'preact';
 import { useContext, useEffect, useState } from 'preact/hooks';
 import { route } from 'preact-router';
-import { observer } from 'mobx-react-lite';
+import { observer as mobxObserver } from 'mobx-react-lite';
+
+// Re-typing functions with generics by assigning them to variables
+// doesn't seem to work, so we create a new function :/
+function observer<P>(props: P): any {
+    return mobxObserver(props as any);
+}
+
 import { LogIn } from 'react-feather';
 
 import { RegistrationUser } from 'models/User';
@@ -113,9 +120,7 @@ const Register: FunctionalComponent = observer(() => {
                 <div class="level">
                     <div class="level-item">
                         <span>Submit</span>
-                        <span class="icon is-small">
-                            <LogIn />
-                        </span>
+                        <span class="icon is-small">{/*<LogIn />*/}</span>
                     </div>
                 </div>
             </button>
