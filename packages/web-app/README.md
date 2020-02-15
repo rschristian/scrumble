@@ -31,7 +31,7 @@ Once the dependencies are installed, to start a dev server, run:
 npm run serve:dev
 ```
 
-...or for a production server [once this is fixed](https://github.com/preactjs/preact-cli/issues/953):
+...or for a production server:
 
 ```
 npm run serve:prod
@@ -49,7 +49,7 @@ npm run lint
 
 ## Built With
 
-* [Preact](https://reactjs.org/) - Library Used to Build Interface
-  * [Typescript](https://www.typescriptlang.org/) - A Typed Superset (sorta) of JavaScript
-  * [MobX](https://mobx.js.org/README.html) - Global State Management Tool
-  * [NPM](https://www.npmjs.com/) - Dependency Management Tool
+-   [Preact](https://reactjs.org/) - Library Used to Build Interface
+    -   [Typescript](https://www.typescriptlang.org/) - A Typed Superset (sorta) of JavaScript
+    -   [MobX](https://mobx.js.org/README.html) - Global State Management Tool
+    -   [NPM](https://www.npmjs.com/) - Dependency Management Tool
