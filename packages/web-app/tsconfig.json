@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "commonjs",
+        "baseUrl": "src/",
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "jsx": "react",
+        "jsxFactory": "h",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "outDir": "dist"
+    },
+    "include": [
+        "src/**/*"
+    ]
+}
