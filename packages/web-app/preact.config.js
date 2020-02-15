@@ -23,6 +23,8 @@ export default {
             plugins.unshift(tailwindCss);
 
             // Add PurgeCSS only in production.
+            // TODO Not entirely sure that it's working correctly, but in prod, absolutely none of the Bulma
+            // CSS is loaded, making the site look rather broken. Purging too much?
             if (env.production) {
                 plugins.push(purgecss);
             }
