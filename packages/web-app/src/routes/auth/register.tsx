@@ -9,7 +9,7 @@ function observer<P>(props: P): any {
     return mobxObserver(props as any);
 }
 
-import { LogIn } from 'react-feather';
+import { LogIn } from 'preact-feather';
 
 import { RegistrationUser } from 'models/User';
 import { AuthStoreContext } from 'stores';
@@ -106,7 +106,9 @@ const Register: FunctionalComponent = observer(() => {
                 <div class="level">
                     <div class="level-item">
                         <span>Submit</span>
-                        <span class="icon is-small">{/*<LogIn />*/}</span>
+                        <span class="icon is-small">
+                            <LogIn />
+                        </span>
                     </div>
                 </div>
             </button>
