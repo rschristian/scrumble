@@ -6,6 +6,12 @@ import Auth from 'routes/auth';
 import Home from 'routes/home';
 import { AuthStoreContext } from 'stores';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+if ((module as any).hot) {
+    // tslint:disable-next-line:no-var-requires
+    require('preact/debug');
+}
+
 const App: FunctionalComponent = () => {
     const authStore = useContext(AuthStoreContext);
 
