@@ -1,6 +1,6 @@
 {
-  "name": "BT GitLab Issue Boards",
-  "short_name": "BT Boards",
+  "name": "Scrumble",
+  "short_name": "Scrumble",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
