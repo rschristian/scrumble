@@ -163,7 +163,6 @@ fn test_login_with_invalid_email_format() {
     assert_eq!(response.status(), Status::UnprocessableEntity);
 
     let value = common::response_json_value(response);
-    println!("{}", value);
     let error = value
         .get("errors")
         .and_then(|errors| errors.get("email"))
@@ -186,7 +185,6 @@ fn test_login_with_invalid_password_format() {
     assert_eq!(response.status(), Status::UnprocessableEntity);
 
     let value = common::response_json_value(response);
-    println!("{}", value);
     let error = value
         .get("errors")
         .and_then(|errors| errors.get("password"))
