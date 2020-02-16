@@ -20,7 +20,8 @@ pub struct InsertableUser {
     pub first_name: String,
     pub last_name: String,
     pub email: String,
-    pub hashed_password: String,
+    #[column_name = "hashed_password"]
+    pub password: String,
 }
 
 #[derive(Serialize)]

@@ -18,8 +18,8 @@ pub fn register(
         .child_of(&span)
         .start();
 
-    user.hashed_password =
-        scrypt::scrypt_simple(user.hashed_password.as_ref(), &ScryptParams::new(14, 8, 1))
+    user.password =
+        scrypt::scrypt_simple(user.password.as_ref(), &ScryptParams::new(14, 8, 1))
             .expect("hash error");
     auth_repository::register(user, conn, tracer, span)
 }

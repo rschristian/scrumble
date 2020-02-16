@@ -48,7 +48,7 @@ pub fn users_register(
         first_name,
         last_name,
         email,
-        hashed_password: password,
+        password,
     };
 
     auth_service::register(user, conn, &tracer, parent_span)
