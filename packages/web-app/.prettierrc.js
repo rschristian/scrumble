@@ -4,5 +4,13 @@ module.exports = {
     singleQuote: true,
     printWidth: 120,
     tabWidth: 4,
-    arrowParens: "always"
+    arrowParens: "always",
+    overrides: [
+        {
+            files: ["**.css", "**.scss", "**.json"],
+            options: {
+                tabWidth: 2
+            }
+        }
+    ]
 };

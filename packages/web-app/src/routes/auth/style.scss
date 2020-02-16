@@ -2,7 +2,7 @@
 
 .auth-page {
   .hero {
-    background: #F2F6FA;
+    background: #f2f6fa;
 
     .nav {
       -webkit-box-shadow: none;
@@ -22,8 +22,8 @@
       padding: 5px;
       background: #fff;
       border-radius: 50%;
-      -webkit-box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
-      box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+      -webkit-box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+      box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
     }
   }
   input {
@@ -33,7 +33,7 @@
     font-weight: 700;
 
     .subtitle {
-      padding-top: 1rem
+      padding-top: 1rem;
     }
   }
 
