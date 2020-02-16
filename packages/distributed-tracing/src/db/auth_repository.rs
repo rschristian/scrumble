@@ -38,7 +38,7 @@ pub fn register(
         .map_err(Into::into)
 }
 
-pub fn login(email: &str, conn: Conn, tracer: &Tracer, span: Span) -> Option<User> {
+pub fn login(email: String, conn: Conn, tracer: &Tracer, span: Span) -> Option<User> {
     let _span = tracer
         .span("Login::repository_layer")
         .child_of(&span)

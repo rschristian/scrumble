@@ -2,7 +2,7 @@ use crate::db::{
     auth_repository::{self, UserCreationError},
     Conn,
 };
-use crate::models::user::{InsertableUser, User};
+use crate::models::user::{InsertableUser, User, UserCredentials};
 
 use crypto::scrypt::{self, ScryptParams};
 use rustracing_jaeger::{Span, Tracer};
@@ -24,13 +24,13 @@ pub fn register(
     auth_repository::register(user, conn, tracer, span)
 }
 
-pub fn login(email: &str, password: &str, conn: Conn, tracer: &Tracer, span: Span) -> Option<User> {
+pub fn login(credentials: UserCredentials, conn: Conn, tracer: &Tracer, span: Span) -> Option<User> {
     let span = tracer.span("Login::service_layer").child_of(&span).start();
 
-    let user = auth_repository::login(&email, conn, tracer, span);
+    let user = auth_repository::login(credentials.email, conn, tracer, span);
     match user {
         Some(user) => {
-            let password_matches = scrypt::scrypt_check(password, user.hashed_password.as_ref())
+            let password_matches = scrypt::scrypt_check(credentials.password.as_ref(), user.hashed_password.as_ref())
                 .map_err(|err| eprintln!("login_user: scrypt_check: {}", err))
                 .ok()?;
 

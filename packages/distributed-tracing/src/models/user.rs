@@ -24,6 +24,11 @@ pub struct InsertableUser {
     pub password: String,
 }
 
+pub struct UserCredentials {
+    pub email: String,
+    pub password: String,
+}
+
 #[derive(Serialize)]
 pub struct UserAuth<'a> {
     email: &'a str,
