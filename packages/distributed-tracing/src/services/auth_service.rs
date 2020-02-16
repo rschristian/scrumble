@@ -18,21 +18,26 @@ pub fn register(
         .child_of(&span)
         .start();
 
-    user.password =
-        scrypt::scrypt_simple(user.password.as_ref(), &ScryptParams::new(14, 8, 1))
-            .expect("hash error");
+    user.password = scrypt::scrypt_simple(user.password.as_ref(), &ScryptParams::new(14, 8, 1))
+        .expect("hash error");
     auth_repository::register(user, conn, tracer, span)
 }
 
-pub fn login(credentials: UserCredentials, conn: Conn, tracer: &Tracer, span: Span) -> Option<User> {
+pub fn login(
+    credentials: UserCredentials,
+    conn: Conn,
+    tracer: &Tracer,
+    span: Span,
+) -> Option<User> {
     let span = tracer.span("Login::service_layer").child_of(&span).start();
 
     let user = auth_repository::login(credentials.email, conn, tracer, span);
     match user {
         Some(user) => {
-            let password_matches = scrypt::scrypt_check(credentials.password.as_ref(), user.hashed_password.as_ref())
-                .map_err(|err| eprintln!("login_user: scrypt_check: {}", err))
-                .ok()?;
+            let password_matches =
+                scrypt::scrypt_check(credentials.password.as_ref(), user.hashed_password.as_ref())
+                    .map_err(|err| eprintln!("login_user: scrypt_check: {}", err))
+                    .ok()?;
 
             if password_matches {
                 Some(user)
