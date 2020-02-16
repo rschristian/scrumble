@@ -1,6 +1,7 @@
 use crate::api::auth_middleware::Auth;
-
 use crate::config;
+use crate::schema::users;
+
 use serde::Serialize;
 
 #[derive(Queryable, Serialize)]
@@ -10,6 +11,15 @@ pub struct User {
     pub last_name: String,
     pub email: String,
     #[serde(skip_serializing)]
+    pub hashed_password: String,
+}
+
+#[derive(Insertable)]
+#[table_name = "users"]
+pub struct InsertableUser {
+    pub first_name: String,
+    pub last_name: String,
+    pub email: String,
     pub hashed_password: String,
 }
 

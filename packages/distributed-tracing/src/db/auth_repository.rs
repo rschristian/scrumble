@@ -1,19 +1,10 @@
 use crate::db::Conn;
-use crate::models::user::User;
+use crate::models::user::{InsertableUser, User};
 use crate::schema::users;
 
 use diesel::prelude::*;
 use diesel::result::{DatabaseErrorKind, Error};
 use rustracing_jaeger::{Span, Tracer};
-
-#[derive(Insertable)]
-#[table_name = "users"]
-pub struct NewUser<'a> {
-    pub first_name: &'a str,
-    pub last_name: &'a str,
-    pub email: &'a str,
-    pub hashed_password: &'a str,
-}
 
 pub enum UserCreationError {
     DuplicatedEmail,
@@ -31,10 +22,7 @@ impl From<Error> for UserCreationError {
 }
 
 pub fn register(
-    first_name: &str,
-    last_name: &str,
-    email: &str,
-    hashed_password: &str,
+    user: InsertableUser,
     conn: Conn,
     tracer: &Tracer,
     span: Span,
@@ -45,12 +33,7 @@ pub fn register(
         .start();
 
     diesel::insert_into(users::table)
-        .values(NewUser {
-            first_name,
-            last_name,
-            email,
-            hashed_password,
-        })
+        .values(user)
         .get_result::<User>(&*conn)
         .map_err(Into::into)
 }
