@@ -24,7 +24,7 @@ export default {
 
             // Add PurgeCSS only in production.
             if (env.production) {
-                plugins.push(purgecss);
+                // plugins.push(purgecss);
             }
         });
 

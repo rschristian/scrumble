@@ -5,7 +5,7 @@
     "scripts": {
         "serve:dev": "cross-env PORT=3000 preact watch",
         "serve:prod": "preact build && echo 'Add run config here later?'",
-        "build": "preact build",
+        "build": "preact build --no-prerender",
         "lint": "eslint src/**/*.{js,ts,tsx} --quiet --fix"
     },
     "husky": {
