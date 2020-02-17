@@ -11,27 +11,27 @@ pub fn register(
     mut user: InsertableUser,
     conn: Conn,
     tracer: &Tracer,
-    span: Span,
+    span: &Span,
 ) -> Result<User, UserCreationError> {
     let span = tracer
         .span("Register::service_layer")
-        .child_of(&span)
+        .child_of(span)
         .start();
 
     user.password = scrypt::scrypt_simple(user.password.as_ref(), &ScryptParams::new(14, 8, 1))
         .expect("hash error");
-    auth_repository::register(user, conn, tracer, span)
+    auth_repository::register(user, conn, tracer, &span)
 }
 
 pub fn login(
     credentials: UserCredentials,
     conn: Conn,
     tracer: &Tracer,
-    span: Span,
+    span: &Span,
 ) -> Option<User> {
-    let span = tracer.span("Login::service_layer").child_of(&span).start();
+    let span = tracer.span("Login::service_layer").child_of(span).start();
 
-    let user = auth_repository::login(credentials.email, conn, tracer, span);
+    let user = auth_repository::login(credentials.email, conn, tracer, &span);
     match user {
         Some(user) => {
             let password_matches =

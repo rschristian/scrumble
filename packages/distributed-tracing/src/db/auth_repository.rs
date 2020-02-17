@@ -25,11 +25,11 @@ pub fn register(
     user: InsertableUser,
     conn: Conn,
     tracer: &Tracer,
-    span: Span,
+    span: &Span,
 ) -> Result<User, UserCreationError> {
     let _span = tracer
         .span("Register::repository_layer")
-        .child_of(&span)
+        .child_of(span)
         .start();
 
     diesel::insert_into(users::table)
@@ -38,10 +38,10 @@ pub fn register(
         .map_err(Into::into)
 }
 
-pub fn login(email: String, conn: Conn, tracer: &Tracer, span: Span) -> Option<User> {
+pub fn login(email: String, conn: Conn, tracer: &Tracer, span: &Span) -> Option<User> {
     let _span = tracer
         .span("Login::repository_layer")
-        .child_of(&span)
+        .child_of(span)
         .start();
 
     users::table

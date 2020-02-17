@@ -53,7 +53,7 @@ pub fn users_register(
         },
         conn,
         &tracer,
-        parent_span,
+        &parent_span,
     )
     .map(|user| json!({ "user": user.to_user_auth(&state.secret) }))
     .map_err(|error| {
@@ -97,7 +97,7 @@ pub fn users_login(
         UserCredentials { email, password },
         conn,
         &tracer,
-        parent_span,
+        &parent_span,
     )
     .map(|user| json!({ "user": user.to_user_auth(&state.secret) }))
     .ok_or_else(|| Errors::new(&[("email or password", "is invalid")]))
