@@ -7,7 +7,6 @@ use std::collections::HashMap;
 use std::env;
 
 /// Debug only secret for JWT encoding & decoding.
-#[cfg(debug_assertions)]
 pub const SECRET: &str = "XK6EH:M<G~k8l[iYw/1=0*RznX*P$7WU";
 
 pub const TOKEN_PREFIX: &str = "Bearer ";
