@@ -1,26 +1,34 @@
 @charset "utf-8";
 @import 'variables';
 
+@import '~tailwindcss/base';
+@import '~tailwindcss/components';
+@import 'navigation';
+@import 'listItems';
+@import 'utilities';
+@import 'buttons';
+
+// NB: Must be placed after all custom utilities made with Tailwind
+@import '~tailwindcss/utilities';
+
 .is-clickable {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 html,
 body,
 #app,
 .App {
-    height: 100%;
+  height: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 .App {
-    display: flex;
+  display: flex;
 }
 .Footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    right: 0;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
-
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';

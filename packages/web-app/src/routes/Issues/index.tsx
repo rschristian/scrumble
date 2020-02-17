@@ -1,12 +1,10 @@
 import { FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
 
-import { Issue } from '../../models/Issue';
-import IssueListItem from '../../components/IssueListItem';
-import IssueFilter from '../../components/IssueFilter';
+import IssueListItem from 'components/Issues/ListItem';
+import IssueFilter from 'components/Issues/Filter';
 
 const Issues: FunctionalComponent = () => {
-    const [issues, setIssues] = useState<Issue[]>([
+    const issues = [
         {
             id: 1,
             name: 'As a user, I want to be edit a workspace so they can be altered after creation',
@@ -25,34 +23,28 @@ const Issues: FunctionalComponent = () => {
             description: 'An insightful description of a user story',
             storyPoint: 1,
         },
-    ]);
+    ];
 
     return (
-        <div class="w-screen">
-            <div class="mx-3 flex justify-center flex-col w-3/4">
-                <h1 class="text-left font-medium text-sm text-deep-space-sparkle py-2 border-b border-gray-300">
-                    CUBRIC > Sprints > Skyfall
-                </h1>
-                <div class="flex items-baseline items-start justify-between border-b border-gray-300">
-                    <h1 class="text-3xl text-deep-space-sparkle tracking-wide font-medium my-5">Issues</h1>
-                    <button class="align-baseline bg-blue-500 hover:bg-gray-100 hover:text-gray-800 text-white font-semibold px-2 py-1 border border-gray-400 rounded shadow">
-                        New Issue
-                    </button>
-                </div>
-                <IssueFilter />
-                <div class="rounded bg-white overflow-hidden shadow-lg">
-                    {issues.map((issue, index) => {
-                        return (
-                            <IssueListItem
-                                key={index}
-                                id={issue.id}
-                                name={issue.name}
-                                description={issue.description}
-                                storyPoint={issue.storyPoint}
-                            />
-                        );
-                    })}
-                </div>
+        <div className="main-content">
+            <h1 className="user-path">CUBRIC > Sprints > Skyfall</h1>
+            <div className="create-bar">
+                <h1 className="page-heading">Issues</h1>
+                <button className="btn-create my-auto">New Issue</button>
+            </div>
+            <IssueFilter />
+            <div className="rounded bg-white overflow-hidden shadow-lg">
+                {issues.map((issue, index) => {
+                    return (
+                        <IssueListItem
+                            key={index}
+                            id={issue.id}
+                            name={issue.name}
+                            description={issue.description}
+                            storyPoint={issue.storyPoint}
+                        />
+                    );
+                })}
             </div>
         </div>
     );

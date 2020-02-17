@@ -2,13 +2,11 @@ import { FunctionalComponent, h } from 'preact';
 import { useContext, useState } from 'preact/hooks';
 import { getCurrentUrl, route, Route, Router, RouterOnChangeArgs } from 'preact-router';
 
-import Auth from 'routes/auth';
-import Home from 'routes/home';
 import { AuthStoreContext } from 'stores';
-import Workspaces from '../components/Workspaces';
-import Navbar from '../components/Navbar';
-import WorkspaceView from './WorkspaceView';
-import SprintView from './SprintView';
+import Workspaces from 'components/Workspaces';
+import TopBar from 'components/Navigation/TopBar';
+import WorkspaceView from 'routes/Workspaces';
+import SprintView from 'routes/Sprints';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 if ((module as any).hot) {
@@ -33,9 +31,9 @@ const App: FunctionalComponent = () => {
     return (
         <div id="app" class="bg-blue-100">
             {/*{authGuard()}*/}
-            <Navbar />
+            <TopBar />
             <Router onChange={(e: RouterOnChangeArgs): void => setCurrentUrl(e.url)}>
-                <Home path="/" />
+                <Workspaces path="/" />
                 <Route path="/workspaces" component={Workspaces} />
                 <Route path="/workspace/:id" component={WorkspaceView} />
                 <Route path="/workspace/:id/metrics" component={WorkspaceView} />
@@ -43,8 +41,6 @@ const App: FunctionalComponent = () => {
                 <Route path="/sprint/:id/metrics" component={SprintView} />
                 <Route path="/sprint/:id/board" component={SprintView} />
                 <Route path="/sprint/:id/show-tell" component={SprintView} />
-                {/*<Route path="/login" component={Auth} />*/}
-                {/*<Route path="/register" component={Auth} />*/}
             </Router>
         </div>
     );

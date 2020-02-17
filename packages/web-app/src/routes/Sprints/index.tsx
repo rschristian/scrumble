@@ -1,13 +1,14 @@
 import { FunctionalComponent, h } from 'preact';
-import SprintNav from '../../components/SprintNav';
-import Issues from '../Issues';
+
+import SprintNav from 'components/Navigation/SprintNav';
+import Issues from 'routes/Issues';
 
 const SprintView: FunctionalComponent = () => {
     return (
         <div class="w-screen">
             <div class="flex">
                 <SprintNav />
-                <div class="flex flex-col content-center mx-auto w-3/4">
+                <div class="main-content">
                     <Issues />
                 </div>
             </div>
