@@ -10,6 +10,12 @@ import Navbar from '../components/Navbar';
 import WorkspaceView from './WorkspaceView';
 import SprintView from './SprintView';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+if ((module as any).hot) {
+    // tslint:disable-next-line:no-var-requires
+    require('preact/debug');
+}
+
 const App: FunctionalComponent = () => {
     const authStore = useContext(AuthStoreContext);
 

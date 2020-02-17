@@ -1,8 +1,11 @@
 // Color Scheme (and names) generated from https://coolors.co/
-$theme-isabelline: #F3E8EE;
-$theme-deep-space-sparkle: #475B63;
-$theme-ash-grey: #2E2C2F;
+$theme-isabelline: #f3e8ee;
+$theme-deep-space-sparkle: #475b63;
+$theme-ash-grey: #2e2c2f;
 
 $colors: (
-        "deep-space-sparkle": ($theme-deep-space-sparkle, $theme-isabelline),
+  'deep-space-sparkle': (
+    $theme-deep-space-sparkle,
+    $theme-isabelline,
+  ),
 );

@@ -1,0 +1,4 @@
+.netlify/
+assets/
+build/
+node_modules/
