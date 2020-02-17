@@ -1,10 +1,26 @@
 @charset "utf-8";
 @import 'variables';
 
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
 .is-clickable {
     cursor: pointer;
 }
+
+html,
+body,
+#app,
+.App {
+    height: 100%;
+}
+.App {
+    display: flex;
+}
+.Footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
