@@ -1,9 +1,12 @@
 import { FunctionalComponent, h } from 'preact';
-import { IWorkspaceView } from 'propTypes/IWorkspaceView';
 import Sprints from 'components/Sprints';
 import WorkspaceNav from 'components/Navigation/WorkspaceNav';
 
-const WorkspaceView: FunctionalComponent<IWorkspaceView> = (props: IWorkspaceView) => {
+interface IProps {
+    id: number;
+}
+
+const WorkspaceView: FunctionalComponent<IProps> = (props: IProps) => {
     return (
         <div class="w-screen">
             <div class="flex">

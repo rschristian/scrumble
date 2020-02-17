@@ -24,7 +24,7 @@ module.exports =  {
         'react/jsx-indent': ['warn', 4],
         'react/jsx-indent-props': ['warn', 4],
         'react/no-unknown-property': ['error', { ignore: ['class'] }],
-        'react/no-unescaped-entities': 'off',
+        'react/no-unescaped-entities': ['warn'],
         'quotes': 'off',
         '@typescript-eslint/quotes': ['warn', 'single'],
         '@typescript-eslint/no-use-before-define': ['warn'],
