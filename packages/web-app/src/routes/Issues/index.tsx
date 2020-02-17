@@ -10,19 +10,19 @@ const Issues: FunctionalComponent = () => {
         {
             id: 1,
             name: 'As a user, I want to be edit a workspace so they can be altered after creation',
-            description: 'Crippling depression and anxiety',
+            description: 'An insightful description of a user story',
             storyPoint: 1,
         },
         {
             id: 2,
             name: 'As a scrum master, I want to view a burn down chart for a sprint so that I can view velocity',
-            description: 'Retards and assholes',
+            description: 'An insightful description of a user story',
             storyPoint: 3,
         },
         {
             id: 1,
             name: 'As a scrum master, I want to view the current number of closed tasks for a sprint',
-            description: 'Toughest option. Personal development',
+            description: 'An insightful description of a user story',
             storyPoint: 1,
         },
     ]);
@@ -31,7 +31,6 @@ const Issues: FunctionalComponent = () => {
         <div class="w-screen">
             <div class="mx-3 flex justify-center flex-col w-3/4">
                 <h1 class="text-left font-medium text-sm text-deep-space-sparkle py-2 border-b border-gray-300">
-                    {/* eslint-disable-next-line react/no-unescaped-entities */}
                     CUBRIC > Sprints > Skyfall
                 </h1>
                 <div class="flex items-baseline items-start justify-between border-b border-gray-300">

@@ -20,7 +20,6 @@ const Sprints: FunctionalComponent = () => {
         <div class="w-screen">
             <div class="mx-3 flex justify-center flex-col w-3/4">
                 <h1 class="text-left font-medium text-sm text-deep-space-sparkle py-2 border-b border-gray-300">
-                    {/* eslint-disable-next-line react/no-unescaped-entities */}
                     CUBRIC > Sprints
                 </h1>
                 <div class="flex items-baseline items-start justify-between border-b border-gray-300">
