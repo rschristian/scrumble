@@ -2,13 +2,13 @@ import { FunctionalComponent, h } from 'preact';
 import { useContext, useState } from 'preact/hooks';
 import { getCurrentUrl, route, Route, Router, RouterOnChangeArgs } from 'preact-router';
 
+import Navbar from 'components/Navbar';
+import Workspaces from 'components/Workspaces';
 import Auth from 'routes/auth';
 import Home from 'routes/home';
+import SprintView from 'routes/SprintView';
+import WorkspaceView from 'routes/WorkspaceView';
 import { AuthStoreContext } from 'stores';
-import Workspaces from '../components/Workspaces';
-import Navbar from '../components/Navbar';
-import WorkspaceView from './WorkspaceView';
-import SprintView from './SprintView';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 if ((module as any).hot) {
