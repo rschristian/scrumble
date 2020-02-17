@@ -1,8 +1,10 @@
-# Rust Rocket Template Server
+# Distributed Tracing
 
-This is a template API server built with Rocket, Diesel, and Postgres, with a prebuilt authentication system. This should help you get up and running rapidly.
+This application uses a template of an API server in a microservice architecture that can display how distributed tracing could be utilized in a microservice-heavy environment like BT's.
 
 This server is built with [Rocket](https://rocket.rs), a simple, fast, and type-safe web framework for Rust. The database used is [PostgreSQL](https://www.postgresql.org/), the world's most advanced open source relational database, with [Diesel](http://diesel.rs), a safe, extensible ORM and query builder for Rust, acting as the bridge between Rocket and the database. Diesel also provides all migration management for this project.
+
+All tracing is done with `rustracing` with `jaeger` as the visualization tool used for now.
 
 ## Getting Started
 
@@ -13,8 +15,7 @@ These instructions will get you a copy of the project up and running on your loc
 ```
 Rust nightly
 Cargo
-Docker - optional
-Diesel-cli - necessary only if Docker is not used
+Docker/Compose
 ```
 
 ### Running
@@ -39,30 +40,30 @@ The network you use depends on the parent directory, so if the docker compose is
 
 The Docker image built for diesel-cli will run "Diesel" without any arguments, making the container act like a normal CLI. However, that very large command is necessary upon every use. I therefore recommend creating an alias "docker ... /diesel-cli" to "diesel-cli" in a .bashrc or .zshrc, so the tool can be just called with "diesel-cli [command]".
 
-If you'd like to avoid Docker, a local Postgres database is necessary. Make sure to edit the [.env](.env) file to match your connection URL. You will also need to install the diesel-cli, and run it with:
+To start the Jaeger container, run:
 
 ```
-diesel migration run
+docker run -d --name jaeger \
+    -p6831:6831/udp \
+    -p6832:6832/udp \
+    -p16686:16686 \
+    jaegertracing/all-in-one:latest
 ```
 
-The server can then be ran using a debug build with:
+To populate Jaeger with production-like data, run:
 
-```
-cargo run
+```bash
+cargo test --release
 ```
 
-Create a production build with:
-
-```
-cargo build --release
-```
+Rust-Crypto has a massive slow down on debug builds, so it isn't recommended that you run debug at all.
 
 ## Running the tests
 
 The unit tests and integration tests can all be ran using:
 
 ```
-cargo test
+cargo test --release
 ```
 
 The unit tests are found in the same file as the code they test, while the integration tests are found in ~/tests.
@@ -86,6 +87,7 @@ cargo clippy
 * [Rocket](https://github.com/glium/glium) - A simple, fast, and type-safe web framework for Rust
 * [Diesel](https://github.com/tomaka/glium_text) - A safe, extensible ORM and query builder for Rust
 * [PostgreSQL](https://github.com/rustgd/cgmath) - The world's most advanced open source relational database
+* [JaegerTracing](https://www.jaegertracing.io/) - Open Source, End-to-End Distributed Tracing
 
 ## Authors
 
