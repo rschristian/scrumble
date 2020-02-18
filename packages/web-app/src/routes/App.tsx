@@ -5,10 +5,10 @@ import { getCurrentUrl, route, Route, Router, RouterOnChangeArgs } from 'preact-
 
 import TopBar from 'components/Navigation/TopBar';
 import WorkspaceView from 'routes/Workspaces/Workspace';
+import Home from 'routes/Home';
 import SprintView from 'routes/Sprints';
 import Metrics from 'routes/Sprints/Metrics';
 import { AuthStoreContext } from 'stores';
-import Workspaces from 'components/Workspaces';
 
 // @Lauren Lazy loading would probably be beneficial I think? Especially if more pages are later added
 const Login = lazy(() => import('routes/Login'));
@@ -38,10 +38,10 @@ const App: FunctionalComponent = () => {
             {/*{authGuard()}*/}
             <TopBar />
             <Router onChange={(e: RouterOnChangeArgs): void => setCurrentUrl(e.url)}>
-                <Workspaces path="/" />
                 <Route path="/workspaces" component={Workspaces} />
                 <Route path="/workspace/:id" component={WorkspaceView} />
                 <Route path="/workspace/:id/metrics" component={WorkspaceView} />
+                <Home path="/" />
                 <Login path="/login" />
                 <Route path="/sprint/:id/metrics" component={Metrics} />
                 <Route path="/sprint/:id" component={SprintView} />
