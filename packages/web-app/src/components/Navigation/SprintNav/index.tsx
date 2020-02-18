@@ -23,7 +23,7 @@ const SprintNav: FunctionalComponent = () => {
         {
             label: 'Metrics',
             iconPath: metrics,
-            href: '#',
+            href: 'sprint/1/metrics',
         },
         {
             label: 'Show n Tell',

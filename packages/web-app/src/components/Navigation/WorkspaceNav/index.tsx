@@ -13,27 +13,27 @@ const WorkspaceNav: FunctionalComponent = () => {
         {
             label: 'Issues',
             iconPath: list,
-            href: '#',
+            href: '/issues',
         },
         {
             label: 'Projects',
             iconPath: projects,
-            href: '#',
+            href: '/projects',
         },
         {
             label: 'Sprints',
             iconPath: sprinter,
-            href: '#',
+            href: '/sprints',
         },
         {
             label: 'Metrics',
             iconPath: metrics,
-            href: '#',
+            href: '/metrics',
         },
         {
             label: 'Edit',
             iconPath: edit,
-            href: '#',
+            href: '/edit',
         },
     ];
 

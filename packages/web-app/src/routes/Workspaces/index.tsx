@@ -8,12 +8,10 @@ interface IProps {
 
 const WorkspaceView: FunctionalComponent<IProps> = (props: IProps) => {
     return (
-        <div class="w-screen">
-            <div class="flex">
-                <WorkspaceNav />
-                <div class="main-content">
-                    <Sprints />
-                </div>
+        <div className="flex">
+            <WorkspaceNav />
+            <div className="main-content">
+                <Sprints />
             </div>
         </div>
     );

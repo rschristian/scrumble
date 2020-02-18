@@ -12,7 +12,7 @@ const Navbar: FunctionalComponent = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <header class="header">
+        <header class="header min-h-16">
             <div class="flex items-center justify-between px-4 py-3 sm:p-0">
                 <div class="flex items-center flex-shrink-0 text-deep-space-sparkle mr-6">
                     <img class="h-8" src={scrumCards} />
