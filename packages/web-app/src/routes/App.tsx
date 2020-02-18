@@ -10,6 +10,7 @@ import Metrics from 'routes/Sprints/Metrics';
 import { AuthStoreContext } from 'stores';
 
 // @Lauren Lazy loading would probably be beneficial I think? Especially if more pages are later added
+// @Lauren Ok Lazy loading has issues, and I'm a bit too tipsy to fix them rn, but probably a decent idea for future me to work out the kinks on
 const Login = lazy(() => import('routes/Login'));
 
 const WorkspacesEdit = lazy(() => import('routes/Workspaces/edit'));

@@ -3,7 +3,7 @@ import { useState } from 'preact/hooks';
 import { getCurrentUrl, Link } from 'preact-router';
 import { Menu, X } from 'preact-feather';
 
-import { SideBarItem } from 'models/SideNavItem';
+import { SideBarItem } from 'models/SideBarItem';
 
 interface IProps {
     items: SideBarItem[];
