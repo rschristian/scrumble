@@ -1,6 +1,6 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
-import { Link } from 'preact-router';
+import { getCurrentUrl, Link } from 'preact-router';
 import { Menu, X } from 'preact-feather';
 
 import { SideNav } from 'models/SideNav';
@@ -11,6 +11,7 @@ interface IProps {
 
 const Sidebar: FunctionalComponent<IProps> = (props: IProps) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [currentUrl] = useState<string>(getCurrentUrl());
 
     return (
         <div
@@ -38,7 +39,10 @@ const Sidebar: FunctionalComponent<IProps> = (props: IProps) => {
                     return (
                         <li key={index} class="side-nav-link">
                             <img src={menuItem.icon} class="my-auto ml-2 w-5" alt={menuItem.label} />
-                            <Link href={menuItem.path} class={'ml-3 my-auto ' + (isOpen ? 'block' : 'hidden')}>
+                            <Link
+                                href={getUrlSubstring(currentUrl) + menuItem.path}
+                                class={'ml-3 my-auto ' + (isOpen ? 'block' : 'hidden')}
+                            >
                                 {menuItem.label}
                             </Link>
                         </li>
@@ -47,6 +51,14 @@ const Sidebar: FunctionalComponent<IProps> = (props: IProps) => {
             </ul>
         </div>
     );
+};
+
+const getUrlSubstring = (currentUrl: string): string => {
+    // This regex is used to cut off URLs for better transitions.
+    // If I'm at '/workspace/1/edit', and request the sprints page,
+    // it gets /'workspace/1' so that I can append 'sprints' to it,
+    // making '/workspace/1/sprints'
+    return currentUrl.replace(/\D+$/g, '');
 };
 
 export default Sidebar;
