@@ -1,5 +1,5 @@
 import { FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
+import {useEffect, useRef, useState} from 'preact/hooks';
 
 import avatar from 'assets/gitlab_avatar.png';
 
@@ -8,7 +8,9 @@ const AccountDropdown: FunctionalComponent = () => {
 
     return (
         <div className="relative">
-            <button onClick={(): void => setIsOpen(!isOpen)} className="btn-account-dropdown">
+            <button onFocus={(): void => setIsOpen(true)}
+                    onBlur={(): void => setIsOpen(false)}
+                    className={'btn-account-dropdown ' + (isOpen ? 'outline-none border-white' : '')}>
                 <img className="avatar" src={avatar} alt="Your avatar" />
             </button>
             <div className={'btn-sign-out shadow-lg ' + (isOpen ? 'block' : 'hidden')}>
