@@ -1,4 +1,4 @@
-export interface SideNav {
+export interface SideNavItem {
     label: string;
     icon: string;
     path: string;
