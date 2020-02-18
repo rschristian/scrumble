@@ -1,7 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
 import { useContext, useState } from 'preact/hooks';
-import { lazy } from 'preact/compat';
-import { getCurrentUrl, route, Route, Router, RouterOnChangeArgs } from 'preact-router';
+import { lazy, Suspense } from 'preact/compat';
+import { getCurrentUrl, route, Router, RouterOnChangeArgs } from 'preact-router';
 
 import TopBar from 'components/Navigation/TopBar';
 import Home from 'routes/Home';
@@ -39,21 +39,23 @@ const App: FunctionalComponent = () => {
 
     return (
         <div id="app" class="bg-blue-100">
-            {/*{authGuard()}*/}
-            <TopBar />
-            <Router onChange={(e: RouterOnChangeArgs): void => setCurrentUrl(e.url)}>
-                <Home path="/" />
-                <Login path="/login" />
-                <WorkspacesSprints path="/workspace/:id" />
-                <WorkspacesIssues path="/workspace/:id/issues" />
-                <WorkspacesMetrics path="/workspace/:id/metrics" />
-                <WorkspacesEdit path="/workspace/:id/edit" />
-                <Route path="/sprint/:id/metrics" component={Metrics} />
-                <Route path="/sprint/:id" component={SprintView} />
-                <Route path="/sprint/:id/metrics" component={SprintView} />
-                <Route path="/sprint/:id/board" component={SprintView} />
-                <Route path="/sprint/:id/show-tell" component={SprintView} />
-            </Router>
+            <Suspense fallback={<div>Loading...</div>}>
+                {/*{authGuard()}*/}
+                <TopBar />
+                <Router onChange={(e: RouterOnChangeArgs): void => setCurrentUrl(e.url)}>
+                    <Home path="/" />
+                    <Login path="/login" />
+                    <WorkspacesSprints path="/workspace/:id" />
+                    <WorkspacesIssues path="/workspace/:id/issues" />
+                    <WorkspacesMetrics path="/workspace/:id/metrics" />
+                    <WorkspacesEdit path="/workspace/:id/edit" />
+                    <Metrics path="/sprint/:id/metrics" />
+                    <SprintView path="/sprint/:id" />
+                    <SprintView path="/sprint/:id/metrics" />
+                    <SprintView path="/sprint/:id/board" />
+                    <SprintView path="/sprint/:id/show-tell" />
+                </Router>
+            </Suspense>
         </div>
     );
 };
