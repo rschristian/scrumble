@@ -9,7 +9,7 @@ const AccountDropdown: FunctionalComponent = () => {
     return (
         <div className="relative">
             <button
-                onFocus={(): void => setIsOpen(true)}
+                onClick={(): void => setIsOpen(!isOpen)}
                 onBlur={(): void => setIsOpen(false)}
                 className={'btn-account-dropdown ' + (isOpen ? 'outline-none border-white' : '')}
             >
