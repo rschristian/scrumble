@@ -5,6 +5,7 @@ import { getCurrentUrl, route, Route, Router, RouterOnChangeArgs } from 'preact-
 import TopBar from 'components/Navigation/TopBar';
 import Workspaces from 'components/Workspaces';
 import SprintView from 'routes/Sprints';
+import Metrics from 'routes/Sprints/Metrics';
 import WorkspaceView from 'routes/Workspaces';
 import { AuthStoreContext } from 'stores';
 
@@ -37,6 +38,7 @@ const App: FunctionalComponent = () => {
                 <Route path="/workspaces" component={Workspaces} />
                 <Route path="/workspace/:id" component={WorkspaceView} />
                 <Route path="/workspace/:id/metrics" component={WorkspaceView} />
+                <Route path="/sprint/:id/metrics" component={Metrics} />
                 <Route path="/sprint/:id" component={SprintView} />
                 <Route path="/sprint/:id/metrics" component={SprintView} />
                 <Route path="/sprint/:id/board" component={SprintView} />

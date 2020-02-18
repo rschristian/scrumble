@@ -30,7 +30,9 @@ const Issues: FunctionalComponent = () => {
             <h1 className="user-path">CUBRIC > Sprints > Skyfall</h1>
             <div className="create-bar">
                 <h1 className="page-heading">Issues</h1>
-                <button className="btn-create my-auto">New Issue</button>
+                <button className="btn-create my-auto">
+                    <a href="/sprint/1/metrics">New Issue</a>
+                </button>
             </div>
             <IssueFilter />
             <div className="rounded bg-white overflow-hidden shadow-lg">

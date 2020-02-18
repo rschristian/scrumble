@@ -10,8 +10,8 @@ const Sidebar: FunctionalComponent<ISidebar> = (props: ISidebar) => {
 
     return (
         <div
-            class={
-                'fixed z-10 left-0 md:relative bg-gray-300 h-screen border border-gray-400 ' +
+            className={
+                'z-10 left-0 bg-gray-300 h-screen fixed overflow-auto border border-gray-400 ' +
                 (isOpen ? 'w-48' : 'w-12')
             }
         >

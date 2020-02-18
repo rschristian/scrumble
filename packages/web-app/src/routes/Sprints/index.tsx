@@ -5,7 +5,7 @@ import Issues from 'routes/Issues';
 
 const SprintView: FunctionalComponent = () => {
     return (
-        <div class="w-screen">
+        <div class="w-screen block">
             <div class="flex">
                 <SprintNav />
                 <div class="main-content">
