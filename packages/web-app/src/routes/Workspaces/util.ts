@@ -2,9 +2,9 @@ import edit from 'assets/icons/edit.png';
 import list from 'assets/icons/list.png';
 import metrics from 'assets/icons/metrics.png';
 import sprinter from 'assets/icons/sprinter.png';
-import { SideNavItem } from 'models/SideNavItem';
+import { SideBarItem } from 'models/SideNavItem';
 
-export const sideNavItems: SideNavItem[] = [
+export const sideNavItems: SideBarItem[] = [
     {
         label: 'Sprints',
         icon: sprinter,

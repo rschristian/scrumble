@@ -3,10 +3,10 @@ import { useState } from 'preact/hooks';
 import { getCurrentUrl, Link } from 'preact-router';
 import { Menu, X } from 'preact-feather';
 
-import { SideNavItem } from 'models/SideNavItem';
+import { SideBarItem } from 'models/SideNavItem';
 
 interface IProps {
-    items: SideNavItem[];
+    items: SideBarItem[];
 }
 
 const Sidebar: FunctionalComponent<IProps> = (props: IProps) => {
