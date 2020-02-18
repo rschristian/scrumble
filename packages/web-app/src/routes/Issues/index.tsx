@@ -1,6 +1,6 @@
 import { FunctionalComponent, h } from 'preact';
 
-import IssueListItem from 'components/Issues/ListItem';
+import IssueListItem from 'components/ListItems/issue';
 import IssueFilter from 'components/Issues/Filter';
 
 const Issues: FunctionalComponent = () => {

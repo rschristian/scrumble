@@ -1,6 +1,6 @@
 import { FunctionalComponent, h } from 'preact';
 
-import SprintListItem from 'components/Sprints/ListItem';
+import SprintListItem from 'components/ListItems/sprint';
 import SearchBar from 'components/SearchBar';
 
 const Sprints: FunctionalComponent = () => {
