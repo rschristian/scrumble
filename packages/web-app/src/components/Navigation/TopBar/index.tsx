@@ -8,14 +8,14 @@ import AccountDropdown from 'components/AccountDropdown';
 import scrumCards from 'assets/icons/scrumCards.png';
 import avatar from 'assets/gitlab_avatar.png';
 
-const Navbar: FunctionalComponent = () => {
+const TopBar: FunctionalComponent = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
         <header class="header min-h-16">
             <div class="flex items-center justify-between px-4 py-3 sm:p-0">
                 <div class="flex items-center flex-shrink-0 text-deep-space-sparkle mr-6">
-                    <img class="h-8" src={scrumCards} />
+                    <img class="h-8" src={scrumCards} alt="Image of Scrum Cards" />
                     <span class="ml-1 font-semibold text-xl tracking-wide">Scrumble</span>
                 </div>
                 <div class="sm:hidden">
@@ -67,4 +67,4 @@ const Navbar: FunctionalComponent = () => {
     );
 };
 
-export default Navbar;
+export default TopBar;
