@@ -5,7 +5,7 @@ import { getCurrentUrl, route, Route, Router, RouterOnChangeArgs } from 'preact-
 import { AuthStoreContext } from 'stores';
 import Workspaces from 'components/Workspaces';
 import TopBar from 'components/Navigation/TopBar';
-import WorkspaceView from 'routes/Workspaces';
+import WorkspaceView from 'routes/Workspaces/Workspace';
 import SprintView from 'routes/Sprints';
 import Metrics from './Sprints/Metrics';
 
