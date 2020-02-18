@@ -1,11 +1,15 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { Link } from 'preact-router';
-
-import { ISidebar } from './ISidebar';
 import { Menu, X } from 'preact-feather';
 
-const Sidebar: FunctionalComponent<ISidebar> = (props: ISidebar) => {
+import { SideNav } from 'models/SideNav';
+
+interface IProps {
+    items: SideNav[];
+}
+
+const Sidebar: FunctionalComponent<IProps> = (props: IProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -33,8 +37,8 @@ const Sidebar: FunctionalComponent<ISidebar> = (props: ISidebar) => {
                 {props.items.map((menuItem, index) => {
                     return (
                         <li key={index} class="side-nav-link">
-                            <img src={menuItem.iconPath} class="my-auto ml-2 w-5" alt={menuItem.label} />
-                            <Link href={menuItem.href} class={'ml-3 my-auto ' + (isOpen ? 'block' : 'hidden')}>
+                            <img src={menuItem.icon} class="my-auto ml-2 w-5" alt={menuItem.label} />
+                            <Link href={menuItem.path} class={'ml-3 my-auto ' + (isOpen ? 'block' : 'hidden')}>
                                 {menuItem.label}
                             </Link>
                         </li>
