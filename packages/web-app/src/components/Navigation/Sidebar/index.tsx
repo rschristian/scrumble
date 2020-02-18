@@ -37,15 +37,12 @@ const Sidebar: FunctionalComponent<IProps> = (props: IProps) => {
                 </li>
                 {props.items.map((menuItem, index) => {
                     return (
-                        <li key={index} class="side-nav-link">
-                            <img src={menuItem.icon} class="my-auto ml-2 w-5" alt={menuItem.label} />
-                            <Link
-                                href={getUrlSubstring(currentUrl) + menuItem.path}
-                                class={'ml-3 my-auto ' + (isOpen ? 'block' : 'hidden')}
-                            >
-                                {menuItem.label}
-                            </Link>
-                        </li>
+                        <Link href={getUrlSubstring(currentUrl) + menuItem.path} key={index}>
+                            <li class="side-nav-link">
+                                <img src={menuItem.icon} class="my-auto ml-2 w-5" alt={menuItem.label} />
+                                <div class={'ml-3 my-auto ' + (isOpen ? 'block' : 'hidden')}>{menuItem.label}</div>
+                            </li>
+                        </Link>
                     );
                 })}
             </ul>
