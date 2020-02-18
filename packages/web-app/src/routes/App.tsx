@@ -1,5 +1,6 @@
 import { FunctionalComponent, h } from 'preact';
 import { useContext, useState } from 'preact/hooks';
+import { lazy } from 'preact/compat';
 import { getCurrentUrl, route, Route, Router, RouterOnChangeArgs } from 'preact-router';
 
 import TopBar from 'components/Navigation/TopBar';
@@ -8,6 +9,9 @@ import SprintView from 'routes/Sprints';
 import Metrics from 'routes/Sprints/Metrics';
 import { AuthStoreContext } from 'stores';
 import Workspaces from 'components/Workspaces';
+
+// @Lauren Lazy loading would probably be beneficial I think? Especially if more pages are later added
+const Login = lazy(() => import('routes/Login'));
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 if ((module as any).hot) {
@@ -20,7 +24,7 @@ const App: FunctionalComponent = () => {
 
     const [currentUrl, setCurrentUrl] = useState<string>(getCurrentUrl());
 
-    const publicRoutes = ['/register', '/login'];
+    const publicRoutes = ['/login'];
 
     const authGuard = (): void => {
         if (!publicRoutes.includes(currentUrl) && !authStore.isAuthenticated) {
@@ -38,6 +42,7 @@ const App: FunctionalComponent = () => {
                 <Route path="/workspaces" component={Workspaces} />
                 <Route path="/workspace/:id" component={WorkspaceView} />
                 <Route path="/workspace/:id/metrics" component={WorkspaceView} />
+                <Login path="/login" />
                 <Route path="/sprint/:id/metrics" component={Metrics} />
                 <Route path="/sprint/:id" component={SprintView} />
                 <Route path="/sprint/:id/metrics" component={SprintView} />
