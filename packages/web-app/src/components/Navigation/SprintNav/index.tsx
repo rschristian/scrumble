@@ -7,33 +7,34 @@ import presentation from 'assets/icons/presentation.png';
 import kanbanBoard from 'assets/icons/kanbanBoard.png';
 
 import Sidebar from 'components/Navigation/Sidebar';
+import { SideBarItem } from 'models/SideBarItem';
 
 const SprintNav: FunctionalComponent = () => {
-    const menuItems = [
+    const menuItems: SideBarItem[] = [
         {
             label: 'Issues',
-            iconPath: list,
-            href: '#',
+            icon: list,
+            path: '#',
         },
         {
             label: 'Board',
-            iconPath: kanbanBoard,
-            href: '#',
+            icon: kanbanBoard,
+            path: '#',
         },
         {
             label: 'Metrics',
-            iconPath: metrics,
-            href: 'sprint/1/metrics',
+            icon: metrics,
+            path: 'sprint/1/metrics',
         },
         {
             label: 'Show n Tell',
-            iconPath: presentation,
-            href: '#',
+            icon: presentation,
+            path: '#',
         },
         {
             label: 'Edit',
-            iconPath: edit,
-            href: '#',
+            icon: edit,
+            path: '#',
         },
     ];
 
