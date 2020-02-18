@@ -8,7 +8,12 @@ const WorkspacesMetrics: FunctionalComponent = () => {
         <div class="w-screen block">
             <div class="flex">
                 <Sidebar items={sideNavItems} />
-                <div class="main-content">metrics metrics</div>
+                <div className="main-content">
+                    <h1 className="user-path">CUBRIC > Metrics</h1>
+                    <div className="create-bar">
+                        <h1 className="page-heading">Metrics</h1>
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -8,7 +8,12 @@ const WorkspacesIssues: FunctionalComponent = () => {
         <div class="w-screen block">
             <div class="flex">
                 <Sidebar items={sideNavItems} />
-                <div class="main-content">Lauren's got issues</div>
+                <div className="main-content">
+                    <h1 className="user-path">CUBRIC > Issues</h1>
+                    <div className="create-bar">
+                        <h1 className="page-heading">Lauren's Got Issues a Plenty</h1>
+                    </div>
+                </div>
             </div>
         </div>
     );

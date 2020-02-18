@@ -8,7 +8,12 @@ const WorkspacesEdit: FunctionalComponent = () => {
         <div class="w-screen block">
             <div class="flex">
                 <Sidebar items={sideNavItems} />
-                <div class="main-content">edit edit edit</div>
+                <div class="main-content">
+                    <h1 className="user-path">CUBRIC > Edit</h1>
+                    <div className="create-bar">
+                        <h1 className="page-heading">Edit</h1>
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -8,7 +8,12 @@ const WorkspacesSprints: FunctionalComponent = () => {
         <div class="w-screen block">
             <div class="flex">
                 <Sidebar items={sideNavItems} />
-                <div class="main-content">sprints sprints</div>
+                <div className="main-content">
+                    <h1 className="user-path">CUBRIC > Sprints</h1>
+                    <div className="create-bar">
+                        <h1 className="page-heading">Sprints</h1>
+                    </div>
+                </div>
             </div>
         </div>
     );
