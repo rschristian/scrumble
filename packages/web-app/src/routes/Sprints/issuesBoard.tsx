@@ -2,9 +2,10 @@ import { FunctionalComponent, h } from 'preact';
 import Sidebar from 'components/Navigation/Sidebar';
 import { sideNavItems } from 'routes/Sprints/util';
 import IssueCard from 'components/Cards/issue';
+import { Issue } from 'models/Issue';
 
 const IssuesBoard: FunctionalComponent = () => {
-    const issues = [
+    const issues: Issue[] = [
         {
             id: 1,
             name: 'As a user, I want to be edit a workspace so they can be altered after creation',

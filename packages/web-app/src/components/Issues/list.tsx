@@ -4,26 +4,30 @@ import IssueListItem from 'components/ListItems/issue';
 import IssueFilter from 'components/Issues/Filter';
 import Sidebar from 'components/Navigation/Sidebar';
 import { sideNavItems } from 'routes/Workspaces/util';
+import { Issue } from 'models/Issue';
 
 const Issues: FunctionalComponent = () => {
-    const issues = [
+    const issues: Issue[] = [
         {
             id: 1,
             name: 'As a user, I want to be edit a workspace so they can be altered after creation',
             description: 'An insightful description of a user story',
             storyPoint: 1,
+            project: 'Phoenix Project',
         },
         {
             id: 2,
             name: 'As a scrum master, I want to view a burn down chart for a sprint so that I can view velocity',
             description: 'An insightful description of a user story',
             storyPoint: 3,
+            project: 'Phoenix Project',
         },
         {
             id: 1,
             name: 'As a scrum master, I want to view the current number of closed tasks for a sprint',
             description: 'An insightful description of a user story',
             storyPoint: 1,
+            project: 'Unicorn Project',
         },
     ];
 
@@ -49,6 +53,7 @@ const Issues: FunctionalComponent = () => {
                                     name={issue.name}
                                     description={issue.description}
                                     storyPoint={issue.storyPoint}
+                                    project={issue.project}
                                 />
                             );
                         })}
