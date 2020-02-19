@@ -81,9 +81,9 @@ const App: FunctionalComponent = () => {
 
     return (
         <div id="app" class="bg-blue-100">
-            <Suspense fallback={<div>Loading...</div>}>
-                {/*{authGuard()}*/}
-                <TopBar />
+            {/*{authGuard()}*/}
+            <TopBar />
+            <Suspense fallback={<Fallback />}>
                 <Router onChange={(e: RouterOnChangeArgs): void => setCurrentUrl(e.url)}>
                     <Home path="/" />
                     <Login path="/login" />
@@ -97,6 +97,16 @@ const App: FunctionalComponent = () => {
                     <Route path="/workspace/:id/sprint/:id/edit" component={SprintEdit} />
                 </Router>
             </Suspense>
+        </div>
+    );
+};
+
+const Fallback: FunctionalComponent = () => {
+    return (
+        <div className="w-screen block">
+            <div className="flex">
+                <div className="main-content" />
+            </div>
         </div>
     );
 };
