@@ -4,9 +4,10 @@ import IssueListItem from 'components/ListItems/issue';
 import IssueFilter from 'components/Issues/Filter';
 import Sidebar from 'components/Navigation/Sidebar';
 import { sideNavItems } from 'routes/Sprints/util';
+import { Issue } from 'models/Issue';
 
 const SprintIssues: FunctionalComponent = () => {
-    const issues = [
+    const issues: Issue[] = [
         {
             id: 1,
             name: 'As a user, I want to be edit a workspace so they can be altered after creation',
@@ -52,6 +53,7 @@ const SprintIssues: FunctionalComponent = () => {
                                     name={issue.name}
                                     description={issue.description}
                                     storyPoint={issue.storyPoint}
+                                    project={issue.project}
                                 />
                             );
                         })}

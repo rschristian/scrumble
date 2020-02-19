@@ -4,9 +4,10 @@ import SearchBar from 'components/SearchBar';
 import SprintListItem from 'components/ListItems/sprint';
 import Sidebar from 'components/Navigation/Sidebar';
 import { sideNavItems } from './util';
+import { Sprint } from 'models/Sprint';
 
 const WorkspaceSprints: FunctionalComponent = () => {
-    const sprints = [
+    const sprints: Sprint[] = [
         {
             id: 1,
             name: 'Skyfall',
