@@ -6,7 +6,7 @@ import Sidebar from 'components/Navigation/Sidebar';
 import { sideNavItems } from './util';
 import { Sprint } from 'models/Sprint';
 
-const Sprints: FunctionalComponent = () => {
+const WorkspaceSprints: FunctionalComponent = () => {
     const sprints: Sprint[] = [
         {
             id: 1,
@@ -54,4 +54,4 @@ const Sprints: FunctionalComponent = () => {
     );
 };
 
-export default Sprints;
+export default WorkspaceSprints;

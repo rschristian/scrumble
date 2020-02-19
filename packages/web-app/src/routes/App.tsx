@@ -29,63 +29,61 @@ const App: FunctionalComponent = () => {
         }
     };
 
-    // This is pretty gross, but it's a psuedo lazy loading system that
-    // normal loads when any given lazy route has been loaded. Best of both worlds.
-    let WorkspacesEdit: any = lazy(() => {
+    let WorkspacesSprints: any = lazy(() => {
         WorkspacesIssues = import('routes/Workspaces/issues');
         WorkspacesMetrics = import('routes/Workspaces/metrics');
-        WorkspacesSprints = import('routes/Workspaces/sprints');
-        return import('routes/Workspaces/edit');
+        WorkspacesEdit = import('routes/Workspaces/edit');
+        return import('routes/Workspaces/sprints');
     });
     let WorkspacesIssues: any = lazy(() => {
-        WorkspacesEdit = import('routes/Workspaces/edit');
-        WorkspacesMetrics = import('routes/Workspaces/metrics');
         WorkspacesSprints = import('routes/Workspaces/sprints');
+        WorkspacesMetrics = import('routes/Workspaces/metrics');
+        WorkspacesEdit = import('routes/Workspaces/edit');
         return import('routes/Workspaces/issues');
     });
     let WorkspacesMetrics: any = lazy(() => {
-        WorkspacesEdit = import('routes/Workspaces/edit');
-        WorkspacesIssues = import('routes/Workspaces/issues');
         WorkspacesSprints = import('routes/Workspaces/sprints');
+        WorkspacesIssues = import('routes/Workspaces/issues');
+        WorkspacesEdit = import('routes/Workspaces/edit');
         return import('routes/Workspaces/metrics');
     });
-    let WorkspacesSprints: any = lazy(() => {
-        WorkspacesEdit = import('routes/Workspaces/edit');
+    let WorkspacesEdit: any = lazy(() => {
+        WorkspacesSprints = import('routes/Workspaces/sprints');
         WorkspacesIssues = import('routes/Workspaces/issues');
         WorkspacesMetrics = import('routes/Workspaces/metrics');
-        return import('routes/Workspaces/sprints');
+        return import('routes/Workspaces/edit');
     });
 
-    let SprintEdit: any = lazy(() => {
+    let SprintIssues: any = lazy(() => {
+        SprintBoard = import('routes/Sprints/board');
+        SprintMetrics = import('routes/Sprints/metrics');
+        SprintEdit = import('routes/Workspaces/edit');
+        return import('routes/Sprints/issues');
+    });
+    let SprintBoard: any = lazy(() => {
         SprintIssues = import('routes/Sprints/issues');
-        SprintMetrics = import('routes/Sprints/sprintMetrics');
-        IssuesBoard = import('routes/Sprints/issuesBoard');
-        return import('routes/Sprints/edit');
+        SprintMetrics = import('routes/Sprints/metrics');
+        SprintEdit = import('routes/Sprints/edit');
+        return import('routes/Sprints/board');
     });
     let SprintMetrics: any = lazy(() => {
-        SprintEdit = import('routes/Sprints/edit');
         SprintIssues = import('routes/Sprints/issues');
-        IssuesBoard = import('routes/Workspaces/sprints');
-        return import('routes/Sprints/sprintMetrics');
-    });
-    let IssuesBoard: any = lazy(() => {
+        SprintBoard = import('routes/Sprints/board');
         SprintEdit = import('routes/Sprints/edit');
+        return import('routes/Sprints/metrics');
+    });
+    let SprintEdit: any = lazy(() => {
         SprintIssues = import('routes/Sprints/issues');
-        SprintMetrics = import('routes/Sprints/sprintMetrics');
-        return import('routes/Sprints/issuesBoard');
-    });
-    let SprintIssues: any = lazy(() => {
-        SprintEdit = import('routes/Sprints/edit');
-        SprintMetrics = import('routes/Sprints/sprintMetrics');
-        IssuesBoard = import('routes/Sprints/issuesBoard');
-        return import('routes/Sprints/issues');
+        SprintBoard = import('routes/Sprints/board');
+        SprintMetrics = import('routes/Sprints/metrics');
+        return import('routes/Sprints/edit');
     });
 
     return (
         <div id="app" class="bg-blue-100">
-            <Suspense fallback={<div>Loading...</div>}>
-                {/*{authGuard()}*/}
-                <TopBar />
+            {/*{authGuard()}*/}
+            <TopBar />
+            <Suspense fallback={<Fallback />}>
                 <Router onChange={(e: RouterOnChangeArgs): void => setCurrentUrl(e.url)}>
                     <Home path="/" />
                     <Login path="/login" />
@@ -93,12 +91,22 @@ const App: FunctionalComponent = () => {
                     <Route path="/workspace/:id/issues" component={WorkspacesIssues} />
                     <Route path="/workspace/:id/metrics" component={WorkspacesMetrics} />
                     <Route path="/workspace/:id/edit" component={WorkspacesEdit} />
-                    <SprintMetrics path="/workspace/:id/sprint/:id/metrics" />
-                    <IssuesBoard path="/workspace/:id/sprint/:id/board" />
-                    <SprintIssues path="/workspace/:id/sprint/:id/issues" />
-                    <SprintEdit path="/workspace/:id/sprint/:id/edit" />
+                    <Route path="/workspace/:id/sprint/:id/issues" component={SprintIssues} />
+                    <Route path="/workspace/:id/sprint/:id/board" component={SprintBoard} />
+                    <Route path="/workspace/:id/sprint/:id/metrics" component={SprintMetrics} />
+                    <Route path="/workspace/:id/sprint/:id/edit" component={SprintEdit} />
                 </Router>
             </Suspense>
+        </div>
+    );
+};
+
+const Fallback: FunctionalComponent = () => {
+    return (
+        <div className="w-screen block">
+            <div className="flex">
+                <div className="main-content" />
+            </div>
         </div>
     );
 };

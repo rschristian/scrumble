@@ -13,10 +13,10 @@ const TopBar: FunctionalComponent = () => {
     return (
         <header class="header">
             <div class="flex items-center justify-between px-4 py-3 sm:p-0">
-                <div class="flex items-center flex-shrink-0 text-deep-space-sparkle mr-6">
+                <Link href="/" class="flex items-center flex-shrink-0 text-deep-space-sparkle mr-6">
                     <img class="h-8" src={scrumCards} alt="Image of Scrum Cards" />
                     <span class="ml-1 font-semibold text-xl tracking-wide">Scrumble</span>
-                </div>
+                </Link>
                 <div class="sm:hidden">
                     <button
                         onClick={(): void => setIsOpen(!isOpen)}
@@ -33,9 +33,9 @@ const TopBar: FunctionalComponent = () => {
                         </div>
                     </button>
                 </div>
-                <Link href="/" class={'header-link hidden md:block'}>
-                    Home
-                </Link>
+                {/*<Link href="/" class={'header-link hidden md:block'}>*/}
+                {/*    Home*/}
+                {/*</Link>*/}
             </div>
             <nav class={'sm:block ' + (isOpen ? '' : 'hidden')}>
                 <div class="sm:flex sm:p-0">
@@ -57,16 +57,15 @@ const TopBar: FunctionalComponent = () => {
                             </div>
                         </div>
                     </div>
-
-                    <Link
-                        href="/"
-                        class={
-                            'header-link px-4 py-5 border-t border-deep-space-sparkle sm:hidden ' +
-                            (isOpen ? 'block' : 'hidden')
-                        }
-                    >
-                        Home
-                    </Link>
+                    {/*<Link*/}
+                    {/*    href="/"*/}
+                    {/*    class={*/}
+                    {/*        'header-link px-4 py-5 border-t border-deep-space-sparkle sm:hidden ' +*/}
+                    {/*        (isOpen ? 'block' : 'hidden')*/}
+                    {/*    }*/}
+                    {/*>*/}
+                    {/*    Home*/}
+                    {/*</Link>*/}
                 </div>
                 <div class="px-4 py-5 border-t border-gray-800 sm:hidden">
                     <div class="flex items-center">
@@ -74,7 +73,9 @@ const TopBar: FunctionalComponent = () => {
                         <span class="ml-3 font-semibold text-deep-space-sparkle">Greg</span>
                     </div>
                     <div class="mt-4">
-                        <Link class="top-nav-dropdown-link">Sign out</Link>
+                        <Link href="/login" class="top-nav-dropdown-link">
+                            Sign out
+                        </Link>
                     </div>
                 </div>
             </nav>

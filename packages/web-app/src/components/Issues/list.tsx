@@ -20,7 +20,7 @@ const Issues: FunctionalComponent = () => {
             name: 'As a scrum master, I want to view a burn down chart for a sprint so that I can view velocity',
             description: 'An insightful description of a user story',
             storyPoint: 3,
-            project: 'Phoenix Project',
+            project: 'Narwhal Project',
         },
         {
             id: 1,
