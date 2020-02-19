@@ -7,7 +7,6 @@ import scrumCards from 'assets/icons/scrumCards.png';
 import avatar from 'assets/gitlab_avatar.png';
 
 const TopBar: FunctionalComponent = () => {
-    // TODO What is this for? Some sort of hidden menu that's not yet implemented? I'm a bit lost in this file, sorry if I'm being silly
     const [isOpen, setIsOpen] = useState(false);
     const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
 
@@ -34,7 +33,6 @@ const TopBar: FunctionalComponent = () => {
                         </div>
                     </button>
                 </div>
-                {/*TODO What if we just made the Scrumble name and image a link instead? I think that's common enough where people would understand?*/}
                 <Link href="/" class={'header-link hidden md:block'}>
                     Home
                 </Link>
@@ -59,16 +57,15 @@ const TopBar: FunctionalComponent = () => {
                             </div>
                         </div>
                     </div>
-                    {/* TODO What's all this for? Doesn't seem to be visible, but also looks like it's duplicates of the home button and account drop down?*/}
 
                     <Link
-                        href="/workspaces"
+                        href="/"
                         class={
                             'header-link px-4 py-5 border-t border-deep-space-sparkle sm:hidden ' +
                             (isOpen ? 'block' : 'hidden')
                         }
                     >
-                        Workspaces
+                        Home
                     </Link>
                 </div>
                 <div class="px-4 py-5 border-t border-gray-800 sm:hidden">

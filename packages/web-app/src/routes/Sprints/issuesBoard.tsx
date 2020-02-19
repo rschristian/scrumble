@@ -19,13 +19,6 @@ const IssuesBoard: FunctionalComponent = () => {
             storyPoint: 3,
             project: 'Unicorn Project',
         },
-        {
-            id: 1,
-            name: 'As a scrum master, I want to view the current number of closed tasks for a sprint',
-            description: 'An insightful description of a user story',
-            storyPoint: 1,
-            project: 'Project Dragonfly',
-        },
     ];
 
     return (
