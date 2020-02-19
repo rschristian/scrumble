@@ -1,6 +1,10 @@
 // Page Structure
+.page {
+  @apply mt-16 ml-12;
+}
+
 .main-content {
-  @apply flex flex-col content-center mx-auto w-5/6;
+  @apply flex flex-col content-center mx-auto w-5/6 overflow-auto;
 }
 
 .page-heading {

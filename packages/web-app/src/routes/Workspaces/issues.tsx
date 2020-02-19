@@ -5,7 +5,7 @@ import { sideNavItems } from 'routes/Workspaces/util';
 
 const WorkspacesIssues: FunctionalComponent = () => {
     return (
-        <div class="w-screen block">
+        <div class="page">
             <div class="flex">
                 <Sidebar items={sideNavItems} />
                 <div className="main-content">

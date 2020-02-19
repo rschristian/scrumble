@@ -14,12 +14,7 @@ const Sidebar: FunctionalComponent<IProps> = (props: IProps) => {
     const [currentUrl] = useState<string>(getCurrentUrl());
 
     return (
-        <div
-            className={
-                'z-10 left-0 bg-gray-300 h-screen fixed overflow-auto border border-gray-400 ' +
-                (isOpen ? 'w-48' : 'w-12')
-            }
-        >
+        <div className={'sidebar ' + (isOpen ? 'w-48' : 'w-12')}>
             <ul class="list-reset flex flex-col text-left">
                 <li
                     onClick={(): void => setIsOpen(!isOpen)}

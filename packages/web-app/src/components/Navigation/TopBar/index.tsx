@@ -11,7 +11,7 @@ const TopBar: FunctionalComponent = () => {
     const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
 
     return (
-        <header class="header min-h-16">
+        <header class="header">
             <div class="flex items-center justify-between px-4 py-3 sm:p-0">
                 <div class="flex items-center flex-shrink-0 text-deep-space-sparkle mr-6">
                     <img class="h-8" src={scrumCards} alt="Image of Scrum Cards" />

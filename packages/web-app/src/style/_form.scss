@@ -19,3 +19,21 @@
     @apply p-4;
   }
 }
+
+// This belongs to the metrics page. It's a sanity check and I promise
+// it needs to be here rn before I tear my hair out :-)
+.bubble-container {
+  @apply flex flex-wrap mx-auto mt-4 content-center;
+}
+
+@screen sm {
+  .bubble-container {
+    @apply flex-col;
+  }
+}
+
+@screen md {
+  .bubble-container {
+    @apply flex-row;
+  }
+}

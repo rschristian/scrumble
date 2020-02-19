@@ -5,7 +5,7 @@ import { sideNavItems } from 'routes/Sprints/util';
 
 const SprintEdit: FunctionalComponent = () => {
     return (
-        <div className="w-screen block">
+        <div className="page">
             <div className="flex">
                 <Sidebar items={sideNavItems} />
                 <div className="main-content">
