@@ -8,6 +8,7 @@ import metrics from 'assets/icons/metrics.png';
 import edit from 'assets/icons/edit.png';
 import presentation from 'assets/icons/presentation.png';
 import kanbanBoard from 'assets/icons/kanbanBoard.png';
+import IssuesBoard from 'routes/Sprints/issuesBoard';
 
 const SprintView: FunctionalComponent = () => {
     const menuItems = [
@@ -40,10 +41,10 @@ const SprintView: FunctionalComponent = () => {
 
     return (
         <div class="w-screen block">
-            <div class="flex">
+            <div class="fixed left-0">
                 <Sidebar items={menuItems} />
                 <div class="main-content">
-                    <Issues />
+                    <IssuesBoard />
                 </div>
             </div>
         </div>
