@@ -14,7 +14,7 @@ const Workspaces: FunctionalComponent = () => {
             <div class="mx-3 flex justify-center flex-col w-3/4">
                 <div class="create-bar">
                     <h1 class="page-heading">Your Workspaces</h1>
-                    <button class="btn-create">New Workspace</button>
+                    <button class="btn-create my-auto">New Workspace</button>
                 </div>
                 <SearchBar placeholder="Search by name" />
                 <div class="rounded bg-white overflow-hidden shadow-lg">
