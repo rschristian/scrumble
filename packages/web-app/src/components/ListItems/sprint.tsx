@@ -6,7 +6,7 @@ const SprintListItem: FunctionalComponent<Sprint> = (props: Sprint) => {
     return (
         <div class="lst-itm-container">
             <div class="px-4 py-2">
-                <Link href={`${getCurrentUrl()}/sprint/${props.id}`} class="truncate">
+                <Link href={`${getCurrentUrl()}/sprint/${props.id}/issues`} class="truncate">
                     {props.name}
                 </Link>
                 <p class="itm-description">{props.description}</p>
