@@ -13,6 +13,30 @@ const SprintEdit: FunctionalComponent = () => {
                     <div className="create-bar">
                         <h1 className="page-heading">Edit</h1>
                     </div>
+                    <div class="form-container">
+                        <div className="m-4">
+                            <label className="form-label">Sprint Name</label>
+                            <input className="form-input" type="text" placeholder="Sprint Name" value="Skyfall" />
+                        </div>
+                        <div className="m-4">
+                            <label className="form-label">Description</label>
+                            <input
+                                className="form-input"
+                                type="text"
+                                placeholder="Description"
+                                value="A Sprint description"
+                            />
+                        </div>
+                        <div className="m-4">
+                            <label className="form-label">Start Date</label>
+                            <input className="form-input" type="date" />
+                        </div>
+                        <div className="m-4">
+                            <label className="form-label">End Date</label>
+                            <input className="form-input" type="date" />
+                        </div>
+                        <button class="btn-create mx-auto mb-4 ml-4">Save Changes</button>
+                    </div>
                 </div>
             </div>
         </div>
