@@ -13,15 +13,16 @@ const SprintEdit: FunctionalComponent = () => {
                     <div className="create-bar">
                         <h1 className="page-heading">Edit</h1>
                     </div>
-                    <div class="form-container">
+                    <div class="form-container overflow-auto relative">
                         <div className="m-4">
                             <label className="form-label">Sprint Name</label>
                             <input className="form-input" type="text" placeholder="Sprint Name" value="Skyfall" />
                         </div>
                         <div className="m-4">
                             <label className="form-label">Description</label>
-                            <input
+                            <textarea
                                 className="form-input"
+                                rows={5}
                                 type="text"
                                 placeholder="Description"
                                 value="A Sprint description"

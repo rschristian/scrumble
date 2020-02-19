@@ -1,5 +1,5 @@
 .form-container {
-  @apply bg-white w-3/4 shadow-xl mx-auto mt-4 rounded-md;
+  @apply bg-white w-3/4 shadow-xl mx-auto mt-4 p-2 rounded-md;
 }
 
 .form-input {
@@ -12,4 +12,10 @@
 
 .form-label {
   @apply block text-deep-space-sparkle text-sm font-bold mb-2;
+}
+
+@screen md {
+  .form-container {
+    @apply p-4;
+  }
 }
