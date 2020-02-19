@@ -27,7 +27,7 @@ module.exports =  {
         'react/no-unescaped-entities': ['warn'],
         'quotes': 'off',
         '@typescript-eslint/quotes': ['warn', 'single'],
-        '@typescript-eslint/no-use-before-define': ['warn'],
+        '@typescript-eslint/no-use-before-define': ['off'],
         'arrow-parens': 'warn',
         '@typescript-eslint/ban-ts-ignore': ['warn'],
         '@typescript-eslint/interface-name-prefix': 'off',
