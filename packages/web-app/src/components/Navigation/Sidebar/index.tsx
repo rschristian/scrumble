@@ -51,10 +51,6 @@ const Sidebar: FunctionalComponent<IProps> = (props: IProps) => {
 };
 
 const getUrlSubstring = (currentUrl: string): string => {
-    // This regex is used to cut off URLs for better transitions.
-    // If I'm at '/workspace/1/edit', and request the sprints page,
-    // it gets /'workspace/1' so that I can append 'sprints' to it,
-    // making '/workspace/1/sprints'
     return currentUrl.replace(/\D+$/g, '');
 };
 

@@ -4,14 +4,12 @@ import { Sprint } from 'models/Sprint';
 
 const SprintListItem: FunctionalComponent<Sprint> = (props: Sprint) => {
     return (
-        <div class="lst-itm-container">
+        <Link href={`${getCurrentUrl()}/sprint/${props.id}/issues`} class="lst-itm-container">
             <div class="px-4 py-2">
-                <Link href={`${getCurrentUrl()}/sprint/${props.id}/issues`} class="truncate">
-                    {props.name}
-                </Link>
+                <div class="truncate">{props.name}</div>
                 <p class="itm-description">{props.description}</p>
             </div>
-        </div>
+        </Link>
     );
 };
 

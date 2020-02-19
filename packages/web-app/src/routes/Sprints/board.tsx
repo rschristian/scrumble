@@ -2,10 +2,9 @@ import { FunctionalComponent, h } from 'preact';
 import Sidebar from 'components/Navigation/Sidebar';
 import { sideNavItems } from 'routes/Sprints/util';
 import IssueCard from 'components/Cards/issue';
-import { Issue } from 'models/Issue';
 
-const IssuesBoard: FunctionalComponent = () => {
-    const issues: Issue[] = [
+const SprintBoard: FunctionalComponent = () => {
+    const issues = [
         {
             id: 1,
             name: 'As a user, I want to be edit a workspace so they can be altered after creation',
@@ -19,6 +18,13 @@ const IssuesBoard: FunctionalComponent = () => {
             description: 'An insightful description of a user story',
             storyPoint: 3,
             project: 'Unicorn Project',
+        },
+        {
+            id: 1,
+            name: 'As a scrum master, I want to view the current number of closed tasks for a sprint',
+            description: 'An insightful description of a user story',
+            storyPoint: 1,
+            project: 'Project Dragonfly',
         },
     ];
 
@@ -115,4 +121,4 @@ const IssuesBoard: FunctionalComponent = () => {
     );
 };
 
-export default IssuesBoard;
+export default SprintBoard;
