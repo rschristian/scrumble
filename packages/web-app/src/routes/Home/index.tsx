@@ -1,14 +1,15 @@
 import { FunctionalComponent, h } from 'preact';
+
+import WorkspaceListItem from 'components/ListItems/workspace';
 import SearchBar from 'components/SearchBar';
-import WorkspaceListItem from 'routes/Workspaces/listItem';
 
-const Workspaces: FunctionalComponent = () => {
-    const workspaces = [
-        { id: 1, name: 'CUBRIC', description: 'Brain Tinder' },
-        { id: 2, name: 'Sappo', description: 'Frogs n stuff' },
-        { id: 1, name: 'Spot a Bee', description: 'Bees and Foxgloves' },
-    ];
+const workspaces = [
+    { id: 1, name: 'CUBRIC', description: 'Brain Tinder' },
+    { id: 2, name: 'Sappo', description: 'Frogs n stuff' },
+    { id: 1, name: 'Spot a Bee', description: 'Bees and Foxgloves' },
+];
 
+const Home: FunctionalComponent = () => {
     return (
         <div class="w-screen flex justify-center bg-blue-100">
             <div class="mx-3 flex justify-center flex-col w-3/4">
@@ -34,4 +35,4 @@ const Workspaces: FunctionalComponent = () => {
     );
 };
 
-export default Workspaces;
+export default Home;

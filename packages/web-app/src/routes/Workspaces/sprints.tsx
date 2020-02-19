@@ -1,7 +1,9 @@
 import { FunctionalComponent, h } from 'preact';
 
 import SearchBar from 'components/SearchBar';
-import SprintListItem from 'routes/Sprints/listItem';
+import SprintListItem from 'components/ListItems/sprint';
+import Sidebar from '../../components/Navigation/Sidebar';
+import { sideNavItems } from './util';
 
 const Sprints: FunctionalComponent = () => {
     const sprints = [
@@ -23,24 +25,29 @@ const Sprints: FunctionalComponent = () => {
     ];
 
     return (
-        <div className="main-content">
-            <h1 className="user-path">CUBRIC > Sprints</h1>
-            <div className="create-bar">
-                <h1 className="page-heading">Sprints</h1>
-                <button className="btn-create my-auto">New Sprint</button>
-            </div>
-            <SearchBar placeholder="Search by name" />
-            <div className="rounded bg-white overflow-hidden shadow-lg">
-                {sprints.map((sprint, index) => {
-                    return (
-                        <SprintListItem
-                            key={index}
-                            id={sprint.id}
-                            name={sprint.name}
-                            description={sprint.description}
-                        />
-                    );
-                })}
+        <div className="w-screen block">
+            <div className="flex">
+                <Sidebar items={sideNavItems} />
+                <div className="main-content">
+                    <h1 className="user-path">CUBRIC > Sprints</h1>
+                    <div className="create-bar">
+                        <h1 className="page-heading">Sprints</h1>
+                        <button className="btn-create my-auto">New Sprint</button>
+                    </div>
+                    <SearchBar placeholder="Search by name" />
+                    <div className="rounded bg-white overflow-hidden shadow-lg">
+                        {sprints.map((sprint, index) => {
+                            return (
+                                <SprintListItem
+                                    key={index}
+                                    id={sprint.id}
+                                    name={sprint.name}
+                                    description={sprint.description}
+                                />
+                            );
+                        })}
+                    </div>
+                </div>
             </div>
         </div>
     );
