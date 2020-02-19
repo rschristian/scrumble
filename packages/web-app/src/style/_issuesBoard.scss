@@ -1,0 +1,23 @@
+.main-content-issues {
+  @apply flex flex-col content-center mx-auto w-full ml-20;
+}
+
+.issue-board {
+  @apply flex w-full bg-gray-100 shadow-xl rounded-md overflow-auto border border-deep-space-sparkle;
+}
+
+.issue-list {
+  @apply flex flex-col h-full w-1/4 shadow-xl;
+}
+
+.issue-list-title {
+  @apply text-lg font-semibold text-deep-space-sparkle p-5;
+}
+
+.issue-list-title-holder {
+  @apply border-b border-deep-space-sparkle;
+}
+
+.status-col {
+  @apply flex flex-col h-full border-l border-deep-space-sparkle shadow-xl;
+}

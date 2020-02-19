@@ -2,10 +2,10 @@ import { FunctionalComponent, h } from 'preact';
 
 import SearchBar from 'components/SearchBar';
 import SprintListItem from 'components/ListItems/sprint';
-import Sidebar from '../../components/Navigation/Sidebar';
+import Sidebar from 'components/Navigation/Sidebar';
 import { sideNavItems } from './util';
 
-const Sprints: FunctionalComponent = () => {
+const WorkspaceSprints: FunctionalComponent = () => {
     const sprints = [
         {
             id: 1,
@@ -53,4 +53,4 @@ const Sprints: FunctionalComponent = () => {
     );
 };
 
-export default Sprints;
+export default WorkspaceSprints;

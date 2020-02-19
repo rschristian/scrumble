@@ -7,6 +7,8 @@
 @import 'listItems';
 @import 'utilities';
 @import 'buttons';
+@import 'issuesBoard';
+@import 'form';
 
 // NB: Must be placed after all custom utilities made with Tailwind
 @import '~tailwindcss/utilities';
@@ -20,7 +22,7 @@ body,
 #app,
 .App {
   height: 100%;
-  max-width: 100%;
+  width: 100%;
   overflow-x: hidden;
   overflow-y: hidden;
 }
