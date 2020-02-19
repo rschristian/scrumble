@@ -11,7 +11,7 @@ const WorkspacesIssues: FunctionalComponent = () => {
                 <div className="main-content">
                     <h1 className="user-path">CUBRIC > Issues</h1>
                     <div className="create-bar">
-                        <h1 className="page-heading">Lauren's Got Issues a Plenty</h1>
+                        <h1 className="page-heading">Issues</h1>
                     </div>
                 </div>
             </div>
