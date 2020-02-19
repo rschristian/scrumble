@@ -1,14 +1,15 @@
 import { FunctionalComponent, h } from 'preact';
 
+import Issues from 'components/Issues/list';
+import Sidebar from 'components/Navigation/Sidebar';
+
 import list from 'assets/icons/list.png';
 import metrics from 'assets/icons/metrics.png';
 import edit from 'assets/icons/edit.png';
 import presentation from 'assets/icons/presentation.png';
 import kanbanBoard from 'assets/icons/kanbanBoard.png';
 
-import Sidebar from 'components/Navigation/Sidebar';
-
-const SprintNav: FunctionalComponent = () => {
+const SprintView: FunctionalComponent = () => {
     const menuItems = [
         {
             label: 'Issues',
@@ -37,7 +38,16 @@ const SprintNav: FunctionalComponent = () => {
         },
     ];
 
-    return <Sidebar items={menuItems} />;
+    return (
+        <div class="w-screen block">
+            <div class="flex">
+                <Sidebar items={menuItems} />
+                <div class="main-content">
+                    <Issues />
+                </div>
+            </div>
+        </div>
+    );
 };
 
-export default SprintNav;
+export default SprintView;

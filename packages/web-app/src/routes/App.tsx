@@ -3,11 +3,10 @@ import { useContext, useState } from 'preact/hooks';
 import { getCurrentUrl, route, Route, Router, RouterOnChangeArgs } from 'preact-router';
 
 import TopBar from 'components/Navigation/TopBar';
-import WorkspaceView from 'routes/Workspaces/Workspace';
-import SprintView from 'routes/Sprints';
-import Metrics from 'routes/Sprints/Metrics';
+import SprintView from 'routes/Sprints/sprintView';
 import { AuthStoreContext } from 'stores';
-import Workspaces from 'components/Workspaces';
+import WorkspaceView from 'routes/Workspaces/workspaceView';
+import Workspaces from 'routes/Workspaces/all';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 if ((module as any).hot) {
@@ -38,7 +37,6 @@ const App: FunctionalComponent = () => {
                 <Route path="/workspaces" component={Workspaces} />
                 <Route path="/workspace/:id" component={WorkspaceView} />
                 <Route path="/workspace/:id/metrics" component={WorkspaceView} />
-                <Route path="/sprint/:id/metrics" component={Metrics} />
                 <Route path="/sprint/:id" component={SprintView} />
                 <Route path="/sprint/:id/metrics" component={SprintView} />
                 <Route path="/sprint/:id/board" component={SprintView} />

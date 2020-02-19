@@ -1,6 +1,6 @@
 import { FunctionalComponent, h } from 'preact';
-import WorkspaceListItem from 'components/Workspaces/ListItem';
 import SearchBar from 'components/SearchBar';
+import WorkspaceListItem from 'routes/Workspaces/listItem';
 
 const Workspaces: FunctionalComponent = () => {
     const workspaces = [

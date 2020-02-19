@@ -3,7 +3,7 @@ import { useState } from 'preact/hooks';
 import { Link } from 'preact-router';
 import { Menu, X } from 'preact-feather';
 
-import AccountDropdown from 'components/AccountDropdown';
+import AccountDropdown from 'components/Navigation/AccountDropdown';
 
 import scrumCards from 'assets/icons/scrumCards.png';
 import avatar from 'assets/gitlab_avatar.png';
