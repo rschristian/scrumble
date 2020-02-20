@@ -1,8 +1,12 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
+import { useState } from 'preact/hooks';
 
 import { GenericEdit } from 'components/Edit';
 
 const WorkspaceEdit: FunctionalComponent = () => {
+    const [workspaceName, setWorkspaceName] = useState('');
+    const [projectsInWorkspace, setProjectsInWorkspace] = useState<string[]>([]);
+
     return (
         <GenericEdit
             editForm={
@@ -13,7 +17,8 @@ const WorkspaceEdit: FunctionalComponent = () => {
                             className="form-input"
                             type="text"
                             placeholder="Workspace Name"
-                            value="UI"
+                            value={workspaceName}
+                            onInput={(e): void => setWorkspaceName((e.target as HTMLInputElement).value)}
                         />
                     </div>
                     <div className="m-4">
@@ -23,7 +28,9 @@ const WorkspaceEdit: FunctionalComponent = () => {
                             rows={5}
                             type="text"
                             placeholder="Phoenix, Narwhal, Unicorn"
-                            value="Phoenix, Narwhal, Unicorn"
+                            value={projectsInWorkspace}
+                            // TODO this will need to be an array of projects, maybe through a drop down? Definitely not a cowboy'd string array.
+                            // onInput={(e): void => setWorkspaceName((e.target as HTMLInputElement).value)}
                         />
                     </div>
                 </Fragment>
