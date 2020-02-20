@@ -59,8 +59,9 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
                 <div class="main-content">
                     <h1 className="user-path">
                         <Link href="/">Workspaces</Link> &gt;{' '}
-                        <Link href={`/workspace/${props.workspaceId}`}>{workspaceName} &gt; Sprints</Link> &gt;{' '}
-                        {sprintName} &gt; {currentPage}
+                        <Link href={`/workspace/${props.workspaceId}`}>{workspaceName}</Link> &gt; Sprints &gt;{' '}
+                        <Link href={`/workspace/${props.workspaceId}/sprint/${props.sprintId}`}>{sprintName}</Link> &gt;{' '}
+                        {currentPage}
                     </h1>
                     {form}
                 </div>
