@@ -1,8 +1,8 @@
 [package]
 name = "distributed-tracing"
 version = "1.0.0"
-authors = ["Ryan Christian <ryanchristian4427@gmail.com>"]
-description = "A RESTful API template with authentication"
+authors = ["Ryan Christian <christianr@cardiff.ac.uk>"]
+description = "A RESTful API used to demostrate distributed tracing techniques"
 edition = "2018"
 
 [dependencies]

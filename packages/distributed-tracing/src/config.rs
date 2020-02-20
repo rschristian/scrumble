@@ -1,10 +1,10 @@
 use chrono::{DateTime, Duration, Utc};
+use crossbeam_channel::Sender;
 use rocket::config::{Config, Environment, Value};
 use rocket::fairing::AdHoc;
+use rustracing_jaeger::span::FinishedSpan;
 use std::collections::HashMap;
 use std::env;
-use crossbeam_channel::Sender;
-use rustracing_jaeger::span::FinishedSpan;
 
 /// Debug only secret for JWT encoding & decoding.
 #[cfg(debug_assertions)]

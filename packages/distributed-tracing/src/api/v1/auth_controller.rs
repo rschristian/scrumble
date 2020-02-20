@@ -1,22 +1,23 @@
 use crate::config::AppState;
 use crate::db::{auth_repository::UserCreationError, Conn};
 use crate::errors::{Errors, FieldValidator};
+use crate::models::user::{InsertableUser, UserCredentials};
 use crate::services::auth_service;
 
 use rocket::State;
 use rocket_contrib::json::{Json, JsonValue};
+use rustracing::sampler::AllSampler;
+use rustracing_jaeger::Tracer;
 use serde::Deserialize;
 use validator::Validate;
-use rustracing_jaeger::Tracer;
-use rustracing::sampler::AllSampler;
 
 #[derive(Deserialize)]
-pub struct NewUser {
-    user: NewUserData,
+pub struct RegistrationUser {
+    user: RegistrationUserData,
 }
 
 #[derive(Deserialize, Validate)]
-struct NewUserData {
+struct RegistrationUserData {
     first_name: Option<String>,
     last_name: Option<String>,
     #[validate(email)]
@@ -27,7 +28,7 @@ struct NewUserData {
 
 #[post("/users/register", format = "json", data = "<new_user>")]
 pub fn users_register(
-    new_user: Json<NewUser>,
+    new_user: Json<RegistrationUser>,
     conn: Conn,
     state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
@@ -44,10 +45,12 @@ pub fn users_register(
     extractor.check()?;
 
     auth_service::register(
-        &first_name,
-        &last_name,
-        &email,
-        &password,
+        InsertableUser {
+            first_name,
+            last_name,
+            email,
+            password,
+        },
         conn,
         &tracer,
         parent_span,
@@ -90,7 +93,12 @@ pub fn users_login(
     let password = extractor.extract("password", user.password);
     extractor.check()?;
 
-    auth_service::login(&email, &password, conn, &tracer, parent_span)
-        .map(|user| json!({ "user": user.to_user_auth(&state.secret) }))
-        .ok_or_else(|| Errors::new(&[("email or password", "is invalid")]))
+    auth_service::login(
+        UserCredentials { email, password },
+        conn,
+        &tracer,
+        parent_span,
+    )
+    .map(|user| json!({ "user": user.to_user_auth(&state.secret) }))
+    .ok_or_else(|| Errors::new(&[("email or password", "is invalid")]))
 }

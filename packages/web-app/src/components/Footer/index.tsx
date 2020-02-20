@@ -1,9 +1,10 @@
 import { FunctionalComponent, h } from 'preact';
+import './index.scss';
 
 const Footer: FunctionalComponent = () => (
-    <div class="hero-foot">
-        <div class="container has-text-centered">
-            <span>&copy; 2019 Ryan Christian</span>
+    <div>
+        <div class="text-center footer">
+            <span>&copy; 2020 Scrumble</span>
         </div>
     </div>
 );
