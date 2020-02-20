@@ -1,9 +1,37 @@
 @charset "utf-8";
 @import 'variables';
 
+@import '~tailwindcss/base';
+@import '~tailwindcss/components';
+@import 'navigation';
+@import 'listItems';
+@import 'utilities';
+@import 'buttons';
+@import 'issuesBoard';
+@import 'form';
+
+// NB: Must be placed after all custom utilities made with Tailwind
+@import '~tailwindcss/utilities';
+
 .is-clickable {
   cursor: pointer;
 }
 
-// Importing all of Bulma
-@import '~bulma/bulma.sass';
+html,
+body,
+#app,
+.App {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  //overflow-y: hidden;
+}
+.App {
+  display: flex;
+}
+.Footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}

@@ -1,0 +1,147 @@
+//Styling for top nav
+
+.header {
+  @apply border-b border-gray-500 bg-gray-100 fixed left-0 top-0 w-full h-16;
+}
+
+.sidebar {
+  @apply z-10 mt-16 inset-y-0 left-0 bg-gray-300 h-screen fixed overflow-auto border border-gray-400;
+}
+
+.header-link {
+  @apply block px-2 py-1 text-deep-space-sparkle font-semibold rounded;
+}
+
+.header-link:hover {
+  @apply bg-gray-300;
+}
+
+.avatar {
+  @apply h-8 w-8 border-2 border-gray-600 rounded-full object-cover;
+}
+
+.btn-account-dropdown {
+  @apply relative z-10 block h-8 w-8 rounded-full overflow-hidden border-2 border-gray-600;
+}
+
+.top-nav-dropdown-link {
+  @apply mt-2 block text-deep-space-sparkle;
+}
+.top-nav-dropdown-link:hover {
+  @apply text-gray-400;
+}
+
+.side-nav-link {
+  @apply min-h-12 flex items-start py-1 pl-1 text-deep-space-sparkle;
+}
+
+.side-nav-link:hover {
+  @apply bg-gray-400;
+}
+
+.side-nav-link:focus {
+  @apply font-semibold bg-gray-400;
+}
+
+@screen sm {
+  .header {
+    @apply flex justify-between items-center px-4 py-3;
+  }
+} //Styling for top nav
+
+.header {
+  @apply border-b border-gray-500 bg-gray-100;
+}
+
+.header-link {
+  @apply block px-2 py-1 text-deep-space-sparkle font-semibold rounded;
+}
+
+.header-link:hover {
+  @apply bg-gray-300;
+}
+
+.avatar {
+  @apply h-8 w-8 border-2 border-gray-600 rounded-full object-cover;
+}
+
+.btn-account-dropdown {
+  @apply relative z-10 block h-8 w-8 rounded-full overflow-hidden border-2 border-gray-600;
+}
+
+.btn-sign-out {
+  @apply absolute right-0 mt-2 w-32 bg-deep-space-sparkle shadow-2xl rounded-lg shadow-xl;
+}
+
+.btn-sign-out:hover {
+  @apply bg-orange-500;
+}
+
+.top-nav-dropdown-link {
+  @apply mt-2 block text-deep-space-sparkle;
+}
+.top-nav-dropdown-link:hover {
+  @apply text-gray-400;
+}
+
+//Styling for top nav
+
+.side-nav-link {
+  @apply min-h-12 flex items-start py-1 pl-1 text-deep-space-sparkle;
+}
+
+.side-nav-link:hover {
+  @apply bg-gray-400;
+}
+
+.side-nav-link:focus {
+  @apply font-semibold bg-gray-400;
+}
+
+@screen sm {
+  .header {
+    @apply flex justify-between items-center px-4 py-3;
+  }
+}
+
+.w3-sidebar {
+  height: 100%;
+  width: 200px;
+  background-color: #fff;
+  position: fixed !important;
+  z-index: 1;
+  overflow: auto;
+}
+
+.w3-collapse {
+  display: block !important;
+}
+
+.w3-animate-left {
+  position: relative;
+  animation: animateleft 0.4s;
+}
+
+@keyframes animateleft {
+  from {
+    left: -300px;
+    opacity: 0;
+  }
+  to {
+    left: 0;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 992px) {
+  .w3-sidebar.w3-collapse {
+    display: none;
+  }
+  .w3-main {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  .w3-auto {
+    max-width: 100%;
+  }
+}
