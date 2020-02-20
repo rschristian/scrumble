@@ -11,7 +11,7 @@ export const sideNavItems: SideBarItem[] = [
         path: '/',
     },
     {
-        label: 'Issues',
+        label: 'Backlog',
         icon: list,
         path: '/issues',
     },

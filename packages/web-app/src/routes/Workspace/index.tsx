@@ -42,7 +42,7 @@ const Workspace: FunctionalComponent<IProps> = (props: IProps) => {
     }, [getCurrentUrl()]);
 
     return (
-        <div class="w-screen block">
+        <div class="page">
             <div class="flex">
                 <SideBar items={sideNavItems} />
                 <div class="main-content">
