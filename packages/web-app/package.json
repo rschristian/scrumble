@@ -6,7 +6,7 @@
     "serve:dev": "cross-env PORT=3000 preact watch",
     "serve:prod": "preact build --no-prerender && sirv build --port 3000",
     "build": "preact build --no-prerender",
-    "lint": "eslint src/**/*.{js,ts,tsx} --quiet --fix",
+    "lint": "eslint src/**/*.{js,ts,tsx} --fix",
     "prettier": "prettier src/**/*.{css,scss,json} --write"
   },
   "husky": {
@@ -25,7 +25,7 @@
   "dependencies": {
     "mobx": "^5.15.4",
     "mobx-react-lite": "^1.5.2",
-    "preact": "^10.3.1",
+    "preact": "^10.3.2",
     "preact-feather": "^4.1.0",
     "preact-render-to-string": "^5.1.4",
     "preact-router": "^3.2.1",
@@ -38,9 +38,9 @@
     "@typescript-eslint/parser": "^2.19.0",
     "cross-env": "^7.0.0",
     "eslint": "^6.8.0",
+    "eslint-config-preact": "^1.1.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-react": "^7.18.3",
     "husky": "^4.2.1",
     "lint-staged": "^10.0.7",
     "node-sass": "^4.13.1",
