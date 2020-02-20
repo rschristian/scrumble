@@ -8,7 +8,7 @@ import Home from 'routes/Home';
 import { AuthStoreContext } from 'stores';
 
 const Login = lazy(() => import('routes/Login'));
-const Workspaces = lazy(() => import('routes/Workspaces'));
+const Workspace = lazy(() => import('routes/Workspace'));
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 if ((module as any).hot) {
@@ -31,28 +31,28 @@ const App: FunctionalComponent = () => {
     };
 
     let SprintIssues: any = lazy(() => {
-        SprintBoard = import('routes/Sprints/board');
-        SprintMetrics = import('routes/Sprints/metrics');
-        SprintEdit = import('routes/Workspaces/edit');
-        return import('routes/Sprints/issues');
+        SprintBoard = import('routes/Sprint/board');
+        SprintMetrics = import('routes/Sprint/metrics');
+        SprintEdit = import('routes/Workspace/edit');
+        return import('routes/Sprint/issues');
     });
     let SprintBoard: any = lazy(() => {
-        SprintIssues = import('routes/Sprints/issues');
-        SprintMetrics = import('routes/Sprints/metrics');
-        SprintEdit = import('routes/Sprints/edit');
-        return import('routes/Sprints/board');
+        SprintIssues = import('routes/Sprint/issues');
+        SprintMetrics = import('routes/Sprint/metrics');
+        SprintEdit = import('routes/Sprint/edit');
+        return import('routes/Sprint/board');
     });
     let SprintMetrics: any = lazy(() => {
-        SprintIssues = import('routes/Sprints/issues');
-        SprintBoard = import('routes/Sprints/board');
-        SprintEdit = import('routes/Sprints/edit');
-        return import('routes/Sprints/metrics');
+        SprintIssues = import('routes/Sprint/issues');
+        SprintBoard = import('routes/Sprint/board');
+        SprintEdit = import('routes/Sprint/edit');
+        return import('routes/Sprint/metrics');
     });
     let SprintEdit: any = lazy(() => {
-        SprintIssues = import('routes/Sprints/issues');
-        SprintBoard = import('routes/Sprints/board');
-        SprintMetrics = import('routes/Sprints/metrics');
-        return import('routes/Sprints/edit');
+        SprintIssues = import('routes/Sprint/issues');
+        SprintBoard = import('routes/Sprint/board');
+        SprintMetrics = import('routes/Sprint/metrics');
+        return import('routes/Sprint/edit');
     });
 
     return (
@@ -63,10 +63,10 @@ const App: FunctionalComponent = () => {
                 <Router onChange={(e: RouterOnChangeArgs): void => setCurrentUrl(e.url)}>
                     <Home path="/" />
                     <Login path="/login" />
-                    <Route path="/workspace/:workspaceId" component={Workspaces} />
-                    <Route path="/workspace/:workspaceId/issues" component={Workspaces} />
-                    <Route path="/workspace/:workspaceId/metrics" component={Workspaces} />
-                    <Route path="/workspace/:workspaceId/edit" component={Workspaces} />
+                    <Route path="/workspace/:workspaceId" component={Workspace} />
+                    <Route path="/workspace/:workspaceId/issues" component={Workspace} />
+                    <Route path="/workspace/:workspaceId/metrics" component={Workspace} />
+                    <Route path="/workspace/:workspaceId/edit" component={Workspace} />
                     <Route path="/workspace/:workspaceId/sprint/:id/issues" component={SprintIssues} />
                     <Route path="/workspace/:workspaceId/sprint/:id/board" component={SprintBoard} />
                     <Route path="/workspace/:workspaceId/sprint/:id/metrics" component={SprintMetrics} />

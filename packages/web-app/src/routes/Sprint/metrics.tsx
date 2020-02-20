@@ -1,7 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
 
 import { SideBar } from 'components/Navigation/SideBar';
-import { sideNavItems } from 'routes/Sprints/util';
+import { sideNavItems } from 'routes/Sprint/util';
 
 const SprintMetrics: FunctionalComponent = () => {
     return (

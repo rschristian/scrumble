@@ -3,7 +3,7 @@ import { FunctionalComponent, h } from 'preact';
 import IssueListItem from 'components/ListItems/issue';
 import IssueFilter from 'components/Issues/Filter';
 import Sidebar from 'components/Navigation/Sidebar';
-import { sideNavItems } from 'routes/Workspaces/util';
+import { sideNavItems } from 'routes/Workspace/util';
 import { Issue } from 'models/Issue';
 
 const Issues: FunctionalComponent = () => {

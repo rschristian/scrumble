@@ -4,7 +4,7 @@ import IssueListItem from 'components/ListItems/issue';
 import IssueFilter from 'components/Issues/Filter';
 import { SideBar } from 'components/Navigation/SideBar';
 import { issues } from 'data';
-import { sideNavItems } from 'routes/Sprints/util';
+import { sideNavItems } from 'routes/Sprint/util';
 
 const SprintIssues: FunctionalComponent = () => {
     return (

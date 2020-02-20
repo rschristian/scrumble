@@ -14,7 +14,7 @@ interface IProps {
     workspaceId: number;
 }
 
-const Workspaces: FunctionalComponent<IProps> = (props: IProps) => {
+const Workspace: FunctionalComponent<IProps> = (props: IProps) => {
     const [workspaceName, setWorkspaceName] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<string>('');
     const [form, setForm] = useState<ComponentChild>(null);
@@ -56,4 +56,4 @@ const Workspaces: FunctionalComponent<IProps> = (props: IProps) => {
     );
 };
 
-export default Workspaces;
+export default Workspace;
