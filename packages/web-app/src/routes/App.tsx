@@ -5,10 +5,10 @@ import { getCurrentUrl, Route, route, Router, RouterOnChangeArgs } from 'preact-
 
 import { TopBar } from 'components/Navigation/TopBar';
 import Home from 'routes/Home';
-import Workspaces from 'routes/Workspaces';
 import { AuthStoreContext } from 'stores';
 
 const Login = lazy(() => import('routes/Login'));
+const Workspaces = lazy(() => import('routes/Workspaces'));
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 if ((module as any).hot) {
@@ -29,31 +29,6 @@ const App: FunctionalComponent = () => {
             route('/login');
         }
     };
-
-    let WorkspacesSprints: any = lazy(() => {
-        WorkspacesIssues = import('routes/Workspaces/issues');
-        WorkspacesMetrics = import('routes/Workspaces/metrics');
-        WorkspacesEdit = import('routes/Workspaces/edit');
-        return import('routes/Workspaces/sprints');
-    });
-    let WorkspacesIssues: any = lazy(() => {
-        WorkspacesSprints = import('routes/Workspaces/sprints');
-        WorkspacesMetrics = import('routes/Workspaces/metrics');
-        WorkspacesEdit = import('routes/Workspaces/edit');
-        return import('routes/Workspaces/issues');
-    });
-    let WorkspacesMetrics: any = lazy(() => {
-        WorkspacesSprints = import('routes/Workspaces/sprints');
-        WorkspacesIssues = import('routes/Workspaces/issues');
-        WorkspacesEdit = import('routes/Workspaces/edit');
-        return import('routes/Workspaces/metrics');
-    });
-    let WorkspacesEdit: any = lazy(() => {
-        WorkspacesSprints = import('routes/Workspaces/sprints');
-        WorkspacesIssues = import('routes/Workspaces/issues');
-        WorkspacesMetrics = import('routes/Workspaces/metrics');
-        return import('routes/Workspaces/edit');
-    });
 
     let SprintIssues: any = lazy(() => {
         SprintBoard = import('routes/Sprints/board');
