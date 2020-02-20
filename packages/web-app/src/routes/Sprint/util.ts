@@ -1,14 +1,15 @@
-import { SideBarItem } from '../../models/SideBarItem';
-import list from 'assets/icons/list.png';
-import metrics from 'assets/icons/metrics.png';
 import edit from 'assets/icons/edit.png';
 import kanbanBoard from 'assets/icons/kanbanBoard.png';
+import list from 'assets/icons/list.png';
+import metrics from 'assets/icons/metrics.png';
+import presentation from 'assets/icons/presentation.png';
+import { SideBarItem } from 'models/SideBarItem';
 
 export const sideNavItems: SideBarItem[] = [
     {
         label: 'Issues',
         icon: list,
-        path: '/issues',
+        path: '/',
     },
     {
         label: 'Board',
@@ -20,11 +21,11 @@ export const sideNavItems: SideBarItem[] = [
         icon: metrics,
         path: '/metrics',
     },
-    // {
-    //     label: 'Show n Tell',
-    //     icon: presentation,
-    //     path: '/showntell',
-    // },
+    {
+        label: 'Show and Tell',
+        icon: presentation,
+        path: '/showandtell',
+    },
     {
         label: 'Edit',
         icon: edit,

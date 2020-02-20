@@ -9,7 +9,7 @@ interface IProps {
     items: SideBarItem[];
 }
 
-const Sidebar: FunctionalComponent<IProps> = (props: IProps) => {
+export const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [currentUrl] = useState<string>(getCurrentUrl());
 
@@ -48,5 +48,3 @@ const Sidebar: FunctionalComponent<IProps> = (props: IProps) => {
 const getUrlSubstring = (currentUrl: string): string => {
     return currentUrl.replace(/\D+$/g, '');
 };
-
-export default Sidebar;

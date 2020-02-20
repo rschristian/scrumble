@@ -6,7 +6,7 @@ import { Menu, X } from 'preact-feather';
 import scrumCards from 'assets/icons/scrumCards.png';
 import avatar from 'assets/gitlab_avatar.png';
 
-const TopBar: FunctionalComponent = () => {
+export const TopBar: FunctionalComponent = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
 
@@ -93,5 +93,3 @@ const TopBar: FunctionalComponent = () => {
         </div>
     );
 };
-
-export default TopBar;
