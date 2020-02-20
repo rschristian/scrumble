@@ -14,20 +14,24 @@ export const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
     const [currentUrl] = useState<string>(getCurrentUrl());
 
     return (
-        <div className={'sidebar ' + (isOpen ? 'w-48' : 'w-12')}>
+        <div
+            className={`z-10 left-0 bg-gray-300 h-screen fixed overflow-auto border border-gray-400 ${
+                isOpen ? 'w-48' : 'w-12'
+            }`}
+        >
             <ul class="list-reset flex flex-col text-left">
                 <li
                     onClick={(): void => setIsOpen(!isOpen)}
                     className="side-nav-link border-b border-deep-space-sparkle"
                 >
                     <div className="flex items-start items-baseline min-h-12">
-                        <div class={'my-auto ml-2 ' + (!isOpen ? 'block' : 'hidden')}>
+                        <div class={`my-auto ml-2 ${!isOpen ? 'block' : 'hidden'}`}>
                             <Menu size={20} />
                         </div>
-                        <div class={'my-auto ml-2 ' + (isOpen ? 'block' : 'hidden')}>
+                        <div class={`my-auto ml-2 ${isOpen ? 'block' : 'hidden'}`}>
                             <X size={20} />
                         </div>
-                        <p className={'ml-3 my-auto ' + (isOpen ? 'block' : 'hidden')}>Close sidebar</p>
+                        <p className={`ml-3 my-auto ${isOpen ? 'block' : 'hidden'}`}>Close sidebar</p>
                     </div>
                 </li>
                 {props.items.map((menuItem, index) => {
@@ -35,7 +39,7 @@ export const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
                         <Link href={getUrlSubstring(currentUrl) + menuItem.path} key={index}>
                             <li class="side-nav-link">
                                 <img src={menuItem.icon} class="my-auto ml-2 w-5" alt={menuItem.label} />
-                                <div class={'ml-3 my-auto ' + (isOpen ? 'block' : 'hidden')}>{menuItem.label}</div>
+                                <div class={`ml-3 my-auto ${isOpen ? 'block' : 'hidden'}`}>{menuItem.label}</div>
                             </li>
                         </Link>
                     );

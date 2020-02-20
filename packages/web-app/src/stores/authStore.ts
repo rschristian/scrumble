@@ -20,9 +20,8 @@ class AuthStore {
             }
             if (typeof result == 'string') {
                 return result;
-            } else {
-                return 'Unknown Server Error';
             }
+            return 'Unknown Server Error';
         });
     }
 
@@ -41,9 +40,8 @@ class AuthStore {
             }
             if (typeof result == 'string') {
                 return result;
-            } else {
-                return 'Unknown Server Error';
             }
+            return 'Unknown Server Error';
         });
     }
 }

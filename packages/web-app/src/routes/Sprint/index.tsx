@@ -1,7 +1,8 @@
 import { ComponentChild, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
-import { getCurrentUrl, Link } from 'preact-router';
+import { getCurrentUrl } from 'preact-router';
 
+import BreadCrumbs from 'components/BreadCrumbs';
 import { SideBar } from 'components/Navigation/SideBar';
 import { sprints, workspaces } from 'data';
 import SprintBoard from './board';
@@ -21,6 +22,8 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
     const [sprintName, setSprintName] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<string>('');
     const [form, setForm] = useState<ComponentChild>(null);
+
+    const currentUrl = getCurrentUrl();
 
     useEffect(() => {
         for (const workspace of workspaces) {
@@ -50,19 +53,20 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
             setCurrentPage('Issues');
             setForm(<SprintIssues />);
         }
-    }, [getCurrentUrl()]);
+    }, [props.sprintId, props.workspaceId, currentUrl]);
 
     return (
         <div class="page">
             <div class="flex">
                 <SideBar items={sideNavItems} />
                 <div class="main-content">
-                    <h1 className="user-path">
-                        <Link href="/">Workspaces</Link> &gt;{' '}
-                        <Link href={`/workspace/${props.workspaceId}`}>{workspaceName}</Link> &gt; Sprints &gt;{' '}
-                        <Link href={`/workspace/${props.workspaceId}/sprint/${props.sprintId}`}>{sprintName}</Link> &gt;{' '}
-                        {currentPage}
-                    </h1>
+                    <BreadCrumbs
+                        workspaceId={props.workspaceId}
+                        workspaceName={workspaceName}
+                        currentPage={currentPage}
+                        sprintId={props.sprintId}
+                        sprintName={sprintName}
+                    />
                     {form}
                 </div>
             </div>
