@@ -28,7 +28,7 @@
 
 @screen sm {
   .bubble-container {
-    @apply flex-col;
+    @apply flex-col items-center justify-center content-center;
   }
 }
 

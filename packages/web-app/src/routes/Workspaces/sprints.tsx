@@ -1,7 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
 
 import SearchBar from 'components/SearchBar';
-import SprintListItem from 'components/ListItems/sprint';
+import { SprintListItem } from 'components/ListItems/sprint';
 import Sidebar from 'components/Navigation/Sidebar';
 import { sideNavItems } from './util';
 import { Sprint } from 'models/Sprint';
