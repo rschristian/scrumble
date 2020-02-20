@@ -54,8 +54,9 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
                 <SideBar items={sideNavItems} />
                 <div class="main-content">
                     <h1 className="user-path">
-                        <Link href="/">Workspaces</Link> &gt; {workspaceName} &gt; Sprints &gt; {sprintName} &gt;{' '}
-                        {currentPage}
+                        <Link href="/">Workspaces</Link> &gt;{' '}
+                        <Link href={`/workspace/${props.workspaceId}`}>{workspaceName} &gt; Sprints</Link> &gt;{' '}
+                        {sprintName} &gt; {currentPage}
                     </h1>
                     {form}
                 </div>
