@@ -4,54 +4,11 @@ import Sidebar from 'components/Navigation/Sidebar';
 import { sideNavItems } from 'routes/Workspaces/util';
 import IssueFilter from 'components/Filter/issues';
 import IssueListItem from 'components/ListItems/issue';
-import { Issue } from 'models/Issue';
 import { SprintListItem } from 'components/ListItems/sprint';
-import { Sprint } from 'models/Sprint';
 import SprintFilter from 'components/Filter/sprints';
+import { issues, sprints } from 'data';
 
 const WorkspacesIssues: FunctionalComponent = () => {
-    const issues: Issue[] = [
-        {
-            id: 1,
-            name: 'As a user, I want to be edit a workspace so they can be altered after creation',
-            description: 'An insightful description of a user story',
-            storyPoint: 1,
-            project: 'Phoenix Project',
-        },
-        {
-            id: 2,
-            name: 'As a scrum master, I want to view a burn down chart for a sprint so that I can view velocity',
-            description: 'An insightful description of a user story',
-            storyPoint: 3,
-            project: 'Phoenix Project',
-        },
-        {
-            id: 1,
-            name: 'As a scrum master, I want to view the current number of closed tasks for a sprint',
-            description: 'An insightful description of a user story',
-            storyPoint: 1,
-            project: 'Phoenix Project',
-        },
-    ];
-
-    const sprints: Sprint[] = [
-        {
-            id: 1,
-            name: 'Skyfall',
-            description: 'Insert insightful and creative description of a sprint here',
-        },
-        {
-            id: 2,
-            name: 'Quantum of Solace',
-            description: 'Insert insightful and creative description of a sprint here',
-        },
-        {
-            id: 1,
-            name: 'Spectre',
-            description: 'Insert insightful and creative description of a sprint here',
-        },
-    ];
-
     return (
         <div class="page">
             <div class="flex">
