@@ -20,13 +20,14 @@ const Workspace: FunctionalComponent<IProps> = (props: IProps) => {
     const [currentPage, setCurrentPage] = useState<string>('');
     const [form, setForm] = useState<ComponentChild>(null);
 
+    const currentUrl = getCurrentUrl();
+
     useEffect(() => {
         for (const workspace of workspaces) {
             if (workspace.id == props.workspaceId) {
                 setWorkspaceName(workspace.name);
             }
         }
-        const currentUrl = getCurrentUrl();
         if (currentUrl.includes('issues')) {
             setCurrentPage('Issues');
             setForm(<WorkspaceIssues />);
@@ -40,7 +41,7 @@ const Workspace: FunctionalComponent<IProps> = (props: IProps) => {
             setCurrentPage('Sprints');
             setForm(<WorkspaceSprints />);
         }
-    }, [getCurrentUrl()]);
+    }, [props.workspaceId, currentUrl]);
 
     return (
         <div class="w-screen block">

@@ -23,6 +23,8 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
     const [currentPage, setCurrentPage] = useState<string>('');
     const [form, setForm] = useState<ComponentChild>(null);
 
+    const currentUrl = getCurrentUrl();
+
     useEffect(() => {
         for (const workspace of workspaces) {
             if (workspace.id == props.workspaceId) {
@@ -51,7 +53,7 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
             setCurrentPage('Issues');
             setForm(<SprintIssues />);
         }
-    }, [getCurrentUrl()]);
+    }, [props.sprintId, props.workspaceId, currentUrl]);
 
     return (
         <div class="w-screen block">

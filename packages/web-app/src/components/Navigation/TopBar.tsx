@@ -24,48 +24,36 @@ export const TopBar: FunctionalComponent = () => {
                         class="block text-deep-space-sparkle hover:text-gray-400 focus:outline-none"
                     >
                         <div className="flex items-start items-baseline min-h-12">
-                            <div className={'my-auto ml-2 ' + (!isOpen ? 'block' : 'hidden')}>
+                            <div className={`my-auto ml-2 ${!isOpen ? 'block' : 'hidden'}`}>
                                 <Menu size={20} />
                             </div>
-                            <div className={'my-auto ml-2 ' + (isOpen ? 'block' : 'hidden')}>
+                            <div className={`my-auto ml-2 ${isOpen ? 'block' : 'hidden'}`}>
                                 <X size={20} />
                             </div>
                         </div>
                     </button>
                 </div>
-                {/*<Link href="/" class={'header-link hidden md:block'}>*/}
-                {/*    Home*/}
-                {/*</Link>*/}
             </div>
-            <nav class={'sm:block ' + (isOpen ? '' : 'hidden')}>
+            <nav class={`sm:block ${isOpen ? '' : 'hidden'}`}>
                 <div class="sm:flex sm:p-0">
                     <div class="hidden sm:block sm:ml-6">
                         <div className="relative">
                             <button
                                 onClick={(): void => setIsAccountDropdownOpen(!isAccountDropdownOpen)}
                                 onBlur={(): void => setIsAccountDropdownOpen(false)}
-                                className={
-                                    'btn-account-dropdown ' + (isAccountDropdownOpen ? 'outline-none border-white' : '')
-                                }
+                                className={`btn-account-dropdown ${
+                                    isAccountDropdownOpen ? 'outline-none border-white' : ''
+                                }`}
                             >
                                 <img className="avatar" src={avatar} alt="Your avatar" />
                             </button>
-                            <div className={'btn-sign-out shadow-lg ' + (isAccountDropdownOpen ? 'block' : 'hidden')}>
+                            <div className={`btn-sign-out shadow-lg ${isAccountDropdownOpen ? 'block' : 'hidden'}`}>
                                 <a href="#" className="block px-4 py-2 text-white text-center">
                                     Sign out
                                 </a>
                             </div>
                         </div>
                     </div>
-                    {/*<Link*/}
-                    {/*    href="/"*/}
-                    {/*    class={*/}
-                    {/*        'header-link px-4 py-5 border-t border-deep-space-sparkle sm:hidden ' +*/}
-                    {/*        (isOpen ? 'block' : 'hidden')*/}
-                    {/*    }*/}
-                    {/*>*/}
-                    {/*    Home*/}
-                    {/*</Link>*/}
                 </div>
                 <div class="px-4 py-5 border-t border-gray-800 sm:hidden">
                     <div class="flex items-center">
