@@ -76,7 +76,7 @@ const TopBar: FunctionalComponent = () => {
             </header>
             <div
                 className={
-                    'sm:hidden z-20 fixed w-full mt-16 bg-gray-200 border-b border-gray-500 ' +
+                    'sm:hidden z-20 fixed w-full mt-16 bg-gray-100 border-b border-gray-500 ' +
                     (isOpen ? 'block' : 'hidden')
                 }
             >
