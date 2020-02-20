@@ -9,6 +9,7 @@ import { AuthStoreContext } from 'stores';
 
 const Login = lazy(() => import('routes/Login'));
 const Workspace = lazy(() => import('routes/Workspace'));
+const Sprint = lazy(() => import('routes/Sprint'));
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 if ((module as any).hot) {
@@ -30,31 +31,6 @@ const App: FunctionalComponent = () => {
         }
     };
 
-    let SprintIssues: any = lazy(() => {
-        SprintBoard = import('routes/Sprint/board');
-        SprintMetrics = import('routes/Sprint/metrics');
-        SprintEdit = import('routes/Workspace/edit');
-        return import('routes/Sprint/issues');
-    });
-    let SprintBoard: any = lazy(() => {
-        SprintIssues = import('routes/Sprint/issues');
-        SprintMetrics = import('routes/Sprint/metrics');
-        SprintEdit = import('routes/Sprint/edit');
-        return import('routes/Sprint/board');
-    });
-    let SprintMetrics: any = lazy(() => {
-        SprintIssues = import('routes/Sprint/issues');
-        SprintBoard = import('routes/Sprint/board');
-        SprintEdit = import('routes/Sprint/edit');
-        return import('routes/Sprint/metrics');
-    });
-    let SprintEdit: any = lazy(() => {
-        SprintIssues = import('routes/Sprint/issues');
-        SprintBoard = import('routes/Sprint/board');
-        SprintMetrics = import('routes/Sprint/metrics');
-        return import('routes/Sprint/edit');
-    });
-
     return (
         <div id="app" class="bg-blue-100">
             {/*{authGuard()}*/}
@@ -67,10 +43,10 @@ const App: FunctionalComponent = () => {
                     <Route path="/workspace/:workspaceId/issues" component={Workspace} />
                     <Route path="/workspace/:workspaceId/metrics" component={Workspace} />
                     <Route path="/workspace/:workspaceId/edit" component={Workspace} />
-                    <Route path="/workspace/:workspaceId/sprint/:id/issues" component={SprintIssues} />
-                    <Route path="/workspace/:workspaceId/sprint/:id/board" component={SprintBoard} />
-                    <Route path="/workspace/:workspaceId/sprint/:id/metrics" component={SprintMetrics} />
-                    <Route path="/workspace/:workspaceId/sprint/:id/edit" component={SprintEdit} />
+                    <Route path="/workspace/:workspaceId/sprint/:sprintId/" component={Sprint} />
+                    <Route path="/workspace/:workspaceId/sprint/:sprintId/board" component={Sprint} />
+                    <Route path="/workspace/:workspaceId/sprint/:sprintId/metrics" component={Sprint} />
+                    <Route path="/workspace/:workspaceId/sprint/:sprintId/edit" component={Sprint} />
                 </Router>
             </Suspense>
         </div>

@@ -20,7 +20,7 @@ export const sprints: Sprint[] = [
         description: 'Insert insightful and creative description of a sprint here',
     },
     {
-        id: 1,
+        id: 3,
         name: 'Spectre',
         description: 'Insert insightful and creative description of a sprint here',
     },

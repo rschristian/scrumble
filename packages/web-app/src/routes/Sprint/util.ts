@@ -1,4 +1,4 @@
-import { SideBarItem } from '../../models/SideBarItem';
+import { SideBarItem } from 'models/SideBarItem';
 import list from 'assets/icons/list.png';
 import metrics from 'assets/icons/metrics.png';
 import edit from 'assets/icons/edit.png';
@@ -8,7 +8,7 @@ export const sideNavItems: SideBarItem[] = [
     {
         label: 'Issues',
         icon: list,
-        path: '/issues',
+        path: '/',
     },
     {
         label: 'Board',
