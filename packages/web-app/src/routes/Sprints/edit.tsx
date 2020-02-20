@@ -9,11 +9,11 @@ const SprintEdit: FunctionalComponent = () => {
             <div className="flex">
                 <Sidebar items={sideNavItems} />
                 <div className="main-content">
-                    <h1 className="user-path">CUBRIC > Sprints > Skyfall > Edit</h1>
+                    <h1 className="user-path">CUBRIC > Edit</h1>
                     <div className="create-bar">
                         <h1 className="page-heading">Edit</h1>
                     </div>
-                    <div class="form-container overflow-auto relative">
+                    <div className="form-container overflow-auto relative">
                         <div className="m-4">
                             <label className="form-label">Sprint Name</label>
                             <input className="form-input" type="text" placeholder="Sprint Name" value="Skyfall" />
@@ -36,7 +36,7 @@ const SprintEdit: FunctionalComponent = () => {
                             <label className="form-label">End Date</label>
                             <input className="form-input" type="date" />
                         </div>
-                        <button class="btn-create mx-auto mb-4 ml-4">Save Changes</button>
+                        <button className="btn-create mx-auto mb-4 ml-4">Save Changes</button>
                     </div>
                 </div>
             </div>

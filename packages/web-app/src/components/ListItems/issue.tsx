@@ -10,7 +10,7 @@ const IssueListItem: FunctionalComponent<Issue> = (props: Issue) => {
                     {props.name}
                 </Link>
             </div>
-            <div className="px-4 py-2">
+            <div className="px-4 py-2 z-1">
                 <span className="story-pnt">{props.storyPoint}</span>
             </div>
         </div>

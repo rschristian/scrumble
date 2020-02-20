@@ -1,5 +1,5 @@
 .form-container {
-  @apply bg-white w-3/4 shadow-xl mx-auto mt-4 p-2 rounded-md;
+  @apply bg-white w-11/12 shadow-xl mx-auto mt-4 p-2 rounded-md;
 }
 
 .form-input {
@@ -16,7 +16,7 @@
 
 @screen md {
   .form-container {
-    @apply p-4;
+    @apply p-4 w-3/4;
   }
 }
 
@@ -28,7 +28,7 @@
 
 @screen sm {
   .bubble-container {
-    @apply flex-col items-center justify-center content-center;
+    @apply flex-col items-center content-center;
   }
 }
 
@@ -36,4 +36,8 @@
   .bubble-container {
     @apply flex-row;
   }
+}
+
+.bubble {
+  @apply mx-auto;
 }

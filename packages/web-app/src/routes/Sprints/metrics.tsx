@@ -15,7 +15,7 @@ const SprintMetrics: FunctionalComponent = () => {
                     <div className="create-bar">
                         <h1 className="page-heading">Metrics</h1>
                     </div>
-                    <div class="bubble-container">
+                    <div class="bubble-container justify-between">
                         <MetricBubble
                             metric="Story Points Planned"
                             value="22/33"
