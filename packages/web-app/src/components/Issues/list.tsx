@@ -2,7 +2,7 @@ import { FunctionalComponent, h } from 'preact';
 
 import IssueListItem from 'components/ListItems/issue';
 import IssueFilter from 'components/Issues/Filter';
-import Sidebar from 'components/Navigation/Sidebar';
+import SideBar from 'components/Navigation/SideBar';
 import { sideNavItems } from 'routes/Workspace/util';
 import { Issue } from 'models/Issue';
 
@@ -34,7 +34,7 @@ const Issues: FunctionalComponent = () => {
     return (
         <div className="w-screen block">
             <div className="flex">
-                <Sidebar items={sideNavItems} />
+                <SideBar items={sideNavItems} />
                 <div className="main-content">
                     <h1 className="user-path">CUBRIC > Sprints > Skyfall</h1>
                     <div className="create-bar">
