@@ -1,7 +1,8 @@
 import { ComponentChild, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
-import { getCurrentUrl, Link } from 'preact-router';
+import { getCurrentUrl } from 'preact-router';
 
+import BreadCrumbs from 'components/BreadCrumbs';
 import { SideBar } from 'components/Navigation/SideBar';
 import { workspaces } from 'data';
 import WorkspaceEdit from './edit';
@@ -46,9 +47,11 @@ const Workspace: FunctionalComponent<IProps> = (props: IProps) => {
             <div class="flex">
                 <SideBar items={sideNavItems} />
                 <div class="main-content">
-                    <h1 className="user-path">
-                        <Link href="/">Workspaces</Link> &gt; {workspaceName} &gt; {currentPage}
-                    </h1>
+                    <BreadCrumbs
+                        workspaceId={props.workspaceId}
+                        workspaceName={workspaceName}
+                        currentPage={currentPage}
+                    />
                     {form}
                 </div>
             </div>
