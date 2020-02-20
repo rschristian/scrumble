@@ -8,6 +8,7 @@ import SprintBoard from './board';
 import SprintEdit from './edit';
 import SprintIssues from './issues';
 import SprintMetrics from './metrics';
+import SprintShowAndTell from './showAndTell';
 import { sideNavItems } from './util';
 
 interface IProps {
@@ -42,6 +43,9 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
         } else if (currentUrl.includes('edit')) {
             setCurrentPage('Edit');
             setForm(<SprintEdit />);
+        } else if (currentUrl.includes('showandtell')) {
+            setCurrentPage('Show and Tell');
+            setForm(<SprintShowAndTell />);
         } else {
             setCurrentPage('Issues');
             setForm(<SprintIssues />);

@@ -46,6 +46,7 @@ const App: FunctionalComponent = () => {
                     <Route path="/workspace/:workspaceId/sprint/:sprintId/" component={Sprint} />
                     <Route path="/workspace/:workspaceId/sprint/:sprintId/board" component={Sprint} />
                     <Route path="/workspace/:workspaceId/sprint/:sprintId/metrics" component={Sprint} />
+                    <Route path="/workspace/:workspaceId/sprint/:sprintId/showandtell" component={Sprint} />
                     <Route path="/workspace/:workspaceId/sprint/:sprintId/edit" component={Sprint} />
                 </Router>
             </Suspense>
