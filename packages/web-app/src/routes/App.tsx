@@ -3,8 +3,9 @@ import { useContext, useState } from 'preact/hooks';
 import { lazy, Suspense } from 'preact/compat';
 import { getCurrentUrl, Route, route, Router, RouterOnChangeArgs } from 'preact-router';
 
-import TopBar from 'components/Navigation/TopBar';
+import { TopBar } from 'components/Navigation/TopBar';
 import Home from 'routes/Home';
+import Workspaces from 'routes/Workspaces';
 import { AuthStoreContext } from 'stores';
 
 const Login = lazy(() => import('routes/Login'));
@@ -87,14 +88,14 @@ const App: FunctionalComponent = () => {
                 <Router onChange={(e: RouterOnChangeArgs): void => setCurrentUrl(e.url)}>
                     <Home path="/" />
                     <Login path="/login" />
-                    <Route path="/workspace/:id" component={WorkspacesSprints} />
-                    <Route path="/workspace/:id/issues" component={WorkspacesIssues} />
-                    <Route path="/workspace/:id/metrics" component={WorkspacesMetrics} />
-                    <Route path="/workspace/:id/edit" component={WorkspacesEdit} />
-                    <Route path="/workspace/:id/sprint/:id/issues" component={SprintIssues} />
-                    <Route path="/workspace/:id/sprint/:id/board" component={SprintBoard} />
-                    <Route path="/workspace/:id/sprint/:id/metrics" component={SprintMetrics} />
-                    <Route path="/workspace/:id/sprint/:id/edit" component={SprintEdit} />
+                    <Route path="/workspace/:workspaceId" component={Workspaces} />
+                    <Route path="/workspace/:workspaceId/issues" component={Workspaces} />
+                    <Route path="/workspace/:workspaceId/metrics" component={Workspaces} />
+                    <Route path="/workspace/:workspaceId/edit" component={Workspaces} />
+                    <Route path="/workspace/:workspaceId/sprint/:id/issues" component={SprintIssues} />
+                    <Route path="/workspace/:workspaceId/sprint/:id/board" component={SprintBoard} />
+                    <Route path="/workspace/:workspaceId/sprint/:id/metrics" component={SprintMetrics} />
+                    <Route path="/workspace/:workspaceId/sprint/:id/edit" component={SprintEdit} />
                 </Router>
             </Suspense>
         </div>

@@ -1,13 +1,13 @@
 import { FunctionalComponent, h } from 'preact';
 
-import Sidebar from 'components/Navigation/Sidebar';
+import { SideBar } from 'components/Navigation/SideBar';
 import { sideNavItems } from 'routes/Sprints/util';
 
 const SprintMetrics: FunctionalComponent = () => {
     return (
         <div class="w-screen block">
             <div class="flex">
-                <Sidebar items={sideNavItems} />
+                <SideBar items={sideNavItems} />
                 <div className="main-content">
                     <h1 className="user-path">CUBRIC > Skyall > Metrics</h1>
                     <div className="create-bar">

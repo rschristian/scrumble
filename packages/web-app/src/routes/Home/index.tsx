@@ -2,13 +2,7 @@ import { FunctionalComponent, h } from 'preact';
 
 import WorkspaceListItem from 'components/ListItems/workspace';
 import SearchBar from 'components/SearchBar';
-import { Workspace } from 'models/Workspace';
-
-const workspaces: Workspace[] = [
-    { id: 1, name: 'CUBRIC', description: 'Brain Tinder' },
-    { id: 2, name: 'Sappo', description: 'Frogs n stuff' },
-    { id: 1, name: 'Spot a Bee', description: 'Bees and Foxgloves' },
-];
+import { workspaces } from 'data';
 
 const Home: FunctionalComponent = () => {
     return (

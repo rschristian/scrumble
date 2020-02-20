@@ -1,22 +1,13 @@
-import { FunctionalComponent, h } from 'preact';
+import { Fragment, FunctionalComponent, h } from 'preact';
 
-import Sidebar from 'components/Navigation/Sidebar';
-import { sideNavItems } from 'routes/Workspaces/util';
-
-const WorkspacesIssues: FunctionalComponent = () => {
+const WorkspaceIssues: FunctionalComponent = () => {
     return (
-        <div class="w-screen block">
-            <div class="flex">
-                <Sidebar items={sideNavItems} />
-                <div className="main-content">
-                    <h1 className="user-path">CUBRIC > Issues</h1>
-                    <div className="create-bar">
-                        <h1 className="page-heading">Issues</h1>
-                    </div>
-                </div>
+        <Fragment>
+            <div className="create-bar">
+                <h1 className="page-heading">Issues</h1>
             </div>
-        </div>
+        </Fragment>
     );
 };
 
-export default WorkspacesIssues;
+export default WorkspaceIssues;
