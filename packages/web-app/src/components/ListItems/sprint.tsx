@@ -4,7 +4,7 @@ import { Sprint } from 'models/Sprint';
 
 const SprintListItem: FunctionalComponent<Sprint> = (props: Sprint) => {
     return (
-        <Link href={`${getCurrentUrl()}/sprint/${props.id}/issues`} class="lst-itm-container">
+        <Link href={`${getCurrentUrl()}/sprint/${props.id}/`} class="lst-itm-container">
             <div class="px-4 py-2">
                 <div class="truncate">{props.name}</div>
                 <p class="itm-description">{props.description}</p>
