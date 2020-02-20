@@ -19,6 +19,7 @@ module.exports =  {
             jsx: true
         }
     },
+    ignorePatterns: ['build/'],
     rules:  {
         'indent': ['warn', 4, { "SwitchCase": 1, "ignoredNodes": ["TemplateLiteral > *"] }],
         'react/jsx-indent': ['warn', 4],
