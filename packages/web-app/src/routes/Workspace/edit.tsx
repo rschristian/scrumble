@@ -1,7 +1,7 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 
-import { GenericEdit } from 'components/Edit';
+import { GenericEdit } from 'components/CommonRoutes/Edit';
 
 const WorkspaceEdit: FunctionalComponent = () => {
     const [workspaceName, setWorkspaceName] = useState('');

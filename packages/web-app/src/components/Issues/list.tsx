@@ -1,7 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
 
 import IssueListItem from 'components/ListItems/issue';
-import { SideBar } from 'components/Navigation/SideBar';
+import { SideBar } from 'components/Core/SideBar';
 import IssueFilter from 'components/Filter/issues';
 import { sideNavItems } from 'routes/Workspace/util';
 import { issues } from 'data';

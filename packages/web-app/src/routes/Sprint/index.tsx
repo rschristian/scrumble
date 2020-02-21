@@ -3,7 +3,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { getCurrentUrl } from 'preact-router';
 
 import BreadCrumbs from 'components/BreadCrumbs';
-import { SideBar } from 'components/Navigation/SideBar';
+import { SideBar } from 'components/Core/SideBar';
 import { sprints, workspaces } from 'data';
 import SprintBoard from './board';
 import SprintEdit from './edit';

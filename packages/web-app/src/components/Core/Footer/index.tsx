@@ -1,5 +1,5 @@
 import { FunctionalComponent, h } from 'preact';
-import './index.scss';
+import 'components/Core/Footer/index.scss';
 
 const Footer: FunctionalComponent = () => (
     <div>
