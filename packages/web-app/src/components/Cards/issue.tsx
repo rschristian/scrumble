@@ -1,7 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
 import { Issue } from 'models/Issue';
 
-const IssueCard: FunctionalComponent<Issue> = (props: Issue) => {
+export const IssueCard: FunctionalComponent<Issue> = (props: Issue) => {
     return (
         <div className="bg-white relative rounded-md shadow-lg m-2 min-h-48 m-4">
             <div className="px-4 py-2 h-40">
@@ -16,5 +16,3 @@ const IssueCard: FunctionalComponent<Issue> = (props: Issue) => {
         </div>
     );
 };
-
-export default IssueCard;

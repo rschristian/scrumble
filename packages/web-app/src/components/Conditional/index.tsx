@@ -5,8 +5,6 @@ interface IProps {
     children: VNode;
 }
 
-const Conditional: FunctionalComponent<IProps> = (props: IProps) => {
+export const Conditional: FunctionalComponent<IProps> = (props: IProps) => {
     return props.if ? props.children : null;
 };
-
-export default Conditional;

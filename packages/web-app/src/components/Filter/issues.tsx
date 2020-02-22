@@ -1,7 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
-import SearchBar from 'components/SearchBar';
+import { SearchBar } from 'components/SearchBar';
 
-const IssueFilter: FunctionalComponent = () => {
+export const IssueFilter: FunctionalComponent = () => {
     return (
         <div>
             <div class="my-4 flex flex-col items-start">
@@ -15,5 +15,3 @@ const IssueFilter: FunctionalComponent = () => {
         </div>
     );
 };
-
-export default IssueFilter;
