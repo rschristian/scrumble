@@ -5,12 +5,12 @@ import { getCurrentUrl } from 'preact-router';
 import { BreadCrumbs } from 'components/BreadCrumbs';
 import { SideBar } from 'components/Core/SideBar';
 import { sprints, workspaces } from 'data';
-import SprintBoard from './board';
 import SprintEdit from './edit';
-import SprintIssues from './issues';
 import SprintMetrics from './metrics';
 import SprintShowAndTell from './showAndTell';
 import { sideNavItems } from './util';
+import IssuesBoard from './IssuesBoard';
+import DailyStandUp from './dailyStandUp';
 
 interface IProps {
     workspaceId: number;
@@ -37,10 +37,7 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
             }
         }
         const currentUrl = getCurrentUrl();
-        if (currentUrl.includes('board')) {
-            setCurrentPage('Board');
-            setForm(<SprintBoard />);
-        } else if (currentUrl.includes('metrics')) {
+        if (currentUrl.includes('metrics')) {
             setCurrentPage('Metrics');
             setForm(<SprintMetrics />);
         } else if (currentUrl.includes('edit')) {
@@ -49,9 +46,12 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
         } else if (currentUrl.includes('showandtell')) {
             setCurrentPage('Show and Tell');
             setForm(<SprintShowAndTell />);
+        } else if (currentUrl.includes('issues')) {
+            setCurrentPage('Issues Board');
+            setForm(<IssuesBoard />);
         } else {
-            setCurrentPage('Issues');
-            setForm(<SprintIssues />);
+            setCurrentPage('Daily Stand-up');
+            setForm(<DailyStandUp />);
         }
     }, [props.sprintId, props.workspaceId, currentUrl]);
 

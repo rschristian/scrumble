@@ -4,11 +4,11 @@ import { IssueListItem } from 'components/ListItems/issue';
 import { IssueFilter } from 'components/Filter/issues';
 import { issues } from 'data';
 
-const SprintIssues: FunctionalComponent = () => {
+const BacklogPlanning: FunctionalComponent = () => {
     return (
         <Fragment>
             <div className="create-bar">
-                <h1 className="page-heading">Issues</h1>
+                <h1 className="page-heading">Backlog Planning</h1>
                 <button className="btn-create my-auto">
                     <a href="/sprint/1/metrics">New Issue</a>
                 </button>
@@ -32,4 +32,4 @@ const SprintIssues: FunctionalComponent = () => {
     );
 };
 
-export default SprintIssues;
+export default BacklogPlanning;
