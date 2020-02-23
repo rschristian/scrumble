@@ -5,11 +5,6 @@ import sprinter from 'assets/icons/sprinter.png';
 import { SideBarItem } from 'models/SideBarItem';
 
 export const sideNavItems: SideBarItem[] = [
-    // {
-    //     label: 'Sprints',
-    //     icon: sprinter,
-    //     path: '/',
-    // },
     {
         label: 'Backlog Planning',
         icon: list,

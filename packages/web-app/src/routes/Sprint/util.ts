@@ -8,7 +8,7 @@ export const sideNavItems: SideBarItem[] = [
     {
         label: 'Daily Stand-up',
         icon: kanbanBoard,
-        path: '/board',
+        path: '/dailystandup',
     },
     {
         label: 'Metrics',

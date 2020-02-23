@@ -5,11 +5,11 @@ import { getCurrentUrl } from 'preact-router';
 import { BreadCrumbs } from 'components/BreadCrumbs';
 import { SideBar } from 'components/Core/SideBar';
 import { sprints, workspaces } from 'data';
-import SprintBoard from './dailyStandUp';
 import SprintEdit from './edit';
 import SprintMetrics from './metrics';
 import SprintShowAndTell from './showAndTell';
 import { sideNavItems } from './util';
+import DailyStandUp from './dailyStandUp';
 
 interface IProps {
     workspaceId: number;
@@ -46,8 +46,8 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
             setCurrentPage('Show and Tell');
             setForm(<SprintShowAndTell />);
         } else {
-            setCurrentPage('Board');
-            setForm(<SprintBoard />);
+            setCurrentPage('Daily Stand Up');
+            setForm(<DailyStandUp />);
         }
     }, [props.sprintId, props.workspaceId, currentUrl]);
 
