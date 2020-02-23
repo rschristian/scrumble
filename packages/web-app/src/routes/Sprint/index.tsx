@@ -5,9 +5,8 @@ import { getCurrentUrl } from 'preact-router';
 import { BreadCrumbs } from 'components/BreadCrumbs';
 import { SideBar } from 'components/Core/SideBar';
 import { sprints, workspaces } from 'data';
-import SprintBoard from './board';
+import SprintBoard from './dailyStandUp';
 import SprintEdit from './edit';
-import SprintIssues from './issues';
 import SprintMetrics from './metrics';
 import SprintShowAndTell from './showAndTell';
 import { sideNavItems } from './util';
@@ -37,10 +36,7 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
             }
         }
         const currentUrl = getCurrentUrl();
-        if (currentUrl.includes('board')) {
-            setCurrentPage('Board');
-            setForm(<SprintBoard />);
-        } else if (currentUrl.includes('metrics')) {
+        if (currentUrl.includes('metrics')) {
             setCurrentPage('Metrics');
             setForm(<SprintMetrics />);
         } else if (currentUrl.includes('edit')) {
@@ -50,8 +46,8 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
             setCurrentPage('Show and Tell');
             setForm(<SprintShowAndTell />);
         } else {
-            setCurrentPage('Issues');
-            setForm(<SprintIssues />);
+            setCurrentPage('Board');
+            setForm(<SprintBoard />);
         }
     }, [props.sprintId, props.workspaceId, currentUrl]);
 

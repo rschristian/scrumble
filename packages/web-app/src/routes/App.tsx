@@ -40,7 +40,8 @@ const App: FunctionalComponent = () => {
                     <Home path="/" />
                     <Login path="/login" />
                     <Route path="/workspace/:workspaceId" component={Workspace} />
-                    <Route path="/workspace/:workspaceId/issues" component={Workspace} />
+                    <Route path="/workspace/:workspaceId/backlogPlanning" component={Workspace} />
+                    <Route path="/workspace/:workspaceId/sprintPlanning" component={Workspace} />
                     <Route path="/workspace/:workspaceId/metrics" component={Workspace} />
                     <Route path="/workspace/:workspaceId/edit" component={Workspace} />
                     <Route path="/workspace/:workspaceId/sprint/:sprintId/" component={Sprint} />

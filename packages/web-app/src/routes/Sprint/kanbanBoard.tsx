@@ -3,21 +3,13 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { IssueCard } from 'components/Cards/issue';
 import { issues } from 'data';
 
-const SprintBoard: FunctionalComponent = () => {
+const KanbanBoard: FunctionalComponent = () => {
     return (
         <Fragment>
             <div className="create-bar">
                 <h1 className="page-heading">Issues Board</h1>
             </div>
             <div className="issue-board">
-                {/*<div className="status-col">*/}
-                {/*    <div className="issue-list-title-holder bg-purple-300">*/}
-                {/*        <h2 className="issue-list-title">Status</h2>*/}
-                {/*    </div>*/}
-                {/*    <div class="p4 bg-red-500">*/}
-                {/*        <h2 className="issue-list-title">Urgent</h2>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
                 <div className="issue-list">
                     <div className="issue-list-title-holder bg-red-300">
                         <h2 className="issue-list-title">Open</h2>
@@ -91,4 +83,4 @@ const SprintBoard: FunctionalComponent = () => {
     );
 };
 
-export default SprintBoard;
+export default KanbanBoard;

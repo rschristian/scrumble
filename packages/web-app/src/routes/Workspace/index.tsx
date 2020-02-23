@@ -6,10 +6,10 @@ import { BreadCrumbs } from 'components/BreadCrumbs';
 import { SideBar } from 'components/Core/SideBar';
 import { workspaces } from 'data';
 import WorkspaceEdit from './edit';
-import WorkspaceIssues from './issues';
 import WorkspaceMetrics from './metrics';
-import WorkspaceSprints from './sprints';
 import { sideNavItems } from './util';
+import BacklogPlanning from './backlogPlanning';
+import SprintPlanning from './sprintPlannning';
 
 interface IProps {
     workspaceId: number;
@@ -28,18 +28,18 @@ const Workspace: FunctionalComponent<IProps> = (props: IProps) => {
                 setWorkspaceName(workspace.name);
             }
         }
-        if (currentUrl.includes('issues')) {
-            setCurrentPage('Issues');
-            setForm(<WorkspaceIssues />);
-        } else if (currentUrl.includes('metrics')) {
+        if (currentUrl.includes('metrics')) {
             setCurrentPage('Metrics');
             setForm(<WorkspaceMetrics />);
         } else if (currentUrl.includes('edit')) {
             setCurrentPage('Edit');
             setForm(<WorkspaceEdit />);
+        } else if (currentUrl.includes('sprintPlanning')) {
+            setCurrentPage('Sprint Planning');
+            setForm(<SprintPlanning />);
         } else {
-            setCurrentPage('Sprints');
-            setForm(<WorkspaceSprints />);
+            setCurrentPage('Backlog Planning');
+            setForm(<BacklogPlanning />);
         }
     }, [props.workspaceId, currentUrl]);
 

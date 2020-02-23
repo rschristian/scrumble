@@ -5,14 +5,23 @@ import { IssueListItem } from 'components/ListItems/issue';
 import { IssueFilter } from 'components/Filter/issues';
 import { SprintFilter } from 'components/Filter/sprints';
 import { SprintListItem } from 'components/ListItems/sprint';
+import { useState } from 'preact/hooks';
 
-const WorkspaceIssues: FunctionalComponent = () => {
+const SprintPlanning: FunctionalComponent = () => {
+    const [isSprintView, setIsSprintView] = useState<boolean>(false);
+
     return (
         <Fragment>
             <div className="flex h-screen">
-                <div className="w-11/12 md:w-1/2">
-                    <div className="create-bar">
-                        <h1 className="page-heading">Issues</h1>
+                <div className={`h-full w-11/12 md:w-1/2 md:block " ${!isSprintView ? '' : 'sm:hidden'}`}>
+                    <div class="create-bar">
+                        <h1 className="page-heading items-baseline">Backlog</h1>
+                        <button
+                            onClick={(): void => setIsSprintView(!isSprintView)}
+                            className="btn-create md:hidden my-auto mr-4"
+                        >
+                            Sprints
+                        </button>
                     </div>
                     <div className="mr-4">
                         <IssueFilter />
@@ -32,14 +41,24 @@ const WorkspaceIssues: FunctionalComponent = () => {
                         })}
                     </div>
                 </div>
-                <div className="border-l border-gray-300 h-full w-1/2 hidden md:block">
+                <div
+                    class={`md:border-l border-gray-300 h-full w-11/12 md:w-1/2 md:block " ${
+                        isSprintView ? '' : 'sm:hidden'
+                    }`}
+                >
                     <div className="create-bar">
-                        <h1 className="ml-4 page-heading">Sprints</h1>
+                        <h1 className="md:ml-4 page-heading">Sprints</h1>
+                        <button
+                            onClick={(): void => setIsSprintView(!isSprintView)}
+                            className="btn-create md:hidden my-auto mr-4"
+                        >
+                            Backlog
+                        </button>
                     </div>
-                    <div className="ml-4">
+                    <div className="md:ml-4">
                         <SprintFilter />
                     </div>
-                    <div className="ml-4 rounded bg-white overflow-hidden shadow-lg">
+                    <div className="md:ml-4 rounded bg-white overflow-hidden shadow-lg">
                         {sprints.map((issue, index) => {
                             return (
                                 <SprintListItem
@@ -57,4 +76,4 @@ const WorkspaceIssues: FunctionalComponent = () => {
     );
 };
 
-export default WorkspaceIssues;
+export default SprintPlanning;
