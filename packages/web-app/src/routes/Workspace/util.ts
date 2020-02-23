@@ -8,7 +8,7 @@ export const sideNavItems: SideBarItem[] = [
     {
         label: 'Backlog Planning',
         icon: list,
-        path: '/backlogPlanning',
+        path: '/',
     },
     {
         label: 'Sprint Planning',

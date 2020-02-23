@@ -1,11 +1,11 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 
-import KanbanBoard from './kanbanBoard';
-
 const DailyStandUp: FunctionalComponent = () => {
     return (
         <Fragment>
-            <KanbanBoard />
+            <div className="create-bar">
+                <h1 className="page-heading">Daily Stand-up</h1>
+            </div>
         </Fragment>
     );
 };

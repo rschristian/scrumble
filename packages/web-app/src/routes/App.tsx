@@ -40,12 +40,11 @@ const App: FunctionalComponent = () => {
                     <Home path="/" />
                     <Login path="/login" />
                     <Route path="/workspace/:workspaceId" component={Workspace} />
-                    <Route path="/workspace/:workspaceId/backlogPlanning" component={Workspace} />
                     <Route path="/workspace/:workspaceId/sprintPlanning" component={Workspace} />
                     <Route path="/workspace/:workspaceId/metrics" component={Workspace} />
                     <Route path="/workspace/:workspaceId/edit" component={Workspace} />
                     <Route path="/workspace/:workspaceId/sprint/:sprintId/" component={Sprint} />
-                    <Route path="/workspace/:workspaceId/sprint/:sprintId/dailystandup" component={Sprint} />
+                    <Route path="/workspace/:workspaceId/sprint/:sprintId/issues" component={Sprint} />
                     <Route path="/workspace/:workspaceId/sprint/:sprintId/metrics" component={Sprint} />
                     <Route path="/workspace/:workspaceId/sprint/:sprintId/showandtell" component={Sprint} />
                     <Route path="/workspace/:workspaceId/sprint/:sprintId/edit" component={Sprint} />

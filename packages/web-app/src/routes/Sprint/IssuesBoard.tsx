@@ -3,7 +3,7 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { IssueCard } from 'components/Cards/issue';
 import { issues } from 'data';
 
-const KanbanBoard: FunctionalComponent = () => {
+const IssuesBoard: FunctionalComponent = () => {
     return (
         <Fragment>
             <div className="create-bar">
@@ -83,4 +83,4 @@ const KanbanBoard: FunctionalComponent = () => {
     );
 };
 
-export default KanbanBoard;
+export default IssuesBoard;

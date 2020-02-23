@@ -1,11 +1,11 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
+import { useState } from 'preact/hooks';
 
 import { issues, sprints } from 'data';
 import { IssueListItem } from 'components/ListItems/issue';
 import { IssueFilter } from 'components/Filter/issues';
 import { SprintFilter } from 'components/Filter/sprints';
 import { SprintListItem } from 'components/ListItems/sprint';
-import { useState } from 'preact/hooks';
 
 const SprintPlanning: FunctionalComponent = () => {
     const [isSprintView, setIsSprintView] = useState<boolean>(false);

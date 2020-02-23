@@ -9,6 +9,7 @@ import SprintEdit from './edit';
 import SprintMetrics from './metrics';
 import SprintShowAndTell from './showAndTell';
 import { sideNavItems } from './util';
+import IssuesBoard from './IssuesBoard';
 import DailyStandUp from './dailyStandUp';
 
 interface IProps {
@@ -45,8 +46,11 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
         } else if (currentUrl.includes('showandtell')) {
             setCurrentPage('Show and Tell');
             setForm(<SprintShowAndTell />);
+        } else if (currentUrl.includes('issues')) {
+            setCurrentPage('Issues Board');
+            setForm(<IssuesBoard />);
         } else {
-            setCurrentPage('Daily Stand Up');
+            setCurrentPage('Daily Stand-up');
             setForm(<DailyStandUp />);
         }
     }, [props.sprintId, props.workspaceId, currentUrl]);
