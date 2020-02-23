@@ -1,6 +1,6 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 
-import IssueCard from 'components/Cards/issue';
+import { IssueCard } from 'components/Cards/issue';
 import { issues } from 'data';
 
 const SprintBoard: FunctionalComponent = () => {

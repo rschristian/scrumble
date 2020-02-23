@@ -3,7 +3,7 @@ import { useContext, useState } from 'preact/hooks';
 import { lazy, Suspense } from 'preact/compat';
 import { getCurrentUrl, Route, route, Router, RouterOnChangeArgs } from 'preact-router';
 
-import { TopBar } from 'components/Navigation/TopBar';
+import { TopBar } from 'components/Core/TopBar';
 import Home from 'routes/Home';
 import { AuthStoreContext } from 'stores';
 

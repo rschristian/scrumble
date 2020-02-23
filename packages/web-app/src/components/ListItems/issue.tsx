@@ -2,7 +2,7 @@ import { FunctionalComponent, h } from 'preact';
 import { Issue } from 'models/Issue';
 import { Link } from 'preact-router';
 
-const IssueListItem: FunctionalComponent<Issue> = (props: Issue) => {
+export const IssueListItem: FunctionalComponent<Issue> = (props: Issue) => {
     return (
         <div className="lst-itm-container">
             <div className="px-4 py-2 flex min-w-0">
@@ -17,5 +17,3 @@ const IssueListItem: FunctionalComponent<Issue> = (props: Issue) => {
         </div>
     );
 };
-
-export default IssueListItem;

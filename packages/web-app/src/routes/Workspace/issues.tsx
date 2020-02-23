@@ -1,9 +1,9 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 
 import { issues, sprints } from 'data';
-import IssueListItem from 'components/ListItems/issue';
-import IssueFilter from 'components/Filter/issues';
-import SprintFilter from 'components/Filter/sprints';
+import { IssueListItem } from 'components/ListItems/issue';
+import { IssueFilter } from 'components/Filter/issues';
+import { SprintFilter } from 'components/Filter/sprints';
 import { SprintListItem } from 'components/ListItems/sprint';
 
 const WorkspaceIssues: FunctionalComponent = () => {

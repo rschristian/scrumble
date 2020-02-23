@@ -1,13 +1,8 @@
-import { Fragment, FunctionalComponent, h } from 'preact';
+import { FunctionalComponent, h } from 'preact';
+import { GenericMetrics } from 'components/CommonRoutes/Metrics';
 
 const WorkspaceMetrics: FunctionalComponent = () => {
-    return (
-        <Fragment>
-            <div className="create-bar">
-                <h1 className="page-heading">Metrics</h1>
-            </div>
-        </Fragment>
-    );
+    return <GenericMetrics metricsContent={null} />;
 };
 
 export default WorkspaceMetrics;

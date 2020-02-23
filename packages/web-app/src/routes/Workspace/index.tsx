@@ -2,8 +2,8 @@ import { ComponentChild, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { getCurrentUrl } from 'preact-router';
 
-import BreadCrumbs from 'components/BreadCrumbs';
-import { SideBar } from 'components/Navigation/SideBar';
+import { BreadCrumbs } from 'components/BreadCrumbs';
+import { SideBar } from 'components/Core/SideBar';
 import { workspaces } from 'data';
 import WorkspaceEdit from './edit';
 import WorkspaceIssues from './issues';

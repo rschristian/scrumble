@@ -1,7 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
 
-import WorkspaceListItem from 'components/ListItems/workspace';
-import SearchBar from 'components/SearchBar';
+import { WorkspaceListItem } from 'components/ListItems/workspace';
+import { SearchBar } from 'components/SearchBar';
 import { workspaces } from 'data';
 
 const Home: FunctionalComponent = () => {
