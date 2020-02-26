@@ -36,7 +36,7 @@ fn rocket_instance(mounts: Vec<(&str, Vec<Route>)>) -> Rocket {
     let mut instance = rocket::custom(config::from_env());
 
     for (path, methods) in mounts
-    {
+      {
         instance = instance.mount(path, methods);
     }
 
