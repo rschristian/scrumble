@@ -49,7 +49,10 @@ export const TopBar: FunctionalComponent = () => {
                                     <img className="avatar" src={avatar} alt="Your avatar" />
                                 </button>
                                 <div className={`btn-sign-out shadow-lg ${isAccountDropdownOpen ? 'block' : 'hidden'}`}>
-                                    <a href="#" className="block px-4 py-2 text-white text-center">
+                                    <a
+                                        href="http://localhost:8082/logout"
+                                        className="block px-4 py-2 text-white text-center"
+                                    >
                                         Sign out
                                     </a>
                                 </div>
@@ -68,7 +71,7 @@ export const TopBar: FunctionalComponent = () => {
                     <span className="ml-3 font-semibold text-deep-space-sparkle">Greg</span>
                 </div>
                 <div className="my-4 ml-3">
-                    <Link href="/login" class="top-nav-dropdown-link">
+                    <Link href="http://localhost:8082/logout" class="top-nav-dropdown-link">
                         Sign out
                     </Link>
                 </div>
