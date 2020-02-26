@@ -6,14 +6,14 @@ import { SideBarItem } from 'models/SideBarItem';
 
 export const sideNavItems: SideBarItem[] = [
     {
-        label: 'Sprints',
-        icon: sprinter,
+        label: 'Backlog Planning',
+        icon: list,
         path: '/',
     },
     {
-        label: 'Backlog',
-        icon: list,
-        path: '/issues',
+        label: 'Sprint Planning',
+        icon: sprinter,
+        path: '/sprintPlanning',
     },
     {
         label: 'Metrics',
