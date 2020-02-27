@@ -35,20 +35,11 @@ public class GitLabOAuth2User implements OAuth2User {
     public Map<String, Object> getAttributes() {
         if (this.attributes == null) {
             this.attributes = new HashMap<>();
-            this.attributes.put("id", this.getId());
             this.attributes.put("name", this.getName());
             this.attributes.put("picture", this.getPicture());
             this.attributes.put("nickname", this.getNickname());
         }
         return attributes;
-    }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {

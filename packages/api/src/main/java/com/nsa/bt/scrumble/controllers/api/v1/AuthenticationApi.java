@@ -14,10 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RestController
-@RequestMapping("/api/v1")
-public class UserDetailsAPI {
+@RequestMapping("/api/v1/authenticate")
+public class AuthenticationApi {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserDetailsAPI.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailsApi.class);
 
     @Autowired
     OAuth2AuthorizedClientService auth2AuthorizedClientService;
@@ -43,6 +43,5 @@ public class UserDetailsAPI {
         logger.info(user.getName());
 
         return ResponseEntity.ok().body(user);
-
     }
 }

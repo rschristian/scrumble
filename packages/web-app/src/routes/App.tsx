@@ -24,19 +24,19 @@ const App: FunctionalComponent = () => {
 
     const publicRoutes = ['/login'];
 
-    const authGuard = (): void => {
+    const handleChange = (e: RouterOnChangeArgs): void => {
         if (!publicRoutes.includes(currentUrl) && !authStore.isAuthenticated) {
-            // TODO: Half broken until https://github.com/preactjs/preact-router/issues/357 is resolved
             route('/login');
+        } else {
+            setCurrentUrl(e.url);
         }
     };
 
     return (
         <div id="app" class="bg-blue-100">
-            {/*{authGuard()}*/}
             <TopBar />
             <Suspense fallback={<Fallback />}>
-                <Router onChange={(e: RouterOnChangeArgs): void => setCurrentUrl(e.url)}>
+                <Router onChange={handleChange}>
                     <Home path="/" />
                     <Login path="/login" />
                     <Route path="/workspace/:workspaceId" component={Workspace} />

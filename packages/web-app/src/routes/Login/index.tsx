@@ -1,17 +1,19 @@
-import { FunctionalComponent, h } from 'preact';
+import { Fragment, FunctionalComponent, h } from 'preact';
 
 const Login: FunctionalComponent = () => {
     const REDIRECT_URI = 'http://localhost:8082/oauth/code/gitlab';
 
     return (
-        <div class="w-screen block">
-            <div>
-                <h1>Login</h1>
-                <button>
-                    <a href={REDIRECT_URI}>Login with GitLab</a>
-                </button>
+        <Fragment>
+            <div class="page">
+                <div className="create-bar">
+                    <h1 className="page-heading">Login</h1>
+                    <button className="btn-create my-auto">
+                        <a href={REDIRECT_URI}>Login with GitLab</a>
+                    </button>
+                </div>
             </div>
-        </div>
+        </Fragment>
     );
 };
 
