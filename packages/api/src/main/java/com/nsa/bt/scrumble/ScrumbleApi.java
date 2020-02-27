@@ -9,16 +9,13 @@ import org.springframework.web.client.RestTemplate;
 
 
 @SpringBootApplication
-public class ScrumbleApi extends SpringBootServletInitializer
-    {
-
-        public static void main(String[] args) throws Exception
-            {
-                SpringApplication.run(ScrumbleApi.class, args);
-            }
-
-        @Bean
-        public RestTemplate restTemplate(RestTemplateBuilder builder) {
-            return builder.build();
-        }
+public class ScrumbleApi extends SpringBootServletInitializer {
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(ScrumbleApi.class, args);
     }
+
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
+    }
+}
