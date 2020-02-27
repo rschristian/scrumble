@@ -36,7 +36,10 @@ export const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
                 </li>
                 {props.items.map((menuItem, index) => {
                     return (
-                        <Link href={getUrlSubstring(currentUrl) + menuItem.path} key={index}>
+                        <Link href={getUrlSubstring(currentUrl) + menuItem.path} key={index} class="tooltip">
+                            <span class="tooltip-text bg-blue-100 border rounded border-white text-sky-blue -mt-12">
+                                {menuItem.label}
+                            </span>
                             <li class="side-nav-link">
                                 <img src={menuItem.icon} class="my-auto ml-2 w-5" alt={menuItem.label} />
                                 <div class={`ml-3 my-auto ${isOpen ? 'block' : 'hidden'}`}>{menuItem.label}</div>
