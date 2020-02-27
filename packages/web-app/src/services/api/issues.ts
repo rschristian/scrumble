@@ -1,10 +1,18 @@
-import axios, { AxiosResponse } from 'axios';
+import { apiService } from 'ts-api-toolkit';
 
 import { Issue } from 'models/Issue';
 
-export async function fetchIssueTest(): Promise<AxiosResponse<Issue>> {
-    return await axios.get('/issues/1').then((response) => {
-        console.log(response);
-        return response;
-    });
+export async function fetchIssueTest(): Promise<Issue | string> {
+    return await apiService
+        .get('/issues/1')
+        .then(({ data }) => {
+            console.log(data);
+            return data;
+        })
+        .catch(({ response }) => {
+            if (response.data !== '') {
+                return response.data.message;
+            }
+            return 'Unknown error';
+        });
 }
