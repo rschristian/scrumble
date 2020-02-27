@@ -26,7 +26,7 @@ repositories {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.nsa.bt.scrumble.ScrumbleAPI'
+        attributes 'Main-Class': 'com.nsa.bt.scrumble.ScrumbleApi'
     }
 }
 
@@ -54,19 +54,8 @@ dependencies {
         DATABASE
      */
     implementation('org.postgresql:postgresql')
-
-
     implementation('org.hibernate:hibernate-core')
-//    implementation('org.flywaydb:flyway-core')
     implementation('org.springframework.boot:spring-boot-starter-jdbc')
-
-
-    /*
-        SECURITY
-     */
-    implementation('org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.0.RELEASE')
-    implementation('org.springframework.security:spring-security-oauth2-client')
-    implementation('org.springframework.security.oauth:spring-security-oauth2')
 
 
     /*

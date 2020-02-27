@@ -3,7 +3,7 @@ import { FunctionalComponent, h } from 'preact';
 import { WorkspaceListItem } from 'components/ListItems/workspace';
 import { SearchBar } from 'components/SearchBar';
 import { workspaces } from 'data';
-import { fetchUserInfo } from 'api/userInfoApi';
+import { fetchIssueTest } from 'services/api/issues';
 
 const Home: FunctionalComponent = () => {
     return (
@@ -11,14 +11,10 @@ const Home: FunctionalComponent = () => {
             <div class="mx-3 flex justify-center flex-col w-3/4">
                 <div class="create-bar">
                     <h1 class="page-heading">Your Workspaces</h1>
-                    {/*<button class="btn-create my-auto">New Workspace</button>*/}
-                    <button class="btn-create my-auto">
-                        <a href={'http://localhost:8082/oauth/code/gitlab'}>Login with GitLab</a>
+                    <button onClick={fetchIssueTest} class="btn-create my-auto">
+                        New Workspace
                     </button>
                 </div>
-                <button className="btn-create my-auto w-24" onClick={fetchUserInfo}>
-                    Test
-                </button>
                 <SearchBar placeholder="Search by name" />
                 <div class="rounded bg-white overflow-hidden shadow-lg">
                     {workspaces.map((workspace, index) => {
