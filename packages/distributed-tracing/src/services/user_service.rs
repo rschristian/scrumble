@@ -2,17 +2,23 @@ use crate::db::{email_repository, user_options_repository, Conn};
 use crate::models::email::EmailJson;
 use crate::models::user_options::UserOptions;
 
-pub fn get_options(user_id: i32, conn: Conn) -> Option<UserOptions> {
-    user_options_repository::get_options(user_id, conn)
+use rustracing_jaeger::{Span, Tracer};
+
+pub fn get_options(user_id: i32, conn: Conn, tracer: &Tracer, span: &Span) -> Option<UserOptions> {
+    let span = tracer
+        .span("User_Options::service_layer")
+        .child_of(span)
+        .start();
+    user_options_repository::get_options(user_id, conn, tracer, &span)
 }
 
-pub fn get_inbox(user_id: i32, conn: Conn) -> Option<Vec<EmailJson>> {
-    let email_list = email_repository::get_emails(user_id, conn).unwrap();
+pub fn get_inbox(user_id: i32, conn: Conn, tracer: &Tracer, span: &Span) -> Option<Vec<EmailJson>> {
+    let span = tracer
+        .span("User_Inbox::service_layer")
+        .child_of(span)
+        .start();
+    let email_list = email_repository::get_emails(user_id, conn, tracer, &span).unwrap();
 
-    //If a Vector of Emails are found, this will convert the data into a form that's suitable
-    //to send and present.
-    //TODO Fix the logic used. A user could have a null inbox without there being an error.
-    // fixing this however requires a more advanced DB schema than what is currently in use.
     if !email_list.is_empty() {
         Some(
             email_list
