@@ -20,13 +20,13 @@ Docker/Compose
 
 ### Running
 
-To aid in the process of starting the server, I have provided a Docker Compose file for the database, and created a container for the CLI tool used to manage migrations. From the project root, run:
+To aid in the process of starting the server, I have provided a Docker Compose file for setting up the database and Jaeger, and created a container for the CLI tool used to manage migrations. From the project root, run:
 
 ```
 docker-compose up --build -d
 ```
 
-This will start the Postgres DB in the background. To populate the database, run:
+This will start the Postgres DB and Jaeger in the background. To populate the database, run:
 
 ```
 docker run --rm \
@@ -39,16 +39,6 @@ docker run --rm \
 The network you use depends on the parent directory, so if the docker compose is indeed within 'distributed-tracing', the command above will work just fine. Change it if you change the directory name.
 
 The Docker image built for diesel-cli will run "Diesel" without any arguments, making the container act like a normal CLI. However, that very large command is necessary upon every use. I therefore recommend creating an alias "docker ... /diesel-cli" to "diesel-cli" in a .bashrc or .zshrc, so the tool can be just called with "diesel-cli [command]".
-
-To start the Jaeger container, run:
-
-```
-docker run -d --name jaeger \
-    -p6831:6831/udp \
-    -p6832:6832/udp \
-    -p16686:16686 \
-    jaegertracing/all-in-one:latest
-```
 
 To populate Jaeger with production-like data, run:
 
