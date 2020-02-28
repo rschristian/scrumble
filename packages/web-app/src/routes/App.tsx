@@ -1,14 +1,15 @@
 import { FunctionalComponent, h } from 'preact';
 import { useContext, useState } from 'preact/hooks';
-import { getCurrentUrl, route, Route, Router, RouterOnChangeArgs } from 'preact-router';
+import { lazy, Suspense } from 'preact/compat';
+import { getCurrentUrl, Route, route, Router, RouterOnChangeArgs } from 'preact-router';
 
-import Auth from 'routes/auth';
-import Home from 'routes/home';
+import { TopBar } from 'components/Core/TopBar';
+import Home from 'routes/Home';
 import { AuthStoreContext } from 'stores';
-import Workspaces from '../components/Workspaces';
-import Navbar from '../components/Navbar';
-import WorkspaceView from './WorkspaceView';
-import SprintView from './SprintView';
+
+const Login = lazy(() => import('routes/Login'));
+const Workspace = lazy(() => import('routes/Workspace'));
+const Sprint = lazy(() => import('routes/Sprint'));
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 if ((module as any).hot) {
@@ -21,7 +22,7 @@ const App: FunctionalComponent = () => {
 
     const [currentUrl, setCurrentUrl] = useState<string>(getCurrentUrl());
 
-    const publicRoutes = ['/register', '/login'];
+    const publicRoutes = ['/login'];
 
     const authGuard = (): void => {
         if (!publicRoutes.includes(currentUrl) && !authStore.isAuthenticated) {
@@ -33,19 +34,32 @@ const App: FunctionalComponent = () => {
     return (
         <div id="app" class="bg-blue-100">
             {/*{authGuard()}*/}
-            <Navbar />
-            <Router onChange={(e: RouterOnChangeArgs): void => setCurrentUrl(e.url)}>
-                <Home path="/" />
-                <Route path="/workspaces" component={Workspaces} />
-                <Route path="/workspace/:id" component={WorkspaceView} />
-                <Route path="/workspace/:id/metrics" component={WorkspaceView} />
-                <Route path="/sprint/:id" component={SprintView} />
-                <Route path="/sprint/:id/metrics" component={SprintView} />
-                <Route path="/sprint/:id/board" component={SprintView} />
-                <Route path="/sprint/:id/show-tell" component={SprintView} />
-                {/*<Route path="/login" component={Auth} />*/}
-                {/*<Route path="/register" component={Auth} />*/}
-            </Router>
+            <TopBar />
+            <Suspense fallback={<Fallback />}>
+                <Router onChange={(e: RouterOnChangeArgs): void => setCurrentUrl(e.url)}>
+                    <Home path="/" />
+                    <Login path="/login" />
+                    <Route path="/workspace/:workspaceId" component={Workspace} />
+                    <Route path="/workspace/:workspaceId/sprintPlanning" component={Workspace} />
+                    <Route path="/workspace/:workspaceId/metrics" component={Workspace} />
+                    <Route path="/workspace/:workspaceId/edit" component={Workspace} />
+                    <Route path="/workspace/:workspaceId/sprint/:sprintId/" component={Sprint} />
+                    <Route path="/workspace/:workspaceId/sprint/:sprintId/issues" component={Sprint} />
+                    <Route path="/workspace/:workspaceId/sprint/:sprintId/metrics" component={Sprint} />
+                    <Route path="/workspace/:workspaceId/sprint/:sprintId/showandtell" component={Sprint} />
+                    <Route path="/workspace/:workspaceId/sprint/:sprintId/edit" component={Sprint} />
+                </Router>
+            </Suspense>
+        </div>
+    );
+};
+
+const Fallback: FunctionalComponent = () => {
+    return (
+        <div className="w-screen block">
+            <div className="flex">
+                <div className="main-content" />
+            </div>
         </div>
     );
 };

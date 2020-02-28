@@ -9,6 +9,9 @@ module.exports = {
             },
             minHeight: {
                 '12': '3rem',
+                '16': '4rem',
+                '20': '5rem',
+                '48': '12rem',
             },
             zIndex: {
                 'm-1': -1,

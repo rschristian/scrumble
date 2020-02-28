@@ -1,0 +1,43 @@
+.form-container {
+  @apply bg-white w-11/12 shadow-xl mx-auto mt-4 p-2 rounded-md;
+}
+
+.form-input {
+  @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight;
+}
+
+.form-input:focus {
+  @apply outline-none shadow-outline;
+}
+
+.form-label {
+  @apply block text-deep-space-sparkle text-sm font-bold mb-2;
+}
+
+@screen md {
+  .form-container {
+    @apply p-4 w-3/4;
+  }
+}
+
+// This belongs to the metrics page. It's a sanity check and I promise
+// it needs to be here rn before I tear my hair out :-)
+.bubble-container {
+  @apply flex flex-wrap mx-auto mt-4 content-center;
+}
+
+@screen sm {
+  .bubble-container {
+    @apply flex-col items-center content-center;
+  }
+}
+
+@screen md {
+  .bubble-container {
+    @apply flex-row;
+  }
+}
+
+.bubble {
+  @apply mx-auto;
+}

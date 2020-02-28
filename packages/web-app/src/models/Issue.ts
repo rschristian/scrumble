@@ -3,4 +3,5 @@ export interface Issue {
     name: string;
     description: string | null;
     storyPoint: number | null;
+    project: string;
 }
