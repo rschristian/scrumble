@@ -6,8 +6,6 @@ use crate::services::auth_service;
 
 use rocket::State;
 use rocket_contrib::json::{Json, JsonValue};
-use rustracing::sampler::AllSampler;
-use rustracing_jaeger::Tracer;
 use serde::Deserialize;
 use validator::Validate;
 
@@ -32,8 +30,7 @@ pub fn users_register(
     conn: Conn,
     state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
-    let tracer = Tracer::with_sender(AllSampler, state.sender_context.clone());
-    let parent_span = tracer.span("Register::handle_request").start();
+    let parent_span = state.tracer.span("Register::handle_request").start();
 
     let new_user = new_user.into_inner().user;
 
@@ -52,7 +49,7 @@ pub fn users_register(
             password,
         },
         conn,
-        &tracer,
+        &state.tracer,
         &parent_span,
     )
     .map(|user| json!({ "user": user.to_user_auth(&state.secret) }))
@@ -83,8 +80,7 @@ pub fn users_login(
     conn: Conn,
     state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
-    let tracer = Tracer::with_sender(AllSampler, state.sender_context.clone());
-    let parent_span = tracer.span("Login::handle_request").start();
+    let parent_span = state.tracer.span("Login::handle_request").start();
 
     let user = user.into_inner().user;
 
@@ -96,7 +92,7 @@ pub fn users_login(
     auth_service::login(
         UserCredentials { email, password },
         conn,
-        &tracer,
+        &state.tracer,
         &parent_span,
     )
     .map(|user| json!({ "user": user.to_user_auth(&state.secret) }))
