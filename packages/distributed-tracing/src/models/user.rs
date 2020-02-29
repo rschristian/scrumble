@@ -40,7 +40,7 @@ pub struct UserAuth<'a> {
 
 impl User {
     pub fn to_user_auth_response(&self, secret: &[u8], tracer: &Tracer, span: &Span) -> UserAuth {
-        let _span = tracer
+        let span = tracer
             .span("User::to_user_auth")
             .child_of(span)
             .start();
@@ -51,7 +51,7 @@ impl User {
             email: self.email.clone(),
             exp: exp.timestamp(),
         }
-        .token(secret);
+        .token(secret, tracer, &span);
 
         UserAuth {
             email: &self.email,
