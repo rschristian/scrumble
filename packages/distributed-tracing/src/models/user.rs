@@ -2,6 +2,7 @@ use crate::api::auth_middleware::Auth;
 use crate::config;
 use crate::schema::users;
 
+use rustracing_jaeger::{Span, Tracer};
 use serde::Serialize;
 
 #[derive(Queryable, Serialize)]
@@ -38,7 +39,12 @@ pub struct UserAuth<'a> {
 }
 
 impl User {
-    pub fn to_user_auth(&self, secret: &[u8]) -> UserAuth {
+    pub fn to_user_auth(&self, secret: &[u8], tracer: &Tracer, span: &Span) -> UserAuth {
+        let _span = tracer
+            .span("User_Auth::to_user_auth")
+            .child_of(span)
+            .start();
+
         let exp = config::token_expire_time();
         let token = Auth {
             id: self.id,

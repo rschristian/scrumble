@@ -52,7 +52,7 @@ pub fn users_register(
         &state.tracer,
         &parent_span,
     )
-    .map(|user| json!({ "user": user.to_user_auth(&state.secret) }))
+    .map(|user| json!({ "user": user.to_user_auth(&state.secret, &state.tracer, &parent_span) }))
     .map_err(|error| {
         let _field = match error {
             UserCreationError::DuplicatedEmail => "email",
@@ -95,6 +95,6 @@ pub fn users_login(
         &state.tracer,
         &parent_span,
     )
-    .map(|user| json!({ "user": user.to_user_auth(&state.secret) }))
+    .map(|user| json!({ "user": user.to_user_auth(&state.secret, &state.tracer, &parent_span) }))
     .ok_or_else(|| Errors::new(&[("email or password", "is invalid")]))
 }
