@@ -39,9 +39,9 @@ pub struct UserAuth<'a> {
 }
 
 impl User {
-    pub fn to_user_auth(&self, secret: &[u8], tracer: &Tracer, span: &Span) -> UserAuth {
+    pub fn to_user_auth_response(&self, secret: &[u8], tracer: &Tracer, span: &Span) -> UserAuth {
         let _span = tracer
-            .span("User_Auth::to_user_auth")
+            .span("User::to_user_auth")
             .child_of(span)
             .start();
 

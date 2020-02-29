@@ -23,7 +23,7 @@ pub fn get_inbox(user_id: i32, conn: Conn, tracer: &Tracer, span: &Span) -> Opti
         Some(
             email_list
                 .into_iter()
-                .map(|email| email.to_email_json())
+                .map(|email| email.to_email_response(tracer, &span))
                 .collect(),
         )
     } else {

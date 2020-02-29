@@ -1,3 +1,4 @@
+use rustracing_jaeger::{Span, Tracer};
 use serde::Serialize;
 
 #[derive(Queryable, Serialize)]
@@ -12,7 +13,12 @@ pub struct UserOptionsResponse<'a> {
 }
 
 impl UserOptions {
-    pub fn to_user_options_response(&self) -> UserOptionsResponse {
+    pub fn to_user_options_response(&self, tracer: &Tracer, span: &Span) -> UserOptionsResponse {
+        let _span = tracer
+            .span("User_Options::to_user_options_response")
+            .child_of(span)
+            .start();
+
         UserOptionsResponse {
             emails_per_page: &self.emails_per_page,
         }

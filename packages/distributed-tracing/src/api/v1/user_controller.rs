@@ -17,7 +17,7 @@ pub fn get_user_options(
 
     let user_id = auth.map(|auth| auth.id).unwrap_or(-1);
     user_service::get_options(user_id, conn, &state.tracer, &parent_span)
-        .map(|user_options| json!({ "user_options": user_options.to_user_options_response() }))
+        .map(|user_options| json!({ "user_options": user_options.to_user_options_response(&state.tracer, &parent_span) }))
         .ok_or_else(|| Errors::new(&[("options for that user", "don't exist")]))
 }
 

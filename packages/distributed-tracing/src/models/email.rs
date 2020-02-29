@@ -1,6 +1,7 @@
 use crate::config::DATE_FORMAT;
 
 use chrono::{DateTime, Utc};
+use rustracing_jaeger::{Span, Tracer};
 use serde::Serialize;
 
 #[derive(Queryable, Serialize)]
@@ -20,7 +21,12 @@ pub struct EmailJson {
 }
 
 impl Email {
-    pub fn to_email_json(&self) -> EmailJson {
+    pub fn to_email_response(&self, tracer: &Tracer, span: &Span) -> EmailJson {
+        let _span = tracer
+            .span("User_Inbox::to_email_response")
+            .child_of(span)
+            .start();
+
         EmailJson {
             sender: self.sender.clone(),
             content: self.content.clone(),
