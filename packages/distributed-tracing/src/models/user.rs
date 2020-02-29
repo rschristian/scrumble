@@ -40,10 +40,7 @@ pub struct UserAuth<'a> {
 
 impl User {
     pub fn to_user_auth_response(&self, secret: &[u8], tracer: &Tracer, span: &Span) -> UserAuth {
-        let span = tracer
-            .span("User::to_user_auth")
-            .child_of(span)
-            .start();
+        let span = tracer.span("User::to_user_auth").child_of(span).start();
 
         let exp = config::token_expire_time();
         let token = Auth {
