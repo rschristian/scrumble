@@ -13,11 +13,11 @@ pub fn get_user_options(
     conn: Conn,
     state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
-    let parent_span = state.tracer.span("User_Options::handle_request").start();
+    let parent_span = state.tracer.span("HTTP GET /user/options").start();
 
     let user_id = auth.map(|auth| auth.id).unwrap_or(-1);
-    user_service::get_options(user_id, conn, &state.tracer, &parent_span)
-        .map(|user_options| json!({ "user_options": user_options.to_user_options_response(&state.tracer, &parent_span) }))
+    user_service::get_options(user_id, conn, &parent_span)
+        .map(|user_options| json!({ "user_options": user_options.to_user_options_response(&parent_span) }))
         .ok_or_else(|| Errors::new(&[("options for that user", "don't exist")]))
 }
 
@@ -27,10 +27,10 @@ pub fn get_user_inbox(
     conn: Conn,
     state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
-    let parent_span = state.tracer.span("User_Inbox::handle_request").start();
+    let parent_span = state.tracer.span("HTTP GET /user/inbox").start();
 
     let user_id = auth.map(|auth| auth.id).unwrap_or(-1);
-    user_service::get_inbox(user_id, conn, &state.tracer, &parent_span)
+    user_service::get_inbox(user_id, conn, &parent_span)
         .map(|emails| json!({ "inbox": emails }))
         .ok_or_else(|| Errors::new(&[("inbox for user", "doesn't exist")]))
 }
