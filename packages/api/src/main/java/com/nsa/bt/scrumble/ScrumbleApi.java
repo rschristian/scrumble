@@ -5,17 +5,23 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
 
 @SpringBootApplication
-public class ScrumbleApi extends SpringBootServletInitializer {
-    public static void main(String[] args) throws Exception {
-        SpringApplication.run(ScrumbleApi.class, args);
-    }
+@EnableTransactionManagement
+public class ScrumbleApi extends SpringBootServletInitializer
+    {
 
-    @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder) {
-        return builder.build();
+        public static void main(String[] args) throws Exception
+            {
+                SpringApplication.run(ScrumbleApi.class, args);
+            }
+
+        @Bean
+        public RestTemplate restTemplate(RestTemplateBuilder builder) {
+            return builder.build();
+        }
+
     }
-}
