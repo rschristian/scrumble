@@ -1,6 +1,8 @@
 use chrono::{DateTime, Duration, Utc};
 use rocket::config::{Config, Environment, Value};
 use rocket::fairing::AdHoc;
+use rustracing::sampler::AllSampler;
+use rustracing_jaeger::reporter::JaegerCompactReporter;
 use rustracing_jaeger::Tracer;
 use std::collections::HashMap;
 use std::env;
@@ -22,13 +24,22 @@ pub struct AppState {
 }
 
 impl AppState {
-    pub fn manage(tracer: Tracer) -> AdHoc {
+    pub fn manage() -> AdHoc {
         AdHoc::on_attach("Manage config", |rocket| {
             let secret = env::var("SECRET_KEY").unwrap_or_else(|err| {
                 if cfg!(debug_assertions) {
                     SECRET.to_string()
                 } else {
                     panic!("No SECRET_KEY environment variable found: {:?}", err)
+                }
+            });
+
+            let (span_tx, span_rx) = crossbeam_channel::bounded(100);
+            let tracer = Tracer::with_sender(AllSampler, span_tx);
+            std::thread::spawn(move || {
+                let reporter = track_try_unwrap!(JaegerCompactReporter::new("Rocket_Server"));
+                for span in span_rx {
+                    track_try_unwrap!(reporter.report(&[span]));
                 }
             });
 
