@@ -1,3 +1,4 @@
+use crate::api::v1::api_tracer;
 use crate::config::AppState;
 use crate::db::{auth_repository::UserCreationError, Conn};
 use crate::errors::{Errors, FieldValidator};
@@ -30,7 +31,7 @@ pub fn users_register(
     conn: Conn,
     state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
-    let parent_span = state.tracer.span("Register::handle_request").start();
+    let parent_span = api_tracer().span("HTTP POST /users/register").start();
 
     let new_user = new_user.into_inner().user;
 
@@ -49,10 +50,9 @@ pub fn users_register(
             password,
         },
         conn,
-        &state.tracer,
         &parent_span,
     )
-    .map(|user| json!({ "user": user.to_user_auth_response(&state.secret, &state.tracer, &parent_span) }))
+    .map(|user| json!({ "user": user.to_user_auth_response(&state.secret, &parent_span) }))
     .map_err(|error| {
         let _field = match error {
             UserCreationError::DuplicatedEmail => "email",
@@ -80,7 +80,7 @@ pub fn users_login(
     conn: Conn,
     state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
-    let parent_span = state.tracer.span("Login::handle_request").start();
+    let parent_span = api_tracer().span("HTTP POST /users/login").start();
 
     let user = user.into_inner().user;
 
@@ -89,12 +89,7 @@ pub fn users_login(
     let password = extractor.extract("password", user.password);
     extractor.check()?;
 
-    auth_service::login(
-        UserCredentials { email, password },
-        conn,
-        &state.tracer,
-        &parent_span,
-    )
-    .map(|user| json!({ "user": user.to_user_auth_response(&state.secret, &state.tracer, &parent_span) }))
-    .ok_or_else(|| Errors::new(&[("email or password", "is invalid")]))
+    auth_service::login(UserCredentials { email, password }, conn, &parent_span)
+        .map(|user| json!({ "user": user.to_user_auth_response(&state.secret, &parent_span) }))
+        .ok_or_else(|| Errors::new(&[("email or password", "is invalid")]))
 }

@@ -1,10 +1,11 @@
+use crate::api::auth_middleware_tracer;
 use crate::config;
 
 use jsonwebtoken as jwt;
 use rocket::http::Status;
 use rocket::request::{self, FromRequest, Request};
 use rocket::{Outcome, State};
-use rustracing_jaeger::{Span, Tracer};
+use rustracing_jaeger::Span;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -15,9 +16,9 @@ pub struct Auth {
 }
 
 impl Auth {
-    pub fn token(&self, secret: &[u8], tracer: &Tracer, span: &Span) -> String {
-        let _span = tracer
-            .span("Auth_Middleware::generate_jwt")
+    pub fn token(&self, secret: &[u8], span: &Span) -> String {
+        let _span = auth_middleware_tracer()
+            .span("Create JSON Web Token")
             .child_of(span)
             .start();
 

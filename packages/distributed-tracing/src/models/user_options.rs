@@ -1,5 +1,6 @@
-use rustracing::sampler::AllSampler;
-use rustracing_jaeger::{reporter::JaegerCompactReporter, Span, Tracer};
+use crate::models::domain_tracer;
+
+use rustracing_jaeger::Span;
 use serde::Serialize;
 
 #[derive(Queryable, Serialize)]
@@ -15,17 +16,8 @@ pub struct UserOptionsResponse<'a> {
 
 impl UserOptions {
     pub fn to_user_options_response(&self, span: &Span) -> UserOptionsResponse {
-        let (span_tx, span_rx) = crossbeam_channel::bounded(100);
-        let tracer = Tracer::with_sender(AllSampler, span_tx);
-        std::thread::spawn(move || {
-            let reporter = track_try_unwrap!(JaegerCompactReporter::new("domain"));
-            for span in span_rx {
-                track_try_unwrap!(reporter.report(&[span]));
-            }
-        });
-
-        let _span = tracer
-            .span("JSON Serialize User Options")
+        let _span = domain_tracer()
+            .span("Convert user options to serializable struct")
             .child_of(span)
             .start();
 

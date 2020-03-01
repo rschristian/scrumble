@@ -1,19 +1,13 @@
-use crate::api::auth_middleware::Auth;
-use crate::config::AppState;
+use crate::api::{auth_middleware::Auth, v1::api_tracer};
 use crate::db::Conn;
 use crate::errors::Errors;
 use crate::services::user_service;
 
-use rocket::State;
 use rocket_contrib::json::JsonValue;
 
 #[get("/user/options")]
-pub fn get_user_options(
-    auth: Option<Auth>,
-    conn: Conn,
-    state: State<AppState>,
-) -> Result<JsonValue, Errors> {
-    let parent_span = state.tracer.span("HTTP GET /user/options").start();
+pub fn get_user_options(auth: Option<Auth>, conn: Conn) -> Result<JsonValue, Errors> {
+    let parent_span = api_tracer().span("HTTP GET /user/options").start();
 
     let user_id = auth.map(|auth| auth.id).unwrap_or(-1);
     user_service::get_options(user_id, conn, &parent_span)
@@ -22,12 +16,8 @@ pub fn get_user_options(
 }
 
 #[get("/user/inbox")]
-pub fn get_user_inbox(
-    auth: Option<Auth>,
-    conn: Conn,
-    state: State<AppState>,
-) -> Result<JsonValue, Errors> {
-    let parent_span = state.tracer.span("HTTP GET /user/inbox").start();
+pub fn get_user_inbox(auth: Option<Auth>, conn: Conn) -> Result<JsonValue, Errors> {
+    let parent_span = api_tracer().span("HTTP GET /user/inbox").start();
 
     let user_id = auth.map(|auth| auth.id).unwrap_or(-1);
     user_service::get_inbox(user_id, conn, &parent_span)

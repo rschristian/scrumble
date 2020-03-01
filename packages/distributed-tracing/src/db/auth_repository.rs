@@ -1,10 +1,10 @@
-use crate::db::Conn;
+use crate::db::{repository_tracer, Conn};
 use crate::models::user::{InsertableUser, User};
 use crate::schema::users;
 
 use diesel::prelude::*;
 use diesel::result::{DatabaseErrorKind, Error};
-use rustracing_jaeger::{Span, Tracer};
+use rustracing_jaeger::Span;
 
 pub enum UserCreationError {
     DuplicatedEmail,
@@ -21,14 +21,9 @@ impl From<Error> for UserCreationError {
     }
 }
 
-pub fn register(
-    user: InsertableUser,
-    conn: Conn,
-    tracer: &Tracer,
-    span: &Span,
-) -> Result<User, UserCreationError> {
-    let _span = tracer
-        .span("Register::repository_layer")
+pub fn register(user: InsertableUser, conn: Conn, span: &Span) -> Result<User, UserCreationError> {
+    let _span = repository_tracer()
+        .span("SQL INSERT New User")
         .child_of(span)
         .start();
 
@@ -38,9 +33,9 @@ pub fn register(
         .map_err(Into::into)
 }
 
-pub fn login(email: String, conn: Conn, tracer: &Tracer, span: &Span) -> Option<User> {
-    let _span = tracer
-        .span("Login::repository_layer")
+pub fn login(email: String, conn: Conn, span: &Span) -> Option<User> {
+    let _span = repository_tracer()
+        .span("SQL SELECT User")
         .child_of(span)
         .start();
 

@@ -1,9 +1,6 @@
 use chrono::{DateTime, Duration, Utc};
 use rocket::config::{Config, Environment, Value};
 use rocket::fairing::AdHoc;
-use rustracing::sampler::AllSampler;
-use rustracing_jaeger::reporter::JaegerCompactReporter;
-use rustracing_jaeger::Tracer;
 use std::collections::HashMap;
 use std::env;
 
@@ -20,7 +17,6 @@ pub fn token_expire_time() -> DateTime<Utc> {
 
 pub struct AppState {
     pub secret: Vec<u8>,
-    pub tracer: Tracer,
 }
 
 impl AppState {
@@ -34,18 +30,8 @@ impl AppState {
                 }
             });
 
-            let (span_tx, span_rx) = crossbeam_channel::bounded(100);
-            let tracer = Tracer::with_sender(AllSampler, span_tx);
-            std::thread::spawn(move || {
-                let reporter = track_try_unwrap!(JaegerCompactReporter::new("backend"));
-                for span in span_rx {
-                    track_try_unwrap!(reporter.report(&[span]));
-                }
-            });
-
             Ok(rocket.manage(AppState {
                 secret: secret.into_bytes(),
-                tracer,
             }))
         })
     }
