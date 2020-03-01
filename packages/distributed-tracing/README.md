@@ -6,6 +6,10 @@ This server is built with [Rocket](https://rocket.rs), a simple, fast, and type-
 
 All tracing is done with `rustracing` with `jaeger` as the visualization tool used for now.
 
+|              Trace Search              |             Trace Details              |
+| :------------------------------------: | :------------------------------------: |
+| ![Trace Search](./media/ss_search.png) | ![Trace Details](./media/ss_trace.png) |
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
