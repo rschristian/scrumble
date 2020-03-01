@@ -5,7 +5,8 @@
   "scripts": {
     "serve:dev": "cross-env PORT=3000 preact watch",
     "serve:prod": "preact build --no-prerender && sirv build --port 3000",
-    "build": "preact build --no-prerender --analyze",
+    "build": "preact build --no-prerender",
+    "analyze": "preact build --analyze",
     "lint": "eslint src/**/*.{js,ts,tsx} --fix",
     "prettier": "prettier src/**/*.{css,scss,json} --write"
   },
