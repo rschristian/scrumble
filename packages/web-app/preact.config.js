@@ -20,14 +20,9 @@ export default {
         const postCssLoaders = helpers.getLoadersByName(config, 'postcss-loader');
         postCssLoaders.forEach(({ loader }) => {
             const plugins = loader.options.plugins;
-
-            // Add tailwind css at the top.
             plugins.unshift(tailwindCss);
 
-            // Add PurgeCSS only in production.
-            if (env.production) {
-                plugins.push(purgecss);
-            }
+            if (env.production) plugins.push(purgecss);
         });
 
         const css = helpers.getLoadersByName(config, 'css-loader')[0];
