@@ -2,6 +2,7 @@ use crate::config::DATE_FORMAT;
 use crate::models::domain_tracer;
 
 use chrono::{DateTime, Utc};
+use rustracing::tag::Tag;
 use rustracing_jaeger::Span;
 use serde::Serialize;
 
@@ -26,6 +27,7 @@ impl Email {
         let _span = domain_tracer()
             .span("Convert email to serializable struct")
             .child_of(span)
+            .tag(Tag::new("span.kind", "server"))
             .start();
 
         EmailJson {

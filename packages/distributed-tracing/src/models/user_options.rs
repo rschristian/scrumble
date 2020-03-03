@@ -1,5 +1,6 @@
 use crate::models::domain_tracer;
 
+use rustracing::tag::Tag;
 use rustracing_jaeger::Span;
 use serde::Serialize;
 
@@ -19,6 +20,7 @@ impl UserOptions {
         let _span = domain_tracer()
             .span("Convert user options to serializable struct")
             .child_of(span)
+            .tag(Tag::new("span.kind", "server"))
             .start();
 
         UserOptionsResponse {

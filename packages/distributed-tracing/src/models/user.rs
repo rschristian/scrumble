@@ -3,6 +3,7 @@ use crate::config;
 use crate::models::domain_tracer;
 use crate::schema::users;
 
+use rustracing::tag::Tag;
 use rustracing_jaeger::Span;
 use serde::Serialize;
 
@@ -44,6 +45,7 @@ impl User {
         let span = domain_tracer()
             .span("Convert user auth to serializable struct")
             .child_of(span)
+            .tag(Tag::new("span.kind", "server"))
             .start();
 
         let exp = config::token_expire_time();

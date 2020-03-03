@@ -4,10 +4,17 @@ use crate::errors::Errors;
 use crate::services::user_service;
 
 use rocket_contrib::json::JsonValue;
+use rustracing::tag::Tag;
 
 #[get("/user/options")]
 pub fn get_user_options(auth: Option<Auth>, conn: Conn) -> Result<JsonValue, Errors> {
-    let parent_span = api_tracer().span("HTTP GET /user/options").start();
+    let parent_span = api_tracer()
+        .span("HTTP GET /user/options")
+        .tag(Tag::new("component", "net/http"))
+        .tag(Tag::new("http.method", "GET"))
+        .tag(Tag::new("http.url", "/user/options"))
+        .tag(Tag::new("span.kind", "server"))
+        .start();
 
     let user_id = auth.map(|auth| auth.id).unwrap_or(-1);
     user_service::get_options(user_id, conn, &parent_span)
@@ -17,7 +24,13 @@ pub fn get_user_options(auth: Option<Auth>, conn: Conn) -> Result<JsonValue, Err
 
 #[get("/user/inbox")]
 pub fn get_user_inbox(auth: Option<Auth>, conn: Conn) -> Result<JsonValue, Errors> {
-    let parent_span = api_tracer().span("HTTP GET /user/inbox").start();
+    let parent_span = api_tracer()
+        .span("HTTP GET /user/inbox")
+        .tag(Tag::new("component", "net/http"))
+        .tag(Tag::new("http.method", "GET"))
+        .tag(Tag::new("http.url", "/user/inbox"))
+        .tag(Tag::new("span.kind", "server"))
+        .start();
 
     let user_id = auth.map(|auth| auth.id).unwrap_or(-1);
     user_service::get_inbox(user_id, conn, &parent_span)

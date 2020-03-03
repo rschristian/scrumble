@@ -7,8 +7,48 @@ use crate::services::auth_service;
 
 use rocket::State;
 use rocket_contrib::json::{Json, JsonValue};
+use rustracing::tag::Tag;
 use serde::Deserialize;
 use validator::Validate;
+
+#[derive(Deserialize)]
+pub struct LoginUser {
+    user: LoginUserData,
+}
+
+#[derive(Deserialize, Validate)]
+struct LoginUserData {
+    #[validate(email)]
+    email: Option<String>,
+    #[validate(length(min = 8))]
+    password: Option<String>,
+}
+
+#[post("/users/login", format = "json", data = "<user>")]
+pub fn users_login(
+    user: Json<LoginUser>,
+    conn: Conn,
+    state: State<AppState>,
+) -> Result<JsonValue, Errors> {
+    let parent_span = api_tracer()
+        .span("HTTP POST /users/login")
+        .tag(Tag::new("component", "net/http"))
+        .tag(Tag::new("http.method", "POST"))
+        .tag(Tag::new("http.url", "/users/login"))
+        .tag(Tag::new("span.kind", "server"))
+        .start();
+
+    let user = user.into_inner().user;
+
+    let mut extractor = FieldValidator::validate(&user);
+    let email = extractor.extract("email", user.email);
+    let password = extractor.extract("password", user.password);
+    extractor.check()?;
+
+    auth_service::login(UserCredentials { email, password }, conn, &parent_span)
+        .map(|user| json!({ "user": user.to_user_auth_response(&state.secret, &parent_span) }))
+        .ok_or_else(|| Errors::new(&[("email or password", "is invalid")]))
+}
 
 #[derive(Deserialize)]
 pub struct RegistrationUser {
@@ -31,7 +71,13 @@ pub fn users_register(
     conn: Conn,
     state: State<AppState>,
 ) -> Result<JsonValue, Errors> {
-    let parent_span = api_tracer().span("HTTP POST /users/register").start();
+    let parent_span = api_tracer()
+        .span("HTTP POST /users/register")
+        .tag(Tag::new("component", "net/http"))
+        .tag(Tag::new("http.method", "POST"))
+        .tag(Tag::new("http.url", "/users/register"))
+        .tag(Tag::new("span.kind", "server"))
+        .start();
 
     let new_user = new_user.into_inner().user;
 
@@ -59,37 +105,4 @@ pub fn users_register(
         };
         Errors::new(&[(_field, "has already been taken")])
     })
-}
-
-#[derive(Deserialize)]
-pub struct LoginUser {
-    user: LoginUserData,
-}
-
-#[derive(Deserialize, Validate)]
-struct LoginUserData {
-    #[validate(email)]
-    email: Option<String>,
-    #[validate(length(min = 8))]
-    password: Option<String>,
-}
-
-#[post("/users/login", format = "json", data = "<user>")]
-pub fn users_login(
-    user: Json<LoginUser>,
-    conn: Conn,
-    state: State<AppState>,
-) -> Result<JsonValue, Errors> {
-    let parent_span = api_tracer().span("HTTP POST /users/login").start();
-
-    let user = user.into_inner().user;
-
-    let mut extractor = FieldValidator::validate(&user);
-    let email = extractor.extract("email", user.email);
-    let password = extractor.extract("password", user.password);
-    extractor.check()?;
-
-    auth_service::login(UserCredentials { email, password }, conn, &parent_span)
-        .map(|user| json!({ "user": user.to_user_auth_response(&state.secret, &parent_span) }))
-        .ok_or_else(|| Errors::new(&[("email or password", "is invalid")]))
 }
