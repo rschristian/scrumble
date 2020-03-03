@@ -17,7 +17,7 @@ const App: FunctionalComponent = () => {
     const publicRoutes = ['/login'];
 
     const authGuard = (e: RouterOnChangeArgs): void => {
-        if (!publicRoutes.includes(e.url) && !authStore.isAuthenticated) route('/login');
+        // if (!publicRoutes.includes(e.url) && !authStore.isAuthenticated) route('/login');
     };
 
     return (
