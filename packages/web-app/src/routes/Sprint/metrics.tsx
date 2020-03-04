@@ -13,27 +13,32 @@ const SprintMetrics: FunctionalComponent = () => {
                         <MetricBubble
                             metric="Story Points Planned"
                             value="22/33"
-                            bgColour="orange-500"
-                            borderColour="orange-300"
+                            bgColour="bg-orange-500"
+                            borderColour="border-orange-300"
                         />
-                        <MetricBubble metric="Issues In Todo" value="22/30" bgColour="red-500" borderColour="red-300" />
+                        <MetricBubble
+                            metric="Issues In Todo"
+                            value="22/30"
+                            bgColour="bg-red-500"
+                            borderColour="border-red-300"
+                        />
                         <MetricBubble
                             metric="Issues In Progress"
                             value="22/30"
-                            bgColour="purple-500"
-                            borderColour="purple-300"
+                            bgColour="bg-purple-500"
+                            borderColour="border-purple-300"
                         />
                         <MetricBubble
                             metric="Issues Closed"
                             value="10/15"
-                            bgColour="green-500"
-                            borderColour="green-300"
+                            bgColour="bg-green-500"
+                            borderColour="border-green-300"
                         />
                         <MetricBubble
                             metric="Story Points Closed"
                             value="22/30"
-                            bgColour="teal-500"
-                            borderColour="teal-300"
+                            bgColour="bg-teal-500"
+                            borderColour="border-teal-300"
                         />
                     </div>
                     <div>
