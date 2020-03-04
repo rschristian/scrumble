@@ -1,7 +1,10 @@
 use crate::api::auth_middleware::Auth;
 use crate::config;
+use crate::models::domain_tracer;
 use crate::schema::users;
 
+use rustracing::tag::Tag;
+use rustracing_jaeger::Span;
 use serde::Serialize;
 
 #[derive(Queryable, Serialize)]
@@ -38,14 +41,20 @@ pub struct UserAuth<'a> {
 }
 
 impl User {
-    pub fn to_user_auth(&self, secret: &[u8]) -> UserAuth {
+    pub fn to_user_auth_response(&self, secret: &[u8], span: &Span) -> UserAuth {
+        let span = domain_tracer()
+            .span("Convert user auth to serializable struct")
+            .child_of(span)
+            .tag(Tag::new("span.kind", "server"))
+            .start();
+
         let exp = config::token_expire_time();
         let token = Auth {
             id: self.id,
             email: self.email.clone(),
             exp: exp.timestamp(),
         }
-        .token(secret);
+        .token(secret, &span);
 
         UserAuth {
             email: &self.email,

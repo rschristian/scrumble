@@ -22,7 +22,6 @@ mod services;
 use dotenv::dotenv;
 use rocket::{Rocket, Route};
 use rocket_contrib::json::JsonValue;
-use rustracing_jaeger::reporter::JaegerCompactReporter;
 
 #[catch(404)]
 fn not_found() -> JsonValue {
@@ -39,17 +38,9 @@ fn rocket_instance(mounts: Vec<(&str, Vec<Route>)>) -> Rocket {
         instance = instance.mount(path, methods);
     }
 
-    let (span_tx, span_rx) = crossbeam_channel::bounded(100);
-    std::thread::spawn(move || {
-        let reporter = track_try_unwrap!(JaegerCompactReporter::new("Rocket_Server"));
-        for span in span_rx {
-            track_try_unwrap!(reporter.report(&[span]));
-        }
-    });
-
     instance
         .attach(db::Conn::fairing())
-        .attach(config::AppState::manage(span_tx))
+        .attach(config::AppState::manage())
         .register(catchers![not_found])
 }
 

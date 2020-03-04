@@ -3,6 +3,8 @@ use rocket::request::Request;
 use rocket::response::status;
 use rocket::response::{self, Responder};
 use rocket_contrib::json::Json;
+use rustracing::tag::Tag;
+use rustracing_jaeger::Span;
 use validator::{Validate, ValidationError, ValidationErrors};
 
 #[derive(Debug)]
@@ -65,10 +67,14 @@ impl FieldValidator {
     }
 
     /// Convenience method to trigger early returns with ? operator.
-    pub fn check(self) -> Result<(), Errors> {
+    pub fn check(self, span: &mut Span) -> Result<(), Errors> {
         if self.errors.is_empty() {
             Ok(())
         } else {
+            span.set_tag(|| Tag::new("error", "true"));
+            span.log(|log| {
+                log.error().message(format!("Validator Rejection: {}", self.errors));
+            });
             Err(Errors {
                 errors: self.errors,
             })
