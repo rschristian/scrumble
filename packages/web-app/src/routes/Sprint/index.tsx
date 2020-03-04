@@ -66,7 +66,7 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
     return (
         <div class="page">
             <div class="flex">
-                <SideBar items={sideNavItems} />
+                <SideBar links={sideNavItems} />
                 <div class="main-content">
                     <BreadCrumbs
                         workspaceId={props.workspaceId}

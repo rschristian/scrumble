@@ -3,9 +3,9 @@ import team from 'assets/icons/team.png';
 import kanbanBoard from 'assets/icons/kanbanBoard.png';
 import metrics from 'assets/icons/metrics.png';
 import presentation from 'assets/icons/presentation.png';
-import { SideBarItem } from 'models/SideBarItem';
+import { SideBarLink } from 'models/SideBarLink';
 
-export const sideNavItems: SideBarItem[] = [
+export const sideNavItems: SideBarLink[] = [
     {
         label: 'Issues Board',
         icon: kanbanBoard,
