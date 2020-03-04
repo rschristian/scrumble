@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "serve:dev": "cross-env PORT=3000 preact watch",
-    "serve:prod": "preact build --no-prerender && sirv build --port 3000",
-    "build": "preact build --no-prerender",
-    "lint": "eslint src/**/*.{js,ts,tsx} --quiet --fix",
+    "serve:prod": "npm run build && sirv build --port 3000",
+    "build": "preact build --no-esm --no-prerender",
+    "analyze": "preact build --no-esm --no-prerender --analyze",
+    "lint": "eslint src/**/*.{js,ts,tsx} --fix",
     "prettier": "prettier src/**/*.{css,scss,json} --write"
   },
   "husky": {
@@ -25,7 +26,7 @@
   "dependencies": {
     "mobx": "^5.15.4",
     "mobx-react-lite": "^1.5.2",
-    "preact": "^10.3.1",
+    "preact": "^10.3.3",
     "preact-feather": "^4.1.0",
     "preact-render-to-string": "^5.1.4",
     "preact-router": "^3.2.1",
@@ -33,22 +34,23 @@
     "ts-api-toolkit": "^2.0.0"
   },
   "devDependencies": {
-    "@types/react": "^16.9.19",
-    "@typescript-eslint/eslint-plugin": "^2.19.0",
-    "@typescript-eslint/parser": "^2.19.0",
+    "@fullhuman/postcss-purgecss": "^2.1.0",
+    "@types/react": "^16.9.23",
+    "@typescript-eslint/eslint-plugin": "^2.22.0",
+    "@typescript-eslint/parser": "^2.22.0",
     "cross-env": "^7.0.0",
     "eslint": "^6.8.0",
+    "eslint-config-preact": "^1.1.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-react": "^7.18.3",
-    "husky": "^4.2.1",
-    "lint-staged": "^10.0.7",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.8",
     "node-sass": "^4.13.1",
     "preact-cli": "^3.0.0-next.19",
     "prettier": "^1.19.1",
-    "sass-loader": "^7.3.1",
+    "sass-loader": "^8.0.2",
     "sirv-cli": "^1.0.0-next.3",
     "ts-loader": "^6.2.1",
-    "typescript": "^3.7.5"
+    "typescript": "^3.8.3"
   }
 }

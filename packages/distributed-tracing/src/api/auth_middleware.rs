@@ -1,9 +1,11 @@
+use crate::api::auth_middleware_tracer;
 use crate::config;
 
 use jsonwebtoken as jwt;
 use rocket::http::Status;
 use rocket::request::{self, FromRequest, Request};
 use rocket::{Outcome, State};
+use rustracing_jaeger::Span;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -14,11 +16,19 @@ pub struct Auth {
 }
 
 impl Auth {
-    pub fn token(&self, secret: &[u8]) -> String {
+    pub fn token(&self, secret: &[u8], span: &Span) -> String {
+        let _span = auth_middleware_tracer()
+            .span("Create JSON Web Token")
+            .child_of(span)
+            .start();
+
         jwt::encode(&jwt::Header::default(), self, secret).expect("jwt")
     }
 }
 
+// I could potentially add spans here, but they'd show up without a parent.
+// All that would indicate is that the auth guard is actually being hit, which isn't helpful.
+// Integration tests can do that for me.
 impl<'a, 'r> FromRequest<'a, 'r> for Auth {
     type Error = ();
 

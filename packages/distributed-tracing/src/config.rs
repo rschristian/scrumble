@@ -1,10 +1,10 @@
 use chrono::{DateTime, Duration, Utc};
-use crossbeam_channel::Sender;
 use rocket::config::{Config, Environment, Value};
 use rocket::fairing::AdHoc;
-use rustracing_jaeger::span::FinishedSpan;
 use std::collections::HashMap;
 use std::env;
+
+pub const DATE_FORMAT: &str = "%Y-%m-%dT%H:%M:%S%.3fZ";
 
 /// Debug only secret for JWT encoding & decoding.
 pub const SECRET: &str = "XK6EH:M<G~k8l[iYw/1=0*RznX*P$7WU";
@@ -17,11 +17,10 @@ pub fn token_expire_time() -> DateTime<Utc> {
 
 pub struct AppState {
     pub secret: Vec<u8>,
-    pub sender_context: Sender<FinishedSpan>,
 }
 
 impl AppState {
-    pub fn manage(sender_context: Sender<FinishedSpan>) -> AdHoc {
+    pub fn manage() -> AdHoc {
         AdHoc::on_attach("Manage config", |rocket| {
             let secret = env::var("SECRET_KEY").unwrap_or_else(|err| {
                 if cfg!(debug_assertions) {
@@ -33,7 +32,6 @@ impl AppState {
 
             Ok(rocket.manage(AppState {
                 secret: secret.into_bytes(),
-                sender_context,
             }))
         })
     }

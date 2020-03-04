@@ -1,7 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
-import SearchBar from 'components/SearchBar';
+import { SearchBar } from 'components/SearchBar';
 
-const SprintFilter: FunctionalComponent = () => {
+export const SprintFilter: FunctionalComponent = () => {
     return (
         <div>
             <div class="my-4 flex flex-col items-start">
@@ -14,5 +14,3 @@ const SprintFilter: FunctionalComponent = () => {
         </div>
     );
 };
-
-export default SprintFilter;
