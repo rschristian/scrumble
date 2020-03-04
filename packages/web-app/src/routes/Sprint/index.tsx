@@ -1,6 +1,5 @@
 import { ComponentChild, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
-import { getCurrentUrl } from 'preact-router';
 
 import { BreadCrumbs } from 'components/BreadCrumbs';
 import { SideBar } from 'components/Core/SideBar';
@@ -15,45 +14,54 @@ import DailyStandUp from './dailyStandUp';
 interface IProps {
     workspaceId: number;
     sprintId: number;
+    subPage?: SubPage;
+}
+
+enum SubPage {
+    dailyStandUp = 'dailyStandUp',
+    issuesBoard = 'issuesBoard',
+    metrics = 'metrics',
+    showAndTell = 'showAndTell',
+    edit = 'edit',
 }
 
 const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
     const [workspaceName, setWorkspaceName] = useState<string>('');
     const [sprintName, setSprintName] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<string>('');
-    const [form, setForm] = useState<ComponentChild>(null);
-
-    const currentUrl = getCurrentUrl();
+    const [subPage, setSubPage] = useState<ComponentChild>(null);
 
     useEffect(() => {
         for (const workspace of workspaces) {
-            if (workspace.id == props.workspaceId) {
-                setWorkspaceName(workspace.name);
-            }
+            if (workspace.id == props.workspaceId) setWorkspaceName(workspace.name);
         }
         for (const sprint of sprints) {
-            if (sprint.id == props.sprintId) {
-                setSprintName(sprint.name);
-            }
+            if (sprint.id == props.sprintId) setSprintName(sprint.name);
         }
-        const currentUrl = getCurrentUrl();
-        if (currentUrl.includes('metrics')) {
-            setCurrentPage('Metrics');
-            setForm(<SprintMetrics />);
-        } else if (currentUrl.includes('edit')) {
-            setCurrentPage('Edit');
-            setForm(<SprintEdit />);
-        } else if (currentUrl.includes('showandtell')) {
-            setCurrentPage('Show and Tell');
-            setForm(<SprintShowAndTell />);
-        } else if (currentUrl.includes('issues')) {
-            setCurrentPage('Issues Board');
-            setForm(<IssuesBoard />);
-        } else {
-            setCurrentPage('Daily Stand-up');
-            setForm(<DailyStandUp />);
+
+        switch (props.subPage) {
+            case SubPage.dailyStandUp:
+                setCurrentPage('Daily Stand-up');
+                setSubPage(<DailyStandUp />);
+                break;
+            case SubPage.metrics:
+                setCurrentPage('Metrics');
+                setSubPage(<SprintMetrics />);
+                break;
+            case SubPage.showAndTell:
+                setCurrentPage('Show and Tell');
+                setSubPage(<SprintShowAndTell />);
+                break;
+            case SubPage.edit:
+                setCurrentPage('Edit');
+                setSubPage(<SprintEdit />);
+                break;
+            default:
+                setCurrentPage('Issues Board');
+                setSubPage(<IssuesBoard />);
+                break;
         }
-    }, [props.sprintId, props.workspaceId, currentUrl]);
+    }, [props.sprintId, props.workspaceId, props.subPage]);
 
     return (
         <div class="page">
@@ -67,7 +75,7 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
                         sprintId={props.sprintId}
                         sprintName={sprintName}
                     />
-                    {form}
+                    {subPage}
                 </div>
             </div>
         </div>

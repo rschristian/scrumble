@@ -27,15 +27,8 @@ const App: FunctionalComponent = () => {
                 <Router onChange={authGuard}>
                     <Home path="/" />
                     <Login path="/login" />
-                    <Route path="/workspace/:workspaceId" component={Workspace} />
-                    <Route path="/workspace/:workspaceId/sprintPlanning" component={Workspace} />
-                    <Route path="/workspace/:workspaceId/metrics" component={Workspace} />
-                    <Route path="/workspace/:workspaceId/edit" component={Workspace} />
-                    <Route path="/workspace/:workspaceId/sprint/:sprintId/" component={Sprint} />
-                    <Route path="/workspace/:workspaceId/sprint/:sprintId/issues" component={Sprint} />
-                    <Route path="/workspace/:workspaceId/sprint/:sprintId/metrics" component={Sprint} />
-                    <Route path="/workspace/:workspaceId/sprint/:sprintId/showandtell" component={Sprint} />
-                    <Route path="/workspace/:workspaceId/sprint/:sprintId/edit" component={Sprint} />
+                    <Route path="/workspace/:workspaceId/:subPage?" component={Workspace} />
+                    <Route path="/workspace/:workspaceId/sprint/:sprintId/:subPage?" component={Sprint} />
                 </Router>
             </Suspense>
         </div>
