@@ -17,16 +17,17 @@
 }
 
 .avatar {
-  @apply h-8 w-8 border-2 border-gray-600 rounded-full object-cover;
+  @apply h-auto w-8 border-2 border-gray-600 rounded-full object-cover;
 }
 
 .btn-account-dropdown {
-  @apply relative z-10 block h-8 w-8 rounded-full overflow-hidden border-2 border-gray-600;
+  @apply relative z-10 block h-8 w-8 rounded-full overflow-hidden border-2 border-gray-100;
 }
 
 .top-nav-dropdown-link {
   @apply mt-2 block text-deep-space-sparkle;
 }
+
 .top-nav-dropdown-link:hover {
   @apply text-gray-400;
 }
@@ -47,26 +48,6 @@
   .header {
     @apply flex justify-between items-center px-4 py-3;
   }
-} //Styling for top nav
-
-.header {
-  @apply border-b border-gray-500 bg-gray-100;
-}
-
-.header-link {
-  @apply block px-2 py-1 text-deep-space-sparkle font-semibold rounded;
-}
-
-.header-link:hover {
-  @apply bg-gray-300;
-}
-
-.avatar {
-  @apply h-8 w-8 border-2 border-gray-600 rounded-full object-cover;
-}
-
-.btn-account-dropdown {
-  @apply relative z-10 block h-8 w-8 rounded-full overflow-hidden border-2 border-gray-600;
 }
 
 .btn-sign-out {
@@ -75,33 +56,6 @@
 
 .btn-sign-out:hover {
   @apply bg-orange-500;
-}
-
-.top-nav-dropdown-link {
-  @apply mt-2 block text-deep-space-sparkle;
-}
-.top-nav-dropdown-link:hover {
-  @apply text-gray-400;
-}
-
-//Styling for top nav
-
-.side-nav-link {
-  @apply min-h-12 flex items-start py-1 pl-1 text-deep-space-sparkle;
-}
-
-.side-nav-link:hover {
-  @apply bg-gray-400;
-}
-
-.side-nav-link:focus {
-  @apply font-semibold bg-gray-400;
-}
-
-@screen sm {
-  .header {
-    @apply flex justify-between items-center px-4 py-3;
-  }
 }
 
 .w3-sidebar {
