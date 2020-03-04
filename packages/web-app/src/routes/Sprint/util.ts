@@ -7,14 +7,14 @@ import { SideBarItem } from 'models/SideBarItem';
 
 export const sideNavItems: SideBarItem[] = [
     {
-        label: 'Daily Stand-up',
-        icon: team,
+        label: 'Issues Board',
+        icon: kanbanBoard,
         path: '/',
     },
     {
-        label: 'Issues Board',
-        icon: kanbanBoard,
-        path: '/issues',
+        label: 'Daily Stand-up',
+        icon: team,
+        path: '/dailyStandUp',
     },
     {
         label: 'Metrics',
@@ -24,7 +24,7 @@ export const sideNavItems: SideBarItem[] = [
     {
         label: 'Show and Tell',
         icon: presentation,
-        path: '/showandtell',
+        path: '/showAndTell',
     },
     {
         label: 'Edit',
