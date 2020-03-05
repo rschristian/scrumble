@@ -4,10 +4,7 @@ import com.nsa.bt.scrumble.config.AppProperties;
 import com.nsa.bt.scrumble.exception.BadRequestException;
 import com.nsa.bt.scrumble.security.CookieUtils;
 import com.nsa.bt.scrumble.security.TokenProvider;
-<<<<<<< HEAD
 import com.nsa.bt.scrumble.security.UserPrincipal;
-=======
->>>>>>> feat(authentication): Not finished functionality. But SB now generates JWTs instead of sessions and cookies. Upon successful OAuth authentication, SB redirects to a Preact component that grabs a short lived token from the URL. Next is to trade the short lived token for a long lived one and store it after secure transmission.
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -68,13 +65,8 @@ public class OAuth2AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
 //        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
         String targetUrl = redirectUri.orElse("http://localhost:3000/oauth-success");
 
-<<<<<<< HEAD
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         String token = tokenProvider.createToken(userPrincipal.getId());
-=======
-        // TODO: Get real dynamic id
-        String token = tokenProvider.createToken(1);
->>>>>>> feat(authentication): Not finished functionality. But SB now generates JWTs instead of sessions and cookies. Upon successful OAuth authentication, SB redirects to a Preact component that grabs a short lived token from the URL. Next is to trade the short lived token for a long lived one and store it after secure transmission.
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)

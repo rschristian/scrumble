@@ -1,7 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
-import {useContext, useState} from 'preact/hooks';
+import { useContext, useState } from 'preact/hooks';
 import { lazy, Suspense } from 'preact/compat';
-import {getCurrentUrl, Route, route, Router, RouterOnChangeArgs} from 'preact-router';
+import { Route, route, Router, RouterOnChangeArgs} from 'preact-router';
 
 import { TopBar } from 'components/Core/TopBar';
 import Home from 'routes/Home';
@@ -22,8 +22,6 @@ const App: FunctionalComponent = () => {
     const authStore = useContext(AuthStoreContext);
 
     const publicRoutes = ['/login'];
-
-    const [currentUrl, setCurrentUrl] = useState<string>(getCurrentUrl());
 
     const authGuard = (e: RouterOnChangeArgs): void => {
         const oAuthRedirect = RegExp(/\/oauth-success\?token=(.*)/);

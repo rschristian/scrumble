@@ -44,19 +44,11 @@ public class UserRepositoryImpl implements IUserRepository {
     }
 
     @Override
-<<<<<<< HEAD
     public Optional<User> findUserById(int id) {
         try {
             return jdbcTemplate.queryForObject(
                     "SELECT * FROM scrumble.users WHERE id = ?;",
                     new Object[]{id},
-=======
-    public Optional<User> findUserById(int serviceId) {
-        try {
-            return jdbcTemplate.queryForObject(
-                    "SELECT * FROM scrumble.users WHERE id = ?;",
-                    new Object[]{serviceId},
->>>>>>> feat(authentication): Not finished functionality. But SB now generates JWTs instead of sessions and cookies. Upon successful OAuth authentication, SB redirects to a Preact component that grabs a short lived token from the URL. Next is to trade the short lived token for a long lived one and store it after secure transmission.
                     (rs, rowNum) ->
                             Optional.of(new User(
                                     rs.getInt("id"),
@@ -69,7 +61,6 @@ public class UserRepositoryImpl implements IUserRepository {
         }
     }
 
-<<<<<<< HEAD
     @Override
     public void addToken(int userId, String token) {
         String insertStatement = "UPDATE scrumble.users SET access_token = ? WHERE id = ?";
@@ -99,7 +90,4 @@ public class UserRepositoryImpl implements IUserRepository {
             return Optional.empty();
         }
     }
-=======
-
->>>>>>> feat(authentication): Not finished functionality. But SB now generates JWTs instead of sessions and cookies. Upon successful OAuth authentication, SB redirects to a Preact component that grabs a short lived token from the URL. Next is to trade the short lived token for a long lived one and store it after secure transmission.
 }

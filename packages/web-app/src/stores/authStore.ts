@@ -2,6 +2,8 @@ import { observable, action } from 'mobx';
 
 import { LoginUser, RegistrationUser, User } from 'models/User';
 import { login, logout, register } from 'services/api';
+import { apiService, authStorageService } from 'ts-api-toolkit';
+import { route } from 'preact-router';
 
 class AuthStore {
     @observable user: User | undefined;
@@ -11,17 +13,27 @@ class AuthStore {
         return !!(result as User).token;
     };
 
-    @action async login(credentials: LoginUser): Promise<string | void> {
-        return await login(credentials).then((result) => {
-            if (this.isUser(result)) {
-                this.user = result;
-                this.isAuthenticated = true;
-                return;
-            }
-            if (typeof result == 'string') {
-                return result;
-            }
-            return 'Unknown Server Error';
+    // @action async login(credentials: LoginUser): Promise<string | void> {
+    //     return await login(credentials).then((result) => {
+    //         if (this.isUser(result)) {
+    //             this.user = result;
+    //             this.isAuthenticated = true;
+    //             return;
+    //         }
+    //         if (typeof result == 'string') {
+    //             return result;
+    //         }
+    //         return 'Unknown Server Error';
+    //     });
+    // }
+
+    @action login(shortLivedJwt: string): void {
+        authStorageService.saveToken(shortLivedJwt);
+        apiService.get('/authenticate/token/long-life').then((response) => {
+            console.log(`JWT: ${response.data.jwt}`);
+            authStorageService.saveToken(response.data.jwt);
+            this.isAuthenticated = true;
+            route('/');
         });
     }
 

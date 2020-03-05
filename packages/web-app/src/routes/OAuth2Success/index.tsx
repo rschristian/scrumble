@@ -3,6 +3,7 @@ import { getCurrentUrl, route } from 'preact-router';
 import { useEffect } from 'preact/hooks';
 
 import { apiService, authStorageService } from 'ts-api-toolkit';
+import { authStore } from 'stores/authStore';
 
 const OAuth2Success: FunctionalComponent = () => {
     useEffect(() => {
@@ -11,8 +12,8 @@ const OAuth2Success: FunctionalComponent = () => {
         console.log(token);
 
         apiService.get('/authenticate/token/long-life').then((response) => {
-            console.log(response);
-            return response;
+            // authStorageService.saveToken(response.data.jwt);
+            authStore.login(response.data.jwt);
         });
 
         authStorageService.saveToken(token);

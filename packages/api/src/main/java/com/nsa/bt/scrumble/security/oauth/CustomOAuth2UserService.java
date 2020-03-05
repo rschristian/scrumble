@@ -45,13 +45,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
-<<<<<<< HEAD
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(
-=======
-        // TODO: Save this token in the database
-//        String token = oAuth2UserRequest.getAccessToken().getTokenValue();
-        OAuth2UserInfo gitLabOAuth2User = OAuth2UserInfoFactory.getOAuth2UserInfo(
->>>>>>> feat(authentication): Not finished functionality. But SB now generates JWTs instead of sessions and cookies. Upon successful OAuth authentication, SB redirects to a Preact component that grabs a short lived token from the URL. Next is to trade the short lived token for a long lived one and store it after secure transmission.
                 oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes()
         );
 
