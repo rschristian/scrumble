@@ -1,20 +1,17 @@
 import { apiService, authStorageService } from 'ts-api-toolkit';
 
-import { LoginUser, RegistrationUser, User } from 'models/User';
+import { RegistrationUser, User } from 'models/User';
 
-export const login = async (credentials: LoginUser): Promise<User | string> => {
-    return await apiService
-        .post('users/login', credentials)
-        .then(({ data }) => {
-            authStorageService.saveToken(data.user.token);
-            return data.user;
-        })
-        .catch(({ response }) => {
-            if (response.data !== '') {
-                return response.data.message;
-            }
-            return 'Unknown error while logging in';
-        });
+export const login = async (shortLivedJwt: string): Promise<boolean> => {
+    authStorageService.saveToken(shortLivedJwt);
+    return await apiService.get('/authenticate/token/long-life').then((response) => {
+        authStorageService.saveToken(response.data.jwt);
+        if (true) {
+            return true;
+        } else {
+            return false;
+        }
+    });
 };
 
 export const logout = async (): Promise<void> => {

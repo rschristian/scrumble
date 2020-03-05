@@ -1,14 +1,26 @@
 import { FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
-import { Link } from 'preact-router';
+import { useContext, useState } from 'preact/hooks';
+import { Link, route } from 'preact-router';
 import { Menu, X } from 'preact-feather';
 
 import scrumCards from 'assets/icons/scrumCards.png';
 import avatar from 'assets/gitlab_avatar.png';
+import { destroyOAuthToken } from 'services/api';
+import { AuthStoreContext } from 'stores';
 
 export const TopBar: FunctionalComponent = () => {
+    const authStore = useContext(AuthStoreContext);
     const [isOpen, setIsOpen] = useState(false);
     const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
+
+    const logout = (): void => {
+        destroyOAuthToken().then((success) => {
+            if (success) {
+                authStore.logout();
+                route('/login');
+            }
+        });
+    };
 
     return (
         <header>
@@ -24,11 +36,11 @@ export const TopBar: FunctionalComponent = () => {
                             type="button"
                             class="block text-deep-space-sparkle hover:text-gray-400 focus:outline-none"
                         >
-                            <div class="flex items-start items-baseline min-h-12">
-                                <div class={`my-auto ml-2 ${!isOpen ? 'block' : 'hidden'}`}>
+                            <div className="flex items-start items-baseline min-h-12">
+                                <div className={`my-auto ml-2 ${!isOpen ? 'block' : 'hidden'}`}>
                                     <Menu size={20} />
                                 </div>
-                                <div class={`my-auto ml-2 ${isOpen ? 'block' : 'hidden'}`}>
+                                <div className={`my-auto ml-2 ${isOpen ? 'block' : 'hidden'}`}>
                                     <X size={20} />
                                 </div>
                             </div>
@@ -38,19 +50,26 @@ export const TopBar: FunctionalComponent = () => {
                 <nav class={`sm:block ${isOpen ? '' : 'hidden'}`}>
                     <div class="sm:flex sm:p-0">
                         <div class="hidden sm:block sm:ml-6">
-                            <div class="relative">
+                            <div className="relative">
                                 <button
                                     onClick={(): void => setIsAccountDropdownOpen(!isAccountDropdownOpen)}
                                     onBlur={(): void => setIsAccountDropdownOpen(false)}
-                                    class={`btn-account-dropdown ${
+                                    className={`btn-account-dropdown ${
                                         isAccountDropdownOpen ? 'outline-none border-white' : ''
                                     }`}
                                 >
-                                    <img class="avatar" src={avatar} alt="Your avatar" />
+                                    <img className="avatar" src={avatar} alt="Your avatar" />
                                 </button>
-                                <div class={`btn-sign-out shadow-lg ${isAccountDropdownOpen ? 'block' : 'hidden'}`}>
-                                    <a href="#" class="block px-4 py-2 text-white text-center">
-                                        Sign out
+                                <div
+                                    onClick={() => logout()}
+                                    className={`btn-sign-out shadow-lg ${isAccountDropdownOpen ? 'block' : 'hidden'}`}
+                                >
+                                    <a
+                                        href="http://localhost:8082/logout"
+                                        className="block px-4 py-2 text-white text-center"
+                                    >
+                                        {' '}
+                                        Sign Out{' '}
                                     </a>
                                 </div>
                             </div>
@@ -59,18 +78,16 @@ export const TopBar: FunctionalComponent = () => {
                 </nav>
             </div>
             <div
-                class={`sm:hidden z-20 fixed w-full mt-16 bg-gray-200 border-b border-gray-500 ${
+                className={`sm:hidden z-20 fixed w-full mt-16 bg-gray-200 border-b border-gray-500 ${
                     isOpen ? 'block' : 'hidden'
                 }`}
             >
-                <div class="flex items-center border-b border-gray-300 py-2">
-                    <img class="ml-3 avatar" src={avatar} alt="Your avatar" />
-                    <span class="ml-3 font-semibold text-deep-space-sparkle">Greg</span>
+                <div className="flex items-center border-b border-gray-300 py-2">
+                    <img className="ml-3 avatar" src={avatar} alt="Your avatar" />
+                    <span className="ml-3 font-semibold text-deep-space-sparkle">Greg</span>
                 </div>
-                <div class="my-4 ml-3">
-                    <Link href="/login" class="top-nav-dropdown-link">
-                        Sign out
-                    </Link>
+                <div onClick={() => logout()} className="my-4 ml-3">
+                    <p class="top-nav-dropdown-link">Sign out</p>
                 </div>
             </div>
         </header>

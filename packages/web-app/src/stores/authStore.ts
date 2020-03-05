@@ -27,20 +27,27 @@ class AuthStore {
     //     });
     // }
 
-    @action login(shortLivedJwt: string): void {
-        authStorageService.saveToken(shortLivedJwt);
-        apiService.get('/authenticate/token/long-life').then((response) => {
-            console.log(`JWT: ${response.data.jwt}`);
-            authStorageService.saveToken(response.data.jwt);
-            this.isAuthenticated = true;
-            route('/');
-        });
+    // @action async login(shortLivedJwt: string): Promise<boolean> {
+    //     authStorageService.saveToken(shortLivedJwt);
+    //     return await apiService.get('/authenticate/token/long-life').then((response) => {
+    //         console.log(`JWT: ${response.data.jwt}`);
+    //         authStorageService.saveToken(response.data.jwt);
+    //         this.isAuthenticated = true;
+    //         return true;
+    //     });
+    // }
+
+    @action logout(): void {
+        authStorageService.destroyToken();
+        this.isAuthenticated = false;
+        // await logout();
     }
 
-    @action async logout(): Promise<void> {
-        this.user = undefined;
-        this.isAuthenticated = false;
-        await logout();
+    @action login(): boolean {
+        this.isAuthenticated = true;
+        console.log(`isAuthenticated: ${this.isAuthenticated}`);
+        return this.isAuthenticated;
+        // await login();
     }
 
     @action async register(credentials: RegistrationUser): Promise<string | void> {

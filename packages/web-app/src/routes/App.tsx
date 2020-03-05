@@ -1,7 +1,8 @@
 import { FunctionalComponent, h } from 'preact';
 import { useContext, useState } from 'preact/hooks';
 import { lazy, Suspense } from 'preact/compat';
-import { Route, route, Router, RouterOnChangeArgs} from 'preact-router';
+
+import { Route, route, Router, RouterOnChangeArgs } from 'preact-router';
 
 import { TopBar } from 'components/Core/TopBar';
 import Home from 'routes/Home';

@@ -1,26 +1,30 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { getCurrentUrl, route } from 'preact-router';
-import { useEffect } from 'preact/hooks';
+import { useContext } from 'preact/hooks';
 
-import { apiService, authStorageService } from 'ts-api-toolkit';
-import { authStore } from 'stores/authStore';
+import { AuthStoreContext } from 'stores';
+import { login } from 'services/api';
 
 const OAuth2Success: FunctionalComponent = () => {
-    useEffect(() => {
+    const authStore = useContext(AuthStoreContext);
+
+    const authenticate = (): void => {
         const url = getCurrentUrl();
         const token = url.match(/token=(.*)/)[0].substring(6);
         console.log(token);
 
-        apiService.get('/authenticate/token/long-life').then((response) => {
-            // authStorageService.saveToken(response.data.jwt);
-            authStore.login(response.data.jwt);
+        login(token).then((success) => {
+            if (success) {
+                console.log('successful authentication');
+                authStore.login();
+                route('/');
+            }
         });
-
-        authStorageService.saveToken(token);
-    });
+    };
 
     return (
         <Fragment>
+            {authenticate()}
             <div class="page">
                 <div className="create-bar">
                     <h1 className="page-heading">OAuth2 Success</h1>
