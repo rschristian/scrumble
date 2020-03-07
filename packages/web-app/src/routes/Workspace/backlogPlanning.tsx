@@ -12,6 +12,7 @@ import { observer } from 'mobx-react-lite';
 
 const BacklogPlanning: FunctionalComponent = () => {
     const [showModal, setShowModal] = useState(false);
+    const [newIssue, setNewIssue] = useState(false);
 
     const tempOnClick = (): void => console.log('clicked');
 
@@ -22,6 +23,8 @@ const BacklogPlanning: FunctionalComponent = () => {
             <div class="create-bar">
                 <h1 class="page-heading">Backlog Planning</h1>
                 <button class="btn-create my-auto" onClick={(): void => setShowModal(true)}>
+                    New Issue
+                <button className="btn-create my-auto" onClick={createNewIssue}>
                     New Issue
                 </button>
             </div>

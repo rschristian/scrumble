@@ -2,48 +2,21 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { projects, storyPoints } from 'data';
 
-const NewIssue: FunctionalComponent<any> = (props: any) => {
+const NewIssue: FunctionalComponent = (props: any) => {
     const [Title, setTitle] = useState('');
     const [Descirption, setDescription] = useState('');
-    const [IssueStoryPoint, setIssueStoryPoint] = useState(null);
+    const [IssueStoryPoint, setIssueStoryPoint] = useState(1);
     const [SelectedProject, setSelectedProject] = useState('');
 
     // currently being used for debugging
     const handleSubmit = (evt: any): void => {
-        alert('New Issue Created !');
-        props.store.addNewIssue({
-            name: Title,
-            description: Descirption,
-            storyPoint: IssueStoryPoint,
-            project: SelectedProject,
-        });
+        evt.preventDefault();
         props.isClosed(false);
     };
 
     const handleCancel = (evt: any): void => {
         evt.preventDefault();
-        props.isClosed(false);
-    };
-
-    const handleValidation = (evt: any): void => {
-        evt.preventDefault();
-        if (Title.length === 0) {
-            alert('A Title is required');
-            return;
-        }
-        if (Descirption.length === 0) {
-            alert('A Description is needed');
-            return;
-        }
-        if (IssueStoryPoint === null) {
-            alert('A Story Point is needed');
-            return;
-        }
-        if (SelectedProject.length === 0) {
-            alert('A Project is needed');
-            return;
-        }
-        handleSubmit(evt);
+        props.onCancel(false);
     };
     return (
         <Fragment>
@@ -54,7 +27,7 @@ const NewIssue: FunctionalComponent<any> = (props: any) => {
                     type="text"
                     id="title"
                     value={Title}
-                    onChange={(e): void => setTitle((e.target as HTMLInputElement).value)}
+                    onChange={(e): void => setTitle(e.target.value)}
                 />
                 <label class="form-label"> Description </label>
                 <textarea
@@ -62,14 +35,14 @@ const NewIssue: FunctionalComponent<any> = (props: any) => {
                     type="text"
                     id="description"
                     value={Descirption}
-                    onChange={(e): void => setDescription((e.target as HTMLTextAreaElement).value)}
+                    onChange={(e): void => setDescription(e.target.value)}
                 />
                 <label class="form-label"> Story Points </label>
                 <select
                     class="form-input"
                     id="StoryPoints"
                     value={IssueStoryPoint}
-                    onChange={(e): void => setIssueStoryPoint((e.target as HTMLSelectElement).value)}
+                    onChange={(e): void => setIssueStoryPoint(e.target.value)}
                 >
                     {storyPoints.map((storyPoint): any => {
                         return (
@@ -84,7 +57,7 @@ const NewIssue: FunctionalComponent<any> = (props: any) => {
                     class="form-input"
                     id="Project"
                     value={SelectedProject}
-                    onChange={(e): void => setSelectedProject((e.target as HTMLSelectElement).value)}
+                    onChange={(e): void => setSelectedProject(e.target.value)}
                 >
                     {projects.map((project): any => {
                         return (
@@ -95,7 +68,7 @@ const NewIssue: FunctionalComponent<any> = (props: any) => {
                         );
                     })}
                 </select>
-                <input className="btn-create my-auto" type="submit" value="Submit" onClick={handleValidation} />
+                <input className="btn-create my-auto" type="submit" value="Submit" onClick={handleSubmit} />
                 <button className="btn-delete my-auto" onClick={handleCancel}>
                     {' '}
                     Cancel{' '}
