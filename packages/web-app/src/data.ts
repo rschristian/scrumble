@@ -2,6 +2,8 @@
 
 import { Workspace } from 'models/Workspace';
 import { Issue } from 'models/Issue';
+import { Sprint } from 'models/Sprint';
+import { Project } from 'models/Project';
 import { GLMilestone, GLMilestoneStatus } from 'models/Milestone';
 
 export const workspaces: Workspace[] = [
@@ -356,3 +358,23 @@ export const issues: Issue[] = [
         project: 'Zamit',
     },
 ];
+
+export const projects: Project[] = [
+    {
+        id: 1,
+        name: 'Phantom menace',
+        url: 'www.pm.com',
+    },
+    {
+        id: 2,
+        name: 'Clone wars',
+        url: 'www.cw.com',
+    },
+    {
+        id: 3,
+        name: 'Revenge of the sith',
+        url: 'www.rots.com',
+    },
+];
+
+export const storyPoints: number[] = [1, 2, 4, 8];
