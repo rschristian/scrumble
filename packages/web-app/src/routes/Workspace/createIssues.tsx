@@ -2,15 +2,14 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { projects, storyPoints } from 'data';
 
-const NewIssue: FunctionalComponent = () => {
-    const [ID, setID] = useState(null);
+const NewIssue: FunctionalComponent = (props: any) => {
     const [Title, setTitle] = useState('');
     const [Descirption, setDescription] = useState('');
-    const [IssueStoryPoint, setIssueStoryPoint] = useState(null);
+    const [IssueStoryPoint, setIssueStoryPoint] = useState(1);
     const [SelectedProject, setSelectedProject] = useState('');
 
     // currently being used for debugging
-    const handleSubmit = (evt: any) => {
+    const handleSubmit = (evt: any): void => {
         evt.preventDefault();
         alert(
             `Submitting title: ${Title}
@@ -19,16 +18,21 @@ const NewIssue: FunctionalComponent = () => {
             project ${SelectedProject}`,
         );
     };
+
+    const handleCancel = (evt: any): void => {
+        evt.preventDefault();
+        props.onCancel(false);
+    };
     return (
         <Fragment>
-            <form onSubmit={handleSubmit} class="bg-grey shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <form class="bg-grey shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <label class="form-label"> Title </label>
                 <input
                     class="form-input"
                     type="text"
                     id="title"
                     value={Title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    onChange={(e): void => setTitle(e.target.value)}
                 />
                 <label class="form-label"> Description </label>
                 <textarea
@@ -36,16 +40,16 @@ const NewIssue: FunctionalComponent = () => {
                     type="text"
                     id="description"
                     value={Descirption}
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={(e): void => setDescription(e.target.value)}
                 />
                 <label class="form-label"> Story Points </label>
                 <select
                     class="form-input"
                     id="StoryPoints"
                     value={IssueStoryPoint}
-                    onChange={(e) => setIssueStoryPoint(e.target.value)}
+                    onChange={(e): void => setIssueStoryPoint(e.target.value)}
                 >
-                    {storyPoints.map((storyPoint) => {
+                    {storyPoints.map((storyPoint): any => {
                         return (
                             <option class="form-option" value={storyPoint}>
                                 {storyPoint}
@@ -58,9 +62,9 @@ const NewIssue: FunctionalComponent = () => {
                     class="form-input"
                     id="Project"
                     value={SelectedProject}
-                    onChange={(e) => setSelectedProject(e.target.value)}
+                    onChange={(e): void => setSelectedProject(e.target.value)}
                 >
-                    {projects.map((project) => {
+                    {projects.map((project): any => {
                         return (
                             <option class="form-option" value={project.name}>
                                 {' '}
@@ -69,7 +73,11 @@ const NewIssue: FunctionalComponent = () => {
                         );
                     })}
                 </select>
-                <input className="btn-create my-auto" type="submit" value="Submit" />
+                <input className="btn-create my-auto" type="submit" value="Submit" onClick={handleSubmit} />
+                <button className="btn-delete my-auto" onClick={handleCancel}>
+                    {' '}
+                    Cancel{' '}
+                </button>
             </form>
         </Fragment>
     );

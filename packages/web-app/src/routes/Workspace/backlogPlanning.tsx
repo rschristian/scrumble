@@ -6,6 +6,7 @@ import { Conditional } from 'components/Conditional';
 import { IssueFilter } from 'components/Filter/issues';
 import { Modal } from 'components/Modal';
 import { issues } from 'data';
+import { useState } from 'preact/hooks';
 
 const BacklogPlanning: FunctionalComponent = () => {
     const [showModal, setShowModal] = useState(false);
