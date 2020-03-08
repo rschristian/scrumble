@@ -2,10 +2,10 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { projects, storyPoints } from 'data';
 
-const NewIssue: FunctionalComponent = (props: any) => {
+const NewIssue: FunctionalComponent<any> = (props: any) => {
     const [Title, setTitle] = useState('');
     const [Descirption, setDescription] = useState('');
-    const [IssueStoryPoint, setIssueStoryPoint] = useState(1);
+    const [IssueStoryPoint, setIssueStoryPoint] = useState(null);
     const [SelectedProject, setSelectedProject] = useState('');
 
     // currently being used for debugging
@@ -27,7 +27,7 @@ const NewIssue: FunctionalComponent = (props: any) => {
                     type="text"
                     id="title"
                     value={Title}
-                    onChange={(e): void => setTitle(e.target.value)}
+                    onChange={(e): void => setTitle((e.target as HTMLInputElement).value)}
                 />
                 <label class="form-label"> Description </label>
                 <textarea
@@ -35,14 +35,14 @@ const NewIssue: FunctionalComponent = (props: any) => {
                     type="text"
                     id="description"
                     value={Descirption}
-                    onChange={(e): void => setDescription(e.target.value)}
+                    onChange={(e): void => setDescription((e.target as HTMLTextAreaElement).value)}
                 />
                 <label class="form-label"> Story Points </label>
                 <select
                     class="form-input"
                     id="StoryPoints"
                     value={IssueStoryPoint}
-                    onChange={(e): void => setIssueStoryPoint(e.target.value)}
+                    onChange={(e): void => setIssueStoryPoint((e.target as HTMLSelectElement).value)}
                 >
                     {storyPoints.map((storyPoint): any => {
                         return (
@@ -57,7 +57,7 @@ const NewIssue: FunctionalComponent = (props: any) => {
                     class="form-input"
                     id="Project"
                     value={SelectedProject}
-                    onChange={(e): void => setSelectedProject(e.target.value)}
+                    onChange={(e): void => setSelectedProject((e.target as HTMLSelectElement).value)}
                 >
                     {projects.map((project): any => {
                         return (
