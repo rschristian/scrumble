@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve:dev": "cross-env PORT=3000 preact watch",
+    "serve:dev": "preact watch --port 3000",
     "serve:prod": "npm run build && sirv build --port 3000",
     "build": "preact build --no-esm --no-prerender",
     "analyze": "preact build --no-esm --no-prerender --analyze",
@@ -38,7 +38,6 @@
     "@types/react": "^16.9.23",
     "@typescript-eslint/eslint-plugin": "^2.22.0",
     "@typescript-eslint/parser": "^2.22.0",
-    "cross-env": "^7.0.0",
     "eslint": "^6.8.0",
     "eslint-config-preact": "^1.1.0",
     "eslint-config-prettier": "^6.10.0",
