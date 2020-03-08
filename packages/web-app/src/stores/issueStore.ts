@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, autorun } from 'mobx';
 import { Issue } from 'models/Issue';
 import { issues } from 'data';
 
@@ -8,8 +8,11 @@ class IssueStore {
         value.id = this.issues.length;
         this.issues.push(value);
     }
+    deleteIssue(value: number): void {
+        console.log(value);
+        this.issues.splice(value, 1);
+    }
 }
-
 const store = new IssueStore();
 
 export default store;
