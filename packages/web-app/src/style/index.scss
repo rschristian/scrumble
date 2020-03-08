@@ -3,12 +3,13 @@
 
 @import '~tailwindcss/base';
 @import '~tailwindcss/components';
-@import 'navigation';
-@import 'listItems';
-@import 'utilities';
 @import 'buttons';
-@import 'issuesBoard';
 @import 'form';
+@import 'issuesBoard';
+@import 'listItems';
+@import 'modal';
+@import 'navigation';
+@import 'utilities';
 
 // NB: Must be placed after all custom utilities made with Tailwind
 @import '~tailwindcss/utilities';

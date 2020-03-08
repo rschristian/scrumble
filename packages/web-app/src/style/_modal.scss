@@ -1,0 +1,19 @@
+.modal {
+  @apply fixed w-full h-full top-0 left-0 flex items-center justify-center;
+}
+
+.modal-overlay {
+  @apply absolute w-full h-full bg-gray-900 opacity-50;
+}
+
+.modal-container {
+  @apply bg-white w-11/12 mx-auto rounded shadow-lg z-50 overflow-y-auto;
+}
+
+.modal-content {
+  @apply py-4 text-left px-6;
+}
+
+.modal-close {
+  @apply cursor-pointer z-50;
+}
