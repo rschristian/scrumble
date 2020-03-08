@@ -11,17 +11,17 @@ export const workspaces: Workspace[] = [
 export const sprints: Sprint[] = [
     {
         id: 1,
-        name: 'Skyfall',
+        name: 'Sprint 1',
         description: 'Insert insightful and creative description of a sprint here',
     },
     {
         id: 2,
-        name: 'Quantum of Solace',
+        name: 'Sprint 2',
         description: 'Insert insightful and creative description of a sprint here',
     },
     {
         id: 3,
-        name: 'Spectre',
+        name: 'Sprint 3',
         description: 'Insert insightful and creative description of a sprint here',
     },
 ];

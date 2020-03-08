@@ -1,4 +1,4 @@
-import { Fragment, FunctionalComponent, h } from 'preact';
+import { FunctionalComponent, h } from 'preact';
 
 import { IssueListItem } from 'components/ListItems/issue';
 import { IssueFilter } from 'components/Filter/issues';
