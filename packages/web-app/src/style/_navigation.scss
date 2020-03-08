@@ -4,10 +4,6 @@
   @apply border-b border-gray-500 bg-gray-100 fixed left-0 top-0 w-full h-16;
 }
 
-.sidebar {
-  @apply z-10 mt-16 inset-y-0 left-0 bg-gray-300 h-screen fixed overflow-auto border border-gray-400;
-}
-
 .header-link {
   @apply block px-2 py-1 text-deep-space-sparkle font-semibold rounded;
 }
@@ -30,6 +26,10 @@
 
 .top-nav-dropdown-link:hover {
   @apply text-gray-400;
+}
+
+.sidebar {
+  @apply mt-16 inset-y-0 left-0 bg-gray-300 h-screen fixed overflow-auto border border-gray-400;
 }
 
 .side-nav-link {
