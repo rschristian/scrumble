@@ -12,7 +12,7 @@ const SprintPlanning: FunctionalComponent = () => {
 
     return (
         <Fragment>
-            <div className="flex h-screen">
+            <div className="flex">
                 <div className={`h-full w-11/12 md:w-1/2 md:block " ${!isSprintView ? '' : 'sm:hidden'}`}>
                     <div class="create-bar">
                         <h1 className="page-heading items-baseline">Backlog</h1>
