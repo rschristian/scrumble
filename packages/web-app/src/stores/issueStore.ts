@@ -10,6 +10,6 @@ class IssueStore {
     }
 }
 
-const store = (window.store = new IssueStore());
+const store = new IssueStore();
 
 export default store;

@@ -10,7 +10,6 @@ const NewIssue: FunctionalComponent<any> = (props: any) => {
 
     // currently being used for debugging
     const handleSubmit = (evt: any): void => {
-        evt.preventDefault();
         alert('New Issue Created !');
         props.store.addNewIssue({
             name: Title,
@@ -18,11 +17,33 @@ const NewIssue: FunctionalComponent<any> = (props: any) => {
             storyPoint: IssueStoryPoint,
             project: SelectedProject,
         });
+        props.isClosed(false);
     };
 
     const handleCancel = (evt: any): void => {
         evt.preventDefault();
-        props.onCancel(false);
+        props.isClosed(false);
+    };
+
+    const handleValidation = (evt: any): void => {
+        evt.preventDefault();
+        if (Title.length === 0) {
+            alert('A Title is required');
+            return;
+        }
+        if (Descirption.length === 0) {
+            alert('A Description is needed');
+            return;
+        }
+        if (IssueStoryPoint === null) {
+            alert('A Story Point is needed');
+            return;
+        }
+        if (SelectedProject.length === 0) {
+            alert('A Project is needed');
+            return;
+        }
+        handleSubmit(evt);
     };
     return (
         <Fragment>
@@ -74,7 +95,7 @@ const NewIssue: FunctionalComponent<any> = (props: any) => {
                         );
                     })}
                 </select>
-                <input className="btn-create my-auto" type="submit" value="Submit" onClick={handleSubmit} />
+                <input className="btn-create my-auto" type="submit" value="Submit" onClick={handleValidation} />
                 <button className="btn-delete my-auto" onClick={handleCancel}>
                     {' '}
                     Cancel{' '}
