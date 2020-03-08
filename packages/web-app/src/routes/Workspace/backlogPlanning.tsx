@@ -7,6 +7,8 @@ import { IssueFilter } from 'components/Filter/issues';
 import { Modal } from 'components/Modal';
 import { issues } from 'data';
 import { useState } from 'preact/hooks';
+import issueStore from 'stores/issueStore';
+import { observer } from 'mobx-react-lite';
 
 const BacklogPlanning: FunctionalComponent = () => {
     const [showModal, setShowModal] = useState(false);
@@ -39,6 +41,6 @@ const BacklogPlanning: FunctionalComponent = () => {
             </div>
         </div>
     );
-};
+});
 
 export default BacklogPlanning;

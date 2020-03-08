@@ -11,12 +11,13 @@ const NewIssue: FunctionalComponent<any> = (props: any) => {
     // currently being used for debugging
     const handleSubmit = (evt: any): void => {
         evt.preventDefault();
-        alert(
-            `Submitting title: ${Title}
-            Description: ${Descirption}
-            Story points ${IssueStoryPoint}
-            project ${SelectedProject}`,
-        );
+        alert('New Issue Created !');
+        props.store.addNewIssue({
+            name: Title,
+            description: Descirption,
+            storyPoint: IssueStoryPoint,
+            project: SelectedProject,
+        });
     };
 
     const handleCancel = (evt: any): void => {
