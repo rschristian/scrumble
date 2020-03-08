@@ -3,17 +3,29 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { IssueListItem } from 'components/ListItems/issue';
 import { IssueFilter } from 'components/Filter/issues';
 import { issues } from 'data';
+import { Modal } from 'components/Modal';
+import { useState } from 'preact/hooks';
+import { Conditional } from 'components/Conditional';
 
 const BacklogPlanning: FunctionalComponent = () => {
+    const [showModal, setShowModal] = useState(false);
+
     return (
-        <Fragment>
+        <div className={showModal ? 'modal-active' : ''}>
             <div className="create-bar">
                 <h1 className="page-heading">Backlog Planning</h1>
-                <button className="btn-create my-auto">
-                    <a href="/sprint/1/metrics">New Issue</a>
+                <button className="btn-create my-auto" onClick={(): void => setShowModal(true)}>
+                    New Issue
                 </button>
             </div>
             <IssueFilter />
+            <Conditional if={showModal}>
+                <Modal
+                    title="Create Issue"
+                    content={<div>Test Test Test</div>}
+                    close={(): void => setShowModal(false)}
+                />
+            </Conditional>
             <div className="rounded bg-white overflow-hidden shadow-lg">
                 {issues.map((issue, index) => {
                     return (
@@ -28,7 +40,7 @@ const BacklogPlanning: FunctionalComponent = () => {
                     );
                 })}
             </div>
-        </Fragment>
+        </div>
     );
 };
 
