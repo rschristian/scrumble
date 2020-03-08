@@ -10,8 +10,7 @@ import { useState } from 'preact/hooks';
 import issueStore from 'stores/issueStore';
 import { observer } from 'mobx-react-lite';
 
-const BacklogPlanning: FunctionalComponent = () => {
-    const [showModal, setShowModal] = useState(false);
+const BacklogPlanning: FunctionalComponent = observer(() => {
     const [newIssue, setNewIssue] = useState(false);
 
     const tempOnClick = (): void => console.log('clicked');

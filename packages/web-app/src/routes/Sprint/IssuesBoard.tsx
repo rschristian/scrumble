@@ -1,5 +1,4 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-
 import { IssueCard } from 'components/Cards/issue';
 import { issues } from 'data';
 
