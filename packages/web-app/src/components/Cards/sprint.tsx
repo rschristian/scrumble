@@ -1,5 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
-import { getCurrentUrl, Link } from 'preact-router';
+import { getCurrentUrl, route } from 'preact-router';
+
+import { MoreVertical } from 'preact-feather';
 
 interface IProps {
     id: number;
@@ -8,15 +10,29 @@ interface IProps {
 }
 
 export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
+    // Have to do this rather than a link component, as there's no way to stop propagation with it
+    const linkTo = (): void => {
+        route(`${getUrlSubstringAndFix()}/sprint/${props.id}/`);
+    };
+
     return (
-        <Link href={`${getUrlSubstringAndFix()}/sprint/${props.id}/`} class="lst-itm-container">
-            <div class="px-4 py-2 flex min-w-0">
+        <div class="lst-itm-container" onClick={linkTo}>
+            <div class="px-4 py-2 flex min-w-0 justify-between">
                 <div class="truncate">{props.title}</div>
+                <div class="more-vertical">
+                    <MoreVertical
+                        class="hover:text-orange-600"
+                        onClick={(e: MouseEvent): void => {
+                            e.stopPropagation();
+                            console.log('Hello World!');
+                        }}
+                    />
+                </div>
             </div>
             <div class="px-4 py-2 flex min-w-0">
                 <p class="itm-description">{props.description}</p>
             </div>
-        </Link>
+        </div>
     );
 };
 
