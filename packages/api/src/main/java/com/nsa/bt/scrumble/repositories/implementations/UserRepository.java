@@ -11,7 +11,7 @@ import java.sql.Types;
 import java.util.Optional;
 
 @Repository
-public class UserRepositoryImpl implements IUserRepository {
+public class UserRepository implements IUserRepository {
 
     @Autowired
     JdbcTemplate jdbcTemplate;

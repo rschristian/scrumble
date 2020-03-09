@@ -48,7 +48,6 @@ public class CookieUtils {
         }
     }
 
-//    TODO: WIll serializable break?
     public static String serialize(Serializable object) {
         return Base64.getUrlEncoder()
                 .encodeToString(SerializationUtils.serialize(object));
