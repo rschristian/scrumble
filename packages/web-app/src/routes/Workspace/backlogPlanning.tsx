@@ -23,6 +23,7 @@ const BacklogPlanning: FunctionalComponent = () => {
                 <Modal
                     title="Create Issue"
                     content={<div>Test Test Test</div>}
+                    submit={(): void => setShowModal(false)}
                     close={(): void => setShowModal(false)}
                 />
             </Conditional>
