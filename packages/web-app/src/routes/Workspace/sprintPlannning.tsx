@@ -16,6 +16,7 @@ const SprintPlanning: FunctionalComponent = () => {
     const updateIssueFilter = (): void => console.log('');
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
+    // TODO Need to figure out how we actually want to sort issues, because current setup doesn't make much sense
     const issuesList = issues.map((issue, index) => {
         return <IssueCard key={index} issue={issue} onClick={tempOnClick} />;
     });
