@@ -5,7 +5,7 @@ import { Issue } from 'models/Issue';
 
 interface IProps {
     issue: Issue;
-    store: any;
+    editIssue: (index: number, issue: any) => void;
     close: () => void;
 }
 
@@ -22,7 +22,7 @@ const EditIssue: FunctionalComponent<IProps> = (props: IProps) => {
             storyPoint: IssueStoryPoint,
             project: SelectedProject,
         };
-        props.store.editIssue(props.issue.index, issue);
+        props.editIssue(props.issue.index, issue);
         props.close();
     };
     const handleCancel = (): void => {

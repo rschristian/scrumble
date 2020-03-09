@@ -4,7 +4,7 @@ import { projects, storyPoints } from 'data';
 
 interface IProps {
     close: () => void;
-    store: any;
+    addNewIssue: (issue: any) => void;
 }
 
 const NewIssue: FunctionalComponent<IProps> = (props: IProps) => {
@@ -16,7 +16,7 @@ const NewIssue: FunctionalComponent<IProps> = (props: IProps) => {
     // currently being used for debugging
     const handleSubmit = (): void => {
         alert('New Issue Created !');
-        props.store.addNewIssue({
+        props.addNewIssue({
             name: Title,
             description: Descirption,
             storyPoint: IssueStoryPoint,

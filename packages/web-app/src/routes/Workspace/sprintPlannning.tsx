@@ -7,11 +7,7 @@ import { IssueFilter } from 'components/Filter/issues';
 import { SprintFilter } from 'components/Filter/sprints';
 import { issues, sprints } from 'data';
 
-function observer<P>(props: P): any {
-    return mobxObserver(props as any);
-}
-
-const SprintPlanning: FunctionalComponent = observer(() => {
+const SprintPlanning: FunctionalComponent = () => {
     const [isSprintView, setIsSprintView] = useState<boolean>(false);
     const [issueFilter, setIssueFilter] = useState<string>('');
     const [sprintFilter, setSprintFilter] = useState<string>('open');
@@ -71,6 +67,6 @@ const SprintPlanning: FunctionalComponent = observer(() => {
             </div>
         </Fragment>
     );
-});
+};
 
 export default SprintPlanning;

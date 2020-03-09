@@ -6,19 +6,29 @@ import { IssueCard } from 'components/Cards/issue';
 import { Conditional } from 'components/Conditional';
 import { IssueFilter } from 'components/Filter/issues';
 import { Modal } from 'components/Modal';
+import { useState, useEffect } from 'preact/hooks';
 import { issues } from 'data';
-import { useState } from 'preact/hooks';
-import issueStore from 'stores/issueStore';
+import { Conditional } from 'components/Conditional';
 import { Issue } from 'models/Issue';
 
-function observer<P>(props: P): any {
-    return mobxObserver(props as any);
-}
-
-const BacklogPlanning: FunctionalComponent = observer(() => {
+const BacklogPlanning: FunctionalComponent = () => {
     const [newIssue, setNewIssue] = useState(false);
-    const [editIssue, setEditIssue] = useState(false);
+    const [edittingIssue, setEdittingIssue] = useState(false);
     const [currentEditingIssue, setCurrentEdittingIssue] = useState(null);
+    const [data, SetData] = useState([]);
+
+    useEffect(() => {
+        SetData(issues);
+    }, []);
+    const addNewIssue = (value: Issue): void => {
+        data.push(value);
+    };
+    const deleteIssue = (value: number): void => {
+        data.splice(value, 1);
+    };
+    const editIssue = (index: number, issue: Issue): void => {
+        data[index] = issue;
+    };
 
     const tempOnClick = (): void => console.log('clicked');
 
@@ -36,25 +46,25 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             <Conditional if={newIssue}>
                 <Modal
                     title="Create Issue"
-                    content={<NewIssue close={(): void => setNewIssue(false)} store={issueStore} />}
+                    content={<NewIssue close={(): void => setNewIssue(false)} addNewIssue={addNewIssue} />}
                     close={(): void => setNewIssue(false)}
                 />
             </Conditional>
-            <Conditional if={editIssue}>
+            <Conditional if={edittingIssue}>
                 <Modal
                     title="Edit Issue"
                     content={
                         <EditIssue
-                            close={(): void => setEditIssue(false)}
-                            store={issueStore}
+                            close={(): void => setEdittingIssue(false)}
+                            editIssue={editIssue}
                             issue={currentEditingIssue}
                         />
                     }
-                    close={(): void => setEditIssue(false)}
+                    close={(): void => setEdittingIssue(false)}
                 />
             </Conditional>
             <div className="rounded bg-white overflow-hidden shadow-lg">
-                {issueStore.issues.map((issue, index) => {
+                {data.map((issue, index) => {
                     return (
                         <IssueListItem
                             key={index}
@@ -63,9 +73,9 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                             description={issue.description}
                             storyPoint={issue.storyPoint}
                             project={issue.project}
-                            store={issueStore}
                             index={index}
-                            edit={(): void => setEditIssue(true)}
+                            deleteIssue={deleteIssue}
+                            edit={(): void => setEdittingIssue(true)}
                             editing={(issue: Issue): void => setCurrentEdittingIssue(issue)}
                         />
                     );
@@ -73,6 +83,6 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             </div>
         </div>
     );
-});
+};
 
 export default BacklogPlanning;
