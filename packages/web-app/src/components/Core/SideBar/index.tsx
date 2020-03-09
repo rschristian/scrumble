@@ -10,10 +10,11 @@ interface IProps {
 }
 
 export const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
-    const [activeListItem, setActiveListItem] = useState(0);
+    const [activeListItem, setActiveListItem] = useState(parseInt(localStorage.getItem('activeListItem'), 10) || 0);
     const [isOpen, setIsOpen] = useState(false);
 
     const listItemOnClick = (index: number): void => {
+        localStorage.setItem('activeListItem', String(index));
         setActiveListItem(index);
     };
 
