@@ -5,6 +5,7 @@ import com.nsa.bt.scrumble.exception.BadRequestException;
 import com.nsa.bt.scrumble.security.CookieUtils;
 import com.nsa.bt.scrumble.security.TokenProvider;
 import com.nsa.bt.scrumble.security.UserPrincipal;
+import com.nsa.bt.scrumble.services.ITokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -31,6 +32,9 @@ public class OAuth2AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
     private AppProperties appProperties;
 
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+
+    @Autowired
+    ITokenService tokenService;
 
 
     @Autowired
@@ -66,7 +70,7 @@ public class OAuth2AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         String targetUrl = redirectUri.orElse("http://localhost:3000/oauth-success");
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        String token = tokenProvider.createToken(userPrincipal.getId());
+        String token = tokenProvider.createToken(userPrincipal.getId(), tokenService.timeShortLifeTokenValidFor());
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)

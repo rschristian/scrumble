@@ -21,11 +21,9 @@ public class TokenProvider {
         this.appProperties = appProperties;
     }
 
-    public String createToken(int userId) {
-//        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
+    public String createToken(int userId, long validFor) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
+        Date expiryDate = new Date(now.getTime() + validFor);
 
         return Jwts.builder()
                 .setSubject(Long.toString(userId))

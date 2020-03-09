@@ -3,6 +3,7 @@ package com.nsa.bt.scrumble.controllers.api.v1;
 import com.nsa.bt.scrumble.models.User;
 import com.nsa.bt.scrumble.security.TokenProvider;
 import com.nsa.bt.scrumble.security.TokenUtils;
+import com.nsa.bt.scrumble.services.ITokenService;
 import com.nsa.bt.scrumble.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,9 @@ import java.util.Optional;
 public class AuthenticationApi {
 
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsApi.class);
+
+    @Autowired
+    ITokenService tokenService;
 
     @Autowired
     OAuth2AuthorizedClientService auth2AuthorizedClientService;
@@ -54,7 +58,7 @@ public class AuthenticationApi {
             Optional<User> userOptional = userService.findUserById(userId.intValue());
 
             if (userOptional.isPresent()){
-                longLifeToken =  tokenProvider.createToken(userId.intValue());
+                longLifeToken =  tokenProvider.createToken(userId.intValue(), tokenService.timeLongLifeTokenValidFor());
                 tokenResponse.put("jwt", longLifeToken);
             } else {
                 logger.error("User not found");

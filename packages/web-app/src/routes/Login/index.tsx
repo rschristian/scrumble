@@ -21,7 +21,7 @@ const Login: FunctionalComponent = () => {
                 <div className="create-bar">
                     <h1 className="page-heading">Login</h1>
                     <button className="btn-create my-auto">
-                        <a href={'http://localhost:8082/oauth/code/gitlab'}>Login with GitLab</a>
+                        <a href={'http://localhost:8000/oauth/code/gitlab'}>Login with GitLab</a>
                     </button>
                     {/*<button onClick={() => test()} className="btn-create my-auto">*/}
                     {/*    Login with GitLab*/}
