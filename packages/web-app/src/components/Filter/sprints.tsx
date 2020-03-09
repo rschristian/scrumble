@@ -37,7 +37,7 @@ export const SprintFilter: FunctionalComponent<IProps> = (props: IProps) => {
                     Closed
                 </button>
                 <button
-                    className={`btn-filter ${filterStatus === FilterStatus.all ? 'bg-blue-500' : ''}`}
+                    class={`btn-filter ${filterStatus === FilterStatus.all ? 'bg-blue-500' : ''}`}
                     onClick={(): void => updateFilter(FilterStatus.all)}
                 >
                     All

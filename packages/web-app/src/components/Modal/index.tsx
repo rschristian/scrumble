@@ -10,28 +10,28 @@ interface IProps {
 
 export const Modal: FunctionalComponent<IProps> = (props: IProps) => {
     return (
-        <div className="modal">
-            <div className="modal-overlay" onClick={props.close} />
-            <div className="modal-container md:max-w-md">
-                <div className="modal-content">
-                    <div className="flex justify-between items-center pb-3">
-                        <p className="text-2xl font-bold">{props.title}</p>
-                        <div className="modal-close" onClick={props.close}>
+        <div class="modal">
+            <div class="modal-overlay" onClick={props.close} />
+            <div class="modal-container md:max-w-md">
+                <div class="modal-content">
+                    <div class="flex justify-between items-center pb-3">
+                        <p class="text-2xl font-bold">{props.title}</p>
+                        <div class="modal-close" onClick={props.close}>
                             <X />
                         </div>
                     </div>
 
                     {props.content}
 
-                    <div className="flex justify-end pt-2">
+                    <div class="flex justify-end pt-2">
                         <button
-                            className="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
+                            class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
                             onClick={props.submit}
                         >
                             Action
                         </button>
                         <button
-                            className="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
+                            class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
                             onClick={props.close}
                         >
                             Close

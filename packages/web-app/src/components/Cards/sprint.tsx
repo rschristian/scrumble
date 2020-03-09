@@ -13,8 +13,8 @@ export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
             <div class="px-4 py-2 flex min-w-0">
                 <div class="truncate">{props.title}</div>
             </div>
-            <div className="px-4 py-2 flex min-w-0">
-                <p className="itm-description">{props.description}</p>
+            <div class="px-4 py-2 flex min-w-0">
+                <p class="itm-description">{props.description}</p>
             </div>
         </Link>
     );

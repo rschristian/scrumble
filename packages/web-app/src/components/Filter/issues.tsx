@@ -25,19 +25,19 @@ export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
         <div class="my-4 flex flex-col items-start">
             <div class="flex rounded shadow">
                 <button
-                    className={`btn-filter ${filterStatus === FilterStatus.open ? 'bg-blue-500' : ''}`}
+                    class={`btn-filter ${filterStatus === FilterStatus.open ? 'bg-blue-500' : ''}`}
                     onClick={(): void => updateFilter(FilterStatus.open)}
                 >
                     Open
                 </button>
                 <button
-                    className={`btn-filter ${filterStatus === FilterStatus.closed ? 'bg-blue-500' : ''}`}
+                    class={`btn-filter ${filterStatus === FilterStatus.closed ? 'bg-blue-500' : ''}`}
                     onClick={(): void => updateFilter(FilterStatus.closed)}
                 >
                     Closed
                 </button>
                 <button
-                    className={`btn-filter ${filterStatus === FilterStatus.unplanned ? 'bg-blue-500' : ''}`}
+                    class={`btn-filter ${filterStatus === FilterStatus.unplanned ? 'bg-blue-500' : ''}`}
                     onClick={(): void => updateFilter(FilterStatus.unplanned)}
                 >
                     Unplanned

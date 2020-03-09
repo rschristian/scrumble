@@ -11,20 +11,20 @@ const WorkspaceEdit: FunctionalComponent = () => {
         <GenericEdit
             editForm={
                 <Fragment>
-                    <div className="m-4">
-                        <label className="form-label">Workspace Name</label>
+                    <div class="m-4">
+                        <label class="form-label">Workspace Name</label>
                         <input
-                            className="form-input"
+                            class="form-input"
                             type="text"
                             placeholder="Workspace Name"
                             value={workspaceName}
                             onInput={(e): void => setWorkspaceName((e.target as HTMLInputElement).value)}
                         />
                     </div>
-                    <div className="m-4">
-                        <label className="form-label">Projects in this Workspace</label>
+                    <div class="m-4">
+                        <label class="form-label">Projects in this Workspace</label>
                         <textarea
-                            className="form-input"
+                            class="form-input"
                             rows={5}
                             type="text"
                             placeholder="Phoenix, Narwhal, Unicorn"

@@ -11,7 +11,7 @@ interface IProps {
 
 export const BreadCrumbs: FunctionalComponent<IProps> = (props: IProps) => {
     return (
-        <h1 className="user-path">
+        <h1 class="user-path">
             <Link href="/">Workspaces</Link> &gt;{' '}
             <Link href={`/workspace/${props.workspaceId}`}>{props.workspaceName}</Link> &gt;{' '}
             {props.sprintId !== undefined && (

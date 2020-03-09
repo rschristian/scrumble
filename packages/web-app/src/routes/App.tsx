@@ -37,9 +37,9 @@ const App: FunctionalComponent = () => {
 
 const Fallback: FunctionalComponent = () => {
     return (
-        <div className="w-screen block">
-            <div className="flex">
-                <div className="main-content" />
+        <div class="w-screen block">
+            <div class="flex">
+                <div class="main-content" />
             </div>
         </div>
     );
