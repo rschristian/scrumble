@@ -32,20 +32,17 @@ export const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
     });
 
     return (
-        <div className={`sidebar ${isOpen ? 'w-48' : 'w-12'}`}>
+        <div class={`sidebar ${isOpen ? 'w-48' : 'w-12'}`}>
             <ul class="list-reset flex flex-col text-left">
-                <li
-                    onClick={(): void => setIsOpen(!isOpen)}
-                    className="side-nav-link border-b border-deep-space-sparkle"
-                >
-                    <div className="flex items-start items-baseline min-h-12">
+                <li onClick={(): void => setIsOpen(!isOpen)} class="side-nav-link border-b border-deep-space-sparkle">
+                    <div class="flex items-start items-baseline min-h-12">
                         <div class={`my-auto ml-2 ${!isOpen ? 'block' : 'hidden'}`}>
                             <Menu size={20} />
                         </div>
                         <div class={`my-auto ml-2 ${isOpen ? 'block' : 'hidden'}`}>
                             <X size={20} />
                         </div>
-                        <p className={`ml-3 my-auto ${isOpen ? 'block' : 'hidden'}`}>Close sidebar</p>
+                        <p class={`ml-3 my-auto ${isOpen ? 'block' : 'hidden'}`}>Close sidebar</p>
                     </div>
                 </li>
                 {sensors}

@@ -18,20 +18,20 @@ const SprintEdit: FunctionalComponent = () => {
         <GenericEdit
             editForm={
                 <Fragment>
-                    <div className="m-4">
-                        <label className="form-label">Sprint Name</label>
+                    <div class="m-4">
+                        <label class="form-label">Sprint Name</label>
                         <input
-                            className="form-input"
+                            class="form-input"
                             type="text"
                             placeholder="Sprint Name"
                             value={sprintName}
                             onInput={(e): void => setSprintName((e.target as HTMLInputElement).value)}
                         />
                     </div>
-                    <div className="m-4">
-                        <label className="form-label">Description</label>
+                    <div class="m-4">
+                        <label class="form-label">Description</label>
                         <textarea
-                            className="form-input"
+                            class="form-input"
                             rows={5}
                             type="text"
                             placeholder="Description"
@@ -39,10 +39,10 @@ const SprintEdit: FunctionalComponent = () => {
                             onInput={(e): void => setSprintDescription((e.target as HTMLInputElement).value)}
                         />
                     </div>
-                    <div className="m-4">
-                        <label className="form-label">Start Date</label>
+                    <div class="m-4">
+                        <label class="form-label">Start Date</label>
                         <input
-                            className="form-input"
+                            class="form-input"
                             type="date"
                             value={`${startDate.getFullYear().toString()}-${zeroPad(
                                 startDate.getMonth() + 1,
@@ -50,10 +50,10 @@ const SprintEdit: FunctionalComponent = () => {
                             onInput={(e): void => setStartDate(new Date((e.target as HTMLInputElement).value))}
                         />
                     </div>
-                    <div className="m-4">
-                        <label className="form-label">End Date</label>
+                    <div class="m-4">
+                        <label class="form-label">End Date</label>
                         <input
-                            className="form-input"
+                            class="form-input"
                             type="date"
                             value={`${endDate.getFullYear().toString()}-${zeroPad(endDate.getMonth() + 1)}-${zeroPad(
                                 endDate.getDate(),

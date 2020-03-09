@@ -12,15 +12,17 @@ const BacklogPlanning: FunctionalComponent = () => {
 
     const tempOnClick = (): void => console.log('clicked');
 
+    const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
+
     return (
-        <div className={showModal ? 'modal-active' : ''}>
-            <div className="create-bar">
-                <h1 className="page-heading">Backlog Planning</h1>
-                <button className="btn-create my-auto" onClick={(): void => setShowModal(true)}>
+        <div class={showModal ? 'modal-active' : ''}>
+            <div class="create-bar">
+                <h1 class="page-heading">Backlog Planning</h1>
+                <button class="btn-create my-auto" onClick={(): void => setShowModal(true)}>
                     New Issue
                 </button>
             </div>
-            <IssueFilter />
+            <IssueFilter setFilter={updateIssueFilter} />
             <Conditional if={showModal}>
                 <Modal
                     title="Create Issue"
@@ -29,7 +31,7 @@ const BacklogPlanning: FunctionalComponent = () => {
                     close={(): void => setShowModal(false)}
                 />
             </Conditional>
-            <div className="rounded bg-white overflow-hidden shadow-lg">
+            <div class="rounded bg-white overflow-hidden shadow-lg">
                 {issues.map((issue, index) => {
                     return <IssueCard key={index} issue={issue} onClick={tempOnClick} />;
                 })}

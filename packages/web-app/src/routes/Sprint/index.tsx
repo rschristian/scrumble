@@ -36,7 +36,7 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
             if (workspace.id == props.workspaceId) setWorkspaceName(workspace.name);
         }
         for (const sprint of sprints) {
-            if (sprint.id == props.sprintId) setSprintName(sprint.name);
+            if (sprint.id == props.sprintId) setSprintName(sprint.title);
         }
 
         switch (props.subPage) {

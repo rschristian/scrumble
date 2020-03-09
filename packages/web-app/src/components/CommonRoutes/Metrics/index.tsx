@@ -7,8 +7,8 @@ interface IProps {
 export const GenericMetrics: FunctionalComponent<IProps> = (props: IProps) => {
     return (
         <Fragment>
-            <div className="create-bar">
-                <h1 className="page-heading">Metrics</h1>
+            <div class="create-bar">
+                <h1 class="page-heading">Metrics</h1>
             </div>
             {props.metricsContent}
         </Fragment>
