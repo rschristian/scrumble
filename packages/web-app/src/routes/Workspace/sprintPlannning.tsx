@@ -1,10 +1,10 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 
-import { IssueListItem } from 'components/ListItems/issue';
+import { IssueCard } from 'components/Cards/issue';
+import { SprintCard } from 'components/Cards/sprint';
 import { IssueFilter } from 'components/Filter/issues';
 import { SprintFilter } from 'components/Filter/sprints';
-import { SprintListItem } from 'components/ListItems/sprint';
 import { issues, sprints } from 'data';
 
 const SprintPlanning: FunctionalComponent = () => {
@@ -29,7 +29,7 @@ const SprintPlanning: FunctionalComponent = () => {
                     <div className="mr-4 rounded bg-white shadow-lg">
                         {issues.map((issue, index) => {
                             return (
-                                <IssueListItem
+                                <IssueCard
                                     key={index}
                                     id={issue.id}
                                     name={issue.name}
@@ -61,7 +61,7 @@ const SprintPlanning: FunctionalComponent = () => {
                     <div className="md:ml-4 rounded bg-white overflow-hidden shadow-lg">
                         {sprints.map((issue, index) => {
                             return (
-                                <SprintListItem
+                                <SprintCard
                                     key={index}
                                     id={issue.id}
                                     name={issue.name}

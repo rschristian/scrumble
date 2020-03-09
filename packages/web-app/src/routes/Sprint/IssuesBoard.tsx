@@ -1,6 +1,6 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 
-import { IssueCard } from 'components/Cards/issue';
+import { IssueBoardCard } from 'components/Cards/issue';
 import { issues } from 'data';
 
 const IssuesBoard: FunctionalComponent = () => {
@@ -16,7 +16,7 @@ const IssuesBoard: FunctionalComponent = () => {
                     </div>
                     {issues.map((issue, index) => {
                         return (
-                            <IssueCard
+                            <IssueBoardCard
                                 key={index}
                                 id={issue.id}
                                 name={issue.name}
@@ -33,7 +33,7 @@ const IssuesBoard: FunctionalComponent = () => {
                     </div>
                     {issues.map((issue, index) => {
                         return (
-                            <IssueCard
+                            <IssueBoardCard
                                 key={index}
                                 id={issue.id}
                                 name={issue.name}
@@ -50,7 +50,7 @@ const IssuesBoard: FunctionalComponent = () => {
                     </div>
                     {issues.map((issue, index) => {
                         return (
-                            <IssueCard
+                            <IssueBoardCard
                                 key={index}
                                 id={issue.id}
                                 name={issue.name}
@@ -67,7 +67,7 @@ const IssuesBoard: FunctionalComponent = () => {
                     </div>
                     {issues.map((issue, index) => {
                         return (
-                            <IssueCard
+                            <IssueBoardCard
                                 key={index}
                                 id={issue.id}
                                 name={issue.name}

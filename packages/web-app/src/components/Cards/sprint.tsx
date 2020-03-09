@@ -3,7 +3,7 @@ import { getCurrentUrl, Link } from 'preact-router';
 
 import { Sprint } from 'models/Sprint';
 
-export const SprintListItem: FunctionalComponent<Sprint> = (props: Sprint) => {
+export const SprintCard: FunctionalComponent<Sprint> = (props: Sprint) => {
     return (
         <Link href={`${getUrlSubstringAndFix()}/sprint/${props.id}/`} class="lst-itm-container">
             <div class="px-4 py-2 flex min-w-0">
