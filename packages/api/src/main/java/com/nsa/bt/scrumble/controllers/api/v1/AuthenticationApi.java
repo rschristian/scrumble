@@ -73,7 +73,7 @@ public class AuthenticationApi {
         return ResponseEntity.ok().body(tokenResponse);
     }
 
-    @GetMapping("/token/revoke")
+    @DeleteMapping("/token/delete")
     public ResponseEntity<Map<String, Boolean>> deleteToken(Authentication authentication) {
         logger.info("In /token/revoke");
         HashMap<String, Boolean> deleteTokenResponse = new HashMap<>();

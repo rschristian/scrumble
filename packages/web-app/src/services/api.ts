@@ -18,7 +18,7 @@ export const login = async (shortLivedJwt: string): Promise<boolean> => {
 
 export const destroyOAuthToken = async (): Promise<boolean> => {
     return await apiService
-        .get('/authentication/token/revoke')
+        .delete('/authentication/token/delete')
         .then((response) => {
             console.log(response.status);
             authStorageService.destroyToken();
@@ -31,7 +31,7 @@ export const destroyOAuthToken = async (): Promise<boolean> => {
 
 export function fetchUserInfo() {
     console.log("We're in fetchUserInfo");
-    apiService.get('/user/info').then((response) => {
+    apiService.delete('/user/info/yo').then((response) => {
         console.log(response);
         return response;
     });
