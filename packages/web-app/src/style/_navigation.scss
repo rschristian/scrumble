@@ -1,7 +1,7 @@
 //Styling for top nav
 
 .header {
-  @apply border-b border-gray-500 bg-gray-100 fixed left-0 top-0 w-full h-16;
+  @apply border-b border-gray-500 bg-gray-100 fixed left-0 top-0 w-full h-16 z-10;
 }
 
 .header-link {
