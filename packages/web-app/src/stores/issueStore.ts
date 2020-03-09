@@ -9,8 +9,10 @@ class IssueStore {
         this.issues.push(value);
     }
     deleteIssue(value: number): void {
-        console.log(value);
         this.issues.splice(value, 1);
+    }
+    editIssue(index: number, issue: Issue) {
+        this.issues[index] = issue;
     }
 }
 const store = new IssueStore();

@@ -2,48 +2,24 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { projects, storyPoints } from 'data';
 
-const NewIssue: FunctionalComponent<any> = (props: any) => {
-    const [Title, setTitle] = useState('');
-    const [Descirption, setDescription] = useState('');
-    const [IssueStoryPoint, setIssueStoryPoint] = useState(null);
-    const [SelectedProject, setSelectedProject] = useState('');
+const EditIssue: FunctionalComponent<any> = (props: any) => {
+    const [Title, setTitle] = useState(props.issue.name);
+    const [Descirption, setDescription] = useState(props.issue.description);
+    const [IssueStoryPoint, setIssueStoryPoint] = useState(props.issue.storyPoint);
+    const [SelectedProject, setSelectedProject] = useState(props.issue.project);
 
-    // currently being used for debugging
     const handleSubmit = (evt: any): void => {
-        alert('New Issue Created !');
-        props.store.addNewIssue({
+        const issue = {
             name: Title,
             description: Descirption,
             storyPoint: IssueStoryPoint,
             project: SelectedProject,
-        });
-        props.isClosed(false);
+        };
+        props.store.editIssue(props.issue.index, issue);
+        props.isClosed();
     };
-
-    const handleCancel = (evt: any): void => {
-        evt.preventDefault();
-        props.isClosed(false);
-    };
-
-    const handleValidation = (evt: any): void => {
-        evt.preventDefault();
-        if (Title.length === 0) {
-            alert('A Title is required');
-            return;
-        }
-        if (Descirption.length === 0) {
-            alert('A Description is needed');
-            return;
-        }
-        if (IssueStoryPoint === null) {
-            alert('A Story Point is needed');
-            return;
-        }
-        if (SelectedProject.length === 0) {
-            alert('A Project is needed');
-            return;
-        }
-        handleSubmit(evt);
+    const handleCancel = (): void => {
+        props.isClosed();
     };
     return (
         <Fragment>
@@ -95,7 +71,7 @@ const NewIssue: FunctionalComponent<any> = (props: any) => {
                         );
                     })}
                 </select>
-                <input className="btn-create my-auto" type="submit" value="Submit" onClick={handleValidation} />
+                <input className="btn-create my-auto" type="submit" value="Submit" onClick={handleSubmit} />
                 <button className="btn-delete my-auto" onClick={handleCancel}>
                     {' '}
                     Cancel{' '}
@@ -104,5 +80,4 @@ const NewIssue: FunctionalComponent<any> = (props: any) => {
         </Fragment>
     );
 };
-
-export default NewIssue;
+export default EditIssue;

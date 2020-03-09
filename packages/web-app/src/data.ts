@@ -362,19 +362,19 @@ export const issues: Issue[] = [
 export const projects: Project[] = [
     {
         id: 1,
-        name: 'Phantom menace',
+        name: 'Unicorn Project',
         url: 'www.pm.com',
     },
     {
         id: 2,
-        name: 'Clone wars',
+        name: 'Narwhal Project',
         url: 'www.cw.com',
     },
     {
         id: 3,
-        name: 'Revenge of the sith',
+        name: 'Phoenix Project',
         url: 'www.rots.com',
     },
 ];
 
-export const storyPoints: number[] = [1, 2, 4, 8];
+export const storyPoints: number[] = [1, 2, 3, 4, 5, 6, 7, 8];
