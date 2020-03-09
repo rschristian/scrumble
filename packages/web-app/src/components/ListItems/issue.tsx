@@ -30,10 +30,12 @@ export const IssueListItem: FunctionalComponent<any> = (props: any) => {
                     {' '}
                     Delete{' '}
                 </button>
-                <button className="float-right btn-edit my-auto" onClick={editIssue}>
-                    {' '}
-                    Edit{' '}
-                </button>
+                {props.edit === undefined ? null : (
+                    <button className="float-right btn-edit my-auto" onClick={editIssue}>
+                        {' '}
+                        Edit{' '}
+                    </button>
+                )}
             </div>
         </Link>
     );
