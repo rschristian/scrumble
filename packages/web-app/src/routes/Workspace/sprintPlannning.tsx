@@ -52,13 +52,13 @@ const SprintPlanning: FunctionalComponent = () => {
                         <SprintFilter />
                     </div>
                     <div className="md:ml-4 rounded bg-white overflow-hidden shadow-lg">
-                        {sprints.map((issue, index) => {
+                        {sprints.map((sprint, index) => {
                             return (
                                 <SprintCard
                                     key={index}
-                                    id={issue.id}
-                                    name={issue.name}
-                                    description={issue.description}
+                                    id={sprint.id}
+                                    title={sprint.title}
+                                    description={sprint.description}
                                 />
                             );
                         })}
