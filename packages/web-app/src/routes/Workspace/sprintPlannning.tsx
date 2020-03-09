@@ -13,7 +13,7 @@ const SprintPlanning: FunctionalComponent = () => {
     const [sprintFilter, setSprintFilter] = useState<string>('open');
 
     const tempOnClick = (): void => console.log('clicked');
-    const updateIssueFilter = (): void => console.log('');
+    const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
     // TODO Need to figure out how we actually want to sort issues, because current setup doesn't make much sense

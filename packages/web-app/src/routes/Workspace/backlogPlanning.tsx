@@ -12,6 +12,8 @@ const BacklogPlanning: FunctionalComponent = () => {
 
     const tempOnClick = (): void => console.log('clicked');
 
+    const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
+
     return (
         <div className={showModal ? 'modal-active' : ''}>
             <div className="create-bar">
@@ -20,7 +22,7 @@ const BacklogPlanning: FunctionalComponent = () => {
                     New Issue
                 </button>
             </div>
-            <IssueFilter />
+            <IssueFilter setFilter={updateIssueFilter} />
             <Conditional if={showModal}>
                 <Modal
                     title="Create Issue"
