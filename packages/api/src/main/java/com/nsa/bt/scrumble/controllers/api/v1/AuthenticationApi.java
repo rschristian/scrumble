@@ -5,6 +5,7 @@ import com.nsa.bt.scrumble.security.TokenProvider;
 import com.nsa.bt.scrumble.security.TokenUtils;
 import com.nsa.bt.scrumble.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.util.StringUtils;
@@ -54,10 +55,11 @@ public class AuthenticationApi {
 
             if (userOptional.isPresent()){
                 longLifeToken =  tokenProvider.createToken(userId.intValue());
-                tokenResponse.put("jwt", jwt);
+                tokenResponse.put("jwt", longLifeToken);
             } else {
                 logger.error("User not found");
                 tokenResponse.put("error", "User not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(tokenResponse);
             }
         }
 

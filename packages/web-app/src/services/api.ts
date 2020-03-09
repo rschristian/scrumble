@@ -3,12 +3,19 @@ import { apiService, authStorageService } from 'ts-api-toolkit';
 import { RegistrationUser, User } from 'models/User';
 
 export const login = async (shortLivedJwt: string): Promise<boolean> => {
-    // TODO: Alter to check for successful/unsuccessful authentication rather than static boolean
     authStorageService.saveToken(shortLivedJwt);
-    return await apiService.get('/authenticate/token/long-life').then((response) => {
-        authStorageService.saveToken(response.data.jwt);
-        return true;
-    });
+    return await apiService
+        .get('/authenticate/token/long-life')
+        .then((response) => {
+            if (response.status != 200) {
+                return false;
+            }
+            authStorageService.saveToken(response.data.jwt);
+            return true;
+        })
+        .catch(() => {
+            return false;
+        });
 };
 
 export const logout = async (): Promise<void> => {
