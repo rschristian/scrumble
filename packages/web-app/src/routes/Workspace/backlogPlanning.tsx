@@ -11,7 +11,7 @@ import { useState } from 'preact/hooks';
 import issueStore from 'stores/issueStore';
 import { Issue } from 'models/Issue';
 
-function observer<p>(props: p): any {
+function observer<P>(props: P): any {
     return mobxObserver(props as any);
 }
 
