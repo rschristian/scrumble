@@ -2,12 +2,24 @@ import { FunctionalComponent, h } from 'preact';
 import { Issue } from 'models/Issue';
 import { Link } from 'preact-router';
 
-export const IssueListItem: FunctionalComponent<any> = (props: any) => {
+interface IProps {
+    store: any;
+    index: number;
+    id: number;
+    name: string;
+    storyPoint: number;
+    project: string;
+    description: string;
+    edit: () => void;
+    editing: (issue: Issue) => void;
+}
+
+export const IssueListItem: FunctionalComponent<IProps> = (props: IProps) => {
     const deleteIssue = (): void => {
         props.store.deleteIssue(props.index);
     };
     const editIssue = (): void => {
-        const issue: object = {
+        const issue: Issue = {
             id: Date.now(),
             name: props.name,
             description: props.description,
@@ -18,6 +30,7 @@ export const IssueListItem: FunctionalComponent<any> = (props: any) => {
         props.edit();
         props.editing(issue);
     };
+    console.log(props.index);
     return (
         <Link href={`/issue/${props.id}`} className="lst-itm-container">
             <div className="px-4 py-2 flex min-w-0">

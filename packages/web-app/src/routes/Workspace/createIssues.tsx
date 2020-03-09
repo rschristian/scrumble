@@ -1,15 +1,20 @@
-import { Fragment, FunctionalComponent, h } from 'preact';
+import { Fragment, FunctionalComponent, h, ComponentChild } from 'preact';
 import { useState } from 'preact/hooks';
 import { projects, storyPoints } from 'data';
 
-const NewIssue: FunctionalComponent<any> = (props: any) => {
+interface IProps {
+    close: () => void;
+    store: any;
+}
+
+const NewIssue: FunctionalComponent<IProps> = (props: IProps) => {
     const [Title, setTitle] = useState('');
     const [Descirption, setDescription] = useState('');
     const [IssueStoryPoint, setIssueStoryPoint] = useState(null);
     const [SelectedProject, setSelectedProject] = useState('');
 
     // currently being used for debugging
-    const handleSubmit = (evt: any): void => {
+    const handleSubmit = (): void => {
         alert('New Issue Created !');
         props.store.addNewIssue({
             name: Title,
@@ -17,12 +22,12 @@ const NewIssue: FunctionalComponent<any> = (props: any) => {
             storyPoint: IssueStoryPoint,
             project: SelectedProject,
         });
-        props.isClosed(false);
+        props.close();
     };
 
     const handleCancel = (evt: any): void => {
         evt.preventDefault();
-        props.isClosed(false);
+        props.close();
     };
 
     const handleValidation = (evt: any): void => {
@@ -43,7 +48,7 @@ const NewIssue: FunctionalComponent<any> = (props: any) => {
             alert('A Project is needed');
             return;
         }
-        handleSubmit(evt);
+        handleSubmit();
     };
     return (
         <Fragment>
@@ -71,13 +76,15 @@ const NewIssue: FunctionalComponent<any> = (props: any) => {
                     value={IssueStoryPoint}
                     onChange={(e): void => setIssueStoryPoint((e.target as HTMLSelectElement).value)}
                 >
-                    {storyPoints.map((storyPoint): any => {
-                        return (
-                            <option class="form-option" value={storyPoint}>
-                                {storyPoint}
-                            </option>
-                        );
-                    })}
+                    {storyPoints.map(
+                        (storyPoint): ComponentChild => {
+                            return (
+                                <option class="form-option" value={storyPoint}>
+                                    {storyPoint}
+                                </option>
+                            );
+                        },
+                    )}
                 </select>
                 <label class="form-label"> Project </label>
                 <select
@@ -86,14 +93,16 @@ const NewIssue: FunctionalComponent<any> = (props: any) => {
                     value={SelectedProject}
                     onChange={(e): void => setSelectedProject((e.target as HTMLSelectElement).value)}
                 >
-                    {projects.map((project): any => {
-                        return (
-                            <option class="form-option" value={project.name}>
-                                {' '}
-                                {project.name}
-                            </option>
-                        );
-                    })}
+                    {projects.map(
+                        (project): ComponentChild => {
+                            return (
+                                <option class="form-option" value={project.name}>
+                                    {' '}
+                                    {project.name}
+                                </option>
+                            );
+                        },
+                    )}
                 </select>
                 <input className="btn-create my-auto" type="submit" value="Submit" onClick={handleValidation} />
                 <button className="btn-delete my-auto" onClick={handleCancel}>

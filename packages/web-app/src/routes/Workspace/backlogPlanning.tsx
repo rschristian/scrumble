@@ -36,7 +36,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             <Conditional if={newIssue}>
                 <Modal
                     title="Create Issue"
-                    content={<NewIssue isClosed={(): void => setNewIssue(false)} store={issueStore} />}
+                    content={<NewIssue close={(): void => setNewIssue(false)} store={issueStore} />}
                     close={(): void => setNewIssue(false)}
                 />
             </Conditional>
@@ -45,7 +45,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                     title="Edit Issue"
                     content={
                         <EditIssue
-                            isClosed={(): void => setEditIssue(false)}
+                            close={(): void => setEditIssue(false)}
                             store={issueStore}
                             issue={currentEditingIssue}
                         />

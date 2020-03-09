@@ -1,4 +1,4 @@
-import { observable, autorun } from 'mobx';
+import { observable } from 'mobx';
 import { Issue } from 'models/Issue';
 import { issues } from 'data';
 
@@ -11,7 +11,7 @@ class IssueStore {
     deleteIssue(value: number): void {
         this.issues.splice(value, 1);
     }
-    editIssue(index: number, issue: Issue) {
+    editIssue(index: number, issue: Issue): void {
         this.issues[index] = issue;
     }
 }

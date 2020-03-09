@@ -1,14 +1,21 @@
-import { Fragment, FunctionalComponent, h } from 'preact';
+import { Fragment, FunctionalComponent, h, ComponentChild } from 'preact';
 import { useState } from 'preact/hooks';
 import { projects, storyPoints } from 'data';
+import { Issue } from 'models/Issue';
 
-const EditIssue: FunctionalComponent<any> = (props: any) => {
-    const [Title, setTitle] = useState(props.issue.name);
-    const [Descirption, setDescription] = useState(props.issue.description);
-    const [IssueStoryPoint, setIssueStoryPoint] = useState(props.issue.storyPoint);
-    const [SelectedProject, setSelectedProject] = useState(props.issue.project);
+interface IProps {
+    issue: Issue;
+    store: any;
+    close: () => void;
+}
 
-    const handleSubmit = (evt: any): void => {
+const EditIssue: FunctionalComponent<IProps> = (props: IProps) => {
+    const [Title, setTitle] = useState<string>(props.issue.name);
+    const [Descirption, setDescription] = useState<string>(props.issue.description);
+    const [IssueStoryPoint, setIssueStoryPoint] = useState<number | string>(props.issue.storyPoint);
+    const [SelectedProject, setSelectedProject] = useState<string>(props.issue.project);
+
+    const handleSubmit = (): void => {
         const issue = {
             name: Title,
             description: Descirption,
@@ -16,10 +23,10 @@ const EditIssue: FunctionalComponent<any> = (props: any) => {
             project: SelectedProject,
         };
         props.store.editIssue(props.issue.index, issue);
-        props.isClosed();
+        props.close();
     };
     const handleCancel = (): void => {
-        props.isClosed();
+        props.close();
     };
     return (
         <Fragment>
@@ -47,13 +54,15 @@ const EditIssue: FunctionalComponent<any> = (props: any) => {
                     value={IssueStoryPoint}
                     onChange={(e): void => setIssueStoryPoint((e.target as HTMLSelectElement).value)}
                 >
-                    {storyPoints.map((storyPoint): any => {
-                        return (
-                            <option class="form-option" value={storyPoint}>
-                                {storyPoint}
-                            </option>
-                        );
-                    })}
+                    {storyPoints.map(
+                        (storyPoint): ComponentChild => {
+                            return (
+                                <option class="form-option" value={storyPoint}>
+                                    {storyPoint}
+                                </option>
+                            );
+                        },
+                    )}
                 </select>
                 <label class="form-label"> Project </label>
                 <select
@@ -62,14 +71,16 @@ const EditIssue: FunctionalComponent<any> = (props: any) => {
                     value={SelectedProject}
                     onChange={(e): void => setSelectedProject((e.target as HTMLSelectElement).value)}
                 >
-                    {projects.map((project): any => {
-                        return (
-                            <option class="form-option" value={project.name}>
-                                {' '}
-                                {project.name}
-                            </option>
-                        );
-                    })}
+                    {projects.map(
+                        (project): ComponentChild => {
+                            return (
+                                <option class="form-option" value={project.name}>
+                                    {' '}
+                                    {project.name}
+                                </option>
+                            );
+                        },
+                    )}
                 </select>
                 <input className="btn-create my-auto" type="submit" value="Submit" onClick={handleSubmit} />
                 <button className="btn-delete my-auto" onClick={handleCancel}>
