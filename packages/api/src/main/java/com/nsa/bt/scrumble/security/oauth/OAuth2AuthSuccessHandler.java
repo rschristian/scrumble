@@ -5,7 +5,7 @@ import com.nsa.bt.scrumble.exception.BadRequestException;
 import com.nsa.bt.scrumble.security.CookieUtils;
 import com.nsa.bt.scrumble.security.TokenProvider;
 import com.nsa.bt.scrumble.security.UserPrincipal;
-import com.nsa.bt.scrumble.services.ITokenService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -32,10 +32,6 @@ public class OAuth2AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
     private AppProperties appProperties;
 
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
-
-    @Autowired
-    ITokenService tokenService;
-
 
     @Autowired
     OAuth2AuthSuccessHandler(TokenProvider tokenProvider, AppProperties appProperties,
@@ -66,11 +62,10 @@ public class OAuth2AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
             throw new BadRequestException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
         }
 
-//        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
-        String targetUrl = redirectUri.orElse("http://localhost:3000/oauth-success");
+        String targetUrl = redirectUri.orElse(appProperties.getAuth().getRedirectUri());
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        String token = tokenProvider.createToken(userPrincipal.getId(), tokenService.timeShortLifeTokenValidFor());
+        String token = tokenProvider.createToken(userPrincipal.getId(), appProperties.getAuth().getShortLifeTokenExpirationMsec());
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)

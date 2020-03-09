@@ -13,6 +13,7 @@ public class AppProperties {
         private String tokenSecret;
         private long longLifeTokenExpirationMsec;
         private long shortLifeTokenExpirationMsec;
+        private String redirectUri;
 
         public String getTokenSecret() {
             return tokenSecret;
@@ -24,6 +25,14 @@ public class AppProperties {
 
         public long getLongLifeTokenExpirationMsec() {
             return longLifeTokenExpirationMsec;
+        }
+
+        public String getRedirectUri() {
+            return redirectUri;
+        }
+
+        public void setRedirectUri(String redirectUri) {
+            this.redirectUri = redirectUri;
         }
 
         public long getShortLifeTokenExpirationMsec() {

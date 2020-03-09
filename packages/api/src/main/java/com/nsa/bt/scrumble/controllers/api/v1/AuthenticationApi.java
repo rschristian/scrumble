@@ -1,10 +1,11 @@
 package com.nsa.bt.scrumble.controllers.api.v1;
 
+import com.nsa.bt.scrumble.config.AppProperties;
 import com.nsa.bt.scrumble.models.User;
 import com.nsa.bt.scrumble.security.TokenProvider;
 import com.nsa.bt.scrumble.security.TokenUtils;
-import com.nsa.bt.scrumble.services.ITokenService;
 import com.nsa.bt.scrumble.services.IUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,10 +28,11 @@ import java.util.Optional;
 @RequestMapping("/api/v1/authenticate")
 public class AuthenticationApi {
 
+    public AuthenticationApi (AppProperties appProperties) {
+        this.appProperties = appProperties;
+    }
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsApi.class);
-
-    @Autowired
-    ITokenService tokenService;
+    private AppProperties appProperties;
 
     @Autowired
     OAuth2AuthorizedClientService auth2AuthorizedClientService;
@@ -58,7 +61,7 @@ public class AuthenticationApi {
             Optional<User> userOptional = userService.findUserById(userId.intValue());
 
             if (userOptional.isPresent()){
-                longLifeToken =  tokenProvider.createToken(userId.intValue(), tokenService.timeLongLifeTokenValidFor());
+                longLifeToken =  tokenProvider.createToken(userId.intValue(), appProperties.getAuth().getLongLifeTokenExpirationMsec());
                 tokenResponse.put("jwt", longLifeToken);
             } else {
                 logger.error("User not found");

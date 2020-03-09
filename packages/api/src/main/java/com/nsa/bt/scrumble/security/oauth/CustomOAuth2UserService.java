@@ -4,8 +4,10 @@ import com.nsa.bt.scrumble.models.User;
 import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.security.oauth.users.OAuth2UserInfo;
 import com.nsa.bt.scrumble.services.IUserService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
