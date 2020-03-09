@@ -10,6 +10,10 @@ import { useState } from 'preact/hooks';
 import issueStore from 'stores/issueStore';
 import { observer } from 'mobx-react-lite';
 
+function observer<p>(props: p): any {
+    return mobxObserver(props as any);
+}
+
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const [newIssue, setNewIssue] = useState(false);
 
