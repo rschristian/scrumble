@@ -1,6 +1,6 @@
 import { FunctionalComponent, h } from 'preact';
 
-import { WorkspaceListItem } from 'components/ListItems/workspace';
+import { WorkspaceCard } from 'components/Cards/workspace';
 import { SearchBar } from 'components/SearchBar';
 import { workspaces } from 'data';
 import { fetchIssueTest } from 'services/api';
@@ -19,7 +19,7 @@ const Home: FunctionalComponent = () => {
                 <div class="rounded bg-white overflow-hidden shadow-lg">
                     {workspaces.map((workspace, index) => {
                         return (
-                            <WorkspaceListItem
+                            <WorkspaceCard
                                 key={index}
                                 id={workspace.id}
                                 name={workspace.name}

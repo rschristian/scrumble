@@ -7,14 +7,14 @@ import { SideBarLink } from 'models/SideBarLink';
 
 export const sideNavItems: SideBarLink[] = [
     {
-        label: 'Issues Board',
-        icon: kanbanBoard,
+        label: 'Daily Stand-up',
+        icon: team,
         path: '/',
     },
     {
-        label: 'Daily Stand-up',
-        icon: team,
-        path: '/dailyStandUp',
+        label: 'Issues Board',
+        icon: kanbanBoard,
+        path: '/issuesBoard',
     },
     {
         label: 'Metrics',

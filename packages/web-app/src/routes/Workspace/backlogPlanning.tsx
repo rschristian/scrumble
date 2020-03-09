@@ -1,14 +1,16 @@
-import { Fragment, FunctionalComponent, h } from 'preact';
-
-import { IssueListItem } from 'components/ListItems/issue';
-import { IssueFilter } from 'components/Filter/issues';
-import { issues } from 'data';
-import { Modal } from 'components/Modal';
+import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
+
+import { IssueCard } from 'components/Cards/issue';
 import { Conditional } from 'components/Conditional';
+import { IssueFilter } from 'components/Filter/issues';
+import { Modal } from 'components/Modal';
+import { issues } from 'data';
 
 const BacklogPlanning: FunctionalComponent = () => {
     const [showModal, setShowModal] = useState(false);
+
+    const tempOnClick = (): void => console.log('clicked');
 
     return (
         <div className={showModal ? 'modal-active' : ''}>
@@ -29,16 +31,7 @@ const BacklogPlanning: FunctionalComponent = () => {
             </Conditional>
             <div className="rounded bg-white overflow-hidden shadow-lg">
                 {issues.map((issue, index) => {
-                    return (
-                        <IssueListItem
-                            key={index}
-                            id={issue.id}
-                            name={issue.name}
-                            description={issue.description}
-                            storyPoint={issue.storyPoint}
-                            project={issue.project}
-                        />
-                    );
+                    return <IssueCard key={index} issue={issue} onClick={tempOnClick} />;
                 })}
             </div>
         </div>

@@ -1,8 +1,9 @@
 import { FunctionalComponent, h } from 'preact';
 import { Link } from 'preact-router';
+
 import { Workspace } from 'models/Workspace';
 
-export const WorkspaceListItem: FunctionalComponent<Workspace> = (props: Workspace) => {
+export const WorkspaceCard: FunctionalComponent<Workspace> = (props: Workspace) => {
     return (
         <Link href={`/workspace/${props.id}`} class="lst-itm-container">
             <div class="px-4 py-2">

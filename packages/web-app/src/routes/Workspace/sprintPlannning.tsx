@@ -1,14 +1,16 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 
-import { issues, sprints } from 'data';
-import { IssueListItem } from 'components/ListItems/issue';
+import { IssueCard } from 'components/Cards/issue';
+import { SprintCard } from 'components/Cards/sprint';
 import { IssueFilter } from 'components/Filter/issues';
 import { SprintFilter } from 'components/Filter/sprints';
-import { SprintListItem } from 'components/ListItems/sprint';
+import { issues, sprints } from 'data';
 
 const SprintPlanning: FunctionalComponent = () => {
     const [isSprintView, setIsSprintView] = useState<boolean>(false);
+
+    const tempOnClick = (): void => console.log('clicked');
 
     return (
         <Fragment>
@@ -28,16 +30,7 @@ const SprintPlanning: FunctionalComponent = () => {
                     </div>
                     <div className="mr-4 rounded bg-white shadow-lg">
                         {issues.map((issue, index) => {
-                            return (
-                                <IssueListItem
-                                    key={index}
-                                    id={issue.id}
-                                    name={issue.name}
-                                    description={issue.description}
-                                    storyPoint={issue.storyPoint}
-                                    project={issue.project}
-                                />
-                            );
+                            return <IssueCard key={index} issue={issue} onClick={tempOnClick} />;
                         })}
                     </div>
                 </div>
@@ -61,7 +54,7 @@ const SprintPlanning: FunctionalComponent = () => {
                     <div className="md:ml-4 rounded bg-white overflow-hidden shadow-lg">
                         {sprints.map((issue, index) => {
                             return (
-                                <SprintListItem
+                                <SprintCard
                                     key={index}
                                     id={issue.id}
                                     name={issue.name}
