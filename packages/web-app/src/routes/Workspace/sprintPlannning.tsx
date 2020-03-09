@@ -10,6 +10,8 @@ import { issues, sprints } from 'data';
 const SprintPlanning: FunctionalComponent = () => {
     const [isSprintView, setIsSprintView] = useState<boolean>(false);
 
+    const tempOnClick = (): void => console.log('clicked');
+
     return (
         <Fragment>
             <div className="flex">
@@ -28,16 +30,7 @@ const SprintPlanning: FunctionalComponent = () => {
                     </div>
                     <div className="mr-4 rounded bg-white shadow-lg">
                         {issues.map((issue, index) => {
-                            return (
-                                <IssueCard
-                                    key={index}
-                                    id={issue.id}
-                                    name={issue.name}
-                                    description={issue.description}
-                                    storyPoint={issue.storyPoint}
-                                    project={issue.project}
-                                />
-                            );
+                            return <IssueCard key={index} issue={issue} onClick={tempOnClick} />;
                         })}
                     </div>
                 </div>

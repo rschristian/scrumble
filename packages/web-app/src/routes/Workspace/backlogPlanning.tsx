@@ -10,6 +10,8 @@ import { issues } from 'data';
 const BacklogPlanning: FunctionalComponent = () => {
     const [showModal, setShowModal] = useState(false);
 
+    const tempOnClick = (): void => console.log('clicked');
+
     return (
         <div className={showModal ? 'modal-active' : ''}>
             <div className="create-bar">
@@ -29,16 +31,7 @@ const BacklogPlanning: FunctionalComponent = () => {
             </Conditional>
             <div className="rounded bg-white overflow-hidden shadow-lg">
                 {issues.map((issue, index) => {
-                    return (
-                        <IssueCard
-                            key={index}
-                            id={issue.id}
-                            name={issue.name}
-                            description={issue.description}
-                            storyPoint={issue.storyPoint}
-                            project={issue.project}
-                        />
-                    );
+                    return <IssueCard key={index} issue={issue} onClick={tempOnClick} />;
                 })}
             </div>
         </div>
