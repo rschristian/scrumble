@@ -1,36 +1,46 @@
 import { FunctionalComponent, h } from 'preact';
-import { SearchBar } from 'components/SearchBar';
 import { useState } from 'preact/hooks';
 
-enum FilterStatus {
-    all,
-    open,
-    closed,
+import { SearchBar } from 'components/SearchBar';
+
+interface IProps {
+    setFilter: (filterFor: string) => void;
 }
 
-export const SprintFilter: FunctionalComponent = () => {
-    const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.all);
+enum FilterStatus {
+    open = 'open',
+    closed = 'closed',
+    all = 'all',
+}
+
+export const SprintFilter: FunctionalComponent<IProps> = (props: IProps) => {
+    const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.open);
+
+    const updateFilter = (filterStatus: FilterStatus): void => {
+        props.setFilter(filterStatus.toString());
+        setFilterStatus(filterStatus);
+    };
 
     return (
         <div class="my-4 flex flex-col items-start">
             <div class="flex rounded shadow">
                 <button
-                    class={`btn-filter ${filterStatus === FilterStatus.all ? 'bg-blue-500' : ''}`}
-                    onClick={(): void => setFilterStatus(FilterStatus.all)}
-                >
-                    All
-                </button>
-                <button
                     class={`btn-filter ${filterStatus === FilterStatus.open ? 'bg-blue-500' : ''}`}
-                    onClick={(): void => setFilterStatus(FilterStatus.open)}
+                    onClick={(): void => updateFilter(FilterStatus.open)}
                 >
                     Open
                 </button>
                 <button
                     class={`btn-filter ${filterStatus === FilterStatus.closed ? 'bg-blue-500' : ''}`}
-                    onClick={(): void => setFilterStatus(FilterStatus.closed)}
+                    onClick={(): void => updateFilter(FilterStatus.closed)}
                 >
                     Closed
+                </button>
+                <button
+                    className={`btn-filter ${filterStatus === FilterStatus.all ? 'bg-blue-500' : ''}`}
+                    onClick={(): void => updateFilter(FilterStatus.all)}
+                >
+                    All
                 </button>
             </div>
             <SearchBar placeholder="Search by name" />

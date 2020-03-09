@@ -9,8 +9,22 @@ import { issues, sprints } from 'data';
 
 const SprintPlanning: FunctionalComponent = () => {
     const [isSprintView, setIsSprintView] = useState<boolean>(false);
+    const [issueFilter, setIssueFilter] = useState<string>('');
+    const [sprintFilter, setSprintFilter] = useState<string>('open');
 
     const tempOnClick = (): void => console.log('clicked');
+    const updateIssueFilter = (): void => console.log('');
+    const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
+
+    const issuesList = issues.map((issue, index) => {
+        return <IssueCard key={index} issue={issue} onClick={tempOnClick} />;
+    });
+
+    const sprintsList = sprints.map((sprint, index) => {
+        if (sprintFilter === 'all' || sprint.status.toString() === sprintFilter) {
+            return <SprintCard key={index} id={sprint.id} title={sprint.title} description={sprint.description} />;
+        }
+    });
 
     return (
         <Fragment>
@@ -26,13 +40,9 @@ const SprintPlanning: FunctionalComponent = () => {
                         </button>
                     </div>
                     <div className="mr-4">
-                        <IssueFilter />
+                        <IssueFilter setFilter={updateSprintFilter} />
                     </div>
-                    <div className="mr-4 rounded bg-white shadow-lg">
-                        {issues.map((issue, index) => {
-                            return <IssueCard key={index} issue={issue} onClick={tempOnClick} />;
-                        })}
-                    </div>
+                    <div className="mr-4 rounded bg-white shadow-lg">{issuesList}</div>
                 </div>
                 <div
                     class={`md:border-l border-gray-300 h-full w-11/12 md:w-1/2 md:block " ${
@@ -49,20 +59,9 @@ const SprintPlanning: FunctionalComponent = () => {
                         </button>
                     </div>
                     <div className="md:ml-4">
-                        <SprintFilter />
+                        <SprintFilter setFilter={updateSprintFilter} />
                     </div>
-                    <div className="md:ml-4 rounded bg-white overflow-hidden shadow-lg">
-                        {sprints.map((sprint, index) => {
-                            return (
-                                <SprintCard
-                                    key={index}
-                                    id={sprint.id}
-                                    title={sprint.title}
-                                    description={sprint.description}
-                                />
-                            );
-                        })}
-                    </div>
+                    <div className="md:ml-4 rounded bg-white overflow-hidden shadow-lg">{sprintsList}</div>
                 </div>
             </div>
         </Fragment>
