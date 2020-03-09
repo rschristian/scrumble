@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/camelcase */
+
 import { Workspace } from 'models/Workspace';
 import { Issue } from 'models/Issue';
-import { Sprint } from 'models/Sprint';
+import { GLMilestone, GLMilestoneStatus } from 'models/Milestone';
 
 export const workspaces: Workspace[] = [
     { id: 1, name: 'CUBRIC', description: 'Brain Tinder' },
@@ -8,21 +10,36 @@ export const workspaces: Workspace[] = [
     { id: 3, name: 'Spot a Bee', description: 'Bees and Foxgloves' },
 ];
 
-export const sprints: Sprint[] = [
+export const sprints: GLMilestone[] = [
     {
-        id: 1,
-        name: 'Sprint 1',
+        id: 133,
+        iid: 1,
+        project_id: 7381,
+        title: 'Sprint 1',
         description: 'Insert insightful and creative description of a sprint here',
+        status: GLMilestoneStatus.closed,
+        start_date: new Date(2020, 2, 11),
+        due_date: new Date(2020, 2, 20),
     },
     {
-        id: 2,
-        name: 'Sprint 2',
+        id: 134,
+        iid: 1,
+        project_id: 7381,
+        title: 'Sprint 2',
         description: 'Insert insightful and creative description of a sprint here',
+        status: GLMilestoneStatus.closed,
+        start_date: new Date(2020, 2, 20),
+        due_date: new Date(2020, 2, 5),
     },
     {
-        id: 3,
-        name: 'Sprint 3',
+        id: 140,
+        iid: 1,
+        project_id: 7381,
+        title: 'Sprint 3',
         description: 'Insert insightful and creative description of a sprint here',
+        status: GLMilestoneStatus.open,
+        start_date: new Date(2020, 2, 5),
+        due_date: new Date(2020, 2, 19),
     },
 ];
 
