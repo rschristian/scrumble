@@ -22,6 +22,7 @@ const BacklogPlanning: FunctionalComponent = () => {
                     New Issue
                 </button>
             </div>
+
             <IssueFilter setFilter={updateIssueFilter} />
             <Conditional if={showModal}>
                 <Modal

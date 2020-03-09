@@ -26,9 +26,7 @@ const OAuth2Success: FunctionalComponent = () => {
         <Fragment>
             {authenticate()}
             <div class="page">
-                <div className="create-bar">
-                    <h1 className="page-heading">OAuth2 Success</h1>
-                </div>
+                <div class="loader mx-auto mt-10" />
             </div>
         </Fragment>
     );
