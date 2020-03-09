@@ -41,7 +41,7 @@ const SprintPlanning: FunctionalComponent = () => {
                         </button>
                     </div>
                     <div className="mr-4">
-                        <IssueFilter setFilter={updateSprintFilter} />
+                        <IssueFilter setFilter={updateIssueFilter} />
                     </div>
                     <div className="mr-4 rounded bg-white shadow-lg">{issuesList}</div>
                 </div>
