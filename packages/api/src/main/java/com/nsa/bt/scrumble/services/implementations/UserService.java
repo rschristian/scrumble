@@ -3,6 +3,7 @@ package com.nsa.bt.scrumble.services.implementations;
 import com.nsa.bt.scrumble.models.User;
 import com.nsa.bt.scrumble.repositories.IUserRepository;
 import com.nsa.bt.scrumble.services.IUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

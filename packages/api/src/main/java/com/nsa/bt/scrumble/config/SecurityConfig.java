@@ -5,17 +5,16 @@ import com.nsa.bt.scrumble.security.oauth.CustomOAuth2UserService;
 import com.nsa.bt.scrumble.security.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.nsa.bt.scrumble.security.oauth.OAuth2AuthFailureHandler;
 import com.nsa.bt.scrumble.security.oauth.OAuth2AuthSuccessHandler;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-//@Order(1)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
