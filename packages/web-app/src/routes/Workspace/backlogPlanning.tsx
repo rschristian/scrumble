@@ -29,6 +29,7 @@ const BacklogPlanning: FunctionalComponent = () => {
                     content={<div>Test Test Test</div>}
                     submit={(): void => setShowModal(false)}
                     close={(): void => setShowModal(false)}
+                    submit={(): void => setShowModal(false)}
                 />
             </Conditional>
             <div class="rounded bg-white overflow-hidden shadow-lg">
