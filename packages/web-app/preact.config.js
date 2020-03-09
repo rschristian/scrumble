@@ -35,7 +35,7 @@ export default {
             config.devServer.proxy = [
                 {
                     path: '/api/v1',
-                    target: 'http://localhost:8000',
+                    target: 'http://localhost:8082',
                 },
             ];
         }
