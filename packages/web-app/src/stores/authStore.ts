@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { destroyOAuthToken } from 'services/api';
+import { login, destroyOAuthToken } from 'services/api';
 
 class AuthStore {
     @observable isAuthenticated = false;
@@ -11,8 +11,14 @@ class AuthStore {
         });
     }
 
-    @action login(): void {
-        this.isAuthenticated = true;
+    @action async login(shortLivedJwt: string): Promise<boolean> {
+        return await login(shortLivedJwt).then((success) => {
+            if (success) {
+                this.isAuthenticated = true;
+                return this.isAuthenticated;
+            }
+            return false;
+        });
     }
 }
 

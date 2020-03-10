@@ -3,7 +3,6 @@ import { getCurrentUrl, route } from 'preact-router';
 import { useContext, useState } from 'preact/hooks';
 
 import { AuthStoreContext } from 'stores';
-import { login } from 'services/api';
 import { Error } from 'components/Error';
 
 const OAuth2Success: FunctionalComponent = () => {
@@ -14,9 +13,8 @@ const OAuth2Success: FunctionalComponent = () => {
         const url = getCurrentUrl();
         const token = url.match(/token=(.*)/)[0].substring(6);
 
-        login(token).then((success) => {
+        authStore.login(token).then((success) => {
             if (success) {
-                authStore.login();
                 route('/');
             } else {
                 setIsError(true);

@@ -26,7 +26,7 @@ export const destroyOAuthToken = async (): Promise<boolean> => {
 };
 
 export function fetchUserInfo() {
-    apiService.delete('/user/info').then((response) => {
+    apiService.get('/user/info').then((response) => {
         console.log(response);
         return response;
     });
