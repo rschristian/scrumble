@@ -16,5 +16,3 @@ export const Error: FunctionalComponent<IProps> = (props: IProps) => {
         </Fragment>
     );
 };
-
-export default Error;

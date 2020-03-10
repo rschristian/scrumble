@@ -4,7 +4,7 @@ import { useContext, useState } from 'preact/hooks';
 
 import { AuthStoreContext } from 'stores';
 import { login } from 'services/api';
-import Error from 'components/Error';
+import { Error } from 'components/Error';
 
 const OAuth2Success: FunctionalComponent = () => {
     const authStore = useContext(AuthStoreContext);

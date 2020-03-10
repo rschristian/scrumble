@@ -5,7 +5,6 @@ import { Menu, X } from 'preact-feather';
 
 import scrumCards from 'assets/icons/scrumCards.png';
 import avatar from 'assets/gitlab_avatar.png';
-import { destroyOAuthToken } from 'services/api';
 import { AuthStoreContext } from 'stores';
 
 export const TopBar: FunctionalComponent = () => {
@@ -14,11 +13,8 @@ export const TopBar: FunctionalComponent = () => {
     const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
 
     const logout = (): void => {
-        destroyOAuthToken().then((success) => {
-            if (success) {
-                authStore.logout();
-                route('/login');
-            }
+        authStore.logout().then(() => {
+            route('/login');
         });
     };
 
@@ -64,13 +60,7 @@ export const TopBar: FunctionalComponent = () => {
                                     onClick={() => logout()}
                                     class={`btn-sign-out shadow-lg ${isAccountDropdownOpen ? 'block' : 'hidden'}`}
                                 >
-                                    <a
-                                        href="http://localhost:8082/logout"
-                                        class="block px-4 py-2 text-white text-center"
-                                    >
-                                        {' '}
-                                        Sign Out{' '}
-                                    </a>
+                                    <span class="block px-4 py-2 text-white text-center"> Sign Out </span>
                                 </div>
                             </div>
                         </div>
@@ -87,7 +77,7 @@ export const TopBar: FunctionalComponent = () => {
                     <span class="ml-3 font-semibold text-deep-space-sparkle">Greg</span>
                 </div>
                 <div onClick={() => logout()} class="my-4 ml-3">
-                    <p class="top-nav-dropdown-link">Sign out</p>
+                    <span class="top-nav-dropdown-link">Sign out</span>
                 </div>
             </div>
         </header>
