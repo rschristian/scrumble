@@ -3,7 +3,7 @@ import { FunctionalComponent, h } from 'preact';
 import { WorkspaceCard } from 'components/Cards/workspace';
 import { SearchBar } from 'components/SearchBar';
 import { workspaces } from 'data';
-import { fetchIssueTest } from 'services/api';
+import { fetchIssueTest } from 'services/api/issues';
 
 const Home: FunctionalComponent = () => {
     return (
