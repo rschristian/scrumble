@@ -1,4 +1,9 @@
-# Running the application 
+# Running the application
+
+## Assumptions
+* Spring Boot is configured to target Java 11.
+* Docker has been used to create a container holding both Postgres and GitLab CE.
+
 
 ## Spring Boot API
 A gradle wrapper has been included. From the packages/api directory, you can run the project with:
