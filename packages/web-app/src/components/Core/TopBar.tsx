@@ -1,14 +1,22 @@
 import { FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
-import { Link } from 'preact-router';
+import { useContext, useState } from 'preact/hooks';
+import { Link, route } from 'preact-router';
 import { Menu, X } from 'preact-feather';
 
 import scrumCards from 'assets/icons/scrumCards.png';
 import avatar from 'assets/gitlab_avatar.png';
+import { AuthStoreContext } from 'stores';
 
 export const TopBar: FunctionalComponent = () => {
+    const authStore = useContext(AuthStoreContext);
     const [isOpen, setIsOpen] = useState(false);
     const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
+
+    const logout = (): void => {
+        authStore.logout().then(() => {
+            route('/login');
+        });
+    };
 
     return (
         <header>
@@ -48,10 +56,11 @@ export const TopBar: FunctionalComponent = () => {
                                 >
                                     <img class="avatar" src={avatar} alt="Your avatar" />
                                 </button>
-                                <div class={`btn-sign-out shadow-lg ${isAccountDropdownOpen ? 'block' : 'hidden'}`}>
-                                    <a href="#" class="block px-4 py-2 text-white text-center">
-                                        Sign out
-                                    </a>
+                                <div
+                                    onClick={() => logout()}
+                                    class={`btn-sign-out shadow-lg ${isAccountDropdownOpen ? 'block' : 'hidden'}`}
+                                >
+                                    <span class="block px-4 py-2 text-white text-center"> Sign Out </span>
                                 </div>
                             </div>
                         </div>
@@ -67,10 +76,8 @@ export const TopBar: FunctionalComponent = () => {
                     <img class="ml-3 avatar" src={avatar} alt="Your avatar" />
                     <span class="ml-3 font-semibold text-deep-space-sparkle">Greg</span>
                 </div>
-                <div class="my-4 ml-3">
-                    <Link href="/login" class="top-nav-dropdown-link">
-                        Sign out
-                    </Link>
+                <div onClick={() => logout()} class="my-4 ml-3">
+                    <span class="top-nav-dropdown-link">Sign out</span>
                 </div>
             </div>
         </header>

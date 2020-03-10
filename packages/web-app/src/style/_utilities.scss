@@ -39,7 +39,15 @@
   text-overflow: ellipsis;
 }
 
-// Don't hate me for messing with your CSS plz
+.loader {
+  border: 16px solid #909090; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
 .tooltip .tooltip-text {
   visibility: hidden;
   text-align: center;
@@ -50,4 +58,14 @@
 
 .tooltip:hover .tooltip-text {
   visibility: visible;
+}
+
+//# Animations
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

@@ -1,56 +1,33 @@
 import { apiService, authStorageService } from 'ts-api-toolkit';
 
-import { LoginUser, RegistrationUser, User } from 'models/User';
-import { Issue } from 'models/Issue';
-
-export const login = async (credentials: LoginUser): Promise<User | string> => {
+export const login = async (shortLivedJwt: string): Promise<boolean> => {
+    authStorageService.saveToken(shortLivedJwt);
     return await apiService
-        .post('users/login', credentials)
-        .then(({ data }) => {
-            authStorageService.saveToken(data.user.token);
-            return data.user;
+        .get('/auth/token')
+        .then((response) => {
+            authStorageService.saveToken(response.data.jwt);
+            return true;
         })
-        .catch(({ response }) => {
-            if (response.data !== '') {
-                return response.data.message;
-            }
-            return 'Unknown error while logging in';
+        .catch(() => {
+            return false;
         });
 };
 
-export const logout = async (): Promise<void> => {
-    return authStorageService.destroyToken();
-};
-
-export const register = async (credentials: RegistrationUser): Promise<User | string> => {
+export const destroyOAuthToken = async (): Promise<boolean> => {
     return await apiService
-        .post('users/register', credentials)
-        .then(({ data }) => {
-            authStorageService.saveToken(data.user.token);
-            return data.user;
+        .delete('/auth/token/delete')
+        .then((response) => {
+            authStorageService.destroyToken();
+            return true;
         })
-        .catch(({ response }) => {
-            if (response.data !== '') {
-                return response.data.message;
-            }
-            return 'Unknown error while registering';
+        .catch(() => {
+            return false;
         });
 };
 
-// --------------------------
-// Issues
-// --------------------------
-export async function fetchIssueTest(): Promise<Issue | string> {
-    return await apiService
-        .get('/issues/1')
-        .then(({ data }) => {
-            console.log(data);
-            return data;
-        })
-        .catch(({ response }) => {
-            if (response.data !== '') {
-                return response.data.message;
-            }
-            return 'Unknown error';
-        });
+export function fetchUserInfo() {
+    apiService.delete('/user/info').then((response) => {
+        console.log(response);
+        return response;
+    });
 }
