@@ -1,9 +1,9 @@
-export enum GLMilestoneStatus {
+export enum SprintStatus {
     open = 'open',
     closed = 'closed',
 }
 
-export interface GLMilestone {
+export interface Sprint {
     // Id is for all projects on a GL instance.
     id: number;
     // Iid, or internal ID, is the id that is unique to a project
@@ -11,7 +11,7 @@ export interface GLMilestone {
     project_id: number;
     title: string;
     description?: string;
-    status: GLMilestoneStatus;
+    status: SprintStatus;
     start_date: Date;
     due_date: Date;
 }

@@ -6,7 +6,7 @@ import { SprintCard } from 'components/Cards/sprint';
 import { IssueFilter } from 'components/Filter/issues';
 import { SprintFilter } from 'components/Filter/sprints';
 import { issues, sprints } from 'data';
-import { GLMilestoneStatus } from 'models/Milestone';
+import { SprintStatus } from 'models/Sprint';
 
 const SprintPlanning: FunctionalComponent = () => {
     const [isSprintView, setIsSprintView] = useState<boolean>(false);
@@ -30,7 +30,7 @@ const SprintPlanning: FunctionalComponent = () => {
                     id={sprint.id}
                     title={sprint.title}
                     description={sprint.description}
-                    closed={sprint.status === GLMilestoneStatus.closed}
+                    closed={sprint.status === SprintStatus.closed}
                 />
             );
         }

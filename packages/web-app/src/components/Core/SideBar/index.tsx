@@ -2,8 +2,13 @@ import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { Menu, X } from 'preact-feather';
 
-import { SideBarLink } from 'models/SideBarLink';
 import { SideBarItem } from 'components/Core/SideBar/SideBarItem';
+
+export interface SideBarLink {
+    label: string;
+    icon: string;
+    path: string;
+}
 
 interface IProps {
     links: SideBarLink[];

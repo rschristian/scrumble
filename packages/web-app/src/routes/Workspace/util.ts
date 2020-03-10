@@ -2,7 +2,7 @@ import edit from 'assets/icons/edit.png';
 import list from 'assets/icons/list.png';
 import metrics from 'assets/icons/metrics.png';
 import sprinter from 'assets/icons/sprinter.png';
-import { SideBarLink } from 'models/SideBarLink';
+import { SideBarLink } from 'components/Core/SideBar';
 
 export const sideNavItems: SideBarLink[] = [
     {

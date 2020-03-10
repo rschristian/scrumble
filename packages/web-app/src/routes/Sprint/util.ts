@@ -3,7 +3,7 @@ import team from 'assets/icons/team.png';
 import kanbanBoard from 'assets/icons/kanbanBoard.png';
 import metrics from 'assets/icons/metrics.png';
 import presentation from 'assets/icons/presentation.png';
-import { SideBarLink } from 'models/SideBarLink';
+import { SideBarLink } from 'components/Core/SideBar';
 
 export const sideNavItems: SideBarLink[] = [
     {
