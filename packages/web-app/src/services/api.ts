@@ -3,7 +3,7 @@ import { apiService, authStorageService } from 'ts-api-toolkit';
 export const login = async (shortLivedJwt: string): Promise<boolean> => {
     authStorageService.saveToken(shortLivedJwt);
     return await apiService
-        .get('/authentication/token/long-life')
+        .get('/auth/token')
         .then((response) => {
             if (response.status != 200) {
                 return false;
@@ -18,7 +18,7 @@ export const login = async (shortLivedJwt: string): Promise<boolean> => {
 
 export const destroyOAuthToken = async (): Promise<boolean> => {
     return await apiService
-        .delete('/authentication/token/delete')
+        .delete('/auth/token/delete')
         .then((response) => {
             console.log(response.status);
             authStorageService.destroyToken();
@@ -31,7 +31,7 @@ export const destroyOAuthToken = async (): Promise<boolean> => {
 
 export function fetchUserInfo() {
     console.log("We're in fetchUserInfo");
-    apiService.delete('/user/info/yo').then((response) => {
+    apiService.delete('/user/info').then((response) => {
         console.log(response);
         return response;
     });

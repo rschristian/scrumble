@@ -21,11 +21,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/authentication")
+@RequestMapping("/api/v1/auth")
 public class AuthenticationApi {
 
     public AuthenticationApi (AppProperties appProperties) {
@@ -49,9 +48,9 @@ public class AuthenticationApi {
     @Autowired
     TokenUtils tokenUtils;
 
-    @GetMapping("/token/long-life")
-    public ResponseEntity<Map<String, String>> exchangeShortLifeToken(HttpServletRequest request) {
-        HashMap<String, String> tokenResponse = new HashMap<>();
+    @GetMapping("/token")
+    public ResponseEntity<Object> exchangeShortLifeToken(HttpServletRequest request) {
+        var tokenResponse = new HashMap<>();
         String jwt = tokenUtils.getJwtFromRequest(request);
         String longLifeToken = null;
 
@@ -74,9 +73,9 @@ public class AuthenticationApi {
     }
 
     @DeleteMapping("/token/delete")
-    public ResponseEntity<Map<String, Boolean>> deleteToken(Authentication authentication) {
+    public ResponseEntity<Object> deleteToken(Authentication authentication) {
         logger.info("In /token/revoke");
-        HashMap<String, Boolean> deleteTokenResponse = new HashMap<>();
+        var deleteTokenResponse = new HashMap<>();
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         userService.removeToken(userPrincipal.getId());

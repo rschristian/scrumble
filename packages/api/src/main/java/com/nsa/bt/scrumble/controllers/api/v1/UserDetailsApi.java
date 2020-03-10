@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/user")
 public class UserDetailsApi {
 
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsApi.class);
@@ -30,7 +30,7 @@ public class UserDetailsApi {
     @Autowired
     IUserService userService;
 
-    @GetMapping("/user/info")
+    @GetMapping("/info")
     public ResponseEntity<String> getUserInfo(Authentication authentication){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());

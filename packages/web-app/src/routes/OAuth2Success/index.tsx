@@ -27,7 +27,7 @@ const OAuth2Success: FunctionalComponent = () => {
     return (
         <Fragment>
             {authenticate()}
-            <div class="flex w-full mt-16">
+            <div class="flex w-full mt-16 justify-center">
                 <div className={`loader ml-12 mx-auto mt-20 ${isError ? 'hidden' : 'block'}`} />
                 <div className={`mt-20 sm:w-4/5 lg:w-3/5 ${isError ? 'block' : 'hidden'}`}>
                     <Error message={'An error occurred.'} />
