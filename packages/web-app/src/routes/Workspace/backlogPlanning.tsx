@@ -1,6 +1,7 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import NewIssue from './createIssues';
 import EditIssue from './editIssues';
+import DeleteIssue from './deleteIssue';
 import { IssueListItem } from 'components/ListItems/issue';
 import { IssueCard } from 'components/Cards/issue';
 import { Conditional } from 'components/Conditional';
@@ -14,7 +15,9 @@ import { Issue } from 'models/Issue';
 const BacklogPlanning: FunctionalComponent = () => {
     const [newIssue, setNewIssue] = useState(false);
     const [edittingIssue, setEdittingIssue] = useState(false);
+    const [deletingIssue, setDeletingIssue] = useState(false);
     const [currentEditingIssue, setCurrentEdittingIssue] = useState(null);
+    const [currentDeletingIssue, setCurrentDeletingIssue] = useState(null);
     const [data, SetData] = useState([]);
 
     useEffect(() => {
@@ -63,6 +66,19 @@ const BacklogPlanning: FunctionalComponent = () => {
                     close={(): void => setEdittingIssue(false)}
                 />
             </Conditional>
+            <Conditional if={deletingIssue}>
+                <Modal
+                    title="Are you sure you want to delete this issue?"
+                    content={
+                        <DeleteIssue
+                            close={(): void => setDeletingIssue(false)}
+                            deleteIssue={deleteIssue}
+                            index={currentDeletingIssue}
+                        />
+                    }
+                    close={(): void => setDeletingIssue(false)}
+                />
+            </Conditional>
             <div className="rounded bg-white overflow-hidden shadow-lg">
                 {data.map((issue, index) => {
                     return (
@@ -74,7 +90,8 @@ const BacklogPlanning: FunctionalComponent = () => {
                             storyPoint={issue.storyPoint}
                             project={issue.project}
                             index={index}
-                            deleteIssue={deleteIssue}
+                            delete={(): void => setDeletingIssue(true)}
+                            deleteIssue={(index: number): void => setCurrentDeletingIssue(index)}
                             edit={(): void => setEdittingIssue(true)}
                             editing={(issue: Issue): void => setCurrentEdittingIssue(issue)}
                         />
