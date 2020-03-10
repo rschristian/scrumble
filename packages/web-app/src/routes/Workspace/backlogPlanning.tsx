@@ -2,7 +2,6 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import NewIssue from './createIssues';
 import EditIssue from './editIssues';
 import DeleteIssue from './deleteIssue';
-import { IssueListItem } from 'components/ListItems/issue';
 import { IssueCard } from 'components/Cards/issue';
 import { Conditional } from 'components/Conditional';
 import { IssueFilter } from 'components/Filter/issues';
@@ -22,6 +21,7 @@ const BacklogPlanning: FunctionalComponent = () => {
     useEffect(() => {
         SetData(issues);
     }, []);
+
     const addNewIssue = (value: Issue): void => {
         data.push(value);
     };
@@ -44,7 +44,7 @@ const BacklogPlanning: FunctionalComponent = () => {
                     New Issue
                 </button>
             </div>
-            <IssueFilter />
+            <IssueFilter setFilter={updateIssueFilter} />
             <Conditional if={newIssue}>
                 <Modal
                     title="Create Issue"
@@ -81,13 +81,10 @@ const BacklogPlanning: FunctionalComponent = () => {
             <div className="rounded bg-white overflow-hidden shadow-lg">
                 {data.map((issue, index) => {
                     return (
-                        <IssueListItem
+                        <IssueCard
                             key={index}
-                            id={issue.id}
-                            name={issue.name}
-                            description={issue.description}
-                            storyPoint={issue.storyPoint}
-                            project={issue.project}
+                            issue={issue}
+                            onClick={tempOnClick}
                             index={index}
                             delete={(): void => setDeletingIssue(true)}
                             deleteIssue={(index: number): void => setCurrentDeletingIssue(index)}
