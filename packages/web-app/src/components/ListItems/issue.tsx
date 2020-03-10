@@ -34,11 +34,13 @@ export const IssueListItem: FunctionalComponent<IProps> = (props: IProps) => {
         props.editing(issue);
     };
     return (
-        <Link href={`/issue/${props.id}`} className="lst-itm-container">
-            <div className="px-4 py-2 flex min-w-0">
-                <div class="truncate">{props.name}</div>
-            </div>
-            <div className="flex px-4 py-2 z-1">
+        <div className="lst-itm-container">
+            <Link href={`/issue/${props.id}`}>
+                <div className="px-4 py-2 flex min-w-0">
+                    <div class="truncate">{props.name}</div>
+                </div>
+            </Link>
+            <div className="px-4 py-2 z-1">
                 <span className="story-pnt">{props.storyPoint}</span>
                 <span className="text-gray-700">{props.project}</span>
                 {props.delete === undefined ? null : (
@@ -54,6 +56,6 @@ export const IssueListItem: FunctionalComponent<IProps> = (props: IProps) => {
                     </button>
                 )}
             </div>
-        </Link>
+        </div>
     );
 };

@@ -9,7 +9,6 @@ import { IssueFilter } from 'components/Filter/issues';
 import { Modal } from 'components/Modal';
 import { useState, useEffect } from 'preact/hooks';
 import { issues } from 'data';
-import { Conditional } from 'components/Conditional';
 import { Issue } from 'models/Issue';
 
 const BacklogPlanning: FunctionalComponent = () => {
