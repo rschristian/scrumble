@@ -23,15 +23,15 @@ interface IProps {
     index: number;
     onClick: () => void;
     delete?: () => void;
-    deleteIssue?: (value: number) => void;
     edit?: () => void;
-    editing?: (issue: Issue) => void;
+    CurrentIndex?: (value: number) => void;
+    CurrentIssue?: (issue: Issue) => void;
 }
 
 export const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
     const deleteIssue = (): void => {
         props.delete();
-        props.deleteIssue(props.index);
+        props.CurrentIndex(props.index);
     };
     const editIssue = (): void => {
         const issue: Issue = {
@@ -44,7 +44,7 @@ export const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
             index: props.index,
         };
         props.edit();
-        props.editing(issue);
+        props.CurrentIssue(issue);
     };
     return (
         <div class="lst-itm-container" onClick={props.onClick}>
