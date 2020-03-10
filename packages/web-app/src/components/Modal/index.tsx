@@ -28,13 +28,13 @@ export const Modal: FunctionalComponent<IProps> = (props: IProps) => {
                             class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
                             onClick={props.submit}
                         >
-                            Action
+                            Confirm
                         </button>
                         <button
                             class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
                             onClick={props.close}
                         >
-                            Close
+                            Cancel
                         </button>
                     </div>
                 </div>
