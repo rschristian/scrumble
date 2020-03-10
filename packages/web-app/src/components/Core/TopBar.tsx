@@ -57,7 +57,7 @@ export const TopBar: FunctionalComponent = () => {
                                     <img class="avatar" src={avatar} alt="Your avatar" />
                                 </button>
                                 <div
-                                    onClick={() => logout()}
+                                    onFocus={() => logout()}
                                     class={`btn-sign-out shadow-lg ${isAccountDropdownOpen ? 'block' : 'hidden'}`}
                                 >
                                     <span class="block px-4 py-2 text-white text-center"> Sign Out </span>
