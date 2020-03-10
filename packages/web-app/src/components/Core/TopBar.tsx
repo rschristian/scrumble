@@ -36,11 +36,11 @@ export const TopBar: FunctionalComponent = () => {
                             type="button"
                             class="block text-deep-space-sparkle hover:text-gray-400 focus:outline-none"
                         >
-                            <div className="flex items-start items-baseline min-h-12">
-                                <div className={`my-auto ml-2 ${!isOpen ? 'block' : 'hidden'}`}>
+                            <div class="flex items-start items-baseline min-h-12">
+                                <div class={`my-auto ml-2 ${!isOpen ? 'block' : 'hidden'}`}>
                                     <Menu size={20} />
                                 </div>
-                                <div className={`my-auto ml-2 ${isOpen ? 'block' : 'hidden'}`}>
+                                <div class={`my-auto ml-2 ${isOpen ? 'block' : 'hidden'}`}>
                                     <X size={20} />
                                 </div>
                             </div>
@@ -50,23 +50,23 @@ export const TopBar: FunctionalComponent = () => {
                 <nav class={`sm:block ${isOpen ? '' : 'hidden'}`}>
                     <div class="sm:flex sm:p-0">
                         <div class="hidden sm:block sm:ml-6">
-                            <div className="relative">
+                            <div class="relative">
                                 <button
                                     onClick={(): void => setIsAccountDropdownOpen(!isAccountDropdownOpen)}
                                     onBlur={(): void => setIsAccountDropdownOpen(false)}
-                                    className={`btn-account-dropdown ${
+                                    class={`btn-account-dropdown ${
                                         isAccountDropdownOpen ? 'outline-none border-white' : ''
                                     }`}
                                 >
-                                    <img className="avatar" src={avatar} alt="Your avatar" />
+                                    <img class="avatar" src={avatar} alt="Your avatar" />
                                 </button>
                                 <div
                                     onClick={() => logout()}
-                                    className={`btn-sign-out shadow-lg ${isAccountDropdownOpen ? 'block' : 'hidden'}`}
+                                    class={`btn-sign-out shadow-lg ${isAccountDropdownOpen ? 'block' : 'hidden'}`}
                                 >
                                     <a
                                         href="http://localhost:8082/logout"
-                                        className="block px-4 py-2 text-white text-center"
+                                        class="block px-4 py-2 text-white text-center"
                                     >
                                         {' '}
                                         Sign Out{' '}
@@ -78,15 +78,15 @@ export const TopBar: FunctionalComponent = () => {
                 </nav>
             </div>
             <div
-                className={`sm:hidden z-20 fixed w-full mt-16 bg-gray-200 border-b border-gray-500 ${
+                class={`sm:hidden z-20 fixed w-full mt-16 bg-gray-200 border-b border-gray-500 ${
                     isOpen ? 'block' : 'hidden'
                 }`}
             >
-                <div className="flex items-center border-b border-gray-300 py-2">
-                    <img className="ml-3 avatar" src={avatar} alt="Your avatar" />
-                    <span className="ml-3 font-semibold text-deep-space-sparkle">Greg</span>
+                <div class="flex items-center border-b border-gray-300 py-2">
+                    <img class="ml-3 avatar" src={avatar} alt="Your avatar" />
+                    <span class="ml-3 font-semibold text-deep-space-sparkle">Greg</span>
                 </div>
-                <div onClick={() => logout()} className="my-4 ml-3">
+                <div onClick={() => logout()} class="my-4 ml-3">
                     <p class="top-nav-dropdown-link">Sign out</p>
                 </div>
             </div>

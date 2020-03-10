@@ -5,8 +5,8 @@ const Login: FunctionalComponent = () => {
     return (
         <Fragment>
             <div class="page">
-                <div className="flex justify-center content-center">
-                    <button className="btn-create mx-auto my-auto">
+                <div class="flex justify-center content-center">
+                    <button class="btn-create mx-auto my-auto">
                         <a href={REDIRECT_URI}>Login with GitLab</a>
                     </button>
                 </div>
