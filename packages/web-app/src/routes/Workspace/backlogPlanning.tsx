@@ -18,24 +18,26 @@ const BacklogPlanning: FunctionalComponent = () => {
     const [showDeleteIssueModal, setShowDeleteIssueModal] = useState(false);
     const [currentIssue, setCurrentIssue] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(null);
-    const [data, setData] = useState([]);
+    const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
 
     useEffect(() => {
-        setData(issues);
+        setIssuesArray(issues);
     }, []);
 
-    const addNewIssue = (value: Issue): void => {
-        data.push(value);
+    const createIssue = (newIssue: Issue): void => setIssuesArray((oldData) => [...oldData, newIssue]);
+    const deleteIssue = (issueId: number): void => {
+        const tempArray = issuesArray;
+        tempArray.splice(issueId, 1);
+        setIssuesArray(tempArray);
     };
-    const deleteIssue = (value: number): void => {
-        data.splice(value, 1);
-    };
-    const editIssue = (index: number, issue: Issue): void => {
-        data[index] = issue;
+    const editIssue = (issueId: number, issue: Issue): void => {
+        const tempArray = issuesArray;
+        tempArray[issueId] = issue;
+        setIssuesArray(tempArray);
     };
 
+    // Both here to fulfill mandatory props until we decide what to do with them
     const tempOnClick = (): void => console.log('clicked');
-
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
 
     return (
@@ -50,7 +52,7 @@ const BacklogPlanning: FunctionalComponent = () => {
             <Conditional if={showNewIssueModal}>
                 <Modal
                     title="Create Issue"
-                    content={<NewIssue close={(): void => setShowNewIssueModal(false)} addNewIssue={addNewIssue} />}
+                    content={<NewIssue close={(): void => setShowNewIssueModal(false)} addNewIssue={createIssue} />}
                     close={(): void => setShowNewIssueModal(false)}
                 />
             </Conditional>
@@ -82,7 +84,7 @@ const BacklogPlanning: FunctionalComponent = () => {
                 />
             </Conditional>
             <div class="rounded bg-white overflow-hidden shadow-lg">
-                {data.map((issue, index) => {
+                {issuesArray.map((issue, index) => {
                     return (
                         <IssueCard
                             key={index}
