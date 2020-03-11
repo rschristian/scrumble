@@ -1,9 +1,10 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { getCurrentUrl, route } from 'preact-router';
-
-import { MoreVertical } from 'preact-feather';
 import { useState } from 'preact/hooks';
+import { getCurrentUrl, route } from 'preact-router';
+import { MoreVertical } from 'preact-feather';
+
 import { Modal } from 'components/Modal';
+import { toggleSprintStatus } from 'services/api/sprints';
 
 interface IProps {
     id: number;
@@ -15,12 +16,29 @@ interface IProps {
 export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
     const [showClosureModal, setShowClosureModal] = useState<boolean>(false);
     const [showOpeningModal, setShowOpeningModal] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>('');
 
-    // Have to do this rather than a link component, as there's no way to stop propagation with it
     const linkTo = (): boolean => route(`${getUrlSubstringAndFix()}/sprint/${props.id}/`);
 
-    const closureModalContent = <div>Are you sure you want to close this sprint?</div>;
-    const openingModalContent = <div>Are you sure you want to open this sprint?</div>;
+    const closureModalContent = (
+        <div>
+            Are you sure you want to close this sprint?
+            <div class="error">{errorMessage}</div>
+        </div>
+    );
+    const openingModalContent = (
+        <div>
+            Are you sure you want to open this sprint?
+            <div className="error">{errorMessage}</div>
+        </div>
+    );
+
+    const handleToggleSprintStatus = async (): Promise<void> => {
+        return await toggleSprintStatus(props.id).then((error) => {
+            if (error) setErrorMessage(error);
+            else setShowClosureModal(false);
+        });
+    };
 
     return (
         <Fragment>
@@ -28,14 +46,14 @@ export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
                 <Modal
                     title="Close Sprint?"
                     content={closureModalContent}
-                    submit={(): void => setShowClosureModal(false)}
+                    submit={async (): Promise<void> => await handleToggleSprintStatus()}
                     close={(): void => setShowClosureModal(false)}
                 />
             ) : showOpeningModal ? (
                 <Modal
                     title="Open Sprint?"
                     content={openingModalContent}
-                    submit={(): void => setShowOpeningModal(false)}
+                    submit={async (): Promise<void> => await handleToggleSprintStatus()}
                     close={(): void => setShowOpeningModal(false)}
                 />
             ) : null}

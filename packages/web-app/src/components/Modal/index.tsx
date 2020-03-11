@@ -4,7 +4,7 @@ import { X } from 'preact-feather';
 interface IProps {
     title: string;
     content: ComponentChild;
-    submit: () => void;
+    submit: () => void | Promise<void>;
     close: () => void;
 }
 

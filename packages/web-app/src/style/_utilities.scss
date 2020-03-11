@@ -33,6 +33,10 @@
   }
 }
 
+.error {
+  @apply text-red-500 my-2;
+}
+
 .my-truncate {
   white-space: nowrap;
   overflow: hidden;
