@@ -8,7 +8,7 @@ import SprintEdit from './edit';
 import SprintMetrics from './metrics';
 import SprintShowAndTell from './showAndTell';
 import { sideNavItems } from './util';
-import IssuesBoard from './issuesBoard';
+import IssuesBoard from './IssuesBoard';
 import DailyStandUp from './dailyStandUp';
 
 interface IProps {

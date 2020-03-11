@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
 import { Issue } from 'models/Issue';
+import { Project } from 'models/Project';
 import { Sprint, SprintStatus } from 'models/Sprint';
 import { Workspace } from 'models/Workspace';
 
@@ -356,3 +357,178 @@ export const issues: Issue[] = [
         project: 'Zamit',
     },
 ];
+
+export const projects: Project[] = [
+    {
+        id: 1,
+        name: 'Fix San',
+        url: 'www.pm.com',
+    },
+    {
+        id: 2,
+        name: 'Zamit',
+        url: 'www.cw.com',
+    },
+    {
+        id: 3,
+        name: 'Fixflex',
+        url: 'www.rots.com',
+    },
+    {
+        id: 4,
+        name: 'Asoka',
+        url: 'www.rots.com',
+    },
+    {
+        id: 5,
+        name: 'Domainer',
+        url: 'www.rots.com',
+    },
+    {
+        id: 6,
+        name: 'Konklux',
+        url: 'www.rots.com',
+    },
+    {
+        id: 7,
+        name: 'Zoolab',
+        url: 'www.rots.com',
+    },
+    {
+        id: 8,
+        name: 'Bitchip',
+        url: 'www.rots.com',
+    },
+    {
+        id: 9,
+        name: 'It',
+        url: 'www.rots.com',
+    },
+    {
+        id: 10,
+        name: 'Holdlamis',
+        url: 'www.rots.com',
+    },
+    {
+        id: 11,
+        name: 'Stringtough',
+        url: 'www.rots.com',
+    },
+    {
+        id: 12,
+        name: 'Rank',
+        url: 'www.rots.com',
+    },
+    {
+        id: 13,
+        name: 'Sonair',
+        url: 'www.rots.com',
+    },
+    {
+        id: 14,
+        name: 'Zathin',
+        url: 'www.rots.com',
+    },
+    {
+        id: 15,
+        name: 'Aerified',
+        url: 'www.rots.com',
+    },
+    {
+        id: 16,
+        name: 'Keylex',
+        url: 'www.rots.com',
+    },
+    {
+        id: 17,
+        name: 'Flowdesk',
+        url: 'www.rots.com',
+    },
+    {
+        id: 18,
+        name: 'Flexidy',
+        url: 'www.rots.com',
+    },
+    {
+        id: 19,
+        name: 'Latlux',
+        url: 'www.rots.com',
+    },
+    {
+        id: 20,
+        name: 'Lotlux',
+        url: 'www.rots.com',
+    },
+    {
+        id: 21,
+        name: 'Voltsillam',
+        url: 'www.rots.com',
+    },
+    {
+        id: 22,
+        name: 'Flowdesk',
+        url: 'www.rots.com',
+    },
+    {
+        id: 23,
+        name: 'Duobam',
+        url: 'www.rots.com',
+    },
+    {
+        id: 24,
+        name: 'Overhold',
+        url: 'www.rots.com',
+    },
+    {
+        id: 25,
+        name: 'Trippledex',
+        url: 'www.rots.com',
+    },
+    {
+        id: 26,
+        name: 'Otcom',
+        url: 'www.rots.com',
+    },
+    {
+        id: 27,
+        name: 'Y-Solowarm',
+        url: 'www.rots.com',
+    },
+    {
+        id: 28,
+        name: 'Transcof',
+        url: 'www.rots.com',
+    },
+    {
+        id: 29,
+        name: 'Opela',
+        url: 'www.rots.com',
+    },
+    {
+        id: 30,
+        name: 'Sonsing',
+        url: 'www.rots.com',
+    },
+    {
+        id: 31,
+        name: 'Tampflex',
+        url: 'www.rots.com',
+    },
+    {
+        id: 32,
+        name: 'Stronghold',
+        url: 'www.rots.com',
+    },
+    {
+        id: 33,
+        name: 'Tin',
+        url: 'www.rots.com',
+    },
+    {
+        id: 34,
+        name: 'Andalax',
+        url: 'www.rots.com',
+    },
+];
+
+export const storyPoints: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];

@@ -20,18 +20,50 @@ export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
 
 interface IProps {
     issue: Issue;
+    index: number;
     onClick: () => void;
+    delete?: () => void;
+    edit?: () => void;
+    setCurrentIndex?: (value: number) => void;
+    setCurrentIssue?: (issue: Issue) => void;
 }
 
 export const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
+    const deleteIssue = (): void => {
+        props.delete();
+        props.setCurrentIndex(props.index);
+    };
+    const editIssue = (): void => {
+        const issue: Issue = {
+            // Id is a placeholder until we can connect to backend
+            id: Date.now(),
+            name: props.issue.name,
+            description: props.issue.description,
+            storyPoint: props.issue.storyPoint,
+            project: props.issue.project,
+        };
+        props.edit();
+        props.setCurrentIssue(issue);
+        props.setCurrentIndex(props.index);
+    };
     return (
         <div class="lst-itm-container" onClick={props.onClick}>
             <div class="px-4 py-2 flex min-w-0">
                 <div class="truncate">{props.issue.name}</div>
             </div>
-            <div class="flex px-4 py-2 z-1">
+            <div class="px-4 py-2 z-1">
                 <span class="story-pnt">{props.issue.storyPoint}</span>
                 <span class="text-gray-700">{props.issue.project}</span>
+                {props.delete === undefined ? null : (
+                    <button class="float-right btn-delete my-auto" onClick={deleteIssue}>
+                        Delete
+                    </button>
+                )}
+                {props.edit === undefined ? null : (
+                    <button class="float-right btn-edit my-auto" onClick={editIssue}>
+                        Edit
+                    </button>
+                )}
             </div>
         </div>
     );

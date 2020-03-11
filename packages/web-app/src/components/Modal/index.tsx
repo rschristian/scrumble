@@ -4,7 +4,7 @@ import { X } from 'preact-feather';
 interface IProps {
     title: string;
     content: ComponentChild;
-    submit: () => void | Promise<void>;
+    submit?: () => void | Promise<void>;
     close: () => void;
 }
 
@@ -23,20 +23,22 @@ export const Modal: FunctionalComponent<IProps> = (props: IProps) => {
 
                     {props.content}
 
-                    <div class="flex justify-end pt-2">
-                        <button
-                            class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
-                            onClick={props.submit}
-                        >
-                            Confirm
-                        </button>
-                        <button
-                            class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
-                            onClick={props.close}
-                        >
-                            Cancel
-                        </button>
-                    </div>
+                    {props.submit !== undefined && (
+                        <div class="flex justify-end pt-2">
+                            <button
+                                class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
+                                onClick={props.submit}
+                            >
+                                Confirm
+                            </button>
+                            <button
+                                class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
+                                onClick={props.close}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
