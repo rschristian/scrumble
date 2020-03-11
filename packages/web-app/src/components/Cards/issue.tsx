@@ -24,14 +24,14 @@ interface IProps {
     onClick: () => void;
     delete?: () => void;
     edit?: () => void;
-    CurrentIndex?: (value: number) => void;
-    CurrentIssue?: (issue: Issue) => void;
+    setCurrentIndex?: (value: number) => void;
+    setCurrentIssue?: (issue: Issue) => void;
 }
 
 export const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
     const deleteIssue = (): void => {
         props.delete();
-        props.CurrentIndex(props.index);
+        props.setCurrentIndex(props.index);
     };
     const editIssue = (): void => {
         const issue: Issue = {
@@ -41,10 +41,10 @@ export const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
             description: props.issue.description,
             storyPoint: props.issue.storyPoint,
             project: props.issue.project,
-            index: props.index,
         };
         props.edit();
-        props.CurrentIssue(issue);
+        props.setCurrentIssue(issue);
+        props.setCurrentIndex(props.index);
     };
     return (
         <div class="lst-itm-container" onClick={props.onClick}>
@@ -55,15 +55,13 @@ export const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
                 <span class="story-pnt">{props.issue.storyPoint}</span>
                 <span class="text-gray-700">{props.issue.project}</span>
                 {props.delete === undefined ? null : (
-                    <button className="float-right btn-delete my-auto" onClick={deleteIssue}>
-                        {' '}
-                        Delete{' '}
+                    <button class="float-right btn-delete my-auto" onClick={deleteIssue}>
+                        Delete
                     </button>
                 )}
                 {props.edit === undefined ? null : (
-                    <button className="float-right btn-edit my-auto" onClick={editIssue}>
-                        {' '}
-                        Edit{' '}
+                    <button class="float-right btn-edit my-auto" onClick={editIssue}>
+                        Edit
                     </button>
                 )}
             </div>

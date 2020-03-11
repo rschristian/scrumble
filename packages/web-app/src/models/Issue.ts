@@ -4,5 +4,4 @@ export interface Issue {
     description: string | null;
     storyPoint: number | null;
     project: string;
-    index?: number;
 }

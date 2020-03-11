@@ -8,43 +8,40 @@ interface IProps {
 }
 
 const NewIssue: FunctionalComponent<IProps> = (props: IProps) => {
-    const [Title, setTitle] = useState('');
-    const [Descirption, setDescription] = useState('');
-    const [IssueStoryPoint, setIssueStoryPoint] = useState(null);
-    const [SelectedProject, setSelectedProject] = useState('');
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [issueStoryPoint, setIssueStoryPoint] = useState<string>(null);
+    const [selectedProject, setSelectedProject] = useState('');
 
     // currently being used for debugging
     const handleSubmit = (): void => {
-        alert('New Issue Created !');
         props.addNewIssue({
-            name: Title,
-            description: Descirption,
-            storyPoint: IssueStoryPoint,
-            project: SelectedProject,
+            name: title,
+            description,
+            storyPoint: issueStoryPoint,
+            project: selectedProject,
         });
         props.close();
     };
 
-    const handleCancel = (evt: any): void => {
-        evt.preventDefault();
+    const handleCancel = (): void => {
         props.close();
     };
 
-    const handleValidation = (evt: any): void => {
-        evt.preventDefault();
-        if (Title.length === 0) {
-            alert('A Title is required');
+    const handleValidation = (): void => {
+        if (title.length === 0) {
+            alert('A title is required');
             return;
         }
-        if (Descirption.length === 0) {
+        if (description.length === 0) {
             alert('A Description is needed');
             return;
         }
-        if (IssueStoryPoint === null) {
+        if (issueStoryPoint === null) {
             alert('A Story Point is needed');
             return;
         }
-        if (SelectedProject.length === 0) {
+        if (selectedProject.length === 0) {
             alert('A Project is needed');
             return;
         }
@@ -52,13 +49,13 @@ const NewIssue: FunctionalComponent<IProps> = (props: IProps) => {
     };
     return (
         <Fragment>
-            <form class="bg-grey rounded px-8 pt-6 pb-8 mb-4">
+            <div class="bg-grey rounded px-8 pt-6 pb-8 mb-4">
                 <label class="form-label"> Title </label>
                 <input
                     class="form-input"
                     type="text"
                     id="title"
-                    value={Title}
+                    value={title}
                     onChange={(e): void => setTitle((e.target as HTMLInputElement).value)}
                 />
                 <label class="form-label"> Description </label>
@@ -66,14 +63,14 @@ const NewIssue: FunctionalComponent<IProps> = (props: IProps) => {
                     class="form-input"
                     type="text"
                     id="description"
-                    value={Descirption}
+                    value={description}
                     onChange={(e): void => setDescription((e.target as HTMLTextAreaElement).value)}
                 />
                 <label class="form-label"> Story Points </label>
                 <select
                     class="form-input"
                     id="StoryPoints"
-                    value={IssueStoryPoint}
+                    value={issueStoryPoint}
                     onChange={(e): void => setIssueStoryPoint((e.target as HTMLSelectElement).value)}
                 >
                     {storyPoints.map(
@@ -90,26 +87,26 @@ const NewIssue: FunctionalComponent<IProps> = (props: IProps) => {
                 <select
                     class="form-input"
                     id="Project"
-                    value={SelectedProject}
+                    value={selectedProject}
                     onChange={(e): void => setSelectedProject((e.target as HTMLSelectElement).value)}
                 >
                     {projects.map(
                         (project): ComponentChild => {
                             return (
                                 <option class="form-option" value={project.name}>
-                                    {' '}
                                     {project.name}
                                 </option>
                             );
                         },
                     )}
                 </select>
-                <input className="btn-create my-auto" type="submit" value="Submit" onClick={handleValidation} />
-                <button className="btn-delete my-auto" onClick={handleCancel}>
-                    {' '}
-                    Cancel{' '}
+                <button class="btn-create my-auto" onClick={handleValidation}>
+                    Submit
                 </button>
-            </form>
+                <button class="btn-delete my-auto" onClick={handleCancel}>
+                    Cancel
+                </button>
+            </div>
         </Fragment>
     );
 };

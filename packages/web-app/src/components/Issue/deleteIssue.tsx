@@ -12,13 +12,11 @@ const DeleteIssue: FunctionalComponent<Iprops> = (props: Iprops) => {
     };
     return (
         <Fragment>
-            <button className="btn-create my-auto" onClick={handleDelete}>
-                {' '}
-                Yes{' '}
+            <button class="btn-create my-auto" onClick={handleDelete}>
+                Yes
             </button>
-            <button className="btn-delete my-auto" onClick={props.close}>
-                {' '}
-                No{' '}
+            <button class="btn-delete my-auto" onClick={props.close}>
+                No
             </button>
         </Fragment>
     );

@@ -4,5 +4,5 @@ export interface Project {
     ownerId?: number;
     ownerName?: string;
     url: string;
-    avatarUrl?: string | null;
+    avatarUrl?: string;
 }

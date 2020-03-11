@@ -1,7 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
-import NewIssue from './createIssues';
-import EditIssue from './editIssues';
-import DeleteIssue from './deleteIssue';
+import NewIssue from '../../components/Issue/createIssues';
+import EditIssue from '../../components/Issue/editIssues';
+import DeleteIssue from '../../components/Issue/deleteIssue';
 import { IssueCard } from 'components/Cards/issue';
 import { Conditional } from 'components/Conditional';
 import { IssueFilter } from 'components/Filter/issues';
@@ -11,15 +11,15 @@ import { issues } from 'data';
 import { Issue } from 'models/Issue';
 
 const BacklogPlanning: FunctionalComponent = () => {
-    const [ShowNewIssueModal, SetShowNewIssueModal] = useState(false);
-    const [ShowEditIssueModal, SetShowEditIssueModal] = useState(false);
-    const [ShowDeleteIssueModal, SetShowDeleteIssueModal] = useState(false);
-    const [CurrentIssue, SetCurrentIssue] = useState(null);
-    const [CurrentIndex, SetCurrentIndex] = useState(null);
-    const [data, SetData] = useState([]);
+    const [showNewIssueModal, setShowNewIssueModal] = useState(false);
+    const [showEditIssueModal, setShowEditIssueModal] = useState(false);
+    const [showDeleteIssueModal, setShowDeleteIssueModal] = useState(false);
+    const [currentIssue, setCurrentIssue] = useState(null);
+    const [currentIndex, setCurrentIndex] = useState(null);
+    const [data, setData] = useState([]);
 
     useEffect(() => {
-        SetData(issues);
+        setData(issues);
     }, []);
 
     const addNewIssue = (value: Issue): void => {
@@ -37,48 +37,49 @@ const BacklogPlanning: FunctionalComponent = () => {
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
 
     return (
-        <div className={ShowNewIssueModal ? 'modal-active' : ''}>
-            <div className="create-bar">
-                <h1 className="page-heading">Backlog Planning</h1>
-                <button className="btn-create my-auto" onClick={(): void => SetShowNewIssueModal(true)}>
+        <div class={showNewIssueModal ? 'modal-active' : ''}>
+            <div class="create-bar">
+                <h1 class="page-heading">Backlog Planning</h1>
+                <button class="btn-create my-auto" onClick={(): void => setShowNewIssueModal(true)}>
                     New Issue
                 </button>
             </div>
             <IssueFilter setFilter={updateIssueFilter} />
-            <Conditional if={ShowNewIssueModal}>
+            <Conditional if={showNewIssueModal}>
                 <Modal
                     title="Create Issue"
-                    content={<NewIssue close={(): void => SetShowNewIssueModal(false)} addNewIssue={addNewIssue} />}
-                    close={(): void => SetShowNewIssueModal(false)}
+                    content={<NewIssue close={(): void => setShowNewIssueModal(false)} addNewIssue={addNewIssue} />}
+                    close={(): void => setShowNewIssueModal(false)}
                 />
             </Conditional>
-            <Conditional if={ShowEditIssueModal}>
+            <Conditional if={showEditIssueModal}>
                 <Modal
                     title="Edit Issue"
                     content={
                         <EditIssue
-                            close={(): void => SetShowEditIssueModal(false)}
+                            close={(): void => setShowEditIssueModal(false)}
                             editIssue={editIssue}
-                            issue={CurrentIssue}
+                            index={currentIndex}
+                            issue={currentIssue}
                         />
                     }
-                    close={(): void => SetShowEditIssueModal(false)}
+                    close={(): void => setShowEditIssueModal(false)}
                 />
             </Conditional>
-            <Conditional if={ShowDeleteIssueModal}>
+            <Conditional if={showDeleteIssueModal}>
                 <Modal
                     title="Are you sure you want to delete this issue?"
                     content={
                         <DeleteIssue
-                            close={(): void => SetShowDeleteIssueModal(false)}
+                            close={(): void => setShowDeleteIssueModal(false)}
                             deleteIssue={deleteIssue}
-                            index={CurrentIndex}
+                            index={currentIndex}
                         />
                     }
-                    close={(): void => SetShowDeleteIssueModal(false)}
+                    close={(): void => setShowDeleteIssueModal(false)}
                 />
             </Conditional>
-            <div className="rounded bg-white overflow-hidden shadow-lg">
+            <div class="rounded bg-white overflow-hidden shadow-lg">
                 {data.map((issue, index) => {
                     return (
                         <IssueCard
@@ -86,10 +87,10 @@ const BacklogPlanning: FunctionalComponent = () => {
                             issue={issue}
                             onClick={tempOnClick}
                             index={index}
-                            delete={(): void => SetShowDeleteIssueModal(true)}
-                            edit={(): void => SetShowEditIssueModal(true)}
-                            CurrentIndex={(index: number): void => SetCurrentIndex(index)}
-                            CurrentIssue={(issue: Issue): void => SetCurrentIssue(issue)}
+                            delete={(): void => setShowDeleteIssueModal(true)}
+                            edit={(): void => setShowEditIssueModal(true)}
+                            setCurrentIndex={(index: number): void => setCurrentIndex(index)}
+                            setCurrentIssue={(issue: Issue): void => setCurrentIssue(issue)}
                         />
                     );
                 })}
