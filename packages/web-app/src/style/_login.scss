@@ -1,0 +1,17 @@
+.login-page {
+  @apply flex content-center justify-center w-5/6 overflow-auto h-full w-full mt-40;
+}
+
+.login-form {
+  @apply h-64 w-64 flex flex-col justify-center content-center;
+}
+
+.login-title {
+  @apply mx-auto text-2xl text-deep-space-sparkle tracking-wide font-bold;
+}
+
+@screen lg {
+  .login-page {
+    @apply mt-64;
+  }
+}
