@@ -1,12 +1,14 @@
 import { FunctionalComponent, h } from 'preact';
-import NewIssue from '../../components/Issue/createIssues';
-import EditIssue from '../../components/Issue/editIssues';
-import DeleteIssue from '../../components/Issue/deleteIssue';
+import { useState, useEffect } from 'preact/hooks';
+
 import { IssueCard } from 'components/Cards/issue';
 import { Conditional } from 'components/Conditional';
 import { IssueFilter } from 'components/Filter/issues';
+import { NewIssue } from 'components/Issue/createIssues';
+import { EditIssue } from 'components/Issue/editIssues';
+import { DeleteIssue } from 'components/Issue/deleteIssue';
 import { Modal } from 'components/Modal';
-import { useState, useEffect } from 'preact/hooks';
+
 import { issues } from 'data';
 import { Issue } from 'models/Issue';
 

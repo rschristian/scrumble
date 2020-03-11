@@ -1,5 +1,6 @@
 import { Fragment, FunctionalComponent, h, ComponentChild } from 'preact';
 import { useState } from 'preact/hooks';
+
 import { projects, storyPoints } from 'data';
 import { Issue } from 'models/Issue';
 
@@ -10,7 +11,7 @@ interface IProps {
     close: () => void;
 }
 
-const EditIssue: FunctionalComponent<IProps> = (props: IProps) => {
+export const EditIssue: FunctionalComponent<IProps> = (props: IProps) => {
     const [title, setTitle] = useState<string>(props.issue.name);
     const [description, setDescription] = useState<string>(props.issue.description);
     const [issueStoryPoint, setIssueStoryPoint] = useState<number | string>(props.issue.storyPoint);
@@ -92,4 +93,3 @@ const EditIssue: FunctionalComponent<IProps> = (props: IProps) => {
         </Fragment>
     );
 };
-export default EditIssue;

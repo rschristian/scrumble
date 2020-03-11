@@ -1,15 +1,17 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 
-interface Iprops {
+interface IProps {
     index: number;
     deleteIssue: (index: number) => void;
     close: () => void;
 }
-const DeleteIssue: FunctionalComponent<Iprops> = (props: Iprops) => {
+
+export const DeleteIssue: FunctionalComponent<IProps> = (props: IProps) => {
     const handleDelete = (): void => {
         props.deleteIssue(props.index);
         props.close();
     };
+
     return (
         <Fragment>
             <button class="btn-create my-auto" onClick={handleDelete}>
@@ -21,5 +23,3 @@ const DeleteIssue: FunctionalComponent<Iprops> = (props: Iprops) => {
         </Fragment>
     );
 };
-
-export default DeleteIssue;
