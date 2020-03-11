@@ -1,7 +1,7 @@
 export interface Issue {
-    id: number;
-    name: string;
+    id?: number;
+    title: string;
     description: string | null;
     storyPoint: number | null;
-    project: string;
+    projectId: string;
 }
