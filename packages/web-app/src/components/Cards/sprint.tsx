@@ -36,7 +36,10 @@ export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
     const handleToggleSprintStatus = async (): Promise<void> => {
         return await toggleSprintStatus(props.id).then((error) => {
             if (error) setErrorMessage(error);
-            else setShowClosureModal(false);
+            else {
+                setShowClosureModal(false);
+                setShowOpeningModal(false);
+            }
         });
     };
 
