@@ -19,7 +19,7 @@ const SprintPlanning: FunctionalComponent = () => {
 
     // TODO Need to figure out how we actually want to sort issues, because current setup doesn't make much sense
     const issuesList = issues.map((issue, index) => {
-        return <IssueCard index={index} key={index} issue={issue} onClick={tempOnClick} />;
+        return <IssueCard key={index} issue={issue} onClick={tempOnClick} />;
     });
 
     const sprintsList = sprints.map((sprint, index) => {
@@ -28,6 +28,7 @@ const SprintPlanning: FunctionalComponent = () => {
                 <SprintCard
                     key={index}
                     id={sprint.id}
+                    projectId={sprint.projectId}
                     title={sprint.title}
                     description={sprint.description}
                     closed={sprint.status === SprintStatus.closed}
