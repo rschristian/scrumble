@@ -7,6 +7,7 @@ import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
 import { Modal } from 'components/Modal';
 import { issues } from 'data';
 import { Issue } from 'models/Issue';
+import { fetchAllIssues } from 'services/api';
 import { createIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
 import { WorkspaceStoreContext } from 'stores';
@@ -19,7 +20,8 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
     const [errorMessage, setErrorMessage] = useState<string>('');
 
     useEffect(() => {
-        setIssuesArray(issues);
+        setData(issues);
+        fetchAllIssues();
     }, []);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {

@@ -31,3 +31,9 @@ export function fetchUserInfo() {
         return response;
     });
 }
+export function fetchAllIssues() {
+    apiService.get('/issues/all').then((response) => {
+        console.log(response);
+        return response;
+    });
+}
