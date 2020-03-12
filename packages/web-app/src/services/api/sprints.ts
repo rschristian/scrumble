@@ -1,10 +1,13 @@
 import { apiService } from 'ts-api-toolkit';
 
 // GitLab API: PUT /projects/:id/milestones/:milestone_id
-// So I like returning void / string. If there's no error, return void, else, pass the error message forward
-export const toggleSprintStatus = async (sprintId: number): Promise<void | string> => {
+export const toggleSprintStatus = async (
+    workspaceId: number,
+    projectId: number,
+    sprintId: number,
+): Promise<void | string> => {
     return await apiService
-        .put('sprints/status/close', { sprintId })
+        .put(`/workspace/${workspaceId}/project/${projectId}/sprint/${sprintId}/status/toggle`, {})
         .then(() => {
             return;
         })
