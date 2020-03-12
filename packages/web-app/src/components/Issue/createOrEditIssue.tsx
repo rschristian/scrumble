@@ -6,7 +6,7 @@ import { Issue } from 'models/Issue';
 
 interface IProps {
     issue?: Issue;
-    submit: (projectId: number, newIssue: Issue) => void;
+    submit: (newIssue: Issue, projectId?: number) => void;
     close: () => void;
     error: string;
 }
@@ -72,7 +72,7 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
             <div className="flex justify-end pt-2">
                 <button
                     className="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
-                    onClick={(): void => props.submit(projectId, createIssue())}
+                    onClick={(): void => props.submit(createIssue(), projectId)}
                 >
                     Confirm
                 </button>

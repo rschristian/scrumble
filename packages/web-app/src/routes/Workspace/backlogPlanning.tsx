@@ -1,6 +1,5 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState, useEffect, useContext } from 'preact/hooks';
-import { observer as mobxObserver } from 'mobx-react-lite';
 
 import { IssueCard } from 'components/Cards/issue';
 import { IssueFilter } from 'components/Filter/issues';
@@ -9,11 +8,8 @@ import { Modal } from 'components/Modal';
 import { issues } from 'data';
 import { Issue } from 'models/Issue';
 import { createIssue } from 'services/api/issues';
+import { observer } from 'services/mobx';
 import { WorkspaceStoreContext } from 'stores';
-
-function observer<P>(props: P): any {
-    return mobxObserver(props as any);
-}
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const workspaceStore = useContext(WorkspaceStoreContext);
@@ -26,7 +22,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
         setIssuesArray(issues);
     }, []);
 
-    const handleIssueCreation = async (projectId: number, newIssue: Issue): Promise<void> => {
+    const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
         return await createIssue(workspaceStore.currentWorkspace, projectId, newIssue).then((error) => {
             if (error) setErrorMessage(error);
             else setIssuesArray((oldData) => [...oldData, newIssue]);

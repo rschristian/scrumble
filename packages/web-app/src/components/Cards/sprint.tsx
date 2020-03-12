@@ -1,16 +1,12 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useContext, useState } from 'preact/hooks';
 import { getCurrentUrl, route } from 'preact-router';
-import { observer as mobxObserver } from 'mobx-react-lite';
 import { MoreVertical } from 'preact-feather';
 
 import { Modal } from 'components/Modal';
 import { toggleSprintStatus } from 'services/api/sprints';
+import { observer } from 'services/mobx';
 import { WorkspaceStoreContext } from 'stores';
-
-function observer<P>(props: P): any {
-    return mobxObserver(props as any);
-}
 
 interface IProps {
     id: number;

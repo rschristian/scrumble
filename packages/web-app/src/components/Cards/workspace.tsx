@@ -1,14 +1,10 @@
 import { FunctionalComponent, h } from 'preact';
+import { useContext } from 'preact/hooks';
 import { Link } from 'preact-router';
-import { observer as mobxObserver } from 'mobx-react-lite';
 
 import { Workspace } from 'models/Workspace';
 import { WorkspaceStoreContext } from 'stores';
-import { useContext } from 'preact/hooks';
-
-function observer<P>(props: P): any {
-    return mobxObserver(props as any);
-}
+import { observer } from 'services/mobx';
 
 export const WorkspaceCard: FunctionalComponent<Workspace> = observer((props: Workspace) => {
     const workspaceStore = useContext(WorkspaceStoreContext);
