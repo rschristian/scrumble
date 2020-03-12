@@ -5,7 +5,6 @@ class WorkspaceStore {
 
     @action setWorkspace(workspaceId: number): void {
         this.currentWorkspace = workspaceId;
-        console.log(this.currentWorkspace);
     }
 }
 
