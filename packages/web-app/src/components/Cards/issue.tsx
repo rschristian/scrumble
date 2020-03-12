@@ -39,10 +39,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
         return await editIssue(workspaceStore.currentWorkspace, props.issue.projectId, props.issue.iid, issue).then(
             (error) => {
                 if (error) setErrorMessage(error);
-                else {
-                    setShowEditIssueModal(false);
-                    setShowDeleteIssueModal(false);
-                }
+                else setShowEditIssueModal(false);
             },
         );
     };
@@ -51,10 +48,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
         return await deleteIssue(workspaceStore.currentWorkspace, props.issue.projectId, props.issue.iid).then(
             (error) => {
                 if (error) setErrorMessage(error);
-                else {
-                    setShowEditIssueModal(false);
-                    setShowDeleteIssueModal(false);
-                }
+                else setShowDeleteIssueModal(false);
             },
         );
     };
