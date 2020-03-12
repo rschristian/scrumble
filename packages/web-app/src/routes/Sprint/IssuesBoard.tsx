@@ -18,11 +18,11 @@ const IssuesBoard: FunctionalComponent = () => {
                     ...oldValues,
                     <IssueBoardCard
                         key={index}
-                        id={issue.id}
-                        name={issue.name}
+                        iid={issue.iid}
+                        title={issue.title}
                         description={issue.description}
-                        storyPoint={issue.storyPoint}
-                        project={issue.project}
+                        storyPoints={issue.storyPoints}
+                        projectId={issue.projectId}
                     />,
                 ]);
             } else if (index < 20) {
@@ -30,11 +30,11 @@ const IssuesBoard: FunctionalComponent = () => {
                     ...oldValues,
                     <IssueBoardCard
                         key={index}
-                        id={issue.id}
-                        name={issue.name}
+                        iid={issue.iid}
+                        title={issue.title}
                         description={issue.description}
-                        storyPoint={issue.storyPoint}
-                        project={issue.project}
+                        storyPoints={issue.storyPoints}
+                        projectId={issue.projectId}
                     />,
                 ]);
             } else if (index < 30) {
@@ -42,11 +42,11 @@ const IssuesBoard: FunctionalComponent = () => {
                     ...oldValues,
                     <IssueBoardCard
                         key={index}
-                        id={issue.id}
-                        name={issue.name}
+                        iid={issue.iid}
+                        title={issue.title}
                         description={issue.description}
-                        storyPoint={issue.storyPoint}
-                        project={issue.project}
+                        storyPoints={issue.storyPoints}
+                        projectId={issue.projectId}
                     />,
                 ]);
             } else {
@@ -54,11 +54,11 @@ const IssuesBoard: FunctionalComponent = () => {
                     ...oldValues,
                     <IssueBoardCard
                         key={index}
-                        id={issue.id}
-                        name={issue.name}
+                        iid={issue.iid}
+                        title={issue.title}
                         description={issue.description}
-                        storyPoint={issue.storyPoint}
-                        project={issue.project}
+                        storyPoints={issue.storyPoints}
+                        projectId={issue.projectId}
                     />,
                 ]);
             }
