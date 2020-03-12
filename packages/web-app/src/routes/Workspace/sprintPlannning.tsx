@@ -13,13 +13,12 @@ const SprintPlanning: FunctionalComponent = () => {
     const [issueFilter, setIssueFilter] = useState<string>('');
     const [sprintFilter, setSprintFilter] = useState<string>('open');
 
-    const tempOnClick = (): void => console.log('clicked');
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
     // TODO Need to figure out how we actually want to sort issues, because current setup doesn't make much sense
     const issuesList = issues.map((issue, index) => {
-        return <IssueCard key={index} issue={issue} onClick={tempOnClick} />;
+        return <IssueCard key={index} issue={issue} />;
     });
 
     const sprintsList = sprints.map((sprint, index) => {

@@ -30,7 +30,6 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
     };
 
     // Both here to fulfill mandatory props until we decide what to do with them
-    const tempOnClick = (): void => console.log('clicked');
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
 
     return (
@@ -65,7 +64,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
             <div class="rounded bg-white overflow-hidden shadow-lg">
                 {issuesArray.map((issue, index) => {
-                    return <IssueCard key={index} issue={issue} onClick={tempOnClick} />;
+                    return <IssueCard key={index} issue={issue} />;
                 })}
             </div>
         </div>

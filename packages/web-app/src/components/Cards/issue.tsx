@@ -26,7 +26,6 @@ export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
 
 interface IProps {
     issue: Issue;
-    onClick: () => void;
 }
 
 export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
@@ -61,7 +60,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
     };
 
     return (
-        <div class="lst-itm-container" onClick={props.onClick}>
+        <div class="lst-itm-container cursor-default">
             {showEditIssueModal ? (
                 <Modal
                     title="Edit Issue"
