@@ -1,19 +1,28 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
+import { useContext, useState } from 'preact/hooks';
 import { getCurrentUrl, route } from 'preact-router';
+import { observer as mobxObserver } from 'mobx-react-lite';
 import { MoreVertical } from 'preact-feather';
 
 import { Modal } from 'components/Modal';
 import { toggleSprintStatus } from 'services/api/sprints';
+import { WorkspaceStoreContext } from 'stores';
+
+function observer<P>(props: P): any {
+    return mobxObserver(props as any);
+}
 
 interface IProps {
     id: number;
+    projectId: number;
     title: string;
     description: string;
     closed: boolean;
 }
 
-export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
+export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) => {
+    const workspaceStore = useContext(WorkspaceStoreContext);
+
     const [showClosureModal, setShowClosureModal] = useState<boolean>(false);
     const [showOpeningModal, setShowOpeningModal] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
@@ -34,7 +43,7 @@ export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
     );
 
     const handleToggleSprintStatus = async (): Promise<void> => {
-        return await toggleSprintStatus(props.id).then((error) => {
+        return await toggleSprintStatus(workspaceStore.currentWorkspace, props.projectId, props.id).then((error) => {
             if (error) setErrorMessage(error);
             else {
                 setShowClosureModal(false);
@@ -60,6 +69,7 @@ export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
                     close={(): void => setShowOpeningModal(false)}
                 />
             ) : null}
+
             <div class="lst-itm-container" onClick={linkTo}>
                 <div class="px-4 py-2 flex min-w-0 justify-between">
                     <div class="truncate">{props.title}</div>
@@ -80,7 +90,7 @@ export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
             </div>
         </Fragment>
     );
-};
+});
 
 const getUrlSubstringAndFix = (): string => {
     const currentUrl = getCurrentUrl().replace(/\D+$/g, '');
