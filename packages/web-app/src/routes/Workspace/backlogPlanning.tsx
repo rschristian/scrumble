@@ -20,8 +20,10 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
     const [errorMessage, setErrorMessage] = useState<string>('');
 
     useEffect(() => {
-        setData(issues);
-        fetchAllIssues();
+        fetchAllIssues().then((data) => {
+            console.log(data);
+            return setData(data);
+        });
     }, []);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {

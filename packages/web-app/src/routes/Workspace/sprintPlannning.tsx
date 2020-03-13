@@ -1,6 +1,6 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
-
+import { useState, useEffect } from 'preact/hooks';
+import { fetchAllIssues } from 'services/api';
 import { IssueCard } from 'components/Cards/issue';
 import { SprintCard } from 'components/Cards/sprint';
 import { IssueFilter } from 'components/Filter/issues';
@@ -12,13 +12,21 @@ const SprintPlanning: FunctionalComponent = () => {
     const [isSprintView, setIsSprintView] = useState<boolean>(false);
     const [issueFilter, setIssueFilter] = useState<string>('');
     const [sprintFilter, setSprintFilter] = useState<string>('open');
+    const [data, setData] = useState([]);
 
+    useEffect(() => {
+        fetchAllIssues().then((data) => {
+            return setData(data);
+        });
+    }, []);
+
+    const tempOnClick = (): void => console.log('clicked');
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
     // TODO Need to figure out how we actually want to sort issues, because current setup doesn't make much sense
-    const issuesList = issues.map((issue, index) => {
-        return <IssueCard key={index} issue={issue} />;
+    const issuesList = data.map((issue, index) => {
+        return <IssueCard index={index} key={index} issue={issue} onClick={tempOnClick} />;
     });
 
     const sprintsList = sprints.map((sprint, index) => {

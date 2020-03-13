@@ -31,9 +31,7 @@ export function fetchUserInfo() {
         return response;
     });
 }
-export function fetchAllIssues() {
-    apiService.get('/issues/all').then((response) => {
-        console.log(response);
-        return response;
-    });
+export async function fetchAllIssues() {
+    const response = await apiService.get('/issues/all');
+    return response.data;
 }
