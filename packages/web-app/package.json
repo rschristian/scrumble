@@ -8,7 +8,8 @@
     "build": "preact build --no-esm --no-prerender",
     "analyze": "preact build --no-esm --no-prerender --analyze",
     "lint": "eslint src/**/*.{js,ts,tsx} --fix",
-    "prettier": "prettier src/**/*.{css,scss,json} --write"
+    "prettier": "prettier src/**/*.{css,scss,json} --write",
+    "postinstall": "node ./mobx-postinstall.js"
   },
   "husky": {
     "hooks": {
