@@ -54,7 +54,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
     };
 
     return (
-        <div class="lst-itm-container cursor-default">
+        <div class="lst-itm-container cursor-move">
             {showEditIssueModal ? (
                 <Modal
                     title="Edit Issue"
