@@ -22,6 +22,12 @@ public class UserDetailsApi {
 
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsApi.class);
 
+    @Value("${app.issues.provider.gitlab.baseUrl.api}")
+    private String gitLabApiUrl;
+
+    @Value("${app.issues.provider.gitlab.baseUrl}")
+    private String gitLabBaseUrl;
+
     @Autowired
     OAuth2AuthorizedClientService auth2AuthorizedClientService;
 
@@ -30,13 +36,6 @@ public class UserDetailsApi {
 
     @Autowired
     IUserService userService;
-
-    @Value("${app.issues.provider.gitlab.baseUrl}")
-    private String gitLabBaseUrl;
-
-    @Value("${app.issues.providers.gitlab.baseUrl.api}")
-    private String gitLabApiUrl;
-
 
     @GetMapping("/info")
     public ResponseEntity<String> getUserInfo(Authentication authentication){
@@ -55,7 +54,7 @@ public class UserDetailsApi {
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%s/api/v4/projects/4/issues?access_token=%s", gitLabApiUrl, accessTokenOptional.get());
+            String uri = String.format("%s/projects/4/issues?access_token=%s", gitLabApiUrl, accessTokenOptional.get());
             return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
         }
         logger.error("Unable to authenticate with authentication provider");

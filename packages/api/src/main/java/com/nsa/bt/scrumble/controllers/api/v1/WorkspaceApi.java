@@ -6,6 +6,7 @@ import com.nsa.bt.scrumble.services.implementations.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,9 @@ import java.util.Optional;
 public class WorkspaceApi {
 
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceApi.class);
+
+    @Value("${app.issues.providers.gitlab.baseUrl.api}")
+    private String gitLabApiUrl;
 
     @Autowired
     UserService userService;
@@ -38,7 +42,7 @@ public class WorkspaceApi {
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
-            String uri = String.format("http://10.72.98.102/api/v4/projects/4/issues?access_token=%s", accessTokenOptional.get());
+            String uri = String.format("%s/projects/4/issues?access_token=%s", gitLabApiUrl, accessTokenOptional.get());
             return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
         }
         logger.error("Unable to authenticate with authentication provider");
