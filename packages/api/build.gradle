@@ -17,7 +17,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'checkstyle'
 
 group = 'com.nsa.bt'
-version = '0.0.1-SNAPSHOT'
+version = ''
 sourceCompatibility = 11
 
 repositories {
