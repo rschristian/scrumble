@@ -21,7 +21,7 @@ const App: FunctionalComponent = () => {
     const authGuard = (e: RouterOnChangeArgs): void => {
         const oAuthRedirect = RegExp(/\/oauth-success\?token=(.*)/);
         if (!publicRoutes.includes(e.url) && !authStore.isAuthenticated && !oAuthRedirect.test(e.url)) {
-            // route('/login');
+            route('/login');
         }
     };
 
