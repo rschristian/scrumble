@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve:dev": "preact watch --port 3000",
-    "serve:prod": "npm run build && sirv build --port 3000",
+    "serve:prod": "npm run build && sirv build --port 3000 --single",
     "build": "preact build --no-esm --no-prerender",
     "analyze": "preact build --no-esm --no-prerender --analyze",
     "lint": "eslint src/**/*.{js,ts,tsx} --fix",
