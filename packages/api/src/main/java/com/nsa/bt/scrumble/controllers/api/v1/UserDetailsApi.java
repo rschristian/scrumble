@@ -3,6 +3,7 @@ package com.nsa.bt.scrumble.controllers.api.v1;
 import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -30,12 +31,15 @@ public class UserDetailsApi {
     @Autowired
     IUserService userService;
 
+    @Value("${app.issue.provider.gitlab}")
+    private String gitLabServerUrl;
+
     @GetMapping("/info")
     public ResponseEntity<String> getUserInfo(Authentication authentication){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
          if(accessTokenOptional.isPresent()) {
-             String uri = String.format("http://localhost/oauth/userinfo?access_token=%s", accessTokenOptional.get());
+             String uri = String.format("%s/oauth/userinfo?access_token=%s", gitLabServerUrl, accessTokenOptional.get());
              return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
          }
          logger.error("Unable to authenticate with authentication provider");
