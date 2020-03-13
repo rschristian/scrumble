@@ -25,6 +25,13 @@ export const destroyOAuthToken = async (): Promise<boolean> => {
         });
 };
 
+export function fetchWorkspaceIssues() {
+    apiService.get('/user/issues').then((response) => {
+        console.log(response);
+        return response;
+    });
+}
+
 export function fetchUserInfo() {
     apiService.get('/user/info').then((response) => {
         console.log(response);

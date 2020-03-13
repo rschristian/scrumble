@@ -34,15 +34,31 @@ public class UserDetailsApi {
     @Value("${app.issues.provider.gitlab.baseUrl}")
     private String gitLabBaseUrl;
 
+    @Value("${app.issues.providers.gitlab.baseUrl.api}")
+    private String gitLabApiUrl;
+
+
     @GetMapping("/info")
     public ResponseEntity<String> getUserInfo(Authentication authentication){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-         if(accessTokenOptional.isPresent()) {
-             String uri = String.format("%s/oauth/userinfo?access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
-             return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
-         }
-         logger.error("Unable to authenticate with authentication provider");
+        if(accessTokenOptional.isPresent()) {
+            String uri = String.format("%s/oauth/userinfo?access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
+            return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
+        }
+        logger.error("Unable to authenticate with authentication provider");
+        return ResponseEntity.ok().body("Something went wrong...");
+    }
+
+    @GetMapping("/issues")
+    public ResponseEntity<Object> getIssues(Authentication auth) {
+        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        if(accessTokenOptional.isPresent()) {
+            String uri = String.format("%s/api/v4/projects/4/issues?access_token=%s", gitLabApiUrl, accessTokenOptional.get());
+            return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
+        }
+        logger.error("Unable to authenticate with authentication provider");
         return ResponseEntity.ok().body("Something went wrong...");
     }
 }
