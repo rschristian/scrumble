@@ -31,15 +31,15 @@ public class UserDetailsApi {
     @Autowired
     IUserService userService;
 
-    @Value("${app.issue.provider.gitlab}")
-    private String gitLabServerUrl;
+    @Value("${app.issues.provider.gitlab.baseUrl}")
+    private String gitLabBaseUrl;
 
     @GetMapping("/info")
     public ResponseEntity<String> getUserInfo(Authentication authentication){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
          if(accessTokenOptional.isPresent()) {
-             String uri = String.format("%s/oauth/userinfo?access_token=%s", gitLabServerUrl, accessTokenOptional.get());
+             String uri = String.format("%s/oauth/userinfo?access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
              return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
          }
          logger.error("Unable to authenticate with authentication provider");
