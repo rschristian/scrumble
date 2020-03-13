@@ -1,32 +1,57 @@
-# Running the application
+# Scrumble
 
-## Assumptions
-* Spring Boot is configured to target Java 11.
-* Docker has been used to create a container holding both Postgres and GitLab CE.
+## Getting Started
 
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes, as well as (roughly) describe the production deployment process.
 
-## Spring Boot API
-A gradle wrapper has been included. From the packages/api directory, you can run the project with:
+### Prerequisites
 
 ```
+NodeJS v12
+NPM
+Java v11
+Docker (optional)
+PostgreSQL (optional)
+```
+
+### Running
+
+#### API Server
+
+A Docker-Compose file is included in the project for easily setting up the database, should you choose to use it. If you do, run from the root repository directory: 
+
+```
+docker-compose -f packages/api/docker-compose.yml up --build -d
+```
+
+If you choose to use some other Postgres source, you will need to edit the [application.properties](packages/api/src/main/resources/application.properties) file and provide your database configuration details.
+
+Once you have the database prepared, the API server can be started with the following commands:
+
+```
+cd packages/api
 ./gradlew bootJar
-java -jar build/libs/scrumbleApi-0.0.1-SNAPSHOT.jar.
+java -jar build/libs/scrumbleApi.jar
 ```
 
-## Postgres
-To install both Postgres there is a docker-compose.yml file included in the root folder of the project.
+#### Front End Client
 
-To create the container, run the following in the same directory as the file:
+To build the front end for a production build, use the following commands:
+
 ```
-sudo docker-compose up
+cd packages/web-app
+npm install
+npm run build
 ```
-docker-compose.yml configures an admin user and password.
-These credentials match up to the application.properties file.
 
-## GitLab
-There is an instance of GitLab on Cardiff University's OpenStack. The client id and scret for OAuth
-used to configure this instance are in application.properties for demo and development purposes.
+The output can be found in [build](packages/web-app/build). You can use this in a static site generator like Netlify or put it behind Nginx.
 
-Once you have navigated to [GitLab](http://10.72.98.102) you will be able to register with your own name, email and password of choice.
+To run a local server, you can use `npm run serve:prod` for a production-like server, or `npm run serve:dev` for a development one. Both will be accessible with [this address](http://localhost:3000).
 
+#### GitLab
 
+As the API consumes data from a GitLab source, a GitLab instance (with a valid user account) is necessary.
+
+To aid in this, a GitLab instance has been set up at [gitlab.ryanchristian.dev](https://gitlab.ryanchristian.dev). The Client ID and Secret for OAuth used to configure this instance can be found in [application.properties](packages/api/src/main/resources/application.properties).
+
+Navigate to the instance in your browser and register for a new account using your own name, email, and password of your choice. You will need it in order to use this application.
