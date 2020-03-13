@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { login, destroyOAuthToken } from 'services/api';
+import { login, destroyOAuthToken } from 'services/api/auth';
 
 class AuthStore {
     @observable isAuthenticated = false;

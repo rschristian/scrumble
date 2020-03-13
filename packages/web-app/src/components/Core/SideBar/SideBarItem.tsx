@@ -2,7 +2,7 @@ import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { getCurrentUrl, Link } from 'preact-router';
 
-import { SideBarLink } from 'models/SideBarLink';
+import { SideBarLink } from './index';
 
 interface IProps {
     menuItem: SideBarLink;

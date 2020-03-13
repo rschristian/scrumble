@@ -30,3 +30,6 @@ yarn-error.log*
 
 # Local Netlify folder
 .netlify
+
+# Excludes Analyzer's history
+size-plugin.json

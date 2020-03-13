@@ -6,24 +6,33 @@ import { SprintCard } from 'components/Cards/sprint';
 import { IssueFilter } from 'components/Filter/issues';
 import { SprintFilter } from 'components/Filter/sprints';
 import { issues, sprints } from 'data';
+import { SprintStatus } from 'models/Sprint';
 
 const SprintPlanning: FunctionalComponent = () => {
     const [isSprintView, setIsSprintView] = useState<boolean>(false);
     const [issueFilter, setIssueFilter] = useState<string>('');
     const [sprintFilter, setSprintFilter] = useState<string>('open');
 
-    const tempOnClick = (): void => console.log('clicked');
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
     // TODO Need to figure out how we actually want to sort issues, because current setup doesn't make much sense
     const issuesList = issues.map((issue, index) => {
-        return <IssueCard index={index} key={index} issue={issue} onClick={tempOnClick} />;
+        return <IssueCard key={index} issue={issue} />;
     });
 
     const sprintsList = sprints.map((sprint, index) => {
         if (sprintFilter === 'all' || sprint.status.toString() === sprintFilter) {
-            return <SprintCard key={index} id={sprint.id} title={sprint.title} description={sprint.description} />;
+            return (
+                <SprintCard
+                    key={index}
+                    id={sprint.id}
+                    projectId={sprint.projectId}
+                    title={sprint.title}
+                    description={sprint.description}
+                    closed={sprint.status === SprintStatus.closed}
+                />
+            );
         }
     });
 
