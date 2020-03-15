@@ -2,50 +2,90 @@ package com.nsa.bt.scrumble.controllers.api.v1;
 
 import com.nsa.bt.scrumble.dto.Issue;
 import com.nsa.bt.scrumble.security.UserPrincipal;
-import com.nsa.bt.scrumble.services.implementations.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.nsa.bt.scrumble.services.ICacheService;
+import com.nsa.bt.scrumble.services.IUserService;
+import com.nsa.bt.scrumble.util.GitLabLinkParser;
+import com.nsa.bt.scrumble.util.GitLabLinks;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 import java.util.Optional;
 
+@RestController
 @RequestMapping("/api/v1/workspace")
 public class WorkspaceApi {
 
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceApi.class);
 
-    @Value("${app.issues.providers.gitlab.baseUrl.api}")
+    @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabApiUrl;
 
     @Autowired
-    UserService userService;
+    IUserService userService;
 
     @Autowired
     RestTemplate restTemplate;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Issue> getWorkspace(@PathVariable(value="id") int id) {
-        Issue issue = new Issue(id, "An issue name", "An issue description", 8, "Phoenix Project");
+    @Autowired
+    ICacheService cacheService;
 
-        return ResponseEntity.ok().body(issue);
-    }
-
-    @GetMapping("/issues")
-    public ResponseEntity<Object> getIssues(Authentication auth) {
+    @GetMapping("/{id}/issues")
+    public ResponseEntity<Object> getIssues(Authentication auth, @PathVariable(value="id") int id) {
+        int[] projectIds = {1, 3, 4, 5, 8};
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+
         if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%s/projects/4/issues?access_token=%s", gitLabApiUrl, accessTokenOptional.get());
-            return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
+            for (int i = 0; i < projectIds.length; i++) { ;
+                manageLinks(projectIds[i], accessTokenOptional.get());
+            }
+            return ResponseEntity.ok().body(cacheService.getAllWorkspaceIssues(9));
         }
         logger.error("Unable to authenticate with authentication provider");
         return ResponseEntity.ok().body("Something went wrong...");
+    }
+
+    @GetMapping("/{id}/issues/cached")
+    public ResponseEntity<Object> getCachedIssues(@PathVariable(value="id") int id) {
+        return ResponseEntity.ok().body(cacheService.getAllWorkspaceIssues(id));
+    }
+
+    private void manageLinks(int projectId, String accessToken) {
+        boolean areMoreIssues = true;
+        String uri = String.format("%s/projects/%d/issues?access_token=%s", gitLabApiUrl, projectId, accessToken);
+
+        while (areMoreIssues) {
+            GitLabLinks links = collectIssues(uri);
+            if(links.getNext() != null && !links.getNext().isEmpty()) {
+                uri = links.getNext();
+            } else {
+                areMoreIssues = false;
+            }
+        }
+    }
+
+    private GitLabLinks collectIssues(String uri) {
+        GitLabLinkParser linkParser = new GitLabLinkParser();
+        var headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        HttpEntity<String> entity = new HttpEntity<String>(headers);
+
+        ResponseEntity<Issue[]> issuesResponse = restTemplate.exchange(uri, HttpMethod.GET, entity, Issue[].class);
+        Issue[] issues = issuesResponse.getBody();
+        cacheService.addToWorkspaceIssues(9, issues);
+
+        if(issuesResponse.getHeaders().containsKey("Link")){
+            return linkParser.parseLink(issuesResponse.getHeaders().getFirst("Link"));
+        }
+        return null;
     }
 }
