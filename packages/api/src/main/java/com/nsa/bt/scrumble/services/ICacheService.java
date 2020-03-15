@@ -10,4 +10,6 @@ public interface ICacheService {
     RList getAllWorkspaceIssues(int workspaceId);
 
     void deleteWorkspaceIssues(int workspaceId);
+
+    boolean workspaceIssuesExist(int workspaceId);
 }

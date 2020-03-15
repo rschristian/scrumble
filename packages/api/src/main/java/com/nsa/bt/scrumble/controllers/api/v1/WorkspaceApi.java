@@ -40,15 +40,17 @@ public class WorkspaceApi {
 
     @GetMapping("/{id}/issues")
     public ResponseEntity<Object> getIssues(Authentication auth, @PathVariable(value="id") int id) {
-        int[] projectIds = {1, 3, 4, 5, 8};
+        int[] projectIds = { 1, 3, 4, 5, 8 };
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
 
         if(accessTokenOptional.isPresent()) {
-            for (int i = 0; i < projectIds.length; i++) { ;
-                manageLinks(projectIds[i], accessTokenOptional.get());
+            if (!cacheService.workspaceIssuesExist(id)) {
+                for (int i = 0; i < projectIds.length; i++) { ;
+                    manageLinks(id, projectIds[i], accessTokenOptional.get());
+                }
             }
-            return ResponseEntity.ok().body(cacheService.getAllWorkspaceIssues(9));
+            return ResponseEntity.ok().body(cacheService.getAllWorkspaceIssues(id));
         }
         logger.error("Unable to authenticate with authentication provider");
         return ResponseEntity.ok().body("Something went wrong...");
@@ -59,12 +61,12 @@ public class WorkspaceApi {
         return ResponseEntity.ok().body(cacheService.getAllWorkspaceIssues(id));
     }
 
-    private void manageLinks(int projectId, String accessToken) {
+    private void manageLinks(int workspaceId, int projectId, String accessToken) {
         boolean areMoreIssues = true;
         String uri = String.format("%s/projects/%d/issues?access_token=%s", gitLabApiUrl, projectId, accessToken);
 
         while (areMoreIssues) {
-            GitLabLinks links = collectIssues(uri);
+            GitLabLinks links = collectIssues(uri, workspaceId);
             if(links.getNext() != null && !links.getNext().isEmpty()) {
                 uri = links.getNext();
             } else {
@@ -73,7 +75,7 @@ public class WorkspaceApi {
         }
     }
 
-    private GitLabLinks collectIssues(String uri) {
+    private GitLabLinks collectIssues(String uri, int workspaceId) {
         GitLabLinkParser linkParser = new GitLabLinkParser();
         var headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -81,7 +83,7 @@ public class WorkspaceApi {
 
         ResponseEntity<Issue[]> issuesResponse = restTemplate.exchange(uri, HttpMethod.GET, entity, Issue[].class);
         Issue[] issues = issuesResponse.getBody();
-        cacheService.addToWorkspaceIssues(9, issues);
+        cacheService.addToWorkspaceIssues(workspaceId, issues);
 
         if(issuesResponse.getHeaders().containsKey("Link")){
             return linkParser.parseLink(issuesResponse.getHeaders().getFirst("Link"));
