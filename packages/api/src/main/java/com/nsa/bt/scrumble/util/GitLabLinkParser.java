@@ -23,7 +23,7 @@ public class GitLabLinkParser {
             if (!linkPart.startsWith("<") || !linkPart.endsWith(">"))
                 continue;
             linkPart = linkPart.substring(1, linkPart.length() - 1);
-            linkPart = linkPart.replaceAll("http://10.72.96.28:7474", "https://gitlab.ryanchristian.dev");
+            linkPart = linkPart.replaceAll("http://10.72.98.102", "https://gitlab.ryanchristian.dev");
 
             for (int i = 1; i < segments.length; i++) {
                 String[] rel = segments[i].trim().split("="); //$NON-NLS-1$
