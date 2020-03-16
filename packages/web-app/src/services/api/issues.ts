@@ -30,14 +30,9 @@ export const createIssue = async (projectId: number, issue: Issue): Promise<void
 };
 
 // GitLab API: PUT /projects/:id/issues/:issue_iid
-export const editIssue = async (
-    workspaceId: number,
-    projectId: number,
-    issueId: number,
-    issue: Issue,
-): Promise<void | string> => {
+export const editIssue = async (projectId: number, issue: Issue): Promise<void | string> => {
     return await apiService
-        .put(`/workspace/${workspaceId}/project/${projectId}/issue/${issueId}`, { issue })
+        .put(`issues/editIssue/${projectId}`, issue)
         .then(() => {
             return;
         })

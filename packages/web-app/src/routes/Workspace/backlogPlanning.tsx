@@ -23,6 +23,22 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
         });
     };
 
+    const handleEditIssue = () => {
+        const issueArray: Issue[] = [];
+        fetchIssueTest().then((response) => {
+            response.forEach((issue) => {
+                const newIssue: Issue = {
+                    iid: issue.iid,
+                    title: issue.title,
+                    description: issue.description,
+                    storyPoints: issue.labels,
+                    projectId: issue.project_id,
+                };
+                issueArray.push(newIssue);
+                setIssuesArray(issueArray);
+            });
+        });
+    };
     useEffect(() => {
         fetchIssueTest().then((response) => {
             response.forEach((issue) => {
@@ -62,7 +78,6 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                     title="Create Issue"
                     content={
                         <CreateOrEditIssue
-                            create={true}
                             submit={handleIssueCreation}
                             close={(): void => setShowNewIssueModal(false)}
                             error={errorMessage}
@@ -74,7 +89,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
             <div class="rounded bg-white overflow-hidden shadow-lg">
                 {issuesArray.map((issue, index) => {
-                    return <IssueCard key={index} issue={issue} />;
+                    return <IssueCard key={index} issue={issue} updateList={handleEditIssue} />;
                 })}
             </div>
         </div>

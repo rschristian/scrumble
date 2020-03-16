@@ -7,7 +7,7 @@ public class Issue {
     private int storyPoints;
     private int projectId;
 
-    public int getId() {
+    public int getIid() {
         return iid;
     }
 
@@ -31,11 +31,11 @@ public class Issue {
         this.description = description;
     }
 
-    public int getStoryPoint() {
+    public int getStoryPoints() {
         return storyPoints;
     }
 
-    public void setStoryPoint(int storyPoints) {
+    public void setStoryPoints(int storyPoints) {
         this.storyPoints = storyPoints;
     }
 

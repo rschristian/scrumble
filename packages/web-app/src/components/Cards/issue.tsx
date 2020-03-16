@@ -26,6 +26,7 @@ export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
 
 interface IProps {
     issue: Issue;
+    updateList?: () => void;
 }
 
 export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
@@ -34,14 +35,15 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
     const [showEditIssueModal, setShowEditIssueModal] = useState(false);
     const [showDeleteIssueModal, setShowDeleteIssueModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
-
     const handleIssueEdit = async (issue: Issue): Promise<void> => {
-        return await editIssue(workspaceStore.currentWorkspace, props.issue.projectId, props.issue.iid, issue).then(
-            (error) => {
-                if (error) setErrorMessage(error);
-                else setShowEditIssueModal(false);
-            },
-        );
+        return await editIssue(props.issue.projectId, issue).then((error) => {
+            if (error) {
+                setErrorMessage(error);
+            } else {
+                setShowEditIssueModal(false);
+                props.updateList();
+            }
+        });
     };
 
     const handleIssueDeletion = async (): Promise<void> => {
@@ -60,9 +62,8 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                     title="Edit Issue"
                     content={
                         <CreateOrEditIssue
-                            edit={true}
                             issue={props.issue}
-                            submit={handleIssueEdit}
+                            edit={handleIssueEdit}
                             close={(): void => setShowEditIssueModal(false)}
                             error={errorMessage}
                         />

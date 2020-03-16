@@ -1,13 +1,14 @@
 package com.nsa.bt.scrumble.controllers.api.v1;
 
 import com.nsa.bt.scrumble.dto.Issue;
-
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,11 +55,24 @@ public class IssuesApi {
     public ResponseEntity<String> createIssue(Authentication authentication, @PathVariable(value="projectId") int projectId, @RequestBody Issue issue){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-        System.out.println(issue.getDescription());
         if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%s/projects/"+projectId+"/issues?title="+issue.getTitle()+"&description="+issue.getDescription()+"&labels="+ issue.getStoryPoint()+"&access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
+            String uri = String.format("%s/projects/"+projectId+"/issues?title="+issue.getTitle()+"&description="+issue.getDescription()+"&labels="+ issue.getStoryPoints()+"&access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
+            return ResponseEntity.ok().body(restTemplate.postForObject(uri, null , String.class));
+        }
+        logger.error("Unable to authenticate with authentication provider");
+        return ResponseEntity.ok().body("Something went wrong...");
+    }
+
+    @PutMapping("/editIssue/{projectId}")
+    public ResponseEntity<String> editIssue(Authentication authentication, @PathVariable(value="projectId") int projectId, @RequestBody Issue issue) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+         if(accessTokenOptional.isPresent()) {
+            String uri = String.format("%s/projects/"+projectId+"/issues/"+issue.getIid()+"?title="+issue.getTitle()+"&description="+issue.getDescription()+"&labels="+ issue.getStoryPoints()+"&access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
+            System.out.println(issue.getIid());
             System.out.println(String.format(uri));
-            return ResponseEntity.ok().body(restTemplate.postForObject(uri, null ,String.class));
+            restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
+            return ResponseEntity.ok().body("issue updtaed");
         }
         logger.error("Unable to authenticate with authentication provider");
         return ResponseEntity.ok().body("Something went wrong...");
