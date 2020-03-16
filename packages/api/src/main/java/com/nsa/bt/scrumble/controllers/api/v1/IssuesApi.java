@@ -5,7 +5,10 @@ import com.nsa.bt.scrumble.dto.Issue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,22 +35,32 @@ public class IssuesApi {
     @Autowired
     OAuth2AuthorizedClientService auth2AuthorizedClientService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Issue> getIssue(@PathVariable(value="id") int id) {
-        Issue issue = new Issue(id, "An issue name", "An issue description", 8, "Phoenix Project");
+    @Value("${app.issues.provider.gitlab.baseUrl.api}")
+    private String gitLabBaseUrl;
 
-        return ResponseEntity.ok().body(issue);
-    }
     @GetMapping("/all")
     public ResponseEntity<String> getAllIssues(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
-            String uri = String.format("http://10.72.98.102/api/v4/issues?access_token=%s", accessTokenOptional.get());
+            String uri = String.format("%s/issues?scope=all&access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
             return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
         }
         logger.error("Unable to authenticate with authentication provider");
         return ResponseEntity.ok().body("Something went wrong...");
     }
 
+    @PostMapping("/createIssue/{projectId}")
+    public ResponseEntity<String> createIssue(Authentication authentication, @PathVariable(value="projectId") int projectId, @RequestBody Issue issue){
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        System.out.println(issue.getDescription());
+        if(accessTokenOptional.isPresent()) {
+            String uri = String.format("%s/projects/"+projectId+"/issues?title="+issue.getTitle()+"&description="+issue.getDescription()+"&labels="+ issue.getStoryPoint()+"&access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
+            System.out.println(String.format(uri));
+            return ResponseEntity.ok().body(restTemplate.postForObject(uri, null ,String.class));
+        }
+        logger.error("Unable to authenticate with authentication provider");
+        return ResponseEntity.ok().body("Something went wrong...");
+    }
 }

@@ -1,34 +1,26 @@
 package com.nsa.bt.scrumble.dto;
 
 public class Issue {
-    private int id;
-    private String name;
+    private int iid;
+    private String title;
     private String description;
-    private int storyPoint;
-    private String project;
-
-    public Issue(int id, String name, String description, int storyPoint, String project) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.storyPoint = storyPoint;
-        this.project = project;
-    }
+    private int storyPoints;
+    private int projectId;
 
     public int getId() {
-        return id;
+        return iid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int iid) {
+        this.iid = iid;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -40,18 +32,18 @@ public class Issue {
     }
 
     public int getStoryPoint() {
-        return storyPoint;
+        return storyPoints;
     }
 
-    public void setStoryPoint(int storyPoint) {
-        this.storyPoint = storyPoint;
+    public void setStoryPoint(int storyPoints) {
+        this.storyPoints = storyPoints;
     }
 
-    public String getProject() {
-        return project;
+    public int getProject() {
+        return projectId;
     }
 
-    public void setProject(String project) {
-        this.project = project;
+    public void setProject(int projectId) {
+        this.projectId = projectId;
     }
 }

@@ -11,10 +11,10 @@ interface IProps {
 }
 
 const EditIssue: FunctionalComponent<IProps> = (props: IProps) => {
-    const [title, setTitle] = useState<string>(props.issue.name);
+    const [title, setTitle] = useState<string>(props.issue.title);
     const [description, setDescription] = useState<string>(props.issue.description);
-    const [issueStoryPoint, setIssueStoryPoint] = useState<number | string>(props.issue.storyPoint);
-    const [selectedProject, setSelectedProject] = useState<string>(props.issue.project);
+    const [issueStoryPoint, setIssueStoryPoint] = useState<number | string>(props.issue.storyPoints);
+    const [selectedProject, setSelectedProject] = useState(props.issue.projectId);
 
     const handleSubmit = (): void => {
         const issue = {

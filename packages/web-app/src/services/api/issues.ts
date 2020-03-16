@@ -2,9 +2,9 @@ import { apiService } from 'ts-api-toolkit';
 
 import { Issue } from 'models/Issue';
 
-export async function fetchIssueTest(): Promise<Issue | string> {
+export async function fetchIssueTest(): Promise<Issue[]> {
     return await apiService
-        .get('/issues/1')
+        .get('/issues/all')
         .then(({ data }) => {
             return data;
         })
@@ -17,9 +17,9 @@ export async function fetchIssueTest(): Promise<Issue | string> {
 }
 
 // GitLab API: POST /projects/:id/issues
-export const createIssue = async (workspaceId: number, projectId: number, issue: Issue): Promise<void | string> => {
+export const createIssue = async (projectId: number, issue: Issue): Promise<void | string> => {
     return await apiService
-        .post(`/workspace/${workspaceId}/project/${projectId}/issue`, { issue })
+        .post(`issues/createIssue/${projectId}`, issue)
         .then(() => {
             return;
         })

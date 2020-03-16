@@ -60,6 +60,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                     title="Edit Issue"
                     content={
                         <CreateOrEditIssue
+                            edit={true}
                             issue={props.issue}
                             submit={handleIssueEdit}
                             close={(): void => setShowEditIssueModal(false)}
