@@ -17,10 +17,10 @@ public class IssuesApi {
 
     private static final Logger logger = LoggerFactory.getLogger(IssuesApi.class);
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Issue> getIssue(@PathVariable(value="id") int id) {
-        Issue issue = new Issue(id, "An issue name", "An issue description", 8, "Phoenix Project");
-
-        return ResponseEntity.ok().body(issue);
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Issue> getIssue(@PathVariable(value="id") int id) {
+//        Issue issue = new Issue(id, "An issue name", "An issue description", 8, "Phoenix Project");
+//
+//        return ResponseEntity.ok().body(issue);
+//    }
 }

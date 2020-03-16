@@ -40,7 +40,8 @@ public class WorkspaceApi {
 
     @GetMapping("/{id}/issues")
     public ResponseEntity<Object> getIssues(Authentication auth, @PathVariable(value="id") int id) {
-        int[] projectIds = { 1, 3, 4, 5, 8 };
+//        int[] projectIds = { 1, 3, 4, 5, 8 };
+        int[] projectIds = { 5 };
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
 

@@ -1,16 +1,17 @@
 package com.nsa.bt.scrumble.controllers.api.v1;
 
 import com.nsa.bt.scrumble.security.UserPrincipal;
+import com.nsa.bt.scrumble.services.ICacheService;
 import com.nsa.bt.scrumble.services.IUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,10 +33,14 @@ public class UserDetailsApi {
     OAuth2AuthorizedClientService auth2AuthorizedClientService;
 
     @Autowired
+    IUserService userService;
+
+    @Autowired
     RestTemplate restTemplate;
 
     @Autowired
-    IUserService userService;
+    ICacheService cacheService;
+
 
     @GetMapping("/info")
     public ResponseEntity<String> getUserInfo(Authentication authentication){
@@ -43,18 +48,6 @@ public class UserDetailsApi {
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
             String uri = String.format("%s/oauth/userinfo?access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
-            return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
-        }
-        logger.error("Unable to authenticate with authentication provider");
-        return ResponseEntity.ok().body("Something went wrong...");
-    }
-
-    @GetMapping("/issues")
-    public ResponseEntity<Object> getIssues(Authentication auth) {
-        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-        if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%s/projects/4/issues?access_token=%s", gitLabApiUrl, accessTokenOptional.get());
             return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
         }
         logger.error("Unable to authenticate with authentication provider");

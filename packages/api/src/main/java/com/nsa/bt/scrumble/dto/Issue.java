@@ -1,18 +1,43 @@
 package com.nsa.bt.scrumble.dto;
 
-public class Issue {
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Map;
+
+public class Issue implements Serializable {
     private int id;
-    private String name;
+    @JsonProperty("milestone")
+    private Milestone milestone;
+    @JsonAlias("project_id")
+    private int projectId;
+    private String title;
     private String description;
     private int storyPoint;
-    private String project;
+    private String state;
+    private ArrayList<String> labels;
+    private Map<String, String> test;
 
-    public Issue(int id, String name, String description, int storyPoint, String project) {
+    public Issue(){}
+
+    public Issue(int id, int projectId, String title, String description, int storyPoint, String state, ArrayList<String> labels) {
         this.id = id;
-        this.name = name;
+        this.projectId = projectId;
+        this.title = title;
         this.description = description;
         this.storyPoint = storyPoint;
-        this.project = project;
+        this.state = state;
+        this.labels = labels;
+    }
+
+    public Map<String, String> getTest() {
+        return test;
+    }
+
+    public void setTest(Map<String, String> test) {
+        this.test = test;
     }
 
     public int getId() {
@@ -23,12 +48,20 @@ public class Issue {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public int getProjectId() {
+        return projectId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -47,11 +80,19 @@ public class Issue {
         this.storyPoint = storyPoint;
     }
 
-    public String getProject() {
-        return project;
+    public String getState() {
+        return state;
     }
 
-    public void setProject(String project) {
-        this.project = project;
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public ArrayList<String> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(ArrayList<String> labels) {
+        this.labels = labels;
     }
 }
