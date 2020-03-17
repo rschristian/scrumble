@@ -21,12 +21,17 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
         return await createIssue(projectId, newIssue).then((error) => {
-            if (error) setErrorMessage(error);
-            else setIssuesArray((oldData) => [...oldData, newIssue]);
+            if (error) {
+                setErrorMessage(error);
+            } else {
+                setIssuesArray((oldData) => [...oldData, newIssue]);
+                setShowNewIssueModal(false);
+                updateIssues();
+            }
         });
     };
 
-    const handleEditIssue = () => {
+    const updateIssues = () => {
         const issueArray: Issue[] = [];
         fetchIssues().then((response) => {
             response.forEach((issue: any) => {
@@ -80,7 +85,6 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
     // Both here to fulfill mandatory props until we decide what to do with them
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
-    console.log(user);
     return (
         <div class={showNewIssueModal ? 'modal-active' : ''}>
             <div class="create-bar">
@@ -113,7 +117,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
             <div class="rounded bg-white overflow-hidden shadow-lg">
                 {issuesArray.map((issue, index) => {
-                    return <IssueCard key={index} issue={issue} updateList={handleEditIssue} user={user} />;
+                    return <IssueCard key={index} issue={issue} updateList={updateIssues} user={user} />;
                 })}
             </div>
         </div>

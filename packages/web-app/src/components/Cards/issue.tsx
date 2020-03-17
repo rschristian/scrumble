@@ -8,7 +8,6 @@ import { editIssue, deleteIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
 import { WorkspaceStoreContext } from 'stores';
 import { User } from 'models/user';
-import { issues } from 'data';
 
 export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
     return (
