@@ -3,7 +3,7 @@ import { FunctionalComponent, h } from 'preact';
 import { WorkspaceCard } from 'components/Cards/workspace';
 import { SearchBar } from 'components/SearchBar';
 import { workspaces } from 'data';
-import { fetchIssueTest } from 'services/api/issues';
+import { fetchIssues } from 'services/api/issues';
 
 const Home: FunctionalComponent = () => {
     return (
@@ -11,7 +11,7 @@ const Home: FunctionalComponent = () => {
             <div class="mx-3 flex justify-center flex-col w-3/4">
                 <div class="create-bar">
                     <h1 class="page-heading">Your Workspaces</h1>
-                    <button onClick={fetchIssueTest} class="btn-create my-auto">
+                    <button onClick={fetchIssues} class="btn-create my-auto">
                         New Workspace
                     </button>
                 </div>

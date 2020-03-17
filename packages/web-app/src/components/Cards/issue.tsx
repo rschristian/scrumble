@@ -82,7 +82,9 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                 <div class="truncate">{props.issue.title}</div>
             </div>
             <div class="px-4 py-2 z-1">
-                {props.issue.storyPoints.length === 0 ? null : <span class="story-pnt">{props.issue.storyPoints}</span>}
+                {props.issue.storyPoints === undefined ? null : (
+                    <span class="story-pnt">{props.issue.storyPoints}</span>
+                )}
                 <span class="text-gray-700"> Project ID: {props.issue.projectId}</span>
                 {props.updateList != undefined ? (
                     <div>

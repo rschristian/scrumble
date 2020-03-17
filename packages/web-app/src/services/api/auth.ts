@@ -25,12 +25,11 @@ export const destroyOAuthToken = async (): Promise<boolean> => {
         });
 };
 
-export function fetchUserInfo() {
-    apiService.get('user/info').then((response) => {
-        console.log(response);
-        return response;
+export const fetchUserInfo = async (): Promise<any> => {
+    return await apiService.get('user/info').then(({ data }) => {
+        return data;
     });
-}
+};
 export async function fetchAllIssues() {
     const response = await apiService.get('/issues/all');
     return response.data;

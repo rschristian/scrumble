@@ -4,7 +4,7 @@ import { IssueCard } from 'components/Cards/issue';
 import { SprintCard } from 'components/Cards/sprint';
 import { IssueFilter } from 'components/Filter/issues';
 import { SprintFilter } from 'components/Filter/sprints';
-import { issues, sprints } from 'data';
+import { sprints } from 'data';
 import { SprintStatus } from 'models/Sprint';
 import { User } from 'models/user';
 import { fetchUserInfo, fetchSpecificUser } from 'services/api/auth';
@@ -21,9 +21,38 @@ const SprintPlanning: FunctionalComponent = () => {
     const tempOnClick = (): void => console.log('clicked');
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
+
     useEffect(() => {
-        fetchUserInfo();
-        fetchSpecificUser(6).then((response) => {
+        fetchUserInfo().then((response) => {
+            const user: User = {
+                id: response.sub,
+                name: response.name,
+                username: response.nickname,
+            };
+            setUser(user);
+            getUserDetails();
+        });
+        fetchIssues().then((response) => {
+            response.forEach((issue: any) => {
+                const newIssue: Issue = {
+                    iid: issue.iid,
+                    title: issue.title,
+                    description: issue.description,
+                    storyPoints: issue.labels[0],
+                    projectId: issue.project_id,
+                };
+                setIssuesArray((oldData) => [...oldData, newIssue]);
+            });
+        });
+    }, []);
+
+    // TODO Need to figure out how we actually want to sort issues, because current setup doesn't make much sense
+    const issuesList = issuesArray.map((issue, index) => {
+        return <IssueCard key={index} issue={issue} user={user} />;
+    });
+
+    const getUserDetails = () => {
+        fetchSpecificUser(user.id).then((response) => {
             const user: User = {
                 id: response.id,
                 name: response.name,
@@ -32,23 +61,7 @@ const SprintPlanning: FunctionalComponent = () => {
             };
             setUser(user);
         });
-        fetchIssues().then((response) => {
-            response.forEach((issue: any) => {
-                const newIssue: Issue = {
-                    iid: issue.iid,
-                    title: issue.title,
-                    description: issue.description,
-                    storyPoints: issue.labels,
-                    projectId: issue.project_id,
-                };
-                setIssuesArray((oldData) => [...oldData, newIssue]);
-            });
-        });
-    }, []);
-    // TODO Need to figure out how we actually want to sort issues, because current setup doesn't make much sense
-    const issuesList = issuesArray.map((issue, index) => {
-        return <IssueCard key={index} issue={issue} user={user} />;
-    });
+    };
 
     const sprintsList = sprints.map((sprint, index) => {
         if (sprintFilter === 'all' || sprint.status.toString() === sprintFilter) {

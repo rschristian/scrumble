@@ -34,7 +34,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                     iid: issue.iid,
                     title: issue.title,
                     description: issue.description,
-                    storyPoints: issue.labels,
+                    storyPoints: issue.labels[0],
                     projectId: issue.project_id,
                 };
                 issueArray.push(newIssue);
@@ -43,8 +43,31 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
         });
     };
     useEffect(() => {
-        fetchUserInfo();
-        fetchSpecificUser(6).then((response) => {
+        fetchUserInfo().then((response) => {
+            const user: User = {
+                id: response.sub,
+                name: response.name,
+                username: response.nickname,
+            };
+            setUser(user);
+            getUserDetails();
+        });
+        fetchIssues().then((response) => {
+            response.forEach((issue: any) => {
+                const newIssue: Issue = {
+                    iid: issue.iid,
+                    title: issue.title,
+                    description: issue.description,
+                    storyPoints: issue.labels[0],
+                    projectId: issue.project_id,
+                };
+                setIssuesArray((oldData) => [...oldData, newIssue]);
+            });
+        });
+    }, []);
+
+    const getUserDetails = () => {
+        fetchSpecificUser(user.id).then((response) => {
             const user: User = {
                 id: response.id,
                 name: response.name,
@@ -53,19 +76,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             };
             setUser(user);
         });
-        fetchIssues().then((response) => {
-            response.forEach((issue: any) => {
-                const newIssue: Issue = {
-                    iid: issue.iid,
-                    title: issue.title,
-                    description: issue.description,
-                    storyPoints: issue.labels,
-                    projectId: issue.project_id,
-                };
-                setIssuesArray((oldData) => [...oldData, newIssue]);
-            });
-        });
-    }, []);
+    };
 
     // Both here to fulfill mandatory props until we decide what to do with them
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
