@@ -16,7 +16,7 @@ export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
             </div>
             <div class="absolute bottom-0 left-0 px-4 py-2">
                 <div class="flex">
-                    <span class="story-pnt">{props.storyPoints}</span>
+                    <span class="story-pnt">{props.storyPoint}</span>
                     <p class="font-hairline text-gray-700">{props.projectId}</p>
                 </div>
             </div>
@@ -81,7 +81,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                 <div class="truncate">{props.issue.title}</div>
             </div>
             <div class="px-4 py-2 z-1">
-                <span class="story-pnt">{props.issue.storyPoints}</span>
+                <span class="story-pnt">{props.issue.storyPoint}</span>
                 <span class="text-gray-700">{props.issue.projectId}</span>
                 <button
                     className="float-right btn-edit my-auto"

@@ -19,9 +19,11 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         iid={issue.iid}
+                        id={issue.id}
+                        state={issue.state}
                         title={issue.title}
                         description={issue.description}
-                        storyPoints={issue.storyPoints}
+                        storyPoint={issue.storyPoint}
                         projectId={issue.projectId}
                     />,
                 ]);
@@ -31,9 +33,11 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         iid={issue.iid}
+                        id={issue.id}
+                        state={issue.state}
                         title={issue.title}
                         description={issue.description}
-                        storyPoints={issue.storyPoints}
+                        storyPoint={issue.storyPoint}
                         projectId={issue.projectId}
                     />,
                 ]);
@@ -43,9 +47,11 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         iid={issue.iid}
+                        id={issue.id}
+                        state={issue.state}
                         title={issue.title}
                         description={issue.description}
-                        storyPoints={issue.storyPoints}
+                        storyPoint={issue.storyPoint}
                         projectId={issue.projectId}
                     />,
                 ]);
@@ -55,9 +61,11 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         iid={issue.iid}
+                        id={issue.id}
+                        state={issue.state}
                         title={issue.title}
                         description={issue.description}
-                        storyPoints={issue.storyPoints}
+                        storyPoint={issue.storyPoint}
                         projectId={issue.projectId}
                     />,
                 ]);
