@@ -1,7 +1,6 @@
 package com.nsa.bt.scrumble.controllers.api.v1;
 
 import com.nsa.bt.scrumble.security.UserPrincipal;
-import com.nsa.bt.scrumble.services.ICacheService;
 import com.nsa.bt.scrumble.services.IUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +36,6 @@ public class UserDetailsApi {
 
     @Autowired
     RestTemplate restTemplate;
-
-    @Autowired
-    ICacheService cacheService;
-
 
     @GetMapping("/info")
     public ResponseEntity<String> getUserInfo(Authentication authentication){

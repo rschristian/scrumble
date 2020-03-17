@@ -18,7 +18,6 @@ public class Issue implements Serializable {
     private int storyPoint;
     private String state;
     private ArrayList<String> labels;
-    private Map<String, String> test;
 
     public Issue(){}
 
@@ -30,14 +29,6 @@ public class Issue implements Serializable {
         this.storyPoint = storyPoint;
         this.state = state;
         this.labels = labels;
-    }
-
-    public Map<String, String> getTest() {
-        return test;
-    }
-
-    public void setTest(Map<String, String> test) {
-        this.test = test;
     }
 
     public int getId() {
