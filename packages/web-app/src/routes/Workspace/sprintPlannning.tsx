@@ -6,20 +6,48 @@ import { IssueFilter } from 'components/Filter/issues';
 import { SprintFilter } from 'components/Filter/sprints';
 import { issues, sprints } from 'data';
 import { SprintStatus } from 'models/Sprint';
+import { User } from 'models/user';
+import { fetchUserInfo, fetchSpecificUser } from 'services/api/auth';
+import { fetchIssues } from 'services/api/issues';
+import { Issue } from 'models/Issue';
 
 const SprintPlanning: FunctionalComponent = () => {
     const [isSprintView, setIsSprintView] = useState<boolean>(false);
     const [issueFilter, setIssueFilter] = useState<string>('');
     const [sprintFilter, setSprintFilter] = useState<string>('open');
-    const [data, setData] = useState([]);
+    const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
+    const [user, setUser] = useState<User>(null);
 
     const tempOnClick = (): void => console.log('clicked');
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
-
+    useEffect(() => {
+        fetchUserInfo();
+        fetchSpecificUser(6).then((response) => {
+            const user: User = {
+                id: response.id,
+                name: response.name,
+                username: response.username,
+                isAdmin: response.is_admin,
+            };
+            setUser(user);
+        });
+        fetchIssues().then((response) => {
+            response.forEach((issue: any) => {
+                const newIssue: Issue = {
+                    iid: issue.iid,
+                    title: issue.title,
+                    description: issue.description,
+                    storyPoints: issue.labels,
+                    projectId: issue.project_id,
+                };
+                setIssuesArray((oldData) => [...oldData, newIssue]);
+            });
+        });
+    }, []);
     // TODO Need to figure out how we actually want to sort issues, because current setup doesn't make much sense
-    const issuesList = issues.map((issue, index) => {
-        return <IssueCard key={index} issue={issue} />;
+    const issuesList = issuesArray.map((issue, index) => {
+        return <IssueCard key={index} issue={issue} user={user} />;
     });
 
     const sprintsList = sprints.map((sprint, index) => {

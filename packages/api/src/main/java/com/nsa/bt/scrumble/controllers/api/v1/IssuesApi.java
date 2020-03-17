@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,11 +68,25 @@ public class IssuesApi {
     public ResponseEntity<String> editIssue(Authentication authentication, @PathVariable(value="projectId") int projectId, @RequestBody Issue issue) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-         if(accessTokenOptional.isPresent()) {
+        if(accessTokenOptional.isPresent()) {
             String uri = String.format("%s/projects/"+projectId+"/issues/"+issue.getIid()+"?title="+issue.getTitle()+"&description="+issue.getDescription()+"&labels="+ issue.getStoryPoints()+"&access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
             System.out.println(issue.getIid());
             System.out.println(String.format(uri));
             restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
+            return ResponseEntity.ok().body("issue updtaed");
+        }
+        logger.error("Unable to authenticate with authentication provider");
+        return ResponseEntity.ok().body("Something went wrong...");
+    }
+
+    @DeleteMapping("/{projectId}/deleteIssue/{issueId}")
+    public ResponseEntity<String> deleteIssue(Authentication authentication, @PathVariable(value="projectId") int projectId, @PathVariable(value="issueId") int issueId) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        if(accessTokenOptional.isPresent()) {
+            String uri = String.format("%s/projects/"+projectId+"/issues/"+issueId+"?access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
+            System.out.println(String.format(uri));
+            restTemplate.exchange(uri, HttpMethod.DELETE, null, Void.class);
             return ResponseEntity.ok().body("issue updtaed");
         }
         logger.error("Unable to authenticate with authentication provider");

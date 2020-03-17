@@ -7,6 +7,8 @@ import { Issue } from 'models/Issue';
 import { editIssue, deleteIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
 import { WorkspaceStoreContext } from 'stores';
+import { User } from 'models/user';
+import { issues } from 'data';
 
 export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
     return (
@@ -26,6 +28,7 @@ export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
 
 interface IProps {
     issue: Issue;
+    user?: User;
     updateList?: () => void;
 }
 
@@ -35,6 +38,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
     const [showEditIssueModal, setShowEditIssueModal] = useState(false);
     const [showDeleteIssueModal, setShowDeleteIssueModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
+
     const handleIssueEdit = async (issue: Issue): Promise<void> => {
         return await editIssue(props.issue.projectId, issue).then((error) => {
             if (error) {
@@ -45,16 +49,12 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
             }
         });
     };
-
     const handleIssueDeletion = async (): Promise<void> => {
-        return await deleteIssue(workspaceStore.currentWorkspace, props.issue.projectId, props.issue.iid).then(
-            (error) => {
-                if (error) setErrorMessage(error);
-                else setShowDeleteIssueModal(false);
-            },
-        );
+        return await deleteIssue(props.issue.projectId, props.issue.iid).then((error) => {
+            if (error) setErrorMessage(error);
+            else setShowDeleteIssueModal(false);
+        });
     };
-
     return (
         <div class="lst-itm-container cursor-move">
             {showEditIssueModal ? (
@@ -78,31 +78,44 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                     close={(): void => setShowDeleteIssueModal(false)}
                 />
             ) : null}
-
             <div class="px-4 py-2 flex min-w-0">
                 <div class="truncate">{props.issue.title}</div>
             </div>
             <div class="px-4 py-2 z-1">
-                <span class="story-pnt">{props.issue.storyPoints}</span>
-                <span class="text-gray-700">{props.issue.projectId}</span>
-                <button
-                    className="float-right btn-edit my-auto"
-                    onClick={(): void => {
-                        setShowEditIssueModal(true);
-                        setErrorMessage('');
-                    }}
-                >
-                    Edit
-                </button>
-                <button
-                    class="float-right btn-delete my-auto"
-                    onClick={(): void => {
-                        setShowDeleteIssueModal(true);
-                        setErrorMessage('');
-                    }}
-                >
-                    Delete
-                </button>
+                {props.issue.storyPoints.length === 0 ? null : <span class="story-pnt">{props.issue.storyPoints}</span>}
+                <span class="text-gray-700"> Project ID: {props.issue.projectId}</span>
+                {props.updateList != undefined ? (
+                    <div>
+                        <button
+                            className="float-right btn-edit my-auto"
+                            onClick={(): void => {
+                                setShowEditIssueModal(true);
+                                setErrorMessage('');
+                            }}
+                        >
+                            Edit
+                        </button>
+                        <button
+                            disabled={props.user.isAdmin === undefined}
+                            class={
+                                props.user.isAdmin === undefined
+                                    ? 'float-right btn-disable my-auto'
+                                    : 'float-right btn-delete my-auto'
+                            }
+                            title={
+                                props.user.isAdmin === undefined
+                                    ? 'You do not have permisson to delete this issue'
+                                    : null
+                            }
+                            onClick={(): void => {
+                                setShowDeleteIssueModal(true);
+                                setErrorMessage('');
+                            }}
+                        >
+                            Delete
+                        </button>
+                    </div>
+                ) : null}
             </div>
         </div>
     );

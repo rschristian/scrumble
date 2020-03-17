@@ -26,7 +26,7 @@ export const destroyOAuthToken = async (): Promise<boolean> => {
 };
 
 export function fetchUserInfo() {
-    apiService.get('/user/info').then((response) => {
+    apiService.get('user/info').then((response) => {
         console.log(response);
         return response;
     });
@@ -35,3 +35,9 @@ export async function fetchAllIssues() {
     const response = await apiService.get('/issues/all');
     return response.data;
 }
+
+export const fetchSpecificUser = async (id: number): Promise<any> => {
+    return await apiService.get(`user/getUser/${id}`).then(({ data }) => {
+        return data;
+    });
+};

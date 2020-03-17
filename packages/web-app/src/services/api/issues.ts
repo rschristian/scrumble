@@ -2,7 +2,7 @@ import { apiService } from 'ts-api-toolkit';
 
 import { Issue } from 'models/Issue';
 
-export async function fetchIssueTest(): Promise<Issue[]> {
+export async function fetchIssues(): Promise<Issue[]> {
     return await apiService
         .get('/issues/all')
         .then(({ data }) => {
@@ -43,9 +43,9 @@ export const editIssue = async (projectId: number, issue: Issue): Promise<void |
 };
 
 // GitLab API: DELETE /projects/:id/issues/:issue_iid
-export const deleteIssue = async (workspaceId: number, projectId: number, issueId: number): Promise<void | string> => {
+export const deleteIssue = async (projectId: number, issueId: number): Promise<void | string> => {
     return await apiService
-        .delete(`/workspace/${workspaceId}/project/${projectId}/issue/${issueId}`)
+        .delete(`issues/${projectId}/deleteIssue/${issueId}`)
         .then(() => {
             return;
         })

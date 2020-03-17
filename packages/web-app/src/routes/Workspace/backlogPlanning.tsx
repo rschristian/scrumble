@@ -8,13 +8,16 @@ import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
 import { observer } from 'services/mobx';
 import { WorkspaceStoreContext } from 'stores';
-import { fetchIssueTest, createIssue } from 'services/api/issues';
+import { fetchIssues, createIssue } from 'services/api/issues';
+import { fetchUserInfo, fetchSpecificUser } from 'services/api/auth';
+import { User } from 'models/user';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const workspaceStore = useContext(WorkspaceStoreContext);
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [user, setUser] = useState<User>(null);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
         return await createIssue(projectId, newIssue).then((error) => {
@@ -25,8 +28,8 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
     const handleEditIssue = () => {
         const issueArray: Issue[] = [];
-        fetchIssueTest().then((response) => {
-            response.forEach((issue) => {
+        fetchIssues().then((response) => {
+            response.forEach((issue: any) => {
                 const newIssue: Issue = {
                     iid: issue.iid,
                     title: issue.title,
@@ -40,8 +43,18 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
         });
     };
     useEffect(() => {
-        fetchIssueTest().then((response) => {
-            response.forEach((issue) => {
+        fetchUserInfo();
+        fetchSpecificUser(6).then((response) => {
+            const user: User = {
+                id: response.id,
+                name: response.name,
+                username: response.username,
+                isAdmin: response.is_admin,
+            };
+            setUser(user);
+        });
+        fetchIssues().then((response) => {
+            response.forEach((issue: any) => {
                 const newIssue: Issue = {
                     iid: issue.iid,
                     title: issue.title,
@@ -56,7 +69,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
     // Both here to fulfill mandatory props until we decide what to do with them
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
-
+    console.log(user);
     return (
         <div class={showNewIssueModal ? 'modal-active' : ''}>
             <div class="create-bar">
@@ -89,7 +102,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
             <div class="rounded bg-white overflow-hidden shadow-lg">
                 {issuesArray.map((issue, index) => {
-                    return <IssueCard key={index} issue={issue} updateList={handleEditIssue} />;
+                    return <IssueCard key={index} issue={issue} updateList={handleEditIssue} user={user} />;
                 })}
             </div>
         </div>
