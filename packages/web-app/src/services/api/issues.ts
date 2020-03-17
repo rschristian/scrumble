@@ -1,20 +1,8 @@
 import { apiService } from 'ts-api-toolkit';
 
 import { Issue } from 'models/Issue';
-
-export async function fetchIssueTest(): Promise<Issue | string> {
-    return await apiService
-        .get('/issues/1')
-        .then(({ data }) => {
-            return data;
-        })
-        .catch(({ response }) => {
-            if (response.data !== '') {
-                return response.data.message;
-            }
-            return 'Unknown error';
-        });
-}
+import { issues } from '../../data';
+import { IssuePagination } from '../../models/IssuePagination';
 
 // GitLab API: POST /projects/:id/issues
 export const createIssue = async (workspaceId: number, projectId: number, issue: Issue): Promise<void | string> => {
@@ -58,4 +46,24 @@ export const deleteIssue = async (workspaceId: number, projectId: number, issueI
             if (response.data !== '') return response.data.message;
             return 'Unknown error while updating sprint status';
         });
+};
+
+export const fetchWorkspaceIssues = async (page: number): Promise<IssuePagination> => {
+    const workspaceId = 23;
+    return await apiService.get(`/workspace/${workspaceId}/issues?page=${page}`).then((response) => {
+        // console.log(response);
+        return response.data;
+    });
+};
+
+export const mockedWorkspaceIssues = async (): Promise<Issue[]> => {
+    return issues;
+};
+
+export const fetchWorkspaceIssuesCached = async (): Promise<Issue[]> => {
+    const workspaceId = 8;
+    return await apiService.get(`/workspace/${workspaceId}/issues/cached`).then((response) => {
+        console.log(response);
+        return response.data;
+    });
 };
