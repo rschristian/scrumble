@@ -33,6 +33,26 @@
   @apply bg-blue-500 text-white;
 }
 
+.btn-pagination {
+  @apply bg-transparent text-deep-space-sparkle font-semibold py-2 px-4 border border-gray-300;
+}
+
+.btn-pagination:hover {
+  @apply bg-gray-400;
+}
+
+.btn-pagination-active {
+  @apply bg-white text-deep-space-sparkle font-bold py-2 px-4;
+}
+
+.btn-page-move {
+  @apply bg-gray-100 text-deep-space-sparkle font-bold py-2 px-4 rounded-l m-3 border border-gray-300;
+}
+
+.btn-page-move:hover {
+  @apply bg-gray-500 text-white;
+}
+
 // Media Queries
 @screen sm {
   .btn-filter {
