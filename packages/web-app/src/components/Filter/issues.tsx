@@ -8,7 +8,7 @@ interface IProps {
 }
 
 enum FilterStatus {
-    open = 'open',
+    open = 'opened',
     closed = 'closed',
     unplanned = 'unplanned',
 }
