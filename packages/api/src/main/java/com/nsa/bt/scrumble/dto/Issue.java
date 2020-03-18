@@ -35,8 +35,8 @@ public class Issue {
         return storyPoints;
     }
 
-    public void setStoryPoints(int storyPoints) {
-        this.storyPoints = storyPoints;
+    public void setStoryPoints(int[] storyPoints) {
+        this.storyPoints = storyPoints[0];
     }
 
     public int getProject() {
