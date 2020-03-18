@@ -7,17 +7,16 @@ import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
 import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
 import { observer } from 'services/mobx';
-import { WorkspaceStoreContext } from 'stores';
+import { WorkspaceStoreContext, UserStoreContext } from 'stores';
 import { fetchIssues, createIssue } from 'services/api/issues';
-import { fetchUserInfo, fetchSpecificUser } from 'services/api/auth';
-import { User } from 'models/user';
+import { fetchSpecificUser } from 'services/api/auth';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const workspaceStore = useContext(WorkspaceStoreContext);
+    const userStore = useContext(UserStoreContext);
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
     const [errorMessage, setErrorMessage] = useState<string>('');
-    const [user, setUser] = useState<User>(null);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
         return await createIssue(projectId, newIssue).then((error) => {
@@ -39,7 +38,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                     iid: issue.iid,
                     title: issue.title,
                     description: issue.description,
-                    storyPoints: issue.labels[0],
+                    storyPoints: issue.labels.filter(Number),
                     projectId: issue.project_id,
                 };
                 issueArray.push(newIssue);
@@ -49,14 +48,8 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
     };
 
     useEffect(() => {
-        fetchUserInfo().then((response) => {
-            const user: User = {
-                id: response.sub,
-                name: response.name,
-                username: response.nickname,
-            };
-            setUser(user);
-            getUserDetails();
+        fetchSpecificUser(userStore.currentUser.id).then((response) => {
+            userStore.setCurrentUser(response);
         });
         fetchIssues().then((response) => {
             response.forEach((issue: any) => {
@@ -64,25 +57,13 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                     iid: issue.iid,
                     title: issue.title,
                     description: issue.description,
-                    storyPoints: issue.labels[0],
+                    storyPoints: issue.labels.filter(Number),
                     projectId: issue.project_id,
                 };
                 setIssuesArray((oldData) => [...oldData, newIssue]);
             });
         });
     }, []);
-
-    const getUserDetails = () => {
-        fetchSpecificUser(user.id).then((response) => {
-            const user: User = {
-                id: response.id,
-                name: response.name,
-                username: response.username,
-                isAdmin: response.is_admin,
-            };
-            setUser(user);
-        });
-    };
 
     // Both here to fulfill mandatory props until we decide what to do with them
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
@@ -118,7 +99,9 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
             <div class="rounded bg-white overflow-hidden shadow-lg">
                 {issuesArray.map((issue, index) => {
-                    return <IssueCard key={index} issue={issue} updateList={updateIssues} user={user} />;
+                    return (
+                        <IssueCard key={index} issue={issue} updateList={updateIssues} user={userStore.currentUser} />
+                    );
                 })}
             </div>
         </div>

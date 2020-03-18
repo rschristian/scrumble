@@ -57,7 +57,7 @@ public class IssuesApi {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%s/projects/"+projectId+"/issues?title="+issue.getTitle()+"&description="+issue.getDescription()+"&labels="+ issue.getStoryPoints()+"&access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
+            String uri = String.format("%1s/projects/%2s/issues?title=%3s&description=%4s&labels=%5s&access_token=%6s", gitLabBaseUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoints(),accessTokenOptional.get());
             return ResponseEntity.ok().body(restTemplate.postForObject(uri, null , String.class));
         }
         logger.error("Unable to authenticate with authentication provider");
@@ -69,7 +69,7 @@ public class IssuesApi {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%s/projects/"+projectId+"/issues/"+issue.getIid()+"?title="+issue.getTitle()+"&description="+issue.getDescription()+"&labels="+ issue.getStoryPoints()+"&access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
+            String uri = String.format("%1s/projects/%2s/issues/%3s?title=%4s&description=%5s&labels=%6s&access_token=%7s", gitLabBaseUrl, projectId, issue.getIid(), issue.getTitle(), issue.getDescription(), issue.getStoryPoints(), accessTokenOptional.get());
             restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
             return ResponseEntity.ok().body("issue updtaed");
         }
@@ -82,7 +82,7 @@ public class IssuesApi {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%s/projects/"+projectId+"/issues/"+issueId+"?access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
+            String uri = String.format("%1s/projects/%2s/issues/%3s?access_token=%s", gitLabBaseUrl, projectId, issueId ,accessTokenOptional.get());
             restTemplate.exchange(uri, HttpMethod.DELETE, null, Void.class);
             return ResponseEntity.ok().body("issue updtaed");
         }

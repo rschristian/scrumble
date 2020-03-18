@@ -1,11 +1,20 @@
 import { FunctionalComponent, h } from 'preact';
-
+import { useEffect, useContext } from 'preact/hooks';
 import { WorkspaceCard } from 'components/Cards/workspace';
 import { SearchBar } from 'components/SearchBar';
 import { workspaces } from 'data';
 import { fetchIssues } from 'services/api/issues';
+import { UserStoreContext } from 'stores';
+import { fetchUserInfo } from 'services/api/auth';
 
 const Home: FunctionalComponent = () => {
+    const userStore = useContext(UserStoreContext);
+
+    useEffect(() => {
+        fetchUserInfo().then((response) => {
+            userStore.setCurrentUser(response);
+        });
+    }, []);
     return (
         <div class="mt-16 flex justify-center bg-blue-100">
             <div class="mx-3 flex justify-center flex-col w-3/4">

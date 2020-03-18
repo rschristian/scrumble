@@ -1,5 +1,5 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
+import { useState, useEffect, useContext } from 'preact/hooks';
 import { IssueCard } from 'components/Cards/issue';
 import { SprintCard } from 'components/Cards/sprint';
 import { IssueFilter } from 'components/Filter/issues';
@@ -10,8 +10,10 @@ import { User } from 'models/user';
 import { fetchUserInfo, fetchSpecificUser } from 'services/api/auth';
 import { fetchIssues } from 'services/api/issues';
 import { Issue } from 'models/Issue';
+import { UserStoreContext } from 'stores';
 
 const SprintPlanning: FunctionalComponent = () => {
+    const userStore = useContext(UserStoreContext);
     const [isSprintView, setIsSprintView] = useState<boolean>(false);
     const [issueFilter, setIssueFilter] = useState<string>('');
     const [sprintFilter, setSprintFilter] = useState<string>('open');
@@ -23,14 +25,8 @@ const SprintPlanning: FunctionalComponent = () => {
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
     useEffect(() => {
-        fetchUserInfo().then((response) => {
-            const user: User = {
-                id: response.sub,
-                name: response.name,
-                username: response.nickname,
-            };
-            setUser(user);
-            getUserDetails();
+        fetchSpecificUser(userStore.currentUser.sub).then((response) => {
+            userStore.setCurrentUser(response);
         });
         fetchIssues().then((response) => {
             response.forEach((issue: any) => {
@@ -38,7 +34,7 @@ const SprintPlanning: FunctionalComponent = () => {
                     iid: issue.iid,
                     title: issue.title,
                     description: issue.description,
-                    storyPoints: issue.labels[0],
+                    storyPoints: issue.labels.filter(Number),
                     projectId: issue.project_id,
                 };
                 setIssuesArray((oldData) => [...oldData, newIssue]);
@@ -48,20 +44,8 @@ const SprintPlanning: FunctionalComponent = () => {
 
     // TODO Need to figure out how we actually want to sort issues, because current setup doesn't make much sense
     const issuesList = issuesArray.map((issue, index) => {
-        return <IssueCard key={index} issue={issue} user={user} />;
+        return <IssueCard key={index} issue={issue} user={userStore.currentUser} />;
     });
-
-    const getUserDetails = () => {
-        fetchSpecificUser(user.id).then((response) => {
-            const user: User = {
-                id: response.id,
-                name: response.name,
-                username: response.username,
-                isAdmin: response.is_admin,
-            };
-            setUser(user);
-        });
-    };
 
     const sprintsList = sprints.map((sprint, index) => {
         if (sprintFilter === 'all' || sprint.status.toString() === sprintFilter) {
