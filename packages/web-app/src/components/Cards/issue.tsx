@@ -50,8 +50,12 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
     };
     const handleIssueDeletion = async (): Promise<void> => {
         return await deleteIssue(props.issue.projectId, props.issue.iid).then((error) => {
-            if (error) setErrorMessage(error);
-            else setShowDeleteIssueModal(false);
+            if (error) {
+                setErrorMessage(error);
+            } else {
+                setShowDeleteIssueModal(false);
+                props.updateList();
+            }
         });
     };
     return (

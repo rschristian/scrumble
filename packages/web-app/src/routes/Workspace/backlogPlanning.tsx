@@ -47,6 +47,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             });
         });
     };
+
     useEffect(() => {
         fetchUserInfo().then((response) => {
             const user: User = {

@@ -52,7 +52,7 @@ public class IssuesApi {
         return ResponseEntity.ok().body("Something went wrong...");
     }
 
-    @PostMapping("/createIssue/{projectId}")
+    @PostMapping("/{projectId}/createIssue")
     public ResponseEntity<String> createIssue(Authentication authentication, @PathVariable(value="projectId") int projectId, @RequestBody Issue issue){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
@@ -64,14 +64,12 @@ public class IssuesApi {
         return ResponseEntity.ok().body("Something went wrong...");
     }
 
-    @PutMapping("/editIssue/{projectId}")
+    @PutMapping("/{projectId}/editIssue")
     public ResponseEntity<String> editIssue(Authentication authentication, @PathVariable(value="projectId") int projectId, @RequestBody Issue issue) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
             String uri = String.format("%s/projects/"+projectId+"/issues/"+issue.getIid()+"?title="+issue.getTitle()+"&description="+issue.getDescription()+"&labels="+ issue.getStoryPoints()+"&access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
-            System.out.println(issue.getIid());
-            System.out.println(String.format(uri));
             restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
             return ResponseEntity.ok().body("issue updtaed");
         }
@@ -85,7 +83,6 @@ public class IssuesApi {
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
             String uri = String.format("%s/projects/"+projectId+"/issues/"+issueId+"?access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
-            System.out.println(String.format(uri));
             restTemplate.exchange(uri, HttpMethod.DELETE, null, Void.class);
             return ResponseEntity.ok().body("issue updtaed");
         }
