@@ -3,7 +3,7 @@ import { FunctionalComponent, h } from 'preact';
 import { WorkspaceCard } from 'components/Cards/workspace';
 import { SearchBar } from 'components/SearchBar';
 import { workspaces } from 'data';
-import { fetchUserInfo, fetchWorkspaceIssues, fetchWorkspaceIssuesCached } from 'services/api/auth';
+import { fetchWorkspaceIssues, fetchWorkspaceIssuesCached } from 'services/api/issues';
 
 const Home: FunctionalComponent = () => {
     return (
@@ -14,9 +14,9 @@ const Home: FunctionalComponent = () => {
                     <button onClick={fetchWorkspaceIssuesCached} class="btn-create my-auto">
                         Cached Issues
                     </button>
-                    <button onClick={fetchWorkspaceIssues} class="btn-create my-auto">
-                        New Issues
-                    </button>
+                    {/*<button onClick={fetchWorkspaceIssues} class="btn-create my-auto">*/}
+                    {/*    New Issues*/}
+                    {/*</button>*/}
                 </div>
                 <SearchBar placeholder="Search by name" />
                 <div class="rounded bg-white overflow-hidden shadow-lg">

@@ -1,23 +1,34 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 
 import { IssueCard } from 'components/Cards/issue';
 import { SprintCard } from 'components/Cards/sprint';
 import { IssueFilter } from 'components/Filter/issues';
 import { SprintFilter } from 'components/Filter/sprints';
-import { issues, sprints } from 'data';
+import { sprints } from 'data';
 import { SprintStatus } from 'models/Sprint';
+import { Issue } from 'models/Issue';
+import { fetchWorkspaceIssues } from 'services/api/issues';
 
 const SprintPlanning: FunctionalComponent = () => {
     const [isSprintView, setIsSprintView] = useState<boolean>(false);
     const [issueFilter, setIssueFilter] = useState<string>('');
     const [sprintFilter, setSprintFilter] = useState<string>('open');
 
+    const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
+
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
+    useEffect(() => {
+        fetchWorkspaceIssues(1).then((issuePagination) => {
+            setIssuesArray(issuePagination.issues);
+            console.log(issuePagination.pageData);
+        });
+    }, []);
+
     // TODO Need to figure out how we actually want to sort issues, because current setup doesn't make much sense
-    const issuesList = issues.map((issue, index) => {
+    const issuesList = issuesArray.map((issue, index) => {
         return <IssueCard key={index} issue={issue} />;
     });
 

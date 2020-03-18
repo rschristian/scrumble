@@ -1,5 +1,4 @@
 import { apiService, authStorageService } from 'ts-api-toolkit';
-import axios from 'axios';
 
 export const login = async (shortLivedJwt: string): Promise<boolean> => {
     authStorageService.saveToken(shortLivedJwt);
@@ -25,22 +24,6 @@ export const destroyOAuthToken = async (): Promise<boolean> => {
             return false;
         });
 };
-
-export function fetchWorkspaceIssues() {
-    const workspaceId = 23;
-    apiService.get(`/workspace/${workspaceId}/issues`).then((response) => {
-        console.log(response);
-        return response;
-    });
-}
-
-export function fetchWorkspaceIssuesCached() {
-    const workspaceId = 8;
-    apiService.get(`/workspace/${workspaceId}/issues/cached`).then((response) => {
-        console.log(response);
-        return response;
-    });
-}
 
 export function fetchUserInfo() {
     apiService.get('/user/info').then((response) => {
