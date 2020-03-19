@@ -7,7 +7,6 @@ import { SprintFilter } from 'components/Filter/sprints';
 import { sprints } from 'data';
 import { SprintStatus } from 'models/Sprint';
 import { User } from 'models/user';
-import { fetchUserInfo, fetchSpecificUser } from 'services/api/auth';
 import { fetchIssues } from 'services/api/issues';
 import { Issue } from 'models/Issue';
 import { UserStoreContext } from 'stores';
@@ -25,9 +24,6 @@ const SprintPlanning: FunctionalComponent = () => {
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
     useEffect(() => {
-        fetchSpecificUser(userStore.currentUser.sub).then((response) => {
-            userStore.setCurrentUser(response);
-        });
         fetchIssues().then((response) => {
             response.forEach((issue: any) => {
                 const newIssue: Issue = {

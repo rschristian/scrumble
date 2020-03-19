@@ -31,13 +31,3 @@ export const fetchUserInfo = async (): Promise<User> => {
         return data;
     });
 };
-export async function fetchAllIssues() {
-    const response = await apiService.get('/issues/all');
-    return response.data;
-}
-
-export const fetchSpecificUser = async (id: number): Promise<User> => {
-    return await apiService.get(`user/getUser/${id}`).then(({ data }) => {
-        return data;
-    });
-};

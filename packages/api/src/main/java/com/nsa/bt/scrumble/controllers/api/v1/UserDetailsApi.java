@@ -42,20 +42,9 @@ public class UserDetailsApi {
     public ResponseEntity<String> getUserInfo(Authentication authentication){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-         if(accessTokenOptional.isPresent()) {
-             String uri = String.format("%s/oauth/userinfo?access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
-             return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
-         }
-         logger.error("Unable to authenticate with authentication provider");
-        return ResponseEntity.ok().body("Something went wrong...");
-    }
-
-    @GetMapping("/getUser/{id}")
-    public ResponseEntity<String> fetchUser(Authentication authentication, @PathVariable(value="id") int id) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        int serviceId = userPrincipal.getServiceId();
         if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%1s/users/%2s?access_token=%3s", gitLabBaseUrlApi, id, accessTokenOptional.get());
+            String uri = String.format("%1s/users/%2s?access_token=%3s", gitLabBaseUrlApi, serviceId, accessTokenOptional.get());
             return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
         }
         logger.error("Unable to authenticate with authentication provider");

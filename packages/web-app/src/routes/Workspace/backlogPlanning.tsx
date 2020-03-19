@@ -9,7 +9,6 @@ import { Issue } from 'models/Issue';
 import { observer } from 'services/mobx';
 import { WorkspaceStoreContext, UserStoreContext } from 'stores';
 import { fetchIssues, createIssue } from 'services/api/issues';
-import { fetchSpecificUser } from 'services/api/auth';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const workspaceStore = useContext(WorkspaceStoreContext);
@@ -48,9 +47,6 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
     };
 
     useEffect(() => {
-        fetchSpecificUser(userStore.currentUser.id).then((response) => {
-            userStore.setCurrentUser(response);
-        });
         fetchIssues().then((response) => {
             response.forEach((issue: any) => {
                 const newIssue: Issue = {
