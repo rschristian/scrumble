@@ -5,8 +5,8 @@ services:
     container_name: 'postgres'
     image: postgres:12-alpine
     environment:
-      POSTGRES_USER: 'tracing_api'
-      POSTGRES_PASSWORD: 'admin'
+      POSTGRES_USER: 'admin'
+      POSTGRES_PASSWORD: 'password'
       POSTGRES_DB: 'tracing'
     ports:
       - '5432:5432'

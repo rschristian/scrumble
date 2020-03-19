@@ -34,11 +34,22 @@ checkstyle {
     ignoreFailures = true
 }
 
+test {
+    afterTest { desc, result ->
+        logger.quiet "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+    }
+}
+
 tasks.withType(Checkstyle) {
     reports {
         xml.enabled true
         html.enabled true
     }
+}
+
+tasks.withType(Test) {
+    scanForTestClasses = false
+    include "**/*Test.class"
 }
 
 dependencies {
@@ -67,7 +78,6 @@ dependencies {
     implementation('io.jsonwebtoken:jjwt:0.2')
     implementation('org.apache.commons:commons-lang3')
 
-
     /*
         UTILS
      */
@@ -80,5 +90,4 @@ dependencies {
     testImplementation('io.projectreactor:reactor-test')
     testImplementation('org.springframework.security:spring-security-test')
     implementation('org.springframework.boot:spring-boot-starter-actuator')
-
 }
