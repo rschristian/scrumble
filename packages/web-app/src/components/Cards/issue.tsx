@@ -98,25 +98,6 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                         >
                             Edit
                         </button>
-                        <button
-                            disabled={props.user.is_admin === undefined}
-                            class={
-                                props.user.is_admin === undefined
-                                    ? 'float-right btn-disable my-auto'
-                                    : 'float-right btn-delete my-auto'
-                            }
-                            title={
-                                props.user.is_admin === undefined
-                                    ? 'You do not have permisson to delete this issue'
-                                    : null
-                            }
-                            onClick={(): void => {
-                                setShowDeleteIssueModal(true);
-                                setErrorMessage('');
-                            }}
-                        >
-                            Delete
-                        </button>
                     </div>
                 ) : null}
             </div>

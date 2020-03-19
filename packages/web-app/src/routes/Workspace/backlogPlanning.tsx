@@ -31,7 +31,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
     const updateIssues = (): void => {
         const issueArray: Issue[] = [];
         fetchIssues().then((response) => {
-            response.forEach((issue: any) => {
+            response.forEach((issue: Issue) => {
                 const newIssue: Issue = {
                     iid: issue.iid,
                     title: issue.title,
@@ -47,7 +47,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
     useEffect(() => {
         fetchIssues().then((response) => {
-            response.forEach((issue: any) => {
+            response.forEach((issue: Issue) => {
                 const newIssue: Issue = {
                     iid: issue.iid,
                     title: issue.title,
