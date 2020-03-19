@@ -5,33 +5,49 @@ import { IssueCard } from 'components/Cards/issue';
 import { IssueFilter } from 'components/Filter/issues';
 import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
 import { Modal } from 'components/Modal';
-import { issues } from 'data';
 import { Issue } from 'models/Issue';
-import { createIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
-import { WorkspaceStoreContext } from 'stores';
+import { UserStoreContext } from 'stores';
+import { fetchIssues, createIssue } from 'services/api/issues';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
-    const workspaceStore = useContext(WorkspaceStoreContext);
-
+    const userStore = useContext(UserStoreContext);
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
     const [errorMessage, setErrorMessage] = useState<string>('');
 
-    useEffect(() => {
-        setIssuesArray(issues);
-    }, []);
-
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
-        return await createIssue(workspaceStore.currentWorkspace, projectId, newIssue).then((error) => {
-            if (error) setErrorMessage(error);
-            else setIssuesArray((oldData) => [...oldData, newIssue]);
+        return await createIssue(projectId, newIssue).then((error) => {
+            if (error) {
+                setErrorMessage(error);
+            } else {
+                setIssuesArray((oldData) => [...oldData, newIssue]);
+                setShowNewIssueModal(false);
+                updateIssues();
+            }
         });
     };
 
+    const updateIssues = (): void => {
+        const issueArray: Issue[] = [];
+        fetchIssues().then((response) => {
+            response.forEach((issue: Issue) => {
+                issueArray.push(issue);
+                setIssuesArray(issueArray);
+            });
+        });
+    };
+
+    useEffect(() => {
+        fetchIssues().then((response) => {
+            response.forEach((issue: Issue) => {
+                setIssuesArray((oldData) => [...oldData, issue]);
+            });
+        });
+    }, []);
+
     // Both here to fulfill mandatory props until we decide what to do with them
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
-
     return (
         <div class={showNewIssueModal ? 'modal-active' : ''}>
             <div class="create-bar">
@@ -64,7 +80,9 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
             <div class="rounded bg-white overflow-hidden shadow-lg">
                 {issuesArray.map((issue, index) => {
-                    return <IssueCard key={index} issue={issue} />;
+                    return (
+                        <IssueCard key={index} issue={issue} updateList={updateIssues} user={userStore.currentUser} />
+                    );
                 })}
             </div>
         </div>

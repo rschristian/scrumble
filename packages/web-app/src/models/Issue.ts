@@ -3,5 +3,5 @@ export interface Issue {
     title: string;
     description?: string;
     storyPoints?: number;
-    projectId: number;
+    projectId: number; //add an indexer so additional porperties can be added
 }

@@ -7,17 +7,4 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 public class WorkspaceApi {
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Issue> getWorkspace(@PathVariable(value="id") int id) {
-        Issue issue = new Issue(id, "An issue name", "An issue description", 8, "Phoenix Project");
-
-        return ResponseEntity.ok().body(issue);
-    }
-
-    @GetMapping("/{id}/issues")
-    public ResponseEntity<Object> getIssues(@PathVariable(value="id") int id) {
-        Issue issue = new Issue(id, "An issue name", "An issue description", 8, "Phoenix Project");
-
-        return ResponseEntity.ok().body(issue);
-    }
 }

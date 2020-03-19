@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,15 +35,19 @@ public class UserDetailsApi {
     @Value("${app.issues.provider.gitlab.baseUrl}")
     private String gitLabBaseUrl;
 
+    @Value("${app.issues.provider.gitlab.baseUrl.api}")
+    private String gitLabBaseUrlApi;
+
     @GetMapping("/info")
     public ResponseEntity<String> getUserInfo(Authentication authentication){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-         if(accessTokenOptional.isPresent()) {
-             String uri = String.format("%s/oauth/userinfo?access_token=%s", gitLabBaseUrl, accessTokenOptional.get());
-             return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
-         }
-         logger.error("Unable to authenticate with authentication provider");
+        int serviceId = userPrincipal.getServiceId();
+        if(accessTokenOptional.isPresent()) {
+            String uri = String.format("%1s/users/%2s?access_token=%3s", gitLabBaseUrlApi, serviceId, accessTokenOptional.get());
+            return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
+        }
+        logger.error("Unable to authenticate with authentication provider");
         return ResponseEntity.ok().body("Something went wrong...");
     }
 }

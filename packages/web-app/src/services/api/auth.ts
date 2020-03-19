@@ -1,4 +1,5 @@
 import { apiService, authStorageService } from 'ts-api-toolkit';
+import { User } from 'models/user';
 
 export const login = async (shortLivedJwt: string): Promise<boolean> => {
     authStorageService.saveToken(shortLivedJwt);
@@ -25,9 +26,8 @@ export const destroyOAuthToken = async (): Promise<boolean> => {
         });
 };
 
-export function fetchUserInfo() {
-    apiService.get('/user/info').then((response) => {
-        console.log(response);
-        return response;
+export const fetchUserInfo = async (): Promise<User> => {
+    return await apiService.get('user/info').then(({ data }) => {
+        return data;
     });
-}
+};
