@@ -31,7 +31,7 @@ const firstLine = () => {
 const requiredFirstLine = "import React from 'react';";
 
 firstLine().then((result) => {
-    if (result != requiredFirstLine) {
+    if (result !== requiredFirstLine) {
         const data = fs
             .readFileSync(mobxObserverPath)
             .toString()
