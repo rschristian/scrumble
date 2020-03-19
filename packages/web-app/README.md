@@ -37,6 +37,12 @@ npm run serve:dev
 npm run serve:prod
 ```
 
+To build the app with docker (so you don't need to install Node or NPM):
+
+```
+docker run --rm -v "$PWD:/volume" -w /volume -it node:12.16.1-alpine npm run dockerbuild
+```
+
 ## Code Style
 
 The code is formatted to the linting rules found in [.eslintrc.js](.eslintrc.js).
