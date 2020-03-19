@@ -6,7 +6,7 @@ export async function fetchIssues(): Promise<Issue[]> {
     return await apiService
         .get('/issues/all')
         .then(({ data }) => {
-            return data;
+            return data as Issue[];
         })
         .catch(({ response }) => {
             if (response.data !== '') {

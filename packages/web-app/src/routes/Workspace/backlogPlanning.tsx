@@ -31,15 +31,10 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
     const updateIssues = (): void => {
         const issueArray: Issue[] = [];
         fetchIssues().then((response) => {
-            response.forEach((issue: any) => {
-                const newIssue: Issue = {
-                    iid: issue.iid,
-                    title: issue.title,
-                    description: issue.description,
-                    storyPoints: issue.labels.filter(Number)[0],
-                    projectId: issue.project_id,
-                };
-                issueArray.push(newIssue);
+            response.forEach((issue: Issue) => {
+                issue.storyPoints = issue.labels.filter(Number)[0];
+                issue.projectId = issue.project_id;
+                issueArray.push(issue);
                 setIssuesArray(issueArray);
             });
         });
@@ -47,15 +42,10 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
     useEffect(() => {
         fetchIssues().then((response) => {
-            response.forEach((issue: any) => {
-                const newIssue: Issue = {
-                    iid: issue.iid,
-                    title: issue.title,
-                    description: issue.description,
-                    storyPoints: issue.labels.filter(Number)[0],
-                    projectId: issue.project_id,
-                };
-                setIssuesArray((oldData) => [...oldData, newIssue]);
+            response.forEach((issue: Issue) => {
+                issue.storyPoints = issue.labels.filter(Number)[0];
+                issue.projectId = issue.project_id;
+                setIssuesArray((oldData) => [...oldData, issue]);
             });
         });
     }, []);

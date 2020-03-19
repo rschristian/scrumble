@@ -23,15 +23,10 @@ const SprintPlanning: FunctionalComponent = () => {
 
     useEffect(() => {
         fetchIssues().then((response) => {
-            response.forEach((issue: any) => {
-                const newIssue: Issue = {
-                    iid: issue.iid,
-                    title: issue.title,
-                    description: issue.description,
-                    storyPoints: issue.labels.filter(Number)[0],
-                    projectId: issue.project_id,
-                };
-                setIssuesList((oldData) => [...oldData, newIssue]);
+            response.forEach((issue: Issue) => {
+                issue.storyPoints = issue.labels.filter(Number)[0];
+                issue.projectId = issue.project_id;
+                setIssuesList((oldData) => [...oldData, issue]);
             });
         });
     }, []);
