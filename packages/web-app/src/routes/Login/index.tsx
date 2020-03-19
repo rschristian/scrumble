@@ -1,4 +1,5 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
+
 import scrumCards from 'assets/icons/scrumCards.png';
 
 const Login: FunctionalComponent = () => {
