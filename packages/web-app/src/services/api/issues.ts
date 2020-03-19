@@ -41,16 +41,3 @@ export const editIssue = async (projectId: number, issue: Issue): Promise<void |
             return 'Unknown error while updating sprint status';
         });
 };
-
-// GitLab API: DELETE /projects/:id/issues/:issue_iid
-export const deleteIssue = async (projectId: number, issueId: number): Promise<void | string> => {
-    return await apiService
-        .delete(`issues/${projectId}/deleteIssue/${issueId}`)
-        .then(() => {
-            return;
-        })
-        .catch(({ response }) => {
-            if (response.data !== '') return response.data.message;
-            return 'Unknown error while updating sprint status';
-        });
-};

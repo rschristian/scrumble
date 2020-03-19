@@ -6,8 +6,9 @@ import { workspaces } from 'data';
 import { fetchIssues } from 'services/api/issues';
 import { UserStoreContext } from 'stores';
 import { fetchUserInfo } from 'services/api/auth';
+import { observer } from 'services/mobx';
 
-const Home: FunctionalComponent = () => {
+const Home: FunctionalComponent = observer(() => {
     const userStore = useContext(UserStoreContext);
 
     useEffect(() => {
@@ -40,6 +41,6 @@ const Home: FunctionalComponent = () => {
             </div>
         </div>
     );
-};
+});
 
 export default Home;

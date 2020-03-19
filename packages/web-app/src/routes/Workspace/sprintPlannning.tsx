@@ -15,7 +15,7 @@ const SprintPlanning: FunctionalComponent = () => {
     const [isSprintView, setIsSprintView] = useState<boolean>(false);
     const [issueFilter, setIssueFilter] = useState<string>('');
     const [sprintFilter, setSprintFilter] = useState<string>('open');
-    const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
+    const [issuesList, setIssuesList] = useState<Issue[]>([]);
 
     const tempOnClick = (): void => console.log('clicked');
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
@@ -28,18 +28,13 @@ const SprintPlanning: FunctionalComponent = () => {
                     iid: issue.iid,
                     title: issue.title,
                     description: issue.description,
-                    storyPoints: issue.labels.filter(Number),
+                    storyPoints: issue.labels.filter(Number)[0],
                     projectId: issue.project_id,
                 };
-                setIssuesArray((oldData) => [...oldData, newIssue]);
+                setIssuesList((oldData) => [...oldData, newIssue]);
             });
         });
     }, []);
-
-    // TODO Need to figure out how we actually want to sort issues, because current setup doesn't make much sense
-    const issuesList = issuesArray.map((issue, index) => {
-        return <IssueCard key={index} issue={issue} user={userStore.currentUser} />;
-    });
 
     const sprintsList = sprints.map((sprint, index) => {
         if (sprintFilter === 'all' || sprint.status.toString() === sprintFilter) {
@@ -72,7 +67,11 @@ const SprintPlanning: FunctionalComponent = () => {
                     <div class="mr-4">
                         <IssueFilter setFilter={updateIssueFilter} />
                     </div>
-                    <div class="mr-4 rounded bg-white shadow-lg">{issuesList}</div>
+                    <div class="mr-4 rounded bg-white shadow-lg">
+                        {issuesList.map((issue, index) => {
+                            return <IssueCard key={index} issue={issue} user={userStore.currentUser} />;
+                        })}
+                    </div>
                 </div>
                 <div
                     class={`md:border-l border-gray-300 h-full w-11/12 md:w-1/2 md:block " ${

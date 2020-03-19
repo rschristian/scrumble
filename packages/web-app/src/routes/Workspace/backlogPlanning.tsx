@@ -31,12 +31,12 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
     const updateIssues = (): void => {
         const issueArray: Issue[] = [];
         fetchIssues().then((response) => {
-            response.forEach((issue: Issue) => {
+            response.forEach((issue: any) => {
                 const newIssue: Issue = {
                     iid: issue.iid,
                     title: issue.title,
                     description: issue.description,
-                    storyPoints: issue.labels.filter(Number),
+                    storyPoints: issue.labels.filter(Number)[0],
                     projectId: issue.project_id,
                 };
                 issueArray.push(newIssue);
@@ -47,12 +47,12 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
     useEffect(() => {
         fetchIssues().then((response) => {
-            response.forEach((issue: Issue) => {
+            response.forEach((issue: any) => {
                 const newIssue: Issue = {
                     iid: issue.iid,
                     title: issue.title,
                     description: issue.description,
-                    storyPoints: issue.labels.filter(Number),
+                    storyPoints: issue.labels.filter(Number)[0],
                     projectId: issue.project_id,
                 };
                 setIssuesArray((oldData) => [...oldData, newIssue]);

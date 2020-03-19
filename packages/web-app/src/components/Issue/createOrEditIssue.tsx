@@ -7,7 +7,7 @@ import { Issue } from 'models/Issue';
 interface IProps {
     issue?: Issue;
     submit?: (newIssue: Issue, projectId?: number) => void;
-    edit?: (editIssue: Issue, projectId?: number) => void;
+    edit?: boolean;
     close: () => void;
     error: string;
 }
@@ -15,7 +15,7 @@ interface IProps {
 export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
     const [title, setTitle] = useState<string>(props.issue?.title || '');
     const [description, setDescription] = useState<string>(props.issue?.description || '');
-    const [storyPoints, setStoryPoints] = useState<number[]>(props.issue?.storyPoints);
+    const [storyPoints, setStoryPoints] = useState<number>(props.issue?.storyPoints || 0);
     const [projectId, setProjectId] = useState<number>(props.issue?.projectId || 0);
     const createIssue = (): Issue => {
         return {
@@ -50,8 +50,8 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
                 class="form-input"
                 type="number"
                 placeholder="Issue Story Points (Optional)"
-                value={storyPoints[0]}
-                onInput={(e): void => setStoryPoints(() => [parseInt((e.target as HTMLSelectElement).value, 10)])}
+                value={storyPoints}
+                onInput={(e): void => setStoryPoints(parseInt((e.target as HTMLSelectElement).value, 10))}
             />
             <label class="form-label">Project to Attach To</label>
             <select
@@ -70,19 +70,19 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
                 })}
             </select>
             <div className="flex justify-end pt-2">
-                {props.submit ? (
+                {props.edit ? (
+                    <button
+                        className="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
+                        onClick={(): void => props.submit(createIssue())}
+                    >
+                        Edit Issue
+                    </button>
+                ) : (
                     <button
                         className="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
                         onClick={(): void => props.submit(createIssue(), projectId)}
                     >
                         Create new issue
-                    </button>
-                ) : (
-                    <button
-                        className="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
-                        onClick={(): void => props.edit(createIssue())}
-                    >
-                        Edit Issue
                     </button>
                 )}
                 <button
