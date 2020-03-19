@@ -6,6 +6,10 @@ export async function fetchIssues(): Promise<Issue[]> {
     return await apiService
         .get('/issues/all')
         .then(({ data }) => {
+            data.forEach((GitlabIssue: any) => {
+                GitlabIssue.storyPoints = GitlabIssue.labels.filter(Number)[0];
+                GitlabIssue.projectId = GitlabIssue.project_id;
+            });
             return data as Issue[];
         })
         .catch(({ response }) => {

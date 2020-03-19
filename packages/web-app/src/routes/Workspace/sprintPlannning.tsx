@@ -24,8 +24,6 @@ const SprintPlanning: FunctionalComponent = () => {
     useEffect(() => {
         fetchIssues().then((response) => {
             response.forEach((issue: Issue) => {
-                issue.storyPoints = issue.labels.filter(Number)[0];
-                issue.projectId = issue.project_id;
                 setIssuesList((oldData) => [...oldData, issue]);
             });
         });
