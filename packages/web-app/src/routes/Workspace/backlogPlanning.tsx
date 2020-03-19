@@ -7,11 +7,10 @@ import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
 import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
 import { observer } from 'services/mobx';
-import { WorkspaceStoreContext, UserStoreContext } from 'stores';
+import { UserStoreContext } from 'stores';
 import { fetchIssues, createIssue } from 'services/api/issues';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
-    const workspaceStore = useContext(WorkspaceStoreContext);
     const userStore = useContext(UserStoreContext);
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
@@ -29,7 +28,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
         });
     };
 
-    const updateIssues = () => {
+    const updateIssues = (): void => {
         const issueArray: Issue[] = [];
         fetchIssues().then((response) => {
             response.forEach((issue: any) => {

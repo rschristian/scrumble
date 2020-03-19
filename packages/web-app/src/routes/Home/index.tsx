@@ -14,7 +14,7 @@ const Home: FunctionalComponent = () => {
         fetchUserInfo().then((response) => {
             userStore.setCurrentUser(response);
         });
-    }, []);
+    }, [userStore]);
     return (
         <div class="mt-16 flex justify-center bg-blue-100">
             <div class="mx-3 flex justify-center flex-col w-3/4">

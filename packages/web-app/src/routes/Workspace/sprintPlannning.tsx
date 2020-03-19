@@ -6,7 +6,6 @@ import { IssueFilter } from 'components/Filter/issues';
 import { SprintFilter } from 'components/Filter/sprints';
 import { sprints } from 'data';
 import { SprintStatus } from 'models/Sprint';
-import { User } from 'models/user';
 import { fetchIssues } from 'services/api/issues';
 import { Issue } from 'models/Issue';
 import { UserStoreContext } from 'stores';
@@ -17,7 +16,6 @@ const SprintPlanning: FunctionalComponent = () => {
     const [issueFilter, setIssueFilter] = useState<string>('');
     const [sprintFilter, setSprintFilter] = useState<string>('open');
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
-    const [user, setUser] = useState<User>(null);
 
     const tempOnClick = (): void => console.log('clicked');
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
