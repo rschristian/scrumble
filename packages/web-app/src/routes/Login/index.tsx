@@ -2,7 +2,6 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import scrumCards from 'assets/icons/scrumCards.png';
 
 const Login: FunctionalComponent = () => {
-    //const REDIRECT_URI = 'http://localhost:8000/api/v1/oauth2/authorize/gitlab';
     const REDIRECT_URI = '/api/v1/oauth2/authorize/gitlab';
     return (
         <Fragment>
