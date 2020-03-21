@@ -7,28 +7,28 @@ import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
 import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
 import { observer } from 'services/mobx';
-import { WorkspaceStoreContext } from 'stores';
+import { UserLocationStoreContext } from 'stores';
 import { fetchIssues, createIssue } from 'services/api/issues';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
-    const workspaceStore = useContext(WorkspaceStoreContext);
+    const userLocationStore = useContext(UserLocationStoreContext);
 
     const [showNewIssueModal, setShowNewIssueModal] = useState<boolean>(false);
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
     const [errorMessage, setErrorMessage] = useState<string>('');
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
-        return await createIssue(workspaceStore.currentWorkspace, projectId, newIssue).then((error) => {
+        return await createIssue(userLocationStore.currentWorkspace.id, projectId, newIssue).then((error) => {
             if (error) setErrorMessage(error);
             else setIssuesArray((oldData) => [...oldData, newIssue]);
         });
     };
 
     useEffect(() => {
-        fetchIssues().then((issues) => {
+        fetchIssues(userLocationStore.currentWorkspace.id).then((issues) => {
             setIssuesArray(issues);
         });
-    }, []);
+    }, [userLocationStore]);
 
     // Here to fulfill mandatory props until we decide what to do with it
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);

@@ -6,7 +6,7 @@ import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
 import { Issue } from 'models/Issue';
 import { editIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
-import { WorkspaceStoreContext } from 'stores';
+import { UserLocationStoreContext } from 'stores';
 
 export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
     return (
@@ -29,18 +29,21 @@ interface IProps {
 }
 
 export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
-    const workspaceStore = useContext(WorkspaceStoreContext);
+    const userLocationStore = useContext(UserLocationStoreContext);
 
     const [showEditIssueModal, setShowEditIssueModal] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
 
     const handleIssueEdit = async (issue: Issue): Promise<void> => {
-        return await editIssue(workspaceStore.currentWorkspace, props.issue.projectId, props.issue.iid, issue).then(
-            (error) => {
-                if (error) setErrorMessage(error);
-                else setShowEditIssueModal(false);
-            },
-        );
+        return await editIssue(
+            userLocationStore.currentWorkspace.id,
+            props.issue.projectId,
+            props.issue.iid,
+            issue,
+        ).then((error) => {
+            if (error) setErrorMessage(error);
+            else setShowEditIssueModal(false);
+        });
     };
 
     return (

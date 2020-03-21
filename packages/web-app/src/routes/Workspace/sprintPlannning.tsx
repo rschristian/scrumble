@@ -1,5 +1,5 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
+import { useState, useEffect, useContext } from 'preact/hooks';
 
 import { IssueCard } from 'components/Cards/issue';
 import { SprintCard } from 'components/Cards/sprint';
@@ -9,8 +9,11 @@ import { sprints } from 'data';
 import { Issue } from 'models/Issue';
 import { SprintStatus } from 'models/Sprint';
 import { fetchIssues } from 'services/api/issues';
+import { UserLocationStoreContext } from 'stores';
 
 const SprintPlanning: FunctionalComponent = () => {
+    const userLocationStore = useContext(UserLocationStoreContext);
+
     const [isSprintView, setIsSprintView] = useState<boolean>(false);
     const [issueFilter, setIssueFilter] = useState<string>('');
     const [sprintFilter, setSprintFilter] = useState<string>('active');
@@ -21,10 +24,10 @@ const SprintPlanning: FunctionalComponent = () => {
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
     useEffect(() => {
-        fetchIssues().then((issues) => {
+        fetchIssues(userLocationStore.currentWorkspace.id).then((issues) => {
             setIssuesArray(issues);
         });
-    }, []);
+    }, [userLocationStore]);
 
     const issueCardList = issuesArray.map((issue, index) => {
         return <IssueCard key={index} issue={issue} />;
@@ -32,16 +35,7 @@ const SprintPlanning: FunctionalComponent = () => {
 
     const sprintCardList = sprints.map((sprint, index) => {
         if (sprintFilter === 'all' || sprint.status.toString() === sprintFilter) {
-            return (
-                <SprintCard
-                    key={index}
-                    id={sprint.id}
-                    projectId={sprint.projectId}
-                    title={sprint.title}
-                    description={sprint.description}
-                    closed={sprint.status === SprintStatus.closed}
-                />
-            );
+            return <SprintCard key={index} sprint={sprint} closed={sprint.status === SprintStatus.closed} />;
         }
     });
 

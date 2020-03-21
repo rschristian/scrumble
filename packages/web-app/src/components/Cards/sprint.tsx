@@ -6,24 +6,25 @@ import { MoreVertical } from 'preact-feather';
 import { Modal } from 'components/Modal';
 import { toggleSprintStatus } from 'services/api/sprints';
 import { observer } from 'services/mobx';
-import { WorkspaceStoreContext } from 'stores';
+import { UserLocationStoreContext } from 'stores';
+import { Sprint } from 'models/Sprint';
 
 interface IProps {
-    id: number;
-    projectId: number;
-    title: string;
-    description: string;
+    sprint: Sprint;
     closed: boolean;
 }
 
 export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) => {
-    const workspaceStore = useContext(WorkspaceStoreContext);
+    const userLocationStore = useContext(UserLocationStoreContext);
 
     const [showClosureModal, setShowClosureModal] = useState<boolean>(false);
     const [showOpeningModal, setShowOpeningModal] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
 
-    const linkTo = (): boolean => route(`${getUrlSubstringAndFix()}/sprint/${props.id}/`);
+    const linkTo = (): void => {
+        route(`${getUrlSubstringAndFix()}/sprint/${props.sprint.id}/`);
+        userLocationStore.setSprint(props.sprint);
+    };
 
     const closureModalContent = (
         <div>
@@ -39,7 +40,11 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
     );
 
     const handleToggleSprintStatus = async (): Promise<void> => {
-        return await toggleSprintStatus(workspaceStore.currentWorkspace, props.projectId, props.id).then((error) => {
+        return await toggleSprintStatus(
+            userLocationStore.currentWorkspace.id,
+            props.sprint.projectId,
+            props.sprint.id,
+        ).then((error) => {
             if (error) setErrorMessage(error);
             else {
                 setShowClosureModal(false);
@@ -68,7 +73,7 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
 
             <div class="lst-itm-container" onClick={linkTo}>
                 <div class="px-4 py-2 flex min-w-0 justify-between">
-                    <div class="truncate">{props.title}</div>
+                    <div class="truncate">{props.sprint.title}</div>
                     <div class="more-vertical">
                         <MoreVertical
                             class="hover:text-orange-600"
@@ -81,7 +86,7 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
                     </div>
                 </div>
                 <div class="px-4 py-2 flex min-w-0">
-                    <p class="itm-description">{props.description}</p>
+                    <p class="itm-description">{props.sprint.description}</p>
                 </div>
             </div>
         </Fragment>
