@@ -1,5 +1,5 @@
 export enum SprintStatus {
-    open = 'open',
+    active = 'active',
     closed = 'closed',
 }
 
