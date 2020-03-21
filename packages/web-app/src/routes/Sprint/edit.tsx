@@ -15,7 +15,7 @@ const SprintEdit: FunctionalComponent = () => {
     const [startDate, setStartDate] = useState(currentSprint.startDate);
     const [dueDate, setDueDate] = useState(currentSprint.dueDate);
 
-    const [errorMessage, setErrorMessage] = useState<string>('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const onSubmit = (): void => {
         editSprint(userLocationStore.currentWorkspace.id, 1, currentSprint.id, {
