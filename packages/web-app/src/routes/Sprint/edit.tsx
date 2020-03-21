@@ -1,18 +1,37 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
+import { useContext, useState } from 'preact/hooks';
 
 import { GenericEdit } from 'components/CommonRoutes/Edit';
+import { Sprint } from 'models/Sprint';
+import { editSprint } from 'services/api/sprints';
+import { UserLocationStoreContext } from 'stores';
 
 const SprintEdit: FunctionalComponent = () => {
-    const [sprintName, setSprintName] = useState('');
-    const [sprintDescription, setSprintDescription] = useState('');
-    const [startDate, setStartDate] = useState<Date>(new Date());
-    // If there's a better way to do this I'd forever love whoever fixes this
-    const [endDate, setEndDate] = useState<Date>(() => {
-        const today = new Date();
-        today.setDate(today.getDate() + 7);
-        return today;
-    });
+    const userLocationStore = useContext(UserLocationStoreContext);
+    const currentSprint: Sprint = userLocationStore.currentSprint;
+
+    const [title, setTitle] = useState(currentSprint.title);
+    const [description, setDescription] = useState(currentSprint.description);
+    const [startDate, setStartDate] = useState(currentSprint.startDate);
+    const [dueDate, setDueDate] = useState(currentSprint.dueDate);
+
+    const [errorMessage, setErrorMessage] = useState<string>('');
+
+    const onSubmit = (): void => {
+        editSprint(userLocationStore.currentWorkspace.id, 1, currentSprint.id, {
+            id: currentSprint.id,
+            iid: currentSprint.iid,
+            projectId: currentSprint.projectId,
+            title,
+            description,
+            status: currentSprint.status,
+            startDate,
+            dueDate,
+        }).then((error) => {
+            if (error) setErrorMessage(error);
+            else console.log('Success');
+        });
+    };
 
     return (
         <GenericEdit
@@ -24,8 +43,8 @@ const SprintEdit: FunctionalComponent = () => {
                             class="form-input"
                             type="text"
                             placeholder="Sprint Name"
-                            value={sprintName}
-                            onInput={(e): void => setSprintName((e.target as HTMLInputElement).value)}
+                            value={title}
+                            onInput={(e): void => setTitle((e.target as HTMLInputElement).value)}
                         />
                     </div>
                     <div class="m-4">
@@ -35,8 +54,8 @@ const SprintEdit: FunctionalComponent = () => {
                             rows={5}
                             type="text"
                             placeholder="Description"
-                            value={sprintDescription}
-                            onInput={(e): void => setSprintDescription((e.target as HTMLInputElement).value)}
+                            value={description}
+                            onInput={(e): void => setDescription((e.target as HTMLInputElement).value)}
                         />
                     </div>
                     <div class="m-4">
@@ -55,14 +74,16 @@ const SprintEdit: FunctionalComponent = () => {
                         <input
                             class="form-input"
                             type="date"
-                            value={`${endDate.getFullYear().toString()}-${zeroPad(endDate.getMonth() + 1)}-${zeroPad(
-                                endDate.getDate(),
+                            value={`${dueDate.getFullYear().toString()}-${zeroPad(dueDate.getMonth() + 1)}-${zeroPad(
+                                dueDate.getDate(),
                             )}`}
-                            onInput={(e): void => setEndDate(new Date((e.target as HTMLInputElement).value))}
+                            onInput={(e): void => setDueDate(new Date((e.target as HTMLInputElement).value))}
                         />
                     </div>
+                    <div className="error">{errorMessage}</div>
                 </Fragment>
             }
+            onSubmit={onSubmit}
         />
     );
 };
