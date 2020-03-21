@@ -2,9 +2,9 @@ import { apiService } from 'ts-api-toolkit';
 
 import { Issue } from 'models/Issue';
 
-export async function fetchIssues(): Promise<Issue[]> {
+export async function fetchIssues(workspaceId: number): Promise<Issue[]> {
     return await apiService
-        .get('/issues/all')
+        .get(`/workspace/${workspaceId}/issues`)
         .then(({ data }) => {
             data.forEach((GitlabIssue: any) => {
                 GitlabIssue.storyPoints = GitlabIssue.labels.filter(Number)[0];
