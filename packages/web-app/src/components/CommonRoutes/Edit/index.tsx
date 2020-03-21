@@ -2,6 +2,7 @@ import { Fragment, FunctionalComponent, h, VNode } from 'preact';
 
 interface IProps {
     editForm: VNode;
+    onSubmit: () => void;
 }
 
 export const GenericEdit: FunctionalComponent<IProps> = (props: IProps) => {
@@ -12,7 +13,9 @@ export const GenericEdit: FunctionalComponent<IProps> = (props: IProps) => {
             </div>
             <div class="form-container overflow-auto relative">
                 {props.editForm}
-                <button class="btn-create mx-auto mb-4 ml-4">Save Changes</button>
+                <button class="btn-create mx-auto mb-4 ml-4" onClick={props.onSubmit}>
+                    Save Changes
+                </button>
             </div>
         </Fragment>
     );
