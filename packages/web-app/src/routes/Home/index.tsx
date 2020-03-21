@@ -1,18 +1,18 @@
 import { FunctionalComponent, h } from 'preact';
 import { useEffect, useContext } from 'preact/hooks';
+
 import { WorkspaceCard } from 'components/Cards/workspace';
 import { SearchBar } from 'components/SearchBar';
 import { workspaces } from 'data';
-import { AuthStoreContext } from 'stores';
 import { fetchUserInfo } from 'services/api/auth';
+import { AuthStoreContext } from 'stores';
 
 const Home: FunctionalComponent = () => {
     const authStore = useContext(AuthStoreContext);
 
     useEffect(() => {
-        fetchUserInfo().then((response) => {
-            authStore.setCurrentUser(response);
-        });
+        fetchUserInfo().then((response) => authStore.setCurrentUser(response));
+        localStorage.setItem('activeListItem', String(0));
     });
 
     return (
