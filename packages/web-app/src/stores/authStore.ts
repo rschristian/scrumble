@@ -1,8 +1,15 @@
 import { observable, action } from 'mobx';
+
+import { User } from 'models/user';
 import { login, destroyOAuthToken } from 'services/api/auth';
 
 class AuthStore {
     @observable isAuthenticated = false;
+    @observable currentUser: User = null;
+
+    @action setCurrentUser(user: User): void {
+        this.currentUser = user;
+    }
 
     @action async login(shortLivedJwt: string): Promise<boolean> {
         return await login(shortLivedJwt).then((success) => {
