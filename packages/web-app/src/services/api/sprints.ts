@@ -32,6 +32,6 @@ export const editSprint = async (
             return;
         })
         .catch(({ response }) => {
-            return response.data?.message || 'Unknown error while update sprint details';
+            return response.data?.message || 'Unknown error while updating sprint details';
         });
 };
