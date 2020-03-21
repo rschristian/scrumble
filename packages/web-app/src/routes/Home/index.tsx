@@ -13,7 +13,7 @@ const Home: FunctionalComponent = () => {
     useEffect(() => {
         fetchUserInfo().then((response) => authStore.setCurrentUser(response));
         localStorage.setItem('activeListItem', String(0));
-    });
+    }, [authStore]);
 
     return (
         <div class="mt-16 flex justify-center bg-blue-100">
