@@ -1,13 +1,14 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
+
 import { IssueCard } from 'components/Cards/issue';
 import { SprintCard } from 'components/Cards/sprint';
 import { IssueFilter } from 'components/Filter/issues';
 import { SprintFilter } from 'components/Filter/sprints';
 import { sprints } from 'data';
+import { Issue } from 'models/Issue';
 import { SprintStatus } from 'models/Sprint';
 import { fetchIssues } from 'services/api/issues';
-import { Issue } from 'models/Issue';
 
 const SprintPlanning: FunctionalComponent = () => {
     const [isSprintView, setIsSprintView] = useState<boolean>(false);
@@ -23,7 +24,7 @@ const SprintPlanning: FunctionalComponent = () => {
         fetchIssues().then((issues) => {
             setIssuesArray(issues);
         });
-    });
+    }, []);
 
     const issueCardList = issuesArray.map((issue, index) => {
         return <IssueCard key={index} issue={issue} />;

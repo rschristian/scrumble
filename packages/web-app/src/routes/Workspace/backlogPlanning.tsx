@@ -28,7 +28,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
         fetchIssues().then((issues) => {
             setIssuesArray(issues);
         });
-    });
+    }, []);
 
     // Here to fulfill mandatory props until we decide what to do with it
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
