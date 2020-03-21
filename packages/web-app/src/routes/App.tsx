@@ -4,7 +4,8 @@ import { lazy, Suspense } from 'preact/compat';
 import { Route, route, Router, RouterOnChangeArgs } from 'preact-router';
 
 import { TopBar } from 'components/Core/TopBar';
-import { AuthSuccess, Login } from 'routes/Auth';
+import AuthSuccess from 'routes/Auth/authSuccess';
+import Login from 'routes/Auth/login';
 import Home from 'routes/Home';
 import { AuthStoreContext } from 'stores';
 
