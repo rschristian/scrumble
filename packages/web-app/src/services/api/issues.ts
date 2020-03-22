@@ -48,10 +48,15 @@ export const deleteIssue = async (workspaceId: number, projectId: number, issueI
         });
 };
 
-export const fetchWorkspaceIssues = async (page: number): Promise<IssuePagination> => {
-    const workspaceId = 23;
-    return await apiService.get(`/workspace/${workspaceId}/issues?page=${page}`).then((response) => {
-        // console.log(response);
+export const fetchWorkspaceIssues = async (
+    workspaceId: number,
+    filter: string,
+    projectId: number,
+    page: number,
+): Promise<IssuePagination> => {
+    const args = { filter, projectId, page };
+    return await apiService.query(`/workspace/${workspaceId}/issues`, { params: args }).then((response) => {
+        console.log(response);
         return response.data;
     });
 };

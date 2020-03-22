@@ -1,8 +1,14 @@
 package com.nsa.bt.scrumble.services;
 
+import com.nsa.bt.scrumble.dto.Issue;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 public interface IIssueService {
-    Object getIssuesPage(int workspaceId, int[] projectIds, String accessToken, int pageNum);
+
+    void setStoryPoint(Issue issue);
+
+    void filterAndSetStoryPoint(ArrayList<Issue> issues);
 }

@@ -1,15 +1,15 @@
 package com.nsa.bt.scrumble.controllers.api.v1;
 
 import com.nsa.bt.scrumble.dto.Issue;
-import com.nsa.bt.scrumble.dto.IssuePageData;
+import com.nsa.bt.scrumble.dto.NextResource;
 import com.nsa.bt.scrumble.security.UserPrincipal;
-//import com.nsa.bt.scrumble.services.ICacheService;
+import com.nsa.bt.scrumble.services.IIssuePagingService;
 import com.nsa.bt.scrumble.services.IIssueService;
 import com.nsa.bt.scrumble.services.IUserService;
 
-import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -38,22 +38,65 @@ public class WorkspaceApi {
     @Autowired
     IIssueService issueService;
 
-//    @Autowired
-//    ICacheService cacheService;
+    @Autowired
+    IIssuePagingService issuePagingService;
 
     @GetMapping("/{id}/issues")
-    public ResponseEntity<Object> getIssues(Authentication auth, @PathVariable(value="id") int id, @RequestParam(value="page") String page) {
-        int[] projectIds = { 1, 5, 3, 4, 8 };
-        int pageNum = Integer.parseInt(page.replace("/", ""));
+    public ResponseEntity<Object> getIssues(
+            Authentication auth, @PathVariable(value="id") int id,
+            @RequestParam(value="filter") String filter,
+            @RequestParam(value="projectId") int projectId,
+            @RequestParam(value="page") int page) {
 
-        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        page = issuePagingService.getPageNumber(page);
+        projectId = issuePagingService.getProjectId(id, projectId);
 
-        if(accessTokenOptional.isPresent()) {
-            return ResponseEntity.ok().body(issueService.getIssuesPage(id, projectIds, accessTokenOptional.get(), pageNum));
+        ArrayList<Issue> issues = new ArrayList<>();
+        NextResource nextResource = new NextResource();
+
+        Optional<String> accessTokenOptional = userService.getToken(((UserPrincipal) auth.getPrincipal()).getId());
+
+        boolean emptyReturn = issues.isEmpty();
+
+        while (emptyReturn) {
+            logger.info("Start of loop");
+            String uri = String.format("%s/projects/%d/issues?%s&page=%d&access_token=%s",
+                    gitLabApiUrl, projectId, issuePagingService.getFilterQuery(filter), page, accessTokenOptional.get());
+
+            ResponseEntity<ArrayList<Issue>> issuesResponse = restTemplate.exchange(
+                    uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
+
+            issues = issuesResponse.getBody();
+
+            if (issues.isEmpty()) {
+                // If no issues for project and is last project, exit loop
+                if (issuePagingService.isLastProject(id, projectId)) {
+                    logger.info("Last project and no more issues");
+                    emptyReturn = false;
+                } else {
+                    // If not last project, search for next project with filter results
+                    projectId = issuePagingService.getNextProjectId(id, projectId);
+                    logger.info(String.format("Getting next project id: %d", projectId));
+                    nextResource = issuePagingService.getNextResource(issuesResponse.getHeaders().getFirst("Link"), id, projectId, page);
+                }
+            } else {
+                nextResource = issuePagingService.getNextResource(issuesResponse.getHeaders().getFirst("Link"), id, projectId, page);
+                logger.info(String.format("Next project id: %d", nextResource.getProjectId()));
+                emptyReturn = false;
+            }
         }
 
-        logger.error("Unable to authenticate with authentication provider");
-        return ResponseEntity.ok().body("Something went wrong...");
+        var res = new HashMap<>();
+        issueService.filterAndSetStoryPoint(issues);
+        res.put("issues", issues);
+        res.put("projectPageData", nextResource);
+
+        return ResponseEntity.ok().body(res);
+    }
+
+    private HttpEntity<String> getApplicationJsonHeaders() {
+        var headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        return new HttpEntity(headers);
     }
 }

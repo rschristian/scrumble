@@ -11,10 +11,11 @@ enum FilterStatus {
     open = 'opened',
     closed = 'closed',
     unplanned = 'unplanned',
+    all = 'all',
 }
 
 export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
-    const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.open);
+    const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.all);
 
     const updateFilter = (filterStatus: FilterStatus): void => {
         props.setFilter(filterStatus.toString());
@@ -24,6 +25,12 @@ export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
     return (
         <div class="my-4 flex flex-col items-start">
             <div class="flex rounded shadow">
+                <button
+                    className={`btn-filter ${filterStatus === FilterStatus.all ? 'btn-filter-active' : ''}`}
+                    onClick={(): void => updateFilter(FilterStatus.all)}
+                >
+                    All
+                </button>
                 <button
                     class={`btn-filter ${filterStatus === FilterStatus.open ? 'btn-filter-active' : ''}`}
                     onClick={(): void => updateFilter(FilterStatus.open)}

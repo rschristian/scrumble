@@ -1,7 +1,7 @@
 import { Issue } from './Issue';
-import { PageData } from './PageData';
+import { ProjectPageData } from './ProjectPageData';
 
 export interface IssuePagination {
     issues: Issue[];
-    pageData: PageData;
+    projectPageData: ProjectPageData;
 }

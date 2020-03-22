@@ -21,9 +21,9 @@ const SprintPlanning: FunctionalComponent = () => {
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
     useEffect(() => {
-        fetchWorkspaceIssues(1).then((issuePagination) => {
+        fetchWorkspaceIssues(1, 'all', 0, 0).then((issuePagination) => {
             setIssuesArray(issuePagination.issues);
-            console.log(issuePagination.pageData);
+            console.log(issuePagination.projectPageData);
         });
     }, []);
 

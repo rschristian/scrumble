@@ -2,36 +2,35 @@ import { FunctionalComponent, h } from 'preact';
 import { useState, useEffect, useContext } from 'preact/hooks';
 
 import { IssueCard } from 'components/Cards/issue';
-import ReactPaginate from 'react-paginate';
 import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
 import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
 import { createIssue, fetchWorkspaceIssues } from 'services/api/issues';
 import { observer } from 'services/mobx';
 import { WorkspaceStoreContext } from 'stores';
-import { IssueFilter } from '../../components/Filter/issues';
-
-interface PageSelected {
-    selected: number;
-}
+import { IssueFilter } from 'components/Filter/issues';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const workspaceStore = useContext(WorkspaceStoreContext);
 
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
+    const [issueFilter, setIssueFilter] = useState<string>('all');
     const [errorMessage, setErrorMessage] = useState<string>('');
-    const [currentPageNum, setCurrentPageNum] = useState<number>(1);
-    const [totalIssues, setTotalIssues] = useState<number>(1);
-    const [numOfPages, setNumOfPages] = useState<number>(1);
+    const [currentPageNum, setCurrentPageNum] = useState<number>(0);
+    const [currentProjectId, setCurrentProjectId] = useState<number>(0);
+    const [areMoreIssues, setAreMoreIssues] = useState<boolean>(true);
+
+    const updateIssueFilter = (filterFor: string): void => {
+        setCurrentPageNum(0);
+        setCurrentProjectId(0);
+        setIssuesArray([]);
+        setIssueFilter(filterFor);
+    };
 
     useEffect(() => {
-        fetchWorkspaceIssues(currentPageNum).then((issuePagination) => {
-            setIssuesArray(issuePagination.issues);
-            setTotalIssues(issuePagination.pageData.total);
-            setNumOfPages(issuePagination.pageData.numberOfPages);
-        });
-    }, [currentPageNum]);
+        fetchMore();
+    }, [issueFilter]);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
         return await createIssue(workspaceStore.currentWorkspace, projectId, newIssue).then((error) => {
@@ -40,12 +39,20 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
         });
     };
 
-    const handlePageChange = (pageSelected: PageSelected) => {
-        setCurrentPageNum(pageSelected.selected + 1);
-    };
+    const fetchMore = () => {
+        fetchWorkspaceIssues(23, issueFilter, currentProjectId, currentPageNum).then((issuePagination) => {
+            setIssuesArray(issuesArray.concat(issuePagination.issues));
+            const projectId = issuePagination.projectPageData.projectId;
+            const pageNumber = issuePagination.projectPageData.pageNumber;
 
-    // Both here to fulfill mandatory props until we decide what to do with them
-    const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
+            if (projectId == 0 && pageNumber == 0) {
+                setAreMoreIssues(false);
+            } else {
+                setCurrentProjectId(projectId);
+                setCurrentPageNum(pageNumber);
+            }
+        });
+    };
 
     return (
         <div class={showNewIssueModal ? 'modal-active' : ''}>
@@ -64,22 +71,9 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             <IssueFilter setFilter={updateIssueFilter} />
 
             <div class="w-full">
-                <span>Total Issues: {totalIssues}</span>
-                <ReactPaginate
-                    previousLabel={'previous'}
-                    nextLabel={'next'}
-                    breakLabel={'...'}
-                    pageCount={numOfPages}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={handlePageChange}
-                    containerClassName={'flex items-baseline'}
-                    breakClassName={'btn-pagination'}
-                    pageClassName={'btn-pagination'}
-                    activeClassName={'btn-pagination-active'}
-                    previousClassName={'btn-page-move'}
-                    nextClassName={'btn-page-move'}
-                />
+                <button class={`btn-create ${areMoreIssues ? 'block' : 'block'}`} onClick={fetchMore}>
+                    Fetch 100 more
+                </button>
             </div>
 
             {showNewIssueModal ? (
