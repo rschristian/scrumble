@@ -15,7 +15,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
-    const [issueFilter, setIssueFilter] = useState<string>('all');
+    const [issueFilter, setIssueFilter] = useState<string>('unplanned');
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [currentPageNum, setCurrentPageNum] = useState<number>(0);
     const [currentProjectId, setCurrentProjectId] = useState<number>(0);
@@ -42,8 +42,8 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
     const fetchMore = () => {
         fetchWorkspaceIssues(23, issueFilter, currentProjectId, currentPageNum).then((issuePagination) => {
             setIssuesArray(issuesArray.concat(issuePagination.issues));
-            const projectId = issuePagination.projectPageData.projectId;
-            const pageNumber = issuePagination.projectPageData.pageNumber;
+            const projectId = issuePagination.nextResource.projectId;
+            const pageNumber = issuePagination.nextResource.pageNumber;
 
             if (projectId == 0 && pageNumber == 0) {
                 setAreMoreIssues(false);
@@ -71,7 +71,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             <IssueFilter setFilter={updateIssueFilter} />
 
             <div class="w-full">
-                <button class={`btn-create ${areMoreIssues ? 'block' : 'block'}`} onClick={fetchMore}>
+                <button class={`btn-create ${areMoreIssues ? 'block' : 'hidden'}`} onClick={fetchMore}>
                     Fetch 100 more
                 </button>
             </div>

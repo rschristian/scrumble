@@ -1,6 +1,7 @@
 package com.nsa.bt.scrumble.controllers.api.v1;
 
 import com.nsa.bt.scrumble.dto.Issue;
+import com.nsa.bt.scrumble.dto.IssuePageResult;
 import com.nsa.bt.scrumble.dto.NextResource;
 import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.services.IIssuePagingService;
@@ -41,6 +42,63 @@ public class WorkspaceApi {
     @Autowired
     IIssuePagingService issuePagingService;
 
+//    @GetMapping("/{id}/issues")
+//    public ResponseEntity<Object> getIssues(
+//            Authentication auth, @PathVariable(value="id") int id,
+//            @RequestParam(value="filter") String filter,
+//            @RequestParam(value="projectId") int projectId,
+//            @RequestParam(value="page") int page) {
+//
+//        page = issuePagingService.getPageNumber(page);
+//        projectId = issuePagingService.getProjectId(id, projectId);
+//
+//        ArrayList<Issue> issues = new ArrayList<>();
+//        NextResource nextResource = new NextResource();
+//        nextResource.setPageSize(20);
+//
+//        Optional<String> accessTokenOptional = userService.getToken(((UserPrincipal) auth.getPrincipal()).getId());
+//
+//        boolean issuesEmpty = true;
+//        boolean nextResourceIdentified = false;
+//
+//        while (issuesEmpty) {
+//            logger.info("Start of loop");
+//            String uri = String.format("%s/projects/%d/issues?%s&page=%d&access_token=%s",
+//                    gitLabApiUrl, projectId, issuePagingService.getFilterQuery(filter), page, accessTokenOptional.get());
+//
+//            ResponseEntity<ArrayList<Issue>> issuesResponse = restTemplate.exchange(
+//                    uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
+//
+//            issues = issuesResponse.getBody();
+//
+//            if (issues.isEmpty()) {
+//                // If no issues for project and is last project, exit loop
+//                if (issuePagingService.isLastProject(id, projectId)) {
+//                    logger.info("Last project and no more issues");
+//                    issuesEmpty = false;
+//                } else {
+//                    // If not last project, search for next project with filter results
+//                    logger.info(String.format("not last project, search for next project with filter result after project: %d", projectId));
+//                    nextResource = issuePagingService.findNextProjectWithQueryResults(nextResource, id, projectId, uri);
+//                    restTemplate.exchange(
+//                            uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
+//                    issuesEmpty = false;
+//                }
+//            } else {
+//                logger.info(String.format("Still more issues for project %d", projectId));
+//                nextResource = issuePagingService.getNextResource(uri, issuesResponse.getHeaders().getFirst("Link"), id, projectId, page);
+//                issuesEmpty = false;
+//            }
+//        }
+//
+//        var res = new HashMap<>();
+//        issueService.filterAndSetStoryPoint(issues);
+//        res.put("issues", issues);
+//        res.put("projectPageData", nextResource);
+//
+//        return ResponseEntity.ok().body(res);
+//    }
+
     @GetMapping("/{id}/issues")
     public ResponseEntity<Object> getIssues(
             Authentication auth, @PathVariable(value="id") int id,
@@ -53,18 +111,21 @@ public class WorkspaceApi {
 
         ArrayList<Issue> issues = new ArrayList<>();
         NextResource nextResource = new NextResource();
+        nextResource.setPageSize(20);
+
+        IssuePageResult issuePageResult = new IssuePageResult();
 
         Optional<String> accessTokenOptional = userService.getToken(((UserPrincipal) auth.getPrincipal()).getId());
 
-        boolean emptyReturn = issues.isEmpty();
+        boolean issuesEmpty = true;
+        boolean nextResourceIdentified = false;
 
-        while (emptyReturn) {
-            logger.info("Start of loop");
+        while (issuesEmpty) {
+            logger.info("Start of issues loop");
             String uri = String.format("%s/projects/%d/issues?%s&page=%d&access_token=%s",
                     gitLabApiUrl, projectId, issuePagingService.getFilterQuery(filter), page, accessTokenOptional.get());
 
-            ResponseEntity<ArrayList<Issue>> issuesResponse = restTemplate.exchange(
-                    uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
+            ResponseEntity<ArrayList<Issue>> issuesResponse = getIssuesResponse(uri);
 
             issues = issuesResponse.getBody();
 
@@ -72,27 +133,49 @@ public class WorkspaceApi {
                 // If no issues for project and is last project, exit loop
                 if (issuePagingService.isLastProject(id, projectId)) {
                     logger.info("Last project and no more issues");
-                    emptyReturn = false;
+                    nextResourceIdentified = true;
                 } else {
                     // If not last project, search for next project with filter results
-                    projectId = issuePagingService.getNextProjectId(id, projectId);
-                    logger.info(String.format("Getting next project id: %d", projectId));
-                    nextResource = issuePagingService.getNextResource(issuesResponse.getHeaders().getFirst("Link"), id, projectId, page);
+                    logger.info(String.format("not last project, search for next project with filter result after project: %d", projectId));
+                    issuePageResult = issuePagingService.getNextPageOfIssues(id, projectId, uri);
+                    if(issues.isEmpty()) {
+                        projectId = 0;
+                    } else {
+                        projectId = issues.get(0).getProjectId();
+                    }
                 }
             } else {
-                nextResource = issuePagingService.getNextResource(issuesResponse.getHeaders().getFirst("Link"), id, projectId, page);
-                logger.info(String.format("Next project id: %d", nextResource.getProjectId()));
-                emptyReturn = false;
+                logger.info(String.format("Initial client call not empty. Checking for more issues belonging to project: %d", projectId));
+                issuePageResult.setIssues(issues);
+                issuePageResult.setNextResource(issuePagingService.getNextResource(uri, issuesResponse.getHeaders().getFirst("Link"), id, projectId, page));
             }
+            issuesEmpty = false;
         }
+//
+//        while(!nextResourceIdentified) {
+//            logger.info("Start of nextResource loop");
+//            // there are still no issues, means the query failed --> no result match for query, ergo no next page
+//            if(issues.isEmpty()) {
+//                nextResourceIdentified = true;
+//            } else {
+//                nextResource = issuePagingService.getNextResource(id, projectId);
+//            }
+//        }
 
         var res = new HashMap<>();
         issueService.filterAndSetStoryPoint(issues);
         res.put("issues", issues);
         res.put("projectPageData", nextResource);
 
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok().body(issuePageResult);
     }
+
+    private ResponseEntity<ArrayList<Issue>> getIssuesResponse(String uri) {
+        return restTemplate.exchange(
+                uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
+
+    }
+
 
     private HttpEntity<String> getApplicationJsonHeaders() {
         var headers = new HttpHeaders();

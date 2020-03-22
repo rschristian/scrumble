@@ -15,7 +15,7 @@ enum FilterStatus {
 }
 
 export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
-    const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.all);
+    const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.unplanned);
 
     const updateFilter = (filterStatus: FilterStatus): void => {
         props.setFilter(filterStatus.toString());

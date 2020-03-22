@@ -3,5 +3,5 @@ import { ProjectPageData } from './ProjectPageData';
 
 export interface IssuePagination {
     issues: Issue[];
-    projectPageData: ProjectPageData;
+    nextResource: ProjectPageData;
 }
