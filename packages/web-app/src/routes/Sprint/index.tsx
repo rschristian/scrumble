@@ -26,10 +26,10 @@ enum SubPage {
 }
 
 const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
-    const [workspaceName, setWorkspaceName] = useState<string>('');
-    const [sprintName, setSprintName] = useState<string>('');
-    const [currentPage, setCurrentPage] = useState<string>('');
-    const [subPage, setSubPage] = useState<ComponentChild>(null);
+    const [workspaceName, setWorkspaceName] = useState('');
+    const [sprintName, setSprintName] = useState('');
+    const [subPageTitle, setSubPageTitle] = useState('');
+    const [subPageContent, setSubPageContent] = useState<ComponentChild>(null);
 
     useEffect(() => {
         for (const workspace of workspaces) {
@@ -41,24 +41,24 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
 
         switch (props.subPage) {
             case SubPage.issuesBoard:
-                setCurrentPage('Issues Board');
-                setSubPage(<IssuesBoard />);
+                setSubPageTitle('Issues Board');
+                setSubPageContent(<IssuesBoard />);
                 break;
             case SubPage.metrics:
-                setCurrentPage('Metrics');
-                setSubPage(<SprintMetrics />);
+                setSubPageTitle('Metrics');
+                setSubPageContent(<SprintMetrics />);
                 break;
             case SubPage.showAndTell:
-                setCurrentPage('Show and Tell');
-                setSubPage(<SprintShowAndTell />);
+                setSubPageTitle('Show and Tell');
+                setSubPageContent(<SprintShowAndTell />);
                 break;
             case SubPage.edit:
-                setCurrentPage('Edit');
-                setSubPage(<SprintEdit />);
+                setSubPageTitle('Edit');
+                setSubPageContent(<SprintEdit />);
                 break;
             default:
-                setCurrentPage('Daily Stand-up');
-                setSubPage(<DailyStandUp />);
+                setSubPageTitle('Daily Stand-up');
+                setSubPageContent(<DailyStandUp />);
                 break;
         }
     }, [props.sprintId, props.workspaceId, props.subPage]);
@@ -71,11 +71,11 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
                     <BreadCrumbs
                         workspaceId={props.workspaceId}
                         workspaceName={workspaceName}
-                        currentPage={currentPage}
+                        currentPage={subPageTitle}
                         sprintId={props.sprintId}
                         sprintName={sprintName}
                     />
-                    {subPage}
+                    {subPageContent}
                 </div>
             </div>
         </div>

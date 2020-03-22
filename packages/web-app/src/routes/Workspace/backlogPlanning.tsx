@@ -13,9 +13,9 @@ import { fetchIssues, createIssue } from 'services/api/issues';
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const userLocationStore = useContext(UserLocationStoreContext);
 
-    const [showNewIssueModal, setShowNewIssueModal] = useState<boolean>(false);
+    const [showNewIssueModal, setShowNewIssueModal] = useState(false);
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
-    const [errorMessage, setErrorMessage] = useState<string>('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
         return await createIssue(userLocationStore.currentWorkspace.id, projectId, newIssue).then((error) => {

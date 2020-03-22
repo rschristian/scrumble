@@ -12,10 +12,11 @@ interface IProps {
 }
 
 export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
-    const [title, setTitle] = useState<string>(props.issue?.title || '');
-    const [description, setDescription] = useState<string>(props.issue?.description || '');
-    const [storyPoints, setStoryPoints] = useState<number>(props.issue?.storyPoints || 0);
-    const [projectId, setProjectId] = useState<number>(props.issue?.projectId || 0);
+    const [title, setTitle] = useState(props.issue?.title || '');
+    const [description, setDescription] = useState(props.issue?.description || '');
+    const [storyPoints, setStoryPoints] = useState(props.issue?.storyPoints || 0);
+    const [projectId, setProjectId] = useState(props.issue?.projectId || 0);
+
     const createIssue = (): Issue => {
         return {
             iid: props.issue?.iid || 0,

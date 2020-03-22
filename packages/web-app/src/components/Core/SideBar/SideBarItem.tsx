@@ -13,7 +13,7 @@ interface IProps {
 }
 
 export const SideBarItem: FunctionalComponent<IProps> = (props: IProps) => {
-    const [currentUrl] = useState<string>(getCurrentUrl());
+    const [currentUrl] = useState(getCurrentUrl());
 
     const handleOnClick = (): void => {
         props.onClick(props.index);

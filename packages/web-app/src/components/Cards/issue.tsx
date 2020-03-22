@@ -31,8 +31,8 @@ interface IProps {
 export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
     const userLocationStore = useContext(UserLocationStoreContext);
 
-    const [showEditIssueModal, setShowEditIssueModal] = useState<boolean>(false);
-    const [errorMessage, setErrorMessage] = useState<string>('');
+    const [showEditIssueModal, setShowEditIssueModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleIssueEdit = async (issue: Issue): Promise<void> => {
         return await editIssue(

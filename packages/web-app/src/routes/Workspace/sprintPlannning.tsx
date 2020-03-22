@@ -14,9 +14,9 @@ import { UserLocationStoreContext } from 'stores';
 const SprintPlanning: FunctionalComponent = () => {
     const userLocationStore = useContext(UserLocationStoreContext);
 
-    const [isSprintView, setIsSprintView] = useState<boolean>(false);
-    const [issueFilter, setIssueFilter] = useState<string>('');
-    const [sprintFilter, setSprintFilter] = useState<string>('active');
+    const [isSprintView, setIsSprintView] = useState(false);
+    const [issueFilter, setIssueFilter] = useState('');
+    const [sprintFilter, setSprintFilter] = useState('active');
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
 
     // TODO: How do we actually want to filter issues?
@@ -24,9 +24,7 @@ const SprintPlanning: FunctionalComponent = () => {
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
     useEffect(() => {
-        fetchIssues(userLocationStore.currentWorkspace.id).then((issues) => {
-            setIssuesArray(issues);
-        });
+        fetchIssues(userLocationStore.currentWorkspace.id).then((issues) => setIssuesArray(issues));
     }, [userLocationStore]);
 
     const issueCardList = issuesArray.map((issue, index) => {

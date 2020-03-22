@@ -9,13 +9,12 @@ import { AuthStoreContext } from 'stores';
 
 export const TopBar: FunctionalComponent = () => {
     const authStore = useContext(AuthStoreContext);
+
     const [isOpen, setIsOpen] = useState(false);
     const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
 
     const logout = (): void => {
-        authStore.logout().then(() => {
-            route('/login');
-        });
+        authStore.logout().then(() => route('/login'));
     };
 
     return (

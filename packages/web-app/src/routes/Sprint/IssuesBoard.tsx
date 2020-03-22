@@ -1,4 +1,4 @@
-import { Fragment, FunctionalComponent, h } from 'preact';
+import { ComponentChild, Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
 import { IssueBoardCard } from 'components/Cards/issue';
@@ -6,10 +6,10 @@ import { issues } from 'data';
 
 const IssuesBoard: FunctionalComponent = () => {
     // TODO This is horrendous, but an easy way to split up test data. Delete all once real data is set up
-    const [open, setOpen] = useState([]);
-    const [inProgress, setInProgress] = useState([]);
-    const [forReview, setForReview] = useState([]);
-    const [closed, setClosed] = useState([]);
+    const [open, setOpen] = useState<ComponentChild[]>([]);
+    const [inProgress, setInProgress] = useState<ComponentChild[]>([]);
+    const [forReview, setForReview] = useState<ComponentChild[]>([]);
+    const [closed, setClosed] = useState<ComponentChild[]>([]);
 
     useEffect(() => {
         issues.map((issue, index) => {

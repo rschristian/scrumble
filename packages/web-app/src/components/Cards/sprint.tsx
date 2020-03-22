@@ -4,10 +4,10 @@ import { getCurrentUrl, route } from 'preact-router';
 import { MoreVertical } from 'preact-feather';
 
 import { Modal } from 'components/Modal';
+import { Sprint } from 'models/Sprint';
 import { toggleSprintStatus } from 'services/api/sprints';
 import { observer } from 'services/mobx';
 import { UserLocationStoreContext } from 'stores';
-import { Sprint } from 'models/Sprint';
 
 interface IProps {
     sprint: Sprint;
@@ -17,9 +17,9 @@ interface IProps {
 export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) => {
     const userLocationStore = useContext(UserLocationStoreContext);
 
-    const [showClosureModal, setShowClosureModal] = useState<boolean>(false);
-    const [showOpeningModal, setShowOpeningModal] = useState<boolean>(false);
-    const [errorMessage, setErrorMessage] = useState<string>('');
+    const [showClosureModal, setShowClosureModal] = useState(false);
+    const [showOpeningModal, setShowOpeningModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const linkTo = (): void => {
         route(`${getUrlSubstringAndFix()}/sprint/${props.sprint.id}/`);
