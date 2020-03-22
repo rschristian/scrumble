@@ -24,7 +24,10 @@ const SprintPlanning: FunctionalComponent = () => {
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
     useEffect(() => {
-        fetchIssues(userLocationStore.currentWorkspace.id).then((issues) => setIssuesArray(issues));
+        fetchIssues(userLocationStore.currentWorkspace.id).then((issues) => {
+            if (typeof issues == 'string') console.log(issues);
+            else setIssuesArray(issues);
+        });
     }, [userLocationStore]);
 
     const issueCardList = issuesArray.map((issue, index) => {

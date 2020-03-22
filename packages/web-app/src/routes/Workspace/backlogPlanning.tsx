@@ -26,7 +26,8 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
     useEffect(() => {
         fetchIssues(userLocationStore.currentWorkspace.id).then((issues) => {
-            setIssuesArray(issues);
+            if (typeof issues == 'string') setErrorMessage(issues);
+            else setIssuesArray(issues);
         });
     }, [userLocationStore]);
 

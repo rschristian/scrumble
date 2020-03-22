@@ -2,21 +2,14 @@ import { apiService } from 'ts-api-toolkit';
 
 import { Issue } from 'models/Issue';
 
-export async function fetchIssues(workspaceId: number): Promise<Issue[]> {
+export async function fetchIssues(workspaceId: number): Promise<Issue[] | string> {
     return await apiService
         .get(`/workspace/${workspaceId}/issues`)
-        .then(({ data }) => {
-            data.forEach((GitlabIssue: any) => {
-                GitlabIssue.storyPoints = GitlabIssue.labels.filter(Number)[0];
-                GitlabIssue.projectId = GitlabIssue.project_id;
-            });
-            return data as Issue[];
+        .then((response) => {
+            return response.data;
         })
         .catch(({ response }) => {
-            if (response.data !== '') {
-                return response.data.message;
-            }
-            return 'Unknown error';
+            return response.data?.message || 'Unknown error while retrieving issues';
         });
 }
 
@@ -28,8 +21,7 @@ export const createIssue = async (workspaceId: number, projectId: number, issue:
             return;
         })
         .catch(({ response }) => {
-            if (response.data !== '') return response.data.message;
-            return 'Unknown error while updating sprint status';
+            return response.data?.message || 'Unknown error while creating issue';
         });
 };
 
@@ -46,7 +38,6 @@ export const editIssue = async (
             return;
         })
         .catch(({ response }) => {
-            if (response.data !== '') return response.data.message;
-            return 'Unknown error while updating sprint status';
+            return response.data?.message || 'Unknown error while editing issue';
         });
 };

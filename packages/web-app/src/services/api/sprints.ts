@@ -14,8 +14,7 @@ export const toggleSprintStatus = async (
             return;
         })
         .catch(({ response }) => {
-            if (response.data !== '') return response.data.message;
-            return 'Unknown error while updating sprint status';
+            return response.data?.message || 'Unknown error while updating sprint status';
         });
 };
 
