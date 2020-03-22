@@ -18,6 +18,7 @@ const SprintPlanning: FunctionalComponent = () => {
     const [issueFilter, setIssueFilter] = useState('');
     const [sprintFilter, setSprintFilter] = useState('active');
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
+    const [issuesRetrievalErrorMessage, setIssuesRetrievalErrorMessage] = useState('');
 
     // TODO: How do we actually want to filter issues?
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
@@ -25,7 +26,7 @@ const SprintPlanning: FunctionalComponent = () => {
 
     useEffect(() => {
         fetchIssues(userLocationStore.currentWorkspace.id).then((issues) => {
-            if (typeof issues == 'string') console.log(issues);
+            if (typeof issues == 'string') setIssuesRetrievalErrorMessage(issues);
             else setIssuesArray(issues);
         });
     }, [userLocationStore]);
@@ -56,7 +57,9 @@ const SprintPlanning: FunctionalComponent = () => {
                     <div class="mr-4">
                         <IssueFilter setFilter={updateIssueFilter} />
                     </div>
-                    <div class="mr-4 rounded bg-white shadow-lg">{issueCardList}</div>
+                    <div class="mr-4 rounded bg-white shadow-lg">
+                        {issuesRetrievalErrorMessage !== '' ? issuesRetrievalErrorMessage : issueCardList}
+                    </div>
                 </div>
                 <div
                     class={`md:border-l border-gray-300 h-full w-11/12 md:w-1/2 md:block " ${

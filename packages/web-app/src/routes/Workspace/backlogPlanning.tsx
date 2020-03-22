@@ -15,21 +15,26 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [newIssueErrorMessage, setNewIssueErrorMessage] = useState('');
+    const [issuesRetrievalErrorMessage, setIssuesRetrievalErrorMessage] = useState('');
+
+    useEffect(() => {
+        fetchIssues(userLocationStore.currentWorkspace.id).then((issues) => {
+            if (typeof issues == 'string') setIssuesRetrievalErrorMessage(issues);
+            else setIssuesArray(issues);
+        });
+    }, [userLocationStore]);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
         return await createIssue(userLocationStore.currentWorkspace.id, projectId, newIssue).then((error) => {
-            if (error) setErrorMessage(error);
+            if (error) setNewIssueErrorMessage(error);
             else setIssuesArray((oldData) => [...oldData, newIssue]);
         });
     };
 
-    useEffect(() => {
-        fetchIssues(userLocationStore.currentWorkspace.id).then((issues) => {
-            if (typeof issues == 'string') setErrorMessage(issues);
-            else setIssuesArray(issues);
-        });
-    }, [userLocationStore]);
+    const issueCardList = issuesArray.map((issue, index) => {
+        return <IssueCard key={index} issue={issue} />;
+    });
 
     // Here to fulfill mandatory props until we decide what to do with it
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
@@ -42,7 +47,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                     class="btn-create my-auto"
                     onClick={(): void => {
                         setShowNewIssueModal(true);
-                        setErrorMessage('');
+                        setNewIssueErrorMessage('');
                     }}
                 >
                     New Issue
@@ -57,7 +62,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                         <CreateOrEditIssue
                             submit={handleIssueCreation}
                             close={(): void => setShowNewIssueModal(false)}
-                            error={errorMessage}
+                            error={newIssueErrorMessage}
                         />
                     }
                     close={(): void => setShowNewIssueModal(false)}
@@ -65,9 +70,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             ) : null}
 
             <div class="rounded bg-white overflow-hidden shadow-lg">
-                {issuesArray.map((issue, index) => {
-                    return <IssueCard key={index} issue={issue} />;
-                })}
+                {issuesRetrievalErrorMessage !== '' ? issuesRetrievalErrorMessage : issueCardList}
             </div>
         </div>
     );
