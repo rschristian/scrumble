@@ -23,7 +23,7 @@ const SprintPlanning: FunctionalComponent = () => {
     useEffect(() => {
         fetchWorkspaceIssues(1, 'all', 0, 0).then((issuePagination) => {
             setIssuesArray(issuePagination.issues);
-            console.log(issuePagination.projectPageData);
+            console.log(issuePagination.nextResource);
         });
     }, []);
 
