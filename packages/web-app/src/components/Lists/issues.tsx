@@ -12,7 +12,7 @@ const IssuesList: FunctionalComponent = observer(() => {
     const userLocationStore = useContext(UserLocationStoreContext);
 
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
-    const [issueFilter, setIssueFilter] = useState<string>('open');
+    const [issueFilter, setIssueFilter] = useState<string>('unplanned');
     const [currentPageNum, setCurrentPageNum] = useState<number>(0);
     const [currentProjectId, setCurrentProjectId] = useState<number>(0);
     const [areMoreIssues, setAreMoreIssues] = useState<boolean>(true);
@@ -31,7 +31,7 @@ const IssuesList: FunctionalComponent = observer(() => {
 
     useEffect(() => {
         fetchMore();
-    }, [issueFilter, userLocationStore]);
+    }, [issueFilter]);
 
     const fetchMore = (): void => {
         fetchWorkspaceIssues(userLocationStore.currentWorkspace.id, issueFilter, currentProjectId, currentPageNum).then(

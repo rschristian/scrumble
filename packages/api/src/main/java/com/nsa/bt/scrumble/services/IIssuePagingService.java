@@ -1,11 +1,7 @@
 package com.nsa.bt.scrumble.services;
 
-import com.nsa.bt.scrumble.dto.Issue;
 import com.nsa.bt.scrumble.dto.IssuePageResult;
 import com.nsa.bt.scrumble.dto.NextResource;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public interface IIssuePagingService {
 
@@ -25,7 +21,7 @@ public interface IIssuePagingService {
 
     boolean isLastProject(int workspaceId, int projectId);
 
-    HashMap<Object, Object> issuePageResponse(int workspaceId, int projectId, int page, String filter,  String accessToken);
+    IssuePageResult getIssuePageResult(int workspaceId, int projectId, int page, String filter,  String accessToken);
 
-    IssuePageResult getNextPageOfIssues(int workspaceId, int projectId, String queryUri);
+    IssuePageResult getNextProjectPageOfIssues(int workspaceId, int projectId, String queryUri);
 }

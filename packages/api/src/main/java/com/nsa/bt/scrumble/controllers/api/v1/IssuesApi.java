@@ -1,23 +1,24 @@
 package com.nsa.bt.scrumble.controllers.api.v1;
 
 import com.nsa.bt.scrumble.dto.Issue;
+import com.nsa.bt.scrumble.dto.IssuePageResult;
+import com.nsa.bt.scrumble.services.IIssuePagingService;
+import com.nsa.bt.scrumble.security.UserPrincipal;
+import com.nsa.bt.scrumble.services.IUserService;
+
 import org.springframework.http.HttpMethod;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.nsa.bt.scrumble.security.UserPrincipal;
-import com.nsa.bt.scrumble.services.IUserService;
+
+import java.util.HashMap;
 import java.util.Optional;
 
 @RestController
@@ -37,6 +38,29 @@ public class IssuesApi {
 
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabBaseUrl;
+
+    @Autowired
+    IIssuePagingService issuePagingService;
+
+    @GetMapping("/workspace/{id}/issues")
+    public ResponseEntity<Object> getIssues(
+            Authentication auth, @PathVariable(value="id") int id,
+            @RequestParam(value="filter") String filter,
+            @RequestParam(value="projectId") int projectId,
+            @RequestParam(value="page") int page) {
+
+        Optional<String> accessTokenOptional = userService.getToken(((UserPrincipal) auth.getPrincipal()).getId());
+        if(accessTokenOptional.isEmpty()) {
+            var res = new HashMap<String, String>();
+            res.put("issues", "error");
+            return ResponseEntity.ok().body(res);
+        }
+
+        String accessToken = accessTokenOptional.get();
+        IssuePageResult issuePageResult = issuePagingService.getIssuePageResult(id, projectId, page, filter, accessToken);
+
+        return ResponseEntity.ok().body(issuePageResult);
+    }
 
     @PostMapping("/workspace/{workspaceId}/project/{projectId}/issue")
     public ResponseEntity<String> createIssue(

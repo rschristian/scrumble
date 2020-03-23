@@ -9,6 +9,6 @@ public class WorkspaceService implements IWorkspaceService {
     @Override
     public int[] getProjectIdsForWorkspace(int workspaceId) {
 //        return new int[]{ 4, 1, 8, 11, 5};
-        return new int[]{ 8126, 8127 };
+        return new int[]{ 8129 , 8130, 7381 };
     }
 }
