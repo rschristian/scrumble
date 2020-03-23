@@ -1,46 +1,43 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState, useEffect, useContext } from 'preact/hooks';
+
 import { IssueCard } from 'components/Cards/issue';
 import { SprintCard } from 'components/Cards/sprint';
 import { IssueFilter } from 'components/Filter/issues';
 import { SprintFilter } from 'components/Filter/sprints';
 import { sprints } from 'data';
+import { Issue } from 'models/Issue';
 import { SprintStatus } from 'models/Sprint';
 import { fetchIssues } from 'services/api/issues';
-import { Issue } from 'models/Issue';
-import { UserStoreContext } from 'stores';
+import { UserLocationStoreContext } from 'stores';
 
 const SprintPlanning: FunctionalComponent = () => {
-    const userStore = useContext(UserStoreContext);
-    const [isSprintView, setIsSprintView] = useState<boolean>(false);
-    const [issueFilter, setIssueFilter] = useState<string>('');
-    const [sprintFilter, setSprintFilter] = useState<string>('open');
-    const [issuesList, setIssuesList] = useState<Issue[]>([]);
+    const userLocationStore = useContext(UserLocationStoreContext);
 
-    const tempOnClick = (): void => console.log('clicked');
+    const [isSprintView, setIsSprintView] = useState(false);
+    const [issueFilter, setIssueFilter] = useState('');
+    const [sprintFilter, setSprintFilter] = useState('active');
+    const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
+    const [issuesRetrievalErrorMessage, setIssuesRetrievalErrorMessage] = useState('');
+
+    // TODO: How do we actually want to filter issues?
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
     useEffect(() => {
-        fetchIssues().then((response) => {
-            response.forEach((issue: Issue) => {
-                setIssuesList((oldData) => [...oldData, issue]);
-            });
+        fetchIssues(userLocationStore.currentWorkspace.id).then((issues) => {
+            if (typeof issues == 'string') setIssuesRetrievalErrorMessage(issues);
+            else setIssuesArray(issues);
         });
-    }, []);
+    }, [userLocationStore]);
 
-    const sprintsList = sprints.map((sprint, index) => {
+    const issueCardList = issuesArray.map((issue, index) => {
+        return <IssueCard key={index} issue={issue} />;
+    });
+
+    const sprintCardList = sprints.map((sprint, index) => {
         if (sprintFilter === 'all' || sprint.status.toString() === sprintFilter) {
-            return (
-                <SprintCard
-                    key={index}
-                    id={sprint.id}
-                    projectId={sprint.projectId}
-                    title={sprint.title}
-                    description={sprint.description}
-                    closed={sprint.status === SprintStatus.closed}
-                />
-            );
+            return <SprintCard key={index} sprint={sprint} closed={sprint.status === SprintStatus.closed} />;
         }
     });
 
@@ -61,9 +58,7 @@ const SprintPlanning: FunctionalComponent = () => {
                         <IssueFilter setFilter={updateIssueFilter} />
                     </div>
                     <div class="mr-4 rounded bg-white shadow-lg">
-                        {issuesList.map((issue, index) => {
-                            return <IssueCard key={index} issue={issue} user={userStore.currentUser} />;
-                        })}
+                        {issuesRetrievalErrorMessage !== '' ? issuesRetrievalErrorMessage : issueCardList}
                     </div>
                 </div>
                 <div
@@ -83,7 +78,7 @@ const SprintPlanning: FunctionalComponent = () => {
                     <div class="md:ml-4">
                         <SprintFilter setFilter={updateSprintFilter} />
                     </div>
-                    <div class="md:ml-4 rounded bg-white overflow-hidden shadow-lg">{sprintsList}</div>
+                    <div class="md:ml-4 rounded bg-white overflow-hidden shadow-lg">{sprintCardList}</div>
                 </div>
             </div>
         </Fragment>

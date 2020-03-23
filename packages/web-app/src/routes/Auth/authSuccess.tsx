@@ -7,7 +7,8 @@ import { AuthStoreContext } from 'stores';
 
 const AuthSuccess: FunctionalComponent = () => {
     const authStore = useContext(AuthStoreContext);
-    const [isError, setIsError] = useState<boolean>(false);
+
+    const [isError, setIsError] = useState(false);
 
     useEffect(() => {
         const url = getCurrentUrl();

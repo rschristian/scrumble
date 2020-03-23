@@ -2,46 +2,42 @@ import { apiService } from 'ts-api-toolkit';
 
 import { Issue } from 'models/Issue';
 
-export async function fetchIssues(): Promise<Issue[]> {
+export async function fetchIssues(workspaceId: number): Promise<Issue[] | string> {
     return await apiService
-        .get('/issues/all')
-        .then(({ data }) => {
-            data.forEach((GitlabIssue: any) => {
-                GitlabIssue.storyPoints = GitlabIssue.labels.filter(Number)[0];
-                GitlabIssue.projectId = GitlabIssue.project_id;
-            });
-            return data as Issue[];
+        .get(`/workspace/${workspaceId}/issues`)
+        .then((response) => {
+            return response.data;
         })
         .catch(({ response }) => {
-            if (response.data !== '') {
-                return response.data.message;
-            }
-            return 'Unknown error';
+            return response.data?.message || 'Unknown error while retrieving issues';
         });
 }
 
 // GitLab API: POST /projects/:id/issues
-export const createIssue = async (projectId: number, issue: Issue): Promise<void | string> => {
+export const createIssue = async (workspaceId: number, projectId: number, issue: Issue): Promise<void | string> => {
     return await apiService
-        .post(`issues/${projectId}/createIssue`, issue)
+        .post(`/workspace/${workspaceId}/project/${projectId}/issue`, { issue })
         .then(() => {
             return;
         })
         .catch(({ response }) => {
-            if (response.data !== '') return response.data.message;
-            return 'Unknown error while updating sprint status';
+            return response.data?.message || 'Unknown error while creating issue';
         });
 };
 
 // GitLab API: PUT /projects/:id/issues/:issue_iid
-export const editIssue = async (projectId: number, issue: Issue): Promise<void | string> => {
+export const editIssue = async (
+    workspaceId: number,
+    projectId: number,
+    issueId: number,
+    issue: Issue,
+): Promise<void | string> => {
     return await apiService
-        .put(`issues/${projectId}/editIssue/`, issue)
+        .put(`/workspace/${workspaceId}/project/${projectId}/issue/${issueId}`, { issue })
         .then(() => {
             return;
         })
         .catch(({ response }) => {
-            if (response.data !== '') return response.data.message;
-            return 'Unknown error while updating sprint status';
+            return response.data?.message || 'Unknown error while editing issue';
         });
 };

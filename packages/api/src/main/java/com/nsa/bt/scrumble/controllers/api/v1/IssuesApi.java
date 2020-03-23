@@ -23,7 +23,7 @@ import com.nsa.bt.scrumble.services.IUserService;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/issues")
+@RequestMapping("/api/v1")
 public class IssuesApi {
 
     private static final Logger logger = LoggerFactory.getLogger(IssuesApi.class);
@@ -40,8 +40,8 @@ public class IssuesApi {
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabBaseUrl;
 
-    @GetMapping("/all")
-    public ResponseEntity<String> getAllIssues(Authentication authentication) {
+    @GetMapping("/workspace/{workspaceId}/issues")
+    public ResponseEntity<String> getIssues(Authentication authentication, @PathVariable(value="workspaceId") int workspaceId) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
@@ -52,8 +52,8 @@ public class IssuesApi {
         return ResponseEntity.ok().body("Something went wrong...");
     }
 
-    @PostMapping("/{projectId}/createIssue")
-    public ResponseEntity<String> createIssue(Authentication authentication, @PathVariable(value="projectId") int projectId, @RequestBody Issue issue){
+    @PostMapping("/workspace/{workspaceId}/project/{projectId}/issue")
+    public ResponseEntity<String> createIssue(Authentication authentication, @PathVariable(value="workspaceId") int workspaceId, @PathVariable(value="projectId") int projectId, @RequestBody Issue issue){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
@@ -64,26 +64,13 @@ public class IssuesApi {
         return ResponseEntity.ok().body("Something went wrong...");
     }
 
-    @PutMapping("/{projectId}/editIssue")
-    public ResponseEntity<String> editIssue(Authentication authentication, @PathVariable(value="projectId") int projectId, @RequestBody Issue issue) {
+    @PutMapping("/workspace/{workspaceId}/project/{projectId}/issue/{issueId}")
+    public ResponseEntity<String> editIssue(Authentication authentication, @PathVariable(value="workspaceId") int workspaceId, @PathVariable(value="projectId") int projectId, @PathVariable(value="issueId") int issueId, @RequestBody Issue issue) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
             String uri = String.format("%1s/projects/%2s/issues/%3s?title=%4s&description=%5s&labels=%6s&access_token=%7s", gitLabBaseUrl, projectId, issue.getIid(), issue.getTitle(), issue.getDescription(), issue.getStoryPoints(), accessTokenOptional.get());
             restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
-            return ResponseEntity.ok().body("issue updtaed");
-        }
-        logger.error("Unable to authenticate with authentication provider");
-        return ResponseEntity.ok().body("Something went wrong...");
-    }
-
-    @DeleteMapping("/{projectId}/deleteIssue/{issueId}")
-    public ResponseEntity<String> deleteIssue(Authentication authentication, @PathVariable(value="projectId") int projectId, @PathVariable(value="issueId") int issueId) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-        if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%1s/projects/%2s/issues/%3s?access_token=%s", gitLabBaseUrl, projectId, issueId ,accessTokenOptional.get());
-            restTemplate.exchange(uri, HttpMethod.DELETE, null, Void.class);
             return ResponseEntity.ok().body("issue updtaed");
         }
         logger.error("Unable to authenticate with authentication provider");
