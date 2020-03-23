@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Optional;
 
 
@@ -63,7 +64,9 @@ public class WorkspaceApi {
 
         Optional<String> accessTokenOptional = userService.getToken(((UserPrincipal) auth.getPrincipal()).getId());
         if(accessTokenOptional.isEmpty()) {
-            return ResponseEntity.ok().body("Something went wrong...");
+            var res = new HashMap<String, String>();
+            res.put("issues", "error");
+            return ResponseEntity.ok().body(res);
         }
 
         boolean issuesEmpty = true;

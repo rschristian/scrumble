@@ -37,7 +37,7 @@ const IssuesList: FunctionalComponent = observer(() => {
         fetchWorkspaceIssues(userLocationStore.currentWorkspace.id, issueFilter, currentProjectId, currentPageNum).then(
             (issuePagination) => {
                 // TODO: LAUREN FIX THIS!!
-                // if (typeof issues == 'string') setIssuesRetrievalErrorMessage(issues);
+                // if (typeof issuePagination.issues == 'string') setIssuesRetrievalErrorMessage(issuePagination.issues);
 
                 setIssuesArray(issuesArray.concat(issuePagination.issues));
                 const projectId = issuePagination.nextResource.projectId;
