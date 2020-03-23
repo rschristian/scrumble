@@ -1,19 +1,15 @@
 .btn-create {
   @apply align-baseline bg-blue-500 text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow-md;
 }
-.btn-delete {
-  @apply align-baseline bg-red-500 text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow-xl;
-}
-
 .btn-edit {
   @apply align-baseline bg-green-500 text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow-xl;
 }
 
-.btn-create:hover {
-  @apply bg-gray-100 text-gray-800;
+.btn-disable {
+  @apply align-baseline bg-red-500 text-white font-semibold py-2 px-4 border border-gray-400 opacity-50 rounded cursor-not-allowed;
 }
 
-.btn-delete:hover {
+.btn-create:hover {
   @apply bg-gray-100 text-gray-800;
 }
 

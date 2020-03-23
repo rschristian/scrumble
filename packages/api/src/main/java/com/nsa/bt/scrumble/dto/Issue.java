@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class Issue implements Serializable {
     private int id;
+    private int iid;
     @JsonProperty("milestone")
     private Milestone milestone;
     @JsonAlias("project_id")
@@ -21,8 +21,10 @@ public class Issue implements Serializable {
 
     public Issue(){}
 
-    public Issue(int id, int projectId, String title, String description, int storyPoint, String state, ArrayList<String> labels) {
+    public Issue(int id, int iid, Milestone milestone, int projectId, String title, String description, int storyPoint, String state, ArrayList<String> labels) {
         this.id = id;
+        this.iid = iid;
+        this.milestone = milestone;
         this.projectId = projectId;
         this.title = title;
         this.description = description;
@@ -37,6 +39,22 @@ public class Issue implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getIid() {
+        return iid;
+    }
+
+    public void setIid(int iid) {
+        this.iid = iid;
+    }
+
+    public Milestone getMilestone() {
+        return milestone;
+    }
+
+    public void setMilestone(Milestone milestone) {
+        this.milestone = milestone;
     }
 
     public int getProjectId() {

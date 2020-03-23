@@ -4,9 +4,9 @@ import { lazy, Suspense } from 'preact/compat';
 import { Route, route, Router, RouterOnChangeArgs } from 'preact-router';
 
 import { TopBar } from 'components/Core/TopBar';
+import AuthSuccess from 'routes/Auth/authSuccess';
+import Login from 'routes/Auth/login';
 import Home from 'routes/Home';
-import Login from 'routes/Login';
-import OAuth2Success from 'routes/OAuth2Success';
 import { AuthStoreContext } from 'stores';
 
 const Workspace = lazy(() => import('routes/Workspace'));
@@ -32,7 +32,7 @@ const App: FunctionalComponent = () => {
                 <Router>
                     <Route path="/" component={Home} />
                     <Route path="/login" component={Login} />
-                    <Route path="/oauth-success" component={OAuth2Success} />
+                    <Route path="/oauth-success" component={AuthSuccess} />
                     <Route path="/workspace/:workspaceId/:subPage?" component={Workspace} />
                     <Route path="/workspace/:workspaceId/sprint/:sprintId/:subPage?" component={Sprint} />
                 </Router>

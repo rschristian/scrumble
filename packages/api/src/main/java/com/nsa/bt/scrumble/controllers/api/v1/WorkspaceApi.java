@@ -42,63 +42,6 @@ public class WorkspaceApi {
     @Autowired
     IIssuePagingService issuePagingService;
 
-//    @GetMapping("/{id}/issues")
-//    public ResponseEntity<Object> getIssues(
-//            Authentication auth, @PathVariable(value="id") int id,
-//            @RequestParam(value="filter") String filter,
-//            @RequestParam(value="projectId") int projectId,
-//            @RequestParam(value="page") int page) {
-//
-//        page = issuePagingService.getPageNumber(page);
-//        projectId = issuePagingService.getProjectId(id, projectId);
-//
-//        ArrayList<Issue> issues = new ArrayList<>();
-//        NextResource nextResource = new NextResource();
-//        nextResource.setPageSize(20);
-//
-//        Optional<String> accessTokenOptional = userService.getToken(((UserPrincipal) auth.getPrincipal()).getId());
-//
-//        boolean issuesEmpty = true;
-//        boolean nextResourceIdentified = false;
-//
-//        while (issuesEmpty) {
-//            logger.info("Start of loop");
-//            String uri = String.format("%s/projects/%d/issues?%s&page=%d&access_token=%s",
-//                    gitLabApiUrl, projectId, issuePagingService.getFilterQuery(filter), page, accessTokenOptional.get());
-//
-//            ResponseEntity<ArrayList<Issue>> issuesResponse = restTemplate.exchange(
-//                    uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
-//
-//            issues = issuesResponse.getBody();
-//
-//            if (issues.isEmpty()) {
-//                // If no issues for project and is last project, exit loop
-//                if (issuePagingService.isLastProject(id, projectId)) {
-//                    logger.info("Last project and no more issues");
-//                    issuesEmpty = false;
-//                } else {
-//                    // If not last project, search for next project with filter results
-//                    logger.info(String.format("not last project, search for next project with filter result after project: %d", projectId));
-//                    nextResource = issuePagingService.findNextProjectWithQueryResults(nextResource, id, projectId, uri);
-//                    restTemplate.exchange(
-//                            uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
-//                    issuesEmpty = false;
-//                }
-//            } else {
-//                logger.info(String.format("Still more issues for project %d", projectId));
-//                nextResource = issuePagingService.getNextResource(uri, issuesResponse.getHeaders().getFirst("Link"), id, projectId, page);
-//                issuesEmpty = false;
-//            }
-//        }
-//
-//        var res = new HashMap<>();
-//        issueService.filterAndSetStoryPoint(issues);
-//        res.put("issues", issues);
-//        res.put("projectPageData", nextResource);
-//
-//        return ResponseEntity.ok().body(res);
-//    }
-
     @GetMapping("/{id}/issues")
     public ResponseEntity<Object> getIssues(
             Authentication auth, @PathVariable(value="id") int id,
@@ -118,7 +61,6 @@ public class WorkspaceApi {
         Optional<String> accessTokenOptional = userService.getToken(((UserPrincipal) auth.getPrincipal()).getId());
 
         boolean issuesEmpty = true;
-        boolean nextResourceIdentified = false;
 
         while (issuesEmpty) {
             logger.info("Start of issues loop");
@@ -133,7 +75,6 @@ public class WorkspaceApi {
                 // If no issues for project and is last project, exit loop
                 if (issuePagingService.isLastProject(id, projectId)) {
                     logger.info("Last project and no more issues");
-                    nextResourceIdentified = true;
                 } else {
                     // If not last project, search for next project with filter results
                     logger.info(String.format("not last project, search for next project with filter result after project: %d", projectId));
@@ -151,16 +92,6 @@ public class WorkspaceApi {
             }
             issuesEmpty = false;
         }
-//
-//        while(!nextResourceIdentified) {
-//            logger.info("Start of nextResource loop");
-//            // there are still no issues, means the query failed --> no result match for query, ergo no next page
-//            if(issues.isEmpty()) {
-//                nextResourceIdentified = true;
-//            } else {
-//                nextResource = issuePagingService.getNextResource(id, projectId);
-//            }
-//        }
 
         var res = new HashMap<>();
         issueService.filterAndSetStoryPoint(issues);
@@ -173,9 +104,7 @@ public class WorkspaceApi {
     private ResponseEntity<ArrayList<Issue>> getIssuesResponse(String uri) {
         return restTemplate.exchange(
                 uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
-
     }
-
 
     private HttpEntity<String> getApplicationJsonHeaders() {
         var headers = new HttpHeaders();

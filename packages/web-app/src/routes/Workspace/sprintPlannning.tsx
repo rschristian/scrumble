@@ -1,5 +1,5 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { useState, useEffect, useContext } from 'preact/hooks';
 
 import { IssueCard } from 'components/Cards/issue';
 import { SprintCard } from 'components/Cards/sprint';
@@ -7,14 +7,14 @@ import { IssueFilter } from 'components/Filter/issues';
 import { SprintFilter } from 'components/Filter/sprints';
 import { sprints } from 'data';
 import { SprintStatus } from 'models/Sprint';
-import { Issue } from 'models/Issue';
 import { fetchWorkspaceIssues } from 'services/api/issues';
+import { Issue } from 'models/Issue';
+import { UserStoreContext } from 'stores';
 
 const SprintPlanning: FunctionalComponent = () => {
+    const userStore = useContext(UserStoreContext);
     const [isSprintView, setIsSprintView] = useState<boolean>(false);
-    const [issueFilter, setIssueFilter] = useState<string>('');
     const [sprintFilter, setSprintFilter] = useState<string>('open');
-
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
 
     const updateIssueFilter = (filterFor: string): void => console.log(filterFor);
@@ -26,11 +26,6 @@ const SprintPlanning: FunctionalComponent = () => {
             console.log(issuePagination.nextResource);
         });
     }, []);
-
-    // TODO Need to figure out how we actually want to sort issues, because current setup doesn't make much sense
-    const issuesList = issuesArray.map((issue, index) => {
-        return <IssueCard key={index} issue={issue} />;
-    });
 
     const sprintsList = sprints.map((sprint, index) => {
         if (sprintFilter === 'all' || sprint.status.toString() === sprintFilter) {
@@ -63,7 +58,11 @@ const SprintPlanning: FunctionalComponent = () => {
                     <div class="mr-4">
                         <IssueFilter setFilter={updateIssueFilter} />
                     </div>
-                    <div class="mr-4 rounded bg-white shadow-lg">{issuesList}</div>
+                    <div class="mr-4 rounded bg-white shadow-lg">
+                        {issuesArray.map((issue, index) => {
+                            return <IssueCard key={index} issue={issue} user={userStore.currentUser} />;
+                        })}
+                    </div>
                 </div>
                 <div
                     class={`md:border-l border-gray-300 h-full w-11/12 md:w-1/2 md:block " ${

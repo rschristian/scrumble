@@ -7,12 +7,9 @@ import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
 import { createIssue, fetchWorkspaceIssues } from 'services/api/issues';
 import { observer } from 'services/mobx';
-import { WorkspaceStoreContext } from 'stores';
 import { IssueFilter } from 'components/Filter/issues';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
-    const workspaceStore = useContext(WorkspaceStoreContext);
-
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
     const [issueFilter, setIssueFilter] = useState<string>('unplanned');
@@ -33,7 +30,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
     }, [issueFilter]);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
-        return await createIssue(workspaceStore.currentWorkspace, projectId, newIssue).then((error) => {
+        return await createIssue(projectId, newIssue).then((error) => {
             if (error) setErrorMessage(error);
             else setIssuesArray((oldData) => [...oldData, newIssue]);
         });
