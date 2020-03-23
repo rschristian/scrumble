@@ -8,23 +8,14 @@ import { SprintStatus } from 'models/Sprint';
 import IssuesList from 'components/Lists/issues';
 
 const SprintPlanning: FunctionalComponent = () => {
-    const [isSprintView, setIsSprintView] = useState<boolean>(false);
-    const [sprintFilter, setSprintFilter] = useState<string>('open');
+    const [isSprintView, setIsSprintView] = useState(false);
+    const [sprintFilter, setSprintFilter] = useState('active');
 
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
-    const sprintsList = sprints.map((sprint, index) => {
+    const sprintCardList = sprints.map((sprint, index) => {
         if (sprintFilter === 'all' || sprint.status.toString() === sprintFilter) {
-            return (
-                <SprintCard
-                    key={index}
-                    id={sprint.id}
-                    projectId={sprint.projectId}
-                    title={sprint.title}
-                    description={sprint.description}
-                    closed={sprint.status === SprintStatus.closed}
-                />
-            );
+            return <SprintCard key={index} sprint={sprint} closed={sprint.status === SprintStatus.closed} />;
         }
     });
 
@@ -60,7 +51,7 @@ const SprintPlanning: FunctionalComponent = () => {
                     <div class="md:ml-4">
                         <SprintFilter setFilter={updateSprintFilter} />
                     </div>
-                    <div class="md:ml-4 rounded bg-white overflow-hidden shadow-lg">{sprintsList}</div>
+                    <div class="md:ml-4 rounded bg-white overflow-hidden shadow-lg">{sprintCardList}</div>
                 </div>
             </div>
         </Fragment>

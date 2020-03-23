@@ -28,13 +28,13 @@
   "dependencies": {
     "mobx": "^5.15.4",
     "mobx-react-lite": "^1.5.2",
+    "notyf": "^3.1.0",
     "preact": "^10.3.3",
     "preact-feather": "^4.1.0",
     "preact-render-to-string": "^5.1.4",
     "preact-router": "^3.2.1",
     "qs": "^6.9.1",
     "tailwindcss": "^1.2.0",
-    "toasted-notes": "^3.2.0",
     "ts-api-toolkit": "^2.0.1"
   },
   "devDependencies": {

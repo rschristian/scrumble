@@ -38,7 +38,7 @@ export const sprints: Sprint[] = [
         projectId: 7381,
         title: 'Sprint 3',
         description: 'Insert insightful and creative description of a sprint here',
-        status: SprintStatus.open,
+        status: SprintStatus.active,
         startDate: new Date(2020, 2, 5),
         dueDate: new Date(2020, 2, 19),
     },

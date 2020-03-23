@@ -6,17 +6,17 @@ import { Issue } from 'models/Issue';
 
 interface IProps {
     issue?: Issue;
-    submit?: (newIssue: Issue, projectId?: number) => void;
-    edit?: boolean;
+    submit: (newIssue: Issue, projectId?: number) => void;
     close: () => void;
     error: string;
 }
 
 export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
-    const [title, setTitle] = useState<string>(props.issue?.title || '');
-    const [description, setDescription] = useState<string>(props.issue?.description || '');
+    const [title, setTitle] = useState(props.issue?.title || '');
+    const [description, setDescription] = useState(props.issue?.description || '');
     const [storyPoint, setStoryPoint] = useState<number>(props.issue?.storyPoint || 0);
-    const [projectId, setProjectId] = useState<number>(props.issue?.projectId || 0);
+    const [projectId, setProjectId] = useState(props.issue?.projectId || 0);
+
     const createIssue = (): Issue => {
         return {
             iid: props.issue?.iid || 0,
@@ -72,21 +72,12 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
                 })}
             </select>
             <div className="flex justify-end pt-2">
-                {props.edit ? (
-                    <button
-                        className="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
-                        onClick={(): void => props.submit(createIssue())}
-                    >
-                        Edit Issue
-                    </button>
-                ) : (
-                    <button
-                        className="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
-                        onClick={(): void => props.submit(createIssue(), projectId)}
-                    >
-                        Create new issue
-                    </button>
-                )}
+                <button
+                    className="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
+                    onClick={(): void => props.submit(createIssue(), projectId)}
+                >
+                    Confirm
+                </button>
                 <button
                     className="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
                     onClick={props.close}

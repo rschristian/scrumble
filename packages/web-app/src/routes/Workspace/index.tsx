@@ -23,8 +23,8 @@ enum SubPage {
 }
 
 const Workspace: FunctionalComponent<IProps> = (props: IProps) => {
-    const [workspaceName, setWorkspaceName] = useState<string>('');
-    const [currentPageTitle, setCurrentPageTitle] = useState<string>('');
+    const [workspaceName, setWorkspaceName] = useState('');
+    const [currentPageTitle, setCurrentPageTitle] = useState('');
     const [subPage, setSubPage] = useState<ComponentChild>(null);
 
     useEffect(() => {

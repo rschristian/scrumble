@@ -1,9 +1,7 @@
 import { createContext } from 'preact';
 
 import { authStore } from 'stores/authStore';
-import { workspaceStore } from 'stores/workspaceStore';
-import { userStore } from 'stores/userStore';
+import { userLocationStore } from 'stores/userLocationStore';
 
 export const AuthStoreContext = createContext(authStore);
-export const WorkspaceStoreContext = createContext(workspaceStore);
-export const UserStoreContext = createContext(userStore);
+export const UserLocationStoreContext = createContext(userLocationStore);

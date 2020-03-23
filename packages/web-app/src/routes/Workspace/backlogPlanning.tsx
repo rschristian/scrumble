@@ -1,27 +1,30 @@
 import { FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
+import { useState, useContext } from 'preact/hooks';
 
-import toaster from 'toasted-notes';
+import { Notyf } from 'notyf';
+import 'notyf/notyf.min.css'; // for React and Vue
 
 import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
 import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
-import { createIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
+import { UserLocationStoreContext } from 'stores';
+import { createIssue } from 'services/api/issues';
 import IssuesList from 'components/Lists/issues';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
+    const userLocationStore = useContext(UserLocationStoreContext);
+
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string>('');
+    const [newIssueErrorMessage, setNewIssueErrorMessage] = useState('');
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
-        return await createIssue(projectId, newIssue).then((error) => {
+        return await createIssue(userLocationStore.currentWorkspace.id, projectId, newIssue).then((error) => {
             if (error) {
-                setErrorMessage(error);
+                setNewIssueErrorMessage(error);
             } else {
-                toaster.notify('Issue created!', {
-                    duration: 2000,
-                });
+                const notyf = new Notyf();
+                notyf.success('New issue created!');
             }
         });
     };
@@ -34,14 +37,12 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                     class="btn-create my-auto"
                     onClick={(): void => {
                         setShowNewIssueModal(true);
-                        setErrorMessage('');
+                        setNewIssueErrorMessage('');
                     }}
                 >
                     New Issue
                 </button>
             </div>
-
-            <IssuesList />
 
             {showNewIssueModal ? (
                 <Modal
@@ -50,12 +51,13 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                         <CreateOrEditIssue
                             submit={handleIssueCreation}
                             close={(): void => setShowNewIssueModal(false)}
-                            error={errorMessage}
+                            error={newIssueErrorMessage}
                         />
                     }
                     close={(): void => setShowNewIssueModal(false)}
                 />
             ) : null}
+            <IssuesList />
         </div>
     );
 });
