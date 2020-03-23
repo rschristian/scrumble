@@ -1,52 +1,27 @@
 import { FunctionalComponent, h } from 'preact';
-import { useState, useEffect, useContext } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 
-import { IssueCard } from 'components/Cards/issue';
+import toaster from 'toasted-notes';
+
 import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
 import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
-import { createIssue, fetchWorkspaceIssues } from 'services/api/issues';
+import { createIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
-import { IssueFilter } from 'components/Filter/issues';
+import IssuesList from 'components/Lists/issues';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
-    const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
-    const [issueFilter, setIssueFilter] = useState<string>('unplanned');
     const [errorMessage, setErrorMessage] = useState<string>('');
-    const [currentPageNum, setCurrentPageNum] = useState<number>(0);
-    const [currentProjectId, setCurrentProjectId] = useState<number>(0);
-    const [areMoreIssues, setAreMoreIssues] = useState<boolean>(true);
-
-    const updateIssueFilter = (filterFor: string): void => {
-        setCurrentPageNum(0);
-        setCurrentProjectId(0);
-        setIssuesArray([]);
-        setIssueFilter(filterFor);
-    };
-
-    useEffect(() => {
-        fetchMore();
-    }, [issueFilter]);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
         return await createIssue(projectId, newIssue).then((error) => {
-            if (error) setErrorMessage(error);
-            else setIssuesArray((oldData) => [...oldData, newIssue]);
-        });
-    };
-
-    const fetchMore = () => {
-        fetchWorkspaceIssues(23, issueFilter, currentProjectId, currentPageNum).then((issuePagination) => {
-            setIssuesArray(issuesArray.concat(issuePagination.issues));
-            const projectId = issuePagination.nextResource.projectId;
-            const pageNumber = issuePagination.nextResource.pageNumber;
-
-            if (projectId == 0 && pageNumber == 0) {
-                setAreMoreIssues(false);
+            if (error) {
+                setErrorMessage(error);
             } else {
-                setCurrentProjectId(projectId);
-                setCurrentPageNum(pageNumber);
+                toaster.notify('Issue created!', {
+                    duration: 2000,
+                });
             }
         });
     };
@@ -65,13 +40,8 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                     New Issue
                 </button>
             </div>
-            <IssueFilter setFilter={updateIssueFilter} />
 
-            <div class="w-full">
-                <button class={`btn-create ${areMoreIssues ? 'block' : 'hidden'}`} onClick={fetchMore}>
-                    Fetch 100 more
-                </button>
-            </div>
+            <IssuesList />
 
             {showNewIssueModal ? (
                 <Modal
@@ -86,12 +56,6 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                     close={(): void => setShowNewIssueModal(false)}
                 />
             ) : null}
-
-            <div class="rounded bg-white overflow-hidden shadow-lg">
-                {issuesArray.map((issue, index) => {
-                    return <IssueCard key={index} issue={issue} />;
-                })}
-            </div>
         </div>
     );
 });

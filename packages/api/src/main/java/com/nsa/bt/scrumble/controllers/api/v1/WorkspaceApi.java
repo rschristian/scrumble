@@ -19,7 +19,10 @@ import org.springframework.web.client.RestTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/v1/workspace")
@@ -59,13 +62,16 @@ public class WorkspaceApi {
         IssuePageResult issuePageResult = new IssuePageResult();
 
         Optional<String> accessTokenOptional = userService.getToken(((UserPrincipal) auth.getPrincipal()).getId());
+        if(accessTokenOptional.isEmpty()) {
+            return ResponseEntity.ok().body("Something went wrong...");
+        }
 
         boolean issuesEmpty = true;
+        String accessToken = accessTokenOptional.get();
 
         while (issuesEmpty) {
-            logger.info("Start of issues loop");
             String uri = String.format("%s/projects/%d/issues?%s&page=%d&access_token=%s",
-                    gitLabApiUrl, projectId, issuePagingService.getFilterQuery(filter), page, accessTokenOptional.get());
+                    gitLabApiUrl, projectId, issuePagingService.getFilterQuery(filter), page, accessToken);
 
             ResponseEntity<ArrayList<Issue>> issuesResponse = getIssuesResponse(uri);
 
@@ -77,7 +83,6 @@ public class WorkspaceApi {
                     logger.info("Last project and no more issues");
                 } else {
                     // If not last project, search for next project with filter results
-                    logger.info(String.format("not last project, search for next project with filter result after project: %d", projectId));
                     issuePageResult = issuePagingService.getNextPageOfIssues(id, projectId, uri);
                     if(issues.isEmpty()) {
                         projectId = 0;
@@ -86,17 +91,13 @@ public class WorkspaceApi {
                     }
                 }
             } else {
-                logger.info(String.format("Initial client call not empty. Checking for more issues belonging to project: %d", projectId));
                 issuePageResult.setIssues(issues);
                 issuePageResult.setNextResource(issuePagingService.getNextResource(uri, issuesResponse.getHeaders().getFirst("Link"), id, projectId, page));
             }
             issuesEmpty = false;
         }
 
-        var res = new HashMap<>();
         issueService.filterAndSetStoryPoint(issues);
-        res.put("issues", issues);
-        res.put("projectPageData", nextResource);
 
         return ResponseEntity.ok().body(issuePageResult);
     }

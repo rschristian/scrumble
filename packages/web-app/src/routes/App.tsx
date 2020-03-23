@@ -28,8 +28,8 @@ const App: FunctionalComponent = () => {
         <div id="app" class="bg-blue-100">
             <TopBar />
             <Suspense fallback={<Fallback />}>
-                {/*<Router onChange={authGuard}>*/}
-                <Router>
+                <Router onChange={authGuard}>
+                    {/*<Router>*/}
                     <Route path="/" component={Home} />
                     <Route path="/login" component={Login} />
                     <Route path="/oauth-success" component={AuthSuccess} />
