@@ -16,7 +16,7 @@ const IssuesList: FunctionalComponent = observer(() => {
     const userLocationStore = useContext(UserLocationStoreContext);
 
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
-    const [issueFilter, setIssueFilter] = useState<string>('all');
+    const [issueFilter, setIssueFilter] = useState<string>('opened');
     const [currentPageNum, setCurrentPageNum] = useState<number>(0);
     const [currentProjectId, setCurrentProjectId] = useState<number>(0);
     const [areMoreIssues, setAreMoreIssues] = useState<boolean>(true);

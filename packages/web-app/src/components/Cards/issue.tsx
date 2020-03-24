@@ -1,5 +1,5 @@
 import { FunctionalComponent, h } from 'preact';
-import { useState, useContext } from 'preact/hooks';
+import { useContext, useState } from 'preact/hooks';
 
 import { Modal } from 'components/Modal';
 import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';

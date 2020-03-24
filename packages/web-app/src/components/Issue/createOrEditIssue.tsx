@@ -14,13 +14,13 @@ interface IProps {
 export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
     const [title, setTitle] = useState(props.issue?.title || '');
     const [description, setDescription] = useState(props.issue?.description || '');
-    const [storyPoint, setStoryPoint] = useState<number>(props.issue?.storyPoint || 0);
+    const [storyPoint, setStoryPoint] = useState(props.issue?.storyPoint || 0);
     const [projectId, setProjectId] = useState(props.issue?.projectId || 0);
 
     const createIssue = (): Issue => {
         return {
             iid: props.issue?.iid || 0,
-            id: props.issue?.iid || 0,
+            id: props.issue?.id || 0,
             state: props.issue?.state || 'opened',
             title,
             description,

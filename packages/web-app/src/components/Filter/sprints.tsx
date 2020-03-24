@@ -2,9 +2,6 @@ import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 
 import { SearchBar } from 'components/SearchBar';
-import { searchIssueByTitleDescription } from '../../services/api/issues';
-import { notify } from 'react-notify-toast';
-import { error, warning } from '../Notification/colours';
 
 interface IProps {
     setFilter: (filterFor: string) => void;

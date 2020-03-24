@@ -39,6 +39,9 @@ public class UserDetailsApi {
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabBaseUrlApi;
 
+    @Value("${app.msg.error.auth}")
+    private String authErrorMsg;
+
     @GetMapping("/info")
     public ResponseEntity<String> getUserInfo(Authentication authentication){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
@@ -49,6 +52,6 @@ public class UserDetailsApi {
             return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
         }
         logger.error("Unable to authenticate with authentication provider");
-        return ResponseEntity.ok().body("Something went wrong...");
+        return ResponseEntity.ok().body(authErrorMsg);
     }
 }
