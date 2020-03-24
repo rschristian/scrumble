@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from 'preact/hooks';
 
 import { notify } from 'react-notify-toast';
 
-import { error, warning } from 'components/Notification/colours';
+import { error, warning } from 'services/Notification/colours';
 import { IssueCard } from 'components/Cards/issue';
 import { IssueFilter } from 'components/Filter/issues';
 import { Issue } from 'models/Issue';

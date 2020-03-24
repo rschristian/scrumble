@@ -20,7 +20,6 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
     const createIssue = (): Issue => {
         return {
             iid: props.issue?.iid || 0,
-            id: props.issue?.id || 0,
             state: props.issue?.state || 'opened',
             title,
             description,

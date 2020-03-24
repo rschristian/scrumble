@@ -26,7 +26,6 @@
     ]
   },
   "dependencies": {
-    "@types/react-notify-toast": "^0.5.2",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^1.5.2",
     "preact": "^10.3.3",
@@ -43,6 +42,7 @@
     "@types/react": "^16.9.23",
     "@typescript-eslint/eslint-plugin": "^2.22.0",
     "@typescript-eslint/parser": "^2.22.0",
+    "@types/react-notify-toast": "^0.5.2",
     "eslint": "^6.8.0",
     "eslint-config-preact": "^1.1.1",
     "eslint-config-prettier": "^6.10.0",

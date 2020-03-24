@@ -19,7 +19,6 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         iid={issue.iid}
-                        id={issue.id}
                         state={issue.state}
                         title={issue.title}
                         description={issue.description}
@@ -33,7 +32,6 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         iid={issue.iid}
-                        id={issue.id}
                         state={issue.state}
                         title={issue.title}
                         description={issue.description}
@@ -47,7 +45,6 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         iid={issue.iid}
-                        id={issue.id}
                         state={issue.state}
                         title={issue.title}
                         description={issue.description}
@@ -61,7 +58,6 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         iid={issue.iid}
-                        id={issue.id}
                         state={issue.state}
                         title={issue.title}
                         description={issue.description}

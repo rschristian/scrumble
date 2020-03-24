@@ -1,16 +1,14 @@
 package com.nsa.bt.scrumble.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Issue implements Serializable {
-    private int id;
     private int iid;
-    @JsonProperty("milestone")
-    private Milestone milestone;
+    @JsonAlias("milestone")
+    private Sprint sprint;
     @JsonAlias("project_id")
     private int projectId;
     private String title;
@@ -21,24 +19,15 @@ public class Issue implements Serializable {
 
     public Issue(){}
 
-    public Issue(int id, int iid, Milestone milestone, int projectId, String title, String description, int storyPoint, String state, ArrayList<String> labels) {
-        this.id = id;
+    public Issue(int iid, Sprint sprint, int projectId, String title, String description, int storyPoint, String state, ArrayList<String> labels) {
         this.iid = iid;
-        this.milestone = milestone;
+        this.sprint = sprint;
         this.projectId = projectId;
         this.title = title;
         this.description = description;
         this.storyPoint = storyPoint;
         this.state = state;
         this.labels = labels;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getIid() {
@@ -49,12 +38,12 @@ public class Issue implements Serializable {
         this.iid = iid;
     }
 
-    public Milestone getMilestone() {
-        return milestone;
+    public Sprint getSprint() {
+        return sprint;
     }
 
-    public void setMilestone(Milestone milestone) {
-        this.milestone = milestone;
+    public void setSprint(Sprint sprint) {
+        this.sprint = sprint;
     }
 
     public int getProjectId() {

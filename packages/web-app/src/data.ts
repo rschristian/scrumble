@@ -47,7 +47,6 @@ export const sprints: Sprint[] = [
 export const issues: Issue[] = [
     {
         iid: 1,
-        id: 1,
         state: 'opened',
         title: 'empower dynamic e-commerce',
         description:
@@ -57,7 +56,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 2,
-        id: 2,
         state: 'closed',
         title: 'engage innovative synergies',
         description:
@@ -67,7 +65,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 3,
-        id: 3,
         state: 'opened',
         title: 'harness value-added eyeballs',
         description:
@@ -77,7 +74,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 4,
-        id: 4,
         state: 'opened',
         title: 'innovate B2C infrastructures',
         description:
@@ -87,7 +83,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 5,
-        id: 5,
         state: 'opened',
         title: 'matrix sexy markets',
         description:
@@ -97,7 +92,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 6,
-        id: 6,
         state: 'opened',
         title: 'seize revolutionary deliverables',
         description: 'In hac habitasse platea dictumst.',
@@ -106,7 +100,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 7,
-        id: 7,
         state: 'closed',
         title: 'syndicate rich technologies',
         description:
@@ -116,7 +109,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 8,
-        id: 8,
         state: 'closed',
         title: 'iterate intuitive networks',
         description:
@@ -126,7 +118,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 9,
-        id: 9,
         state: 'opened',
         title: 'synthesize compelling ROI',
         description: 'Etiam justo.',
@@ -135,7 +126,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 10,
-        id: 10,
         state: 'opened',
         title: 'productize turn-key e-tailers',
         description:
@@ -145,7 +135,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 11,
-        id: 11,
         state: 'opened',
         title: 'evolve plug-and-play synergies',
         description: 'Suspendisse potenti. Nullam porttitor lacus at turpis.',
@@ -154,7 +143,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 12,
-        id: 12,
         state: 'closed',
         title: 'morph frictionless paradigms',
         description:
@@ -164,7 +152,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 13,
-        id: 13,
         state: 'closed',
         title: 'exploit synergistic solutions',
         description:
@@ -174,7 +161,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 14,
-        id: 14,
         state: 'closed',
         title: 'expedite intuitive metrics',
         description:
@@ -184,7 +170,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 15,
-        id: 15,
         state: 'closed',
         title: 'brand clicks-and-mortar bandwidth',
         description:
@@ -194,7 +179,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 16,
-        id: 16,
         state: 'closed',
         title: 'generate user-centric relationships',
         description:
@@ -204,7 +188,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 17,
-        id: 17,
         state: 'opened',
         title: 'architect sexy markets',
         description:
@@ -214,7 +197,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 18,
-        id: 18,
         state: 'opened',
         title: 'strategize extensible infomediaries',
         description:
@@ -224,7 +206,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 19,
-        id: 19,
         state: 'opened',
         title: 'target user-centric channels',
         description:
@@ -234,7 +215,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 20,
-        id: 20,
         state: 'opened',
         title: 'transition synergistic paradigms',
         description:
@@ -244,7 +224,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 21,
-        id: 21,
         state: 'opened',
         title: 'seize 24/365 relationships',
         description:
@@ -254,7 +233,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 22,
-        id: 22,
         state: 'opened',
         title: 'enhance proactive channels',
         description:
@@ -264,7 +242,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 23,
-        id: 23,
         state: 'opened',
         title: 'reintermediate leading-edge e-tailers',
         description:
@@ -274,7 +251,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 24,
-        id: 24,
         state: 'opened',
         title: 'target robust convergence',
         description:
@@ -284,7 +260,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 25,
-        id: 25,
         state: 'opened',
         title: 'matrix transparent vortals',
         description: 'Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.',
@@ -293,7 +268,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 26,
-        id: 26,
         state: 'opened',
         title: 'utilize back-end mindshare',
         description:
@@ -303,7 +277,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 27,
-        id: 27,
         state: 'opened',
         title: 'extend mission-critical vortals',
         description: 'Duis at velit eu est congue elementum. In hac habitasse platea dictumst.',
@@ -312,7 +285,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 28,
-        id: 28,
         state: 'opened',
         title: 'iterate frictionless deliverables',
         description: 'Duis bibendum. Morbi non quam nec dui luctus rutrum.',
@@ -321,7 +293,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 29,
-        id: 29,
         state: 'closed',
         title: 'cultivate sticky metrics',
         description:
@@ -331,7 +302,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 30,
-        id: 30,
         state: 'closed',
         title: 'whiteboard killer e-commerce',
         description: 'Donec quis orci eget orci vehicula condimentum.',
@@ -340,7 +310,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 31,
-        id: 31,
         state: 'closed',
         title: 'redefine cross-platform eyeballs',
         description:
@@ -350,7 +319,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 32,
-        id: 32,
         state: 'closed',
         title: 'strategize synergistic infomediaries',
         description:
@@ -360,7 +328,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 33,
-        id: 33,
         state: 'closed',
         title: 'grow scalable schemas',
         description: 'Nullam varius. Nulla facilisi.',
@@ -369,7 +336,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 34,
-        id: 33,
         state: 'closed',
         title: 'monetize bricks-and-clicks experiences',
         description:
@@ -379,7 +345,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 35,
-        id: 35,
         state: 'opened',
         title: 'maximize vertical systems',
         description:
@@ -389,7 +354,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 36,
-        id: 36,
         state: 'opened',
         title: 'incubate cutting-edge action-items',
         description:
@@ -399,7 +363,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 37,
-        id: 37,
         state: 'opened',
         title: 'innovate synergistic niches',
         description:
@@ -409,7 +372,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 38,
-        id: 38,
         state: 'closed',
         title: 'benchmark back-end e-services',
         description:
@@ -419,7 +381,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 39,
-        id: 39,
         state: 'opened',
         title: 'e-enable 24/7 e-commerce',
         description: 'In hac habitasse platea dictumst.',
@@ -428,7 +389,6 @@ export const issues: Issue[] = [
     },
     {
         iid: 40,
-        id: 40,
         state: 'closed',
         title: 'synergize scalable infrastructures',
         description:

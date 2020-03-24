@@ -2,12 +2,12 @@ package com.nsa.bt.scrumble.dto;
 
 import java.io.Serializable;
 
-public class Milestone implements Serializable {
+public class Sprint implements Serializable {
     private int id;
     private String title;
     private String description;
 
-    public Milestone(int id, String title, String description) {
+    public Sprint(int id, String title, String description) {
         this.id = id;
         this.title = title;
         this.description = description;

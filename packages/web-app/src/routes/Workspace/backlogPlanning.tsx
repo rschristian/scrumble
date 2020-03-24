@@ -10,7 +10,7 @@ import { observer } from 'services/mobx';
 import { UserLocationStoreContext } from 'stores';
 import { createIssue } from 'services/api/issues';
 import { IssuesList } from 'components/Lists/issues';
-import { success } from 'components/Notification/colours';
+import { success } from 'services/Notification/colours';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const userLocationStore = useContext(UserLocationStoreContext);
