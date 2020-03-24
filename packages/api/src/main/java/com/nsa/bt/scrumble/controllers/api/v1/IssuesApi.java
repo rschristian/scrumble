@@ -41,6 +41,9 @@ public class IssuesApi {
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabBaseUrl;
 
+    @Value("${app.msg.error.auth}")
+    private String authErrorMsg;
+
     @Autowired
     IIssuePagingService issuePagingService;
 
@@ -56,13 +59,11 @@ public class IssuesApi {
 
         Optional<String> accessTokenOptional = userService.getToken(((UserPrincipal) auth.getPrincipal()).getId());
         if(accessTokenOptional.isEmpty()) {
-            var res = new HashMap<String, String>();
-            res.put("issues", "error");
-            return ResponseEntity.ok().body(res);
+            return ResponseEntity.ok().body(authErrorMsg);
         }
 
         String accessToken = accessTokenOptional.get();
-        IssuePageResult issuePageResult = issuePagingService.getIssuePageResult(id, projectId, page, filter, accessToken);
+        IssuePageResult issuePageResult = issuePagingService.getPageOfIssues(id, projectId, page, filter, accessToken);
 
         return ResponseEntity.ok().body(issuePageResult);
     }
@@ -80,7 +81,7 @@ public class IssuesApi {
             return ResponseEntity.ok().body(restTemplate.postForObject(uri, null , String.class));
         }
         logger.error("Unable to authenticate with authentication provider");
-        return ResponseEntity.ok().body("Something went wrong...");
+        return ResponseEntity.ok().body(authErrorMsg);
     }
 
     @PutMapping("/workspace/{workspaceId}/project/{projectId}/issue/{issueId}")
@@ -99,7 +100,7 @@ public class IssuesApi {
             return ResponseEntity.ok().body("issue updated");
         }
         logger.error("Unable to authenticate with authentication provider");
-        return ResponseEntity.ok().body("Something went wrong...");
+        return ResponseEntity.ok().body(authErrorMsg);
     }
 
     @GetMapping("/workspace/{workspaceId}/issues/search")
@@ -116,6 +117,6 @@ public class IssuesApi {
             return ResponseEntity.ok().body(issueService.searchForIssue(workspaceId, searchFor, filter, accessTokenOptional.get()));
         }
         logger.error("Unable to authenticate with authentication provider");
-        return ResponseEntity.ok().body("Something went wrong...");
+        return ResponseEntity.ok().body(authErrorMsg);
     }
 }

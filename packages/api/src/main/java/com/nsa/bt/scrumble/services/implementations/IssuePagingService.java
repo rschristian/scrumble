@@ -79,17 +79,14 @@ public class IssuePagingService implements IIssuePagingService {
             // Still more issues for same project, get the next page
             nextResource.setProjectId(currentProjectId);
             nextResource.setPageNumber(prevPage + 1);
+            return nextResource;
         } else if (isLastProject(workspaceId, currentProjectId)) {
             // On the last project in the workspace and no more issues for it
             nextResource.setProjectId(0);
             nextResource.setPageNumber(0);
+            return nextResource;
         } else {
             // No more issues for the project requested.
-            // If it's the last project in the workspace, then 0 values for page and projectId will be
-            // sent back to indicate there are no more issues to ask for
-            if(isLastProject(workspaceId, currentProjectId)) {
-                return nextResource;
-            }
             // If it's not the last project in the workspace, try and find the next project that has query results
             nextResource = findNextProjectWithQueryResults(nextResource, workspaceId, currentProjectId, requestUri);
         }
@@ -148,15 +145,19 @@ public class IssuePagingService implements IIssuePagingService {
     }
 
     @Override
-    public IssuePageResult getNextProjectPageOfIssues(int workspaceId, int projectId, String queryUri) {
+    public IssuePageResult getPageOfIssues(int workspaceId, int projectId, int page, String filter, String accessToken) {
+        // Initial call for a workspaces issues will pass number 0 for page and project id.
+        // SB works out which project it should start from
+        page = getPageNumber(page);
+        projectId = getProjectId(workspaceId, projectId);
+
+        String queryUri = String.format("%s/projects/%d/issues?%s&page=%d&access_token=%s",
+                gitLabApiUrl, projectId, issueService.getFilterQuery(filter), page, accessToken);
+
         ArrayList<Issue> issues;
         IssuePageResult issuePageResult = new IssuePageResult();
-        boolean emptyResponse = true;
 
-        while(emptyResponse) {
-            projectId = getNextProjectId(workspaceId, projectId);
-            queryUri = getNextProjectIssuesUri(queryUri, projectId);
-
+        while(true) {
             ResponseEntity<ArrayList<Issue>> issuesResponse = restTemplate.exchange(
                     queryUri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
 
@@ -164,63 +165,16 @@ public class IssuePagingService implements IIssuePagingService {
             issuePageResult.setIssues(issues);
 
             if (!issues.isEmpty()) {
-                issuePageResult.setNextResource(getNextResource(queryUri, issuesResponse.getHeaders().getFirst("Link"), workspaceId, projectId, 1));
-                emptyResponse = false;
+                issuePageResult.setNextResource(getNextResource(queryUri, issuesResponse.getHeaders().getFirst("Link"), workspaceId, projectId, page));
+                return issuePageResult;
             } else if(isLastProject(workspaceId, projectId)) {
-                emptyResponse = false;
+                issuePageResult.setNextResource(new NextResource());
+                return issuePageResult;
             }
+            // Prep next iteration
+            projectId = getNextProjectId(workspaceId, projectId);
+            page = 1;
+            queryUri = getNextProjectIssuesUri(queryUri, projectId);
         }
-        return issuePageResult;
-    }
-
-    @Override
-    public IssuePageResult getIssuePageResult(int workspaceId, int projectId, int page, String filter, String accessToken) {
-        ArrayList<Issue> issues = new ArrayList<>();
-        NextResource nextResource = new NextResource();
-        nextResource.setPageSize(ISSUE_PAGE_SIZE);
-
-        IssuePageResult issuePageResult = new IssuePageResult();
-
-        boolean issuesEmpty = true;
-
-        // Initial call for a workspaces issues will pass number 0 for page and project id.
-        // SB works out which project it should start from
-        page = getPageNumber(page);
-        projectId = getProjectId(workspaceId, projectId);
-
-        while (issuesEmpty) {
-            String uri = String.format("%s/projects/%d/issues?%s&page=%d&access_token=%s",
-                    gitLabApiUrl, projectId, issueService.getFilterQuery(filter), page, accessToken);
-
-            ResponseEntity<ArrayList<Issue>> issuesResponse = getIssuesResponse(uri);
-            issues = issuesResponse.getBody();
-
-            if (issues.isEmpty()) {
-                // If not the last project in workspace, find next project with results for query if exists
-                if (!isLastProject(workspaceId, projectId)) {
-                    issuePageResult = getNextProjectPageOfIssues(workspaceId, projectId, uri);
-                    // If search for another project comes empty, then set a 0 value to indicate no further pages to client
-                    if(issuePageResult.getIssues().isEmpty()) {
-                        projectId = 0;
-                    } else {
-                        // If search comes up with results, set the project id to be requested that contains the next set of results
-                        projectId = issuePageResult.getIssues().get(0).getProjectId();
-                    }
-                }
-            } else {
-                // Request was fruitful. Get next resource details. Next resource details provided by the Gitlab
-                // next link if present. Or a search for the next project ensues.
-                issuePageResult.setIssues(issues);
-                issuePageResult.setNextResource(getNextResource(uri, issuesResponse.getHeaders().getFirst("Link"), workspaceId, projectId, page));
-            }
-            issuesEmpty = false;
-        }
-        issueService.filterAndSetStoryPoint(issues);
-        return issuePageResult;
-    }
-
-    private ResponseEntity<ArrayList<Issue>> getIssuesResponse(String uri) {
-        return restTemplate.exchange(
-                uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
     }
 }

@@ -2,6 +2,7 @@ package com.nsa.bt.scrumble.controllers.api.v1;
 
 import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.services.IUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

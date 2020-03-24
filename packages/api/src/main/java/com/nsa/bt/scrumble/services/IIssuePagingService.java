@@ -19,7 +19,5 @@ public interface IIssuePagingService {
 
     boolean isLastProject(int workspaceId, int projectId);
 
-    IssuePageResult getIssuePageResult(int workspaceId, int projectId, int page, String filter,  String accessToken);
-
-    IssuePageResult getNextProjectPageOfIssues(int workspaceId, int projectId, String queryUri);
+    IssuePageResult getPageOfIssues(int workspaceId, int projectId, int page, String filter,  String accessToken);
 }
