@@ -22,7 +22,6 @@ Please see [running.md](running.md) for instructions on how to build the project
 * **Ryan Christian**
 * **Lauren Heymer**
 * **James Buckland**
-* **Aschwin Sivaparan**
 
 ## Acknowledgments
 
