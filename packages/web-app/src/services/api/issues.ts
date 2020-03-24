@@ -51,7 +51,6 @@ export const fetchWorkspaceIssues = async (
 ): Promise<IssuePagination | string> => {
     const args = { filter, projectId, page };
     return await apiService.query(`/workspace/${workspaceId}/issues`, { params: args }).then((response) => {
-        console.log(response);
         return response.data;
     });
 };

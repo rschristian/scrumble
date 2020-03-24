@@ -12,7 +12,7 @@ import { observer } from 'services/mobx';
 import { UserLocationStoreContext } from 'stores';
 import { SearchBar } from 'components/SearchBar';
 
-const IssuesList: FunctionalComponent = observer(() => {
+export const IssuesList: FunctionalComponent = observer(() => {
     const userLocationStore = useContext(UserLocationStoreContext);
 
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
@@ -99,5 +99,3 @@ const IssuesList: FunctionalComponent = observer(() => {
         </div>
     );
 });
-
-export default IssuesList;

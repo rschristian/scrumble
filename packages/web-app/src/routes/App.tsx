@@ -30,7 +30,6 @@ const App: FunctionalComponent = () => {
             <TopBar />
             <Suspense fallback={<Fallback />}>
                 <Router onChange={authGuard}>
-                    {/*<Router>*/}
                     <Route path="/" component={Home} />
                     <Route path="/login" component={Login} />
                     <Route path="/oauth-success" component={AuthSuccess} />

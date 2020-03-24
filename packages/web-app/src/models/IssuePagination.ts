@@ -1,5 +1,10 @@
 import { Issue } from './Issue';
-import { ProjectPageData } from './ProjectPageData';
+
+export interface ProjectPageData {
+    projectId: number;
+    pageNumber: number;
+    pageSize: number;
+}
 
 export interface IssuePagination {
     issues: Issue[];

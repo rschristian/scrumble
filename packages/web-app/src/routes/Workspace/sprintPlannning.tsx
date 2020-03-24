@@ -5,7 +5,7 @@ import { SprintCard } from 'components/Cards/sprint';
 import { SprintFilter } from 'components/Filter/sprints';
 import { sprints } from 'data';
 import { SprintStatus } from 'models/Sprint';
-import IssuesList from 'components/Lists/issues';
+import { IssuesList } from 'components/Lists/issues';
 
 const SprintPlanning: FunctionalComponent = () => {
     const [isSprintView, setIsSprintView] = useState(false);
