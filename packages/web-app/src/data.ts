@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
-import { Issue } from 'models/Issue';
+import { Issue, IssueStatus } from 'models/Issue';
 import { Project } from 'models/Project';
 import { Sprint, SprintStatus } from 'models/Sprint';
 import { Workspace } from 'models/Workspace';
@@ -47,7 +47,7 @@ export const sprints: Sprint[] = [
 export const issues: Issue[] = [
     {
         iid: 1,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'empower dynamic e-commerce',
         description:
             'Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo. Etiam pretium iaculis justo. In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus. Nulla ut erat id mauris vulputate elementum.',
@@ -56,7 +56,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 2,
-        state: 'closed',
+        state: IssueStatus.closed,
         title: 'engage innovative synergies',
         description:
             'Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus. Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.',
@@ -65,7 +65,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 3,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'harness value-added eyeballs',
         description:
             'Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.',
@@ -74,7 +74,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 4,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'innovate B2C infrastructures',
         description:
             'Cras in purus eu magna vulputate luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
@@ -83,7 +83,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 5,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'matrix sexy markets',
         description:
             'Suspendisse potenti. Cras in purus eu magna vulputate luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.',
@@ -92,7 +92,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 6,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'seize revolutionary deliverables',
         description: 'In hac habitasse platea dictumst.',
         storyPoint: 2,
@@ -100,7 +100,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 7,
-        state: 'closed',
+        state: IssueStatus.closed,
         title: 'syndicate rich technologies',
         description:
             'Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus. Pellentesque at nulla. Suspendisse potenti.',
@@ -109,7 +109,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 8,
-        state: 'closed',
+        state: IssueStatus.closed,
         title: 'iterate intuitive networks',
         description:
             'Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus.',
@@ -118,7 +118,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 9,
-        state: 'opened',
+        state: IssueStatus.closed,
         title: 'synthesize compelling ROI',
         description: 'Etiam justo.',
         storyPoint: 11,
@@ -126,7 +126,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 10,
-        state: 'opened',
+        state: IssueStatus.closed,
         title: 'productize turn-key e-tailers',
         description:
             'Phasellus in felis. Donec semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius. Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.',
@@ -135,7 +135,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 11,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'evolve plug-and-play synergies',
         description: 'Suspendisse potenti. Nullam porttitor lacus at turpis.',
         storyPoint: 6,
@@ -143,7 +143,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 12,
-        state: 'closed',
+        state: IssueStatus.closed,
         title: 'morph frictionless paradigms',
         description:
             'Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem. Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci.',
@@ -152,7 +152,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 13,
-        state: 'closed',
+        state: IssueStatus.closed,
         title: 'exploit synergistic solutions',
         description:
             'Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat. Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.',
@@ -161,7 +161,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 14,
-        state: 'closed',
+        state: IssueStatus.closed,
         title: 'expedite intuitive metrics',
         description:
             'Nulla nisl. Nunc nisl. Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.',
@@ -170,7 +170,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 15,
-        state: 'closed',
+        state: IssueStatus.closed,
         title: 'brand clicks-and-mortar bandwidth',
         description:
             'Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.',
@@ -179,7 +179,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 16,
-        state: 'closed',
+        state: IssueStatus.closed,
         title: 'generate user-centric relationships',
         description:
             'Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem. Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus. Pellentesque at nulla. Suspendisse potenti.',
@@ -188,7 +188,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 17,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'architect sexy markets',
         description:
             'Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus. Phasellus in felis. Donec semper sapien a libero.',
@@ -197,7 +197,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 18,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'strategize extensible infomediaries',
         description:
             'Donec dapibus. Duis at velit eu est congue elementum. In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor.',
@@ -206,7 +206,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 19,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'target user-centric channels',
         description:
             'Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede. Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus.',
@@ -215,7 +215,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 20,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'transition synergistic paradigms',
         description:
             'Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus. Aenean fermentum. Donec ut mauris eget massa tempor convallis.',
@@ -224,7 +224,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 21,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'seize 24/365 relationships',
         description:
             'Morbi ut odio. Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices.',
@@ -233,7 +233,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 22,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'enhance proactive channels',
         description:
             'Phasellus in felis. Donec semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.',
@@ -242,7 +242,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 23,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'reintermediate leading-edge e-tailers',
         description:
             'Proin at turpis a pede posuere nonummy. Integer non velit. Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi.',
@@ -251,7 +251,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 24,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'target robust convergence',
         description:
             'In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc.',
@@ -260,7 +260,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 25,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'matrix transparent vortals',
         description: 'Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.',
         storyPoint: 5,
@@ -268,7 +268,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 26,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'utilize back-end mindshare',
         description:
             'Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros. Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo. Etiam pretium iaculis justo. In hac habitasse platea dictumst. Etiam faucibus cursus urna.',
@@ -277,7 +277,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 27,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'extend mission-critical vortals',
         description: 'Duis at velit eu est congue elementum. In hac habitasse platea dictumst.',
         storyPoint: 6,
@@ -285,7 +285,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 28,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'iterate frictionless deliverables',
         description: 'Duis bibendum. Morbi non quam nec dui luctus rutrum.',
         storyPoint: 12,
@@ -293,7 +293,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 29,
-        state: 'closed',
+        state: IssueStatus.closed,
         title: 'cultivate sticky metrics',
         description:
             'Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio. Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices.',
@@ -302,7 +302,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 30,
-        state: 'closed',
+        state: IssueStatus.closed,
         title: 'whiteboard killer e-commerce',
         description: 'Donec quis orci eget orci vehicula condimentum.',
         storyPoint: 7,
@@ -310,7 +310,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 31,
-        state: 'closed',
+        state: IssueStatus.closed,
         title: 'redefine cross-platform eyeballs',
         description:
             'Nunc nisl. Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum. In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.',
@@ -319,7 +319,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 32,
-        state: 'closed',
+        state: IssueStatus.closed,
         title: 'strategize synergistic infomediaries',
         description:
             'Etiam pretium iaculis justo. In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus. Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.',
@@ -328,7 +328,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 33,
-        state: 'closed',
+        state: IssueStatus.closed,
         title: 'grow scalable schemas',
         description: 'Nullam varius. Nulla facilisi.',
         storyPoint: 12,
@@ -336,7 +336,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 34,
-        state: 'closed',
+        state: IssueStatus.closed,
         title: 'monetize bricks-and-clicks experiences',
         description:
             'In congue. Etiam justo. Etiam pretium iaculis justo. In hac habitasse platea dictumst. Etiam faucibus cursus urna.',
@@ -345,7 +345,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 35,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'maximize vertical systems',
         description:
             'Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.',
@@ -354,7 +354,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 36,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'incubate cutting-edge action-items',
         description:
             'Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.',
@@ -363,7 +363,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 37,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'innovate synergistic niches',
         description:
             'Vivamus in felis eu sapien cursus vestibulum. Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem. Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.',
@@ -372,7 +372,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 38,
-        state: 'closed',
+        state: IssueStatus.open,
         title: 'benchmark back-end e-services',
         description:
             'Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede. Morbi porttitor lorem id ligula.',
@@ -381,7 +381,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 39,
-        state: 'opened',
+        state: IssueStatus.open,
         title: 'e-enable 24/7 e-commerce',
         description: 'In hac habitasse platea dictumst.',
         storyPoint: 5,
@@ -389,7 +389,7 @@ export const issues: Issue[] = [
     },
     {
         iid: 40,
-        state: 'closed',
+        state: IssueStatus.closed,
         title: 'synergize scalable infrastructures',
         description:
             'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi.',
