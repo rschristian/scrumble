@@ -8,6 +8,7 @@ import com.nsa.bt.scrumble.services.IIssueService;
 import com.nsa.bt.scrumble.services.IUserService;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
@@ -59,7 +60,9 @@ public class IssuesApi {
 
         Optional<String> accessTokenOptional = userService.getToken(((UserPrincipal) auth.getPrincipal()).getId());
         if(accessTokenOptional.isEmpty()) {
-            return ResponseEntity.ok().body(authErrorMsg);
+            var res = new HashMap<String, String>();
+            res.put("message", authErrorMsg);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
         }
 
         String accessToken = accessTokenOptional.get();
@@ -69,7 +72,7 @@ public class IssuesApi {
     }
 
     @PostMapping("/workspace/{workspaceId}/project/{projectId}/issue")
-    public ResponseEntity<String> createIssue(
+    public ResponseEntity<Object> createIssue(
             Authentication authentication, @PathVariable(value="workspaceId") int workspaceId,
             @PathVariable(value="projectId") int projectId,
             @RequestBody Issue issue){
@@ -81,11 +84,13 @@ public class IssuesApi {
             return ResponseEntity.ok().body(restTemplate.postForObject(uri, null , String.class));
         }
         logger.error("Unable to authenticate with authentication provider");
-        return ResponseEntity.ok().body(authErrorMsg);
+        var res = new HashMap<String, String>();
+        res.put("message", authErrorMsg);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
     }
 
     @PutMapping("/workspace/{workspaceId}/project/{projectId}/issue/{issueId}")
-    public ResponseEntity<String> editIssue(
+    public ResponseEntity<Object> editIssue(
             Authentication authentication,
             @PathVariable(value="workspaceId") int workspaceId,
             @PathVariable(value="projectId") int projectId,
@@ -100,7 +105,9 @@ public class IssuesApi {
             return ResponseEntity.ok().body("issue updated");
         }
         logger.error("Unable to authenticate with authentication provider");
-        return ResponseEntity.ok().body(authErrorMsg);
+        var res = new HashMap<String, String>();
+        res.put("message", authErrorMsg);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
     }
 
     @GetMapping("/workspace/{workspaceId}/issues/search")
@@ -117,6 +124,8 @@ public class IssuesApi {
             return ResponseEntity.ok().body(issueService.searchForIssue(workspaceId, searchFor, filter, accessTokenOptional.get()));
         }
         logger.error("Unable to authenticate with authentication provider");
-        return ResponseEntity.ok().body(authErrorMsg);
+        var res = new HashMap<String, String>();
+        res.put("message", authErrorMsg);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
     }
 }

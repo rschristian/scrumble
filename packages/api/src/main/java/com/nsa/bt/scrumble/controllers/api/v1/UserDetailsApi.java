@@ -5,6 +5,7 @@ import com.nsa.bt.scrumble.services.IUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -16,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 @RestController
@@ -43,7 +45,7 @@ public class UserDetailsApi {
     private String authErrorMsg;
 
     @GetMapping("/info")
-    public ResponseEntity<String> getUserInfo(Authentication authentication){
+    public ResponseEntity<Object> getUserInfo(Authentication authentication){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         int serviceId = userPrincipal.getServiceId();
@@ -52,6 +54,8 @@ public class UserDetailsApi {
             return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
         }
         logger.error("Unable to authenticate with authentication provider");
-        return ResponseEntity.ok().body(authErrorMsg);
+        var res = new HashMap<String, String>();
+        res.put("message", authErrorMsg);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
     }
 }

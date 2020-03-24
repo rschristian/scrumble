@@ -20,7 +20,6 @@ export const IssuesList: FunctionalComponent = observer(() => {
     const [currentPageNum, setCurrentPageNum] = useState<number>(0);
     const [currentProjectId, setCurrentProjectId] = useState<number>(0);
     const [areMoreIssues, setAreMoreIssues] = useState<boolean>(true);
-    const [issuesRetrievalErrorMessage, setIssuesRetrievalErrorMessage] = useState('');
     const [searchFor, setSearchFor] = useState<string>('');
 
     const updateIssueFilter = (filterFor: string): void => {
@@ -34,7 +33,7 @@ export const IssuesList: FunctionalComponent = observer(() => {
         if (e.key === 'Enter') {
             searchIssueByTitleDescription(23, searchFor, issueFilter).then((res) => {
                 if (typeof res === 'string') {
-                    notify.show('An error occurred', 'error', 5000, error);
+                    notify.show(res, 'error', 5000, error);
                 } else if (res.length === 0) {
                     notify.show(
                         `No search results for '${searchFor}' with filter '${issueFilter}'`,
@@ -63,7 +62,7 @@ export const IssuesList: FunctionalComponent = observer(() => {
         fetchWorkspaceIssues(userLocationStore.currentWorkspace.id, issueFilter, currentProjectId, currentPageNum).then(
             (issuePagination) => {
                 if (typeof issuePagination == 'string') {
-                    setIssuesRetrievalErrorMessage(issuePagination);
+                    notify.show(issuePagination, 'error', 5000, error);
                 } else {
                     setIssuesArray(issuesArray.concat(issuePagination.issues));
                     const projectId = issuePagination.nextResource.projectId;
@@ -94,7 +93,7 @@ export const IssuesList: FunctionalComponent = observer(() => {
                 </button>
             </div>
             <div className="rounded bg-white overflow-hidden shadow-lg overflow-y-scroll issuesList">
-                {issuesRetrievalErrorMessage !== '' ? issuesRetrievalErrorMessage : issueCardList}
+                {issueCardList}
             </div>
         </div>
     );

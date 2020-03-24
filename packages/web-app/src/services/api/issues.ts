@@ -50,9 +50,14 @@ export const fetchWorkspaceIssues = async (
     page: number,
 ): Promise<IssuePagination | string> => {
     const args = { filter, projectId, page };
-    return await apiService.query(`/workspace/${workspaceId}/issues`, { params: args }).then((response) => {
-        return response.data;
-    });
+    return await apiService
+        .query(`/workspace/${workspaceId}/issues`, { params: args })
+        .then((response) => {
+            return response.data;
+        })
+        .catch(({ response }) => {
+            return response.data?.message || 'Unknown error while fetching workspace issues';
+        });
 };
 
 export const searchIssueByTitleDescription = async (
@@ -61,7 +66,12 @@ export const searchIssueByTitleDescription = async (
     filter: string,
 ): Promise<Issue[] | string> => {
     const args = { searchFor, filter };
-    return await apiService.query(`/workspace/${workspaceId}/issues/search`, { params: args }).then((response) => {
-        return response.data;
-    });
+    return await apiService
+        .query(`/workspace/${workspaceId}/issues/search`, { params: args })
+        .then((response) => {
+            return response.data;
+        })
+        .catch(({ response }) => {
+            return response.data?.message || 'Unknown error while searching for issue';
+        });
 };
