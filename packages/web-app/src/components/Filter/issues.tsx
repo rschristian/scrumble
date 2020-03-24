@@ -1,8 +1,6 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 
-import { SearchBar } from 'components/SearchBar';
-
 interface IProps {
     setFilter: (filterFor: string) => void;
 }
@@ -15,7 +13,7 @@ enum FilterStatus {
 }
 
 export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
-    const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.unplanned);
+    const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.all);
 
     const updateFilter = (filterStatus: FilterStatus): void => {
         props.setFilter(filterStatus.toString());
@@ -50,7 +48,6 @@ export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
                     Unplanned
                 </button>
             </div>
-            <SearchBar placeholder="Search by name" />
         </div>
     );
 };

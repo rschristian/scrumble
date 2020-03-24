@@ -35,7 +35,7 @@ const SprintPlanning: FunctionalComponent = () => {
                     <IssuesList />
                 </div>
                 <div
-                    class={`md:border-l border-gray-300 h-full w-11/12 md:w-1/2 md:block " ${
+                    class={`md:border-l border-gray-300 h-screen w-11/12 md:w-1/2 md:block " ${
                         isSprintView ? '' : 'sm:hidden'
                     }`}
                 >

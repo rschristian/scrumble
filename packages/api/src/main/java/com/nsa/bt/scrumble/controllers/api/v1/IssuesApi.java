@@ -4,6 +4,7 @@ import com.nsa.bt.scrumble.dto.Issue;
 import com.nsa.bt.scrumble.dto.IssuePageResult;
 import com.nsa.bt.scrumble.services.IIssuePagingService;
 import com.nsa.bt.scrumble.security.UserPrincipal;
+import com.nsa.bt.scrumble.services.IIssueService;
 import com.nsa.bt.scrumble.services.IUserService;
 
 import org.springframework.http.HttpMethod;
@@ -18,6 +19,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -41,6 +43,9 @@ public class IssuesApi {
 
     @Autowired
     IIssuePagingService issuePagingService;
+
+    @Autowired
+    IIssueService issueService;
 
     @GetMapping("/workspace/{id}/issues")
     public ResponseEntity<Object> getIssues(
@@ -91,7 +96,24 @@ public class IssuesApi {
             String uri = String.format("%1s/projects/%2s/issues/%3s?title=%4s&description=%5s&labels=%6s&access_token=%7s",
                     gitLabBaseUrl, projectId, issue.getIid(), issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), accessTokenOptional.get());
             restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
-            return ResponseEntity.ok().body("issue updtaed");
+            return ResponseEntity.ok().body("issue updated");
+        }
+        logger.error("Unable to authenticate with authentication provider");
+        return ResponseEntity.ok().body("Something went wrong...");
+    }
+
+    @GetMapping("/workspace/{workspaceId}/issues/search")
+    public ResponseEntity<Object> searchForIssue(
+            Authentication auth,
+            @PathVariable(value="workspaceId") int workspaceId,
+            @RequestParam(value="filter") String filter,
+            @RequestParam(value="searchFor") String searchFor) {
+        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        if(accessTokenOptional.isPresent()) {
+            var res = new HashMap<String, ArrayList<Issue>>();
+            res.put("issues", issueService.searchForIssue(workspaceId, searchFor, filter, accessTokenOptional.get()));
+            return ResponseEntity.ok().body(issueService.searchForIssue(workspaceId, searchFor, filter, accessTokenOptional.get()));
         }
         logger.error("Unable to authenticate with authentication provider");
         return ResponseEntity.ok().body("Something went wrong...");

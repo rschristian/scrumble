@@ -1,8 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState, useContext } from 'preact/hooks';
 
-import { Notyf } from 'notyf';
-import 'notyf/notyf.min.css'; // for React and Vue
+import { notify } from 'react-notify-toast';
 
 import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
 import { Modal } from 'components/Modal';
@@ -11,6 +10,7 @@ import { observer } from 'services/mobx';
 import { UserLocationStoreContext } from 'stores';
 import { createIssue } from 'services/api/issues';
 import IssuesList from 'components/Lists/issues';
+import { success } from 'components/Notification/colours';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const userLocationStore = useContext(UserLocationStoreContext);
@@ -23,8 +23,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             if (error) {
                 setNewIssueErrorMessage(error);
             } else {
-                const notyf = new Notyf();
-                notyf.success('New issue created!');
+                notify.show('New issue created!', 'success', 5000, success);
             }
         });
     };
@@ -57,7 +56,9 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                     close={(): void => setShowNewIssueModal(false)}
                 />
             ) : null}
-            <IssuesList />
+            <div>
+                <IssuesList />
+            </div>
         </div>
     );
 });

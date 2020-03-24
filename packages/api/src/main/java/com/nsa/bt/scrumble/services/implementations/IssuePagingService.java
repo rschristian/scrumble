@@ -39,9 +39,6 @@ public class IssuePagingService implements IIssuePagingService {
 
 
     private static final int ISSUE_PAGE_SIZE = 20;
-    private static final String UNPLANNED = "unplanned";
-    private static final String OPENED = "opened";
-    private static final String CLOSED = "closed";
 
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabApiUrl;
@@ -137,19 +134,6 @@ public class IssuePagingService implements IIssuePagingService {
         return nextResource;
     }
 
-    @Override
-    public String getFilterQuery(String filter) {
-        switch (filter) {
-            case UNPLANNED:
-                return "labels=unplanned";
-            case OPENED:
-                return "state=opened";
-            case CLOSED:
-                return "state=closed";
-            default:
-                return "scope=all";
-        }
-    }
 
     @Override
     public boolean isLastProject(int workspaceId, int projectId) {
@@ -206,7 +190,7 @@ public class IssuePagingService implements IIssuePagingService {
 
         while (issuesEmpty) {
             String uri = String.format("%s/projects/%d/issues?%s&page=%d&access_token=%s",
-                    gitLabApiUrl, projectId, getFilterQuery(filter), page, accessToken);
+                    gitLabApiUrl, projectId, issueService.getFilterQuery(filter), page, accessToken);
 
             ResponseEntity<ArrayList<Issue>> issuesResponse = getIssuesResponse(uri);
             issues = issuesResponse.getBody();

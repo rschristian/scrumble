@@ -2,6 +2,9 @@ import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 
 import { SearchBar } from 'components/SearchBar';
+import { searchIssueByTitleDescription } from '../../services/api/issues';
+import { notify } from 'react-notify-toast';
+import { error, warning } from '../Notification/colours';
 
 interface IProps {
     setFilter: (filterFor: string) => void;
@@ -20,6 +23,14 @@ export const SprintFilter: FunctionalComponent<IProps> = (props: IProps) => {
         props.setFilter(filterStatus.toString());
         setFilterStatus(filterStatus);
     };
+
+    const handleOnKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            console.log('Enter selected');
+        }
+    };
+
+    const handleOnInput = (e: any): void => console.log((e.target as HTMLSelectElement).value);
 
     return (
         <div class="my-4 flex flex-col items-start">
@@ -43,7 +54,7 @@ export const SprintFilter: FunctionalComponent<IProps> = (props: IProps) => {
                     All
                 </button>
             </div>
-            <SearchBar placeholder="Search by name" />
+            <SearchBar placeholder="Search by name" handleOnInput={handleOnInput} handleOnKeyDown={handleOnKeyDown} />
         </div>
     );
 };

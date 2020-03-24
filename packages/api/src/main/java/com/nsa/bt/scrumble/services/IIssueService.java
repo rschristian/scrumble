@@ -11,4 +11,8 @@ public interface IIssueService {
     void setStoryPoint(Issue issue);
 
     void filterAndSetStoryPoint(ArrayList<Issue> issues);
+
+    ArrayList<Issue> searchForIssue(int workspaceId, String searchFor, String filter, String accessToken);
+
+    String getFilterQuery(String filter);
 }

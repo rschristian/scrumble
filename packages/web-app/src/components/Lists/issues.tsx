@@ -1,22 +1,27 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState, useEffect, useContext } from 'preact/hooks';
 
+import { notify } from 'react-notify-toast';
+
+import { error, warning } from 'components/Notification/colours';
 import { IssueCard } from 'components/Cards/issue';
 import { IssueFilter } from 'components/Filter/issues';
 import { Issue } from 'models/Issue';
-import { fetchWorkspaceIssues } from 'services/api/issues';
+import { fetchWorkspaceIssues, searchIssueByTitleDescription } from 'services/api/issues';
 import { observer } from 'services/mobx';
 import { UserLocationStoreContext } from 'stores';
+import { SearchBar } from 'components/SearchBar';
 
 const IssuesList: FunctionalComponent = observer(() => {
     const userLocationStore = useContext(UserLocationStoreContext);
 
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
-    const [issueFilter, setIssueFilter] = useState<string>('unplanned');
+    const [issueFilter, setIssueFilter] = useState<string>('all');
     const [currentPageNum, setCurrentPageNum] = useState<number>(0);
     const [currentProjectId, setCurrentProjectId] = useState<number>(0);
     const [areMoreIssues, setAreMoreIssues] = useState<boolean>(true);
     const [issuesRetrievalErrorMessage, setIssuesRetrievalErrorMessage] = useState('');
+    const [searchFor, setSearchFor] = useState<string>('');
 
     const updateIssueFilter = (filterFor: string): void => {
         setCurrentPageNum(0);
@@ -24,6 +29,27 @@ const IssuesList: FunctionalComponent = observer(() => {
         setIssuesArray([]);
         setIssueFilter(filterFor);
     };
+
+    const handleOnKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            searchIssueByTitleDescription(23, searchFor, issueFilter).then((res) => {
+                if (typeof res === 'string') {
+                    notify.show('An error occurred', 'error', 5000, error);
+                } else if (res.length === 0) {
+                    notify.show(
+                        `No search results for '${searchFor}' with filter '${issueFilter}'`,
+                        'custom',
+                        5000,
+                        warning,
+                    );
+                } else {
+                    setIssuesArray(res);
+                }
+            });
+        }
+    };
+
+    const handleOnInput = (e: any): void => setSearchFor((e.target as HTMLSelectElement).value);
 
     const issueCardList = issuesArray.map((issue, index) => {
         return <IssueCard key={index} issue={issue} />;
@@ -36,32 +62,38 @@ const IssuesList: FunctionalComponent = observer(() => {
     const fetchMore = (): void => {
         fetchWorkspaceIssues(userLocationStore.currentWorkspace.id, issueFilter, currentProjectId, currentPageNum).then(
             (issuePagination) => {
-                // TODO: LAUREN FIX THIS!!
-                // if (typeof issuePagination.issues == 'string') setIssuesRetrievalErrorMessage(issuePagination.issues);
-
-                setIssuesArray(issuesArray.concat(issuePagination.issues));
-                const projectId = issuePagination.nextResource.projectId;
-                const pageNumber = issuePagination.nextResource.pageNumber;
-
-                if (projectId == 0 && pageNumber == 0) {
-                    setAreMoreIssues(false);
+                if (typeof issuePagination == 'string') {
+                    setIssuesRetrievalErrorMessage(issuePagination);
                 } else {
-                    setCurrentProjectId(projectId);
-                    setCurrentPageNum(pageNumber);
+                    setIssuesArray(issuesArray.concat(issuePagination.issues));
+                    const projectId = issuePagination.nextResource.projectId;
+                    const pageNumber = issuePagination.nextResource.pageNumber;
+
+                    if (projectId == 0 && pageNumber == 0) {
+                        setAreMoreIssues(false);
+                    } else {
+                        setCurrentProjectId(projectId);
+                        setCurrentPageNum(pageNumber);
+                    }
                 }
             },
         );
     };
 
     return (
-        <div>
+        <div class="mr-4">
             <IssueFilter setFilter={updateIssueFilter} />
+            <SearchBar
+                placeholder="Search by title or description"
+                handleOnInput={handleOnInput}
+                handleOnKeyDown={handleOnKeyDown}
+            />
             <div class="w-full">
-                <button class={`btn-create ${areMoreIssues ? 'block' : 'hidden'}`} onClick={fetchMore}>
-                    Fetch more
+                <button class={`btn-create my-4 ${areMoreIssues ? 'block' : 'hidden'}`} onClick={fetchMore}>
+                    Fetch More Issues
                 </button>
             </div>
-            <div className="rounded bg-white overflow-hidden shadow-lg">
+            <div className="rounded bg-white overflow-hidden shadow-lg overflow-y-scroll issuesList">
                 {issuesRetrievalErrorMessage !== '' ? issuesRetrievalErrorMessage : issueCardList}
             </div>
         </div>

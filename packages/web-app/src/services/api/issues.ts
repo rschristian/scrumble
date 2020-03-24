@@ -48,10 +48,21 @@ export const fetchWorkspaceIssues = async (
     filter: string,
     projectId: number,
     page: number,
-): Promise<IssuePagination> => {
+): Promise<IssuePagination | string> => {
     const args = { filter, projectId, page };
     return await apiService.query(`/workspace/${workspaceId}/issues`, { params: args }).then((response) => {
         console.log(response);
+        return response.data;
+    });
+};
+
+export const searchIssueByTitleDescription = async (
+    workspaceId: number,
+    searchFor: string,
+    filter: string,
+): Promise<Issue[] | string> => {
+    const args = { searchFor, filter };
+    return await apiService.query(`/workspace/${workspaceId}/issues/search`, { params: args }).then((response) => {
         return response.data;
     });
 };

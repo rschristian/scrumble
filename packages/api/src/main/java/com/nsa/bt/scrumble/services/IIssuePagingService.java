@@ -17,8 +17,6 @@ public interface IIssuePagingService {
 
     NextResource getNextResource(String requestUri, String linkHeader, int workspaceId, int currentProjectId, int prevPage);
 
-    String getFilterQuery(String filter);
-
     boolean isLastProject(int workspaceId, int projectId);
 
     IssuePageResult getIssuePageResult(int workspaceId, int projectId, int page, String filter,  String accessToken);
