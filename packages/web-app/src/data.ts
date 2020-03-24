@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
-import { Issue } from 'models/Issue';
+import { Issue, IssueStatus } from 'models/Issue';
 import { Project } from 'models/Project';
 import { Sprint, SprintStatus } from 'models/Sprint';
 import { Workspace } from 'models/Workspace';
@@ -47,313 +47,353 @@ export const sprints: Sprint[] = [
 export const issues: Issue[] = [
     {
         iid: 1,
+        state: IssueStatus.open,
         title: 'empower dynamic e-commerce',
         description:
             'Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo. Etiam pretium iaculis justo. In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus. Nulla ut erat id mauris vulputate elementum.',
-        storyPoints: 11,
+        storyPoint: 11,
         projectId: 1,
     },
     {
         iid: 2,
+        state: IssueStatus.closed,
         title: 'engage innovative synergies',
         description:
             'Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus. Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.',
-        storyPoints: 2,
+        storyPoint: 2,
         projectId: 2,
     },
     {
         iid: 3,
+        state: IssueStatus.open,
         title: 'harness value-added eyeballs',
         description:
             'Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.',
-        storyPoints: 9,
+        storyPoint: 9,
         projectId: 3,
     },
     {
         iid: 4,
+        state: IssueStatus.open,
         title: 'innovate B2C infrastructures',
         description:
             'Cras in purus eu magna vulputate luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
-        storyPoints: 12,
+        storyPoint: 12,
         projectId: 4,
     },
     {
         iid: 5,
+        state: IssueStatus.open,
         title: 'matrix sexy markets',
         description:
             'Suspendisse potenti. Cras in purus eu magna vulputate luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.',
-        storyPoints: 5,
+        storyPoint: 5,
         projectId: 5,
     },
     {
         iid: 6,
+        state: IssueStatus.open,
         title: 'seize revolutionary deliverables',
         description: 'In hac habitasse platea dictumst.',
-        storyPoints: 2,
+        storyPoint: 2,
         projectId: 1,
     },
     {
         iid: 7,
+        state: IssueStatus.closed,
         title: 'syndicate rich technologies',
         description:
             'Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus. Pellentesque at nulla. Suspendisse potenti.',
-        storyPoints: 7,
+        storyPoint: 7,
         projectId: 2,
     },
     {
         iid: 8,
+        state: IssueStatus.closed,
         title: 'iterate intuitive networks',
         description:
             'Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus.',
-        storyPoints: 6,
+        storyPoint: 6,
         projectId: 3,
     },
     {
         iid: 9,
+        state: IssueStatus.closed,
         title: 'synthesize compelling ROI',
         description: 'Etiam justo.',
-        storyPoints: 11,
+        storyPoint: 11,
         projectId: 4,
     },
     {
         iid: 10,
+        state: IssueStatus.closed,
         title: 'productize turn-key e-tailers',
         description:
             'Phasellus in felis. Donec semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius. Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.',
-        storyPoints: 13,
+        storyPoint: 13,
         projectId: 5,
     },
     {
         iid: 11,
+        state: IssueStatus.open,
         title: 'evolve plug-and-play synergies',
         description: 'Suspendisse potenti. Nullam porttitor lacus at turpis.',
-        storyPoints: 6,
+        storyPoint: 6,
         projectId: 1,
     },
     {
         iid: 12,
+        state: IssueStatus.closed,
         title: 'morph frictionless paradigms',
         description:
             'Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem. Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci.',
-        storyPoints: 3,
+        storyPoint: 3,
         projectId: 2,
     },
     {
         iid: 13,
+        state: IssueStatus.closed,
         title: 'exploit synergistic solutions',
         description:
             'Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat. Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.',
-        storyPoints: 11,
+        storyPoint: 11,
         projectId: 3,
     },
     {
         iid: 14,
+        state: IssueStatus.closed,
         title: 'expedite intuitive metrics',
         description:
             'Nulla nisl. Nunc nisl. Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.',
-        storyPoints: 11,
+        storyPoint: 11,
         projectId: 4,
     },
     {
         iid: 15,
+        state: IssueStatus.closed,
         title: 'brand clicks-and-mortar bandwidth',
         description:
             'Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.',
-        storyPoints: 11,
+        storyPoint: 11,
         projectId: 5,
     },
     {
         iid: 16,
+        state: IssueStatus.closed,
         title: 'generate user-centric relationships',
         description:
             'Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem. Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus. Pellentesque at nulla. Suspendisse potenti.',
-        storyPoints: 1,
+        storyPoint: 1,
         projectId: 1,
     },
     {
         iid: 17,
+        state: IssueStatus.open,
         title: 'architect sexy markets',
         description:
             'Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus. Phasellus in felis. Donec semper sapien a libero.',
-        storyPoints: 4,
+        storyPoint: 4,
         projectId: 2,
     },
     {
         iid: 18,
+        state: IssueStatus.open,
         title: 'strategize extensible infomediaries',
         description:
             'Donec dapibus. Duis at velit eu est congue elementum. In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor.',
-        storyPoints: 13,
+        storyPoint: 13,
         projectId: 3,
     },
     {
         iid: 19,
+        state: IssueStatus.open,
         title: 'target user-centric channels',
         description:
             'Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede. Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus.',
-        storyPoints: 6,
+        storyPoint: 6,
         projectId: 4,
     },
     {
         iid: 20,
+        state: IssueStatus.open,
         title: 'transition synergistic paradigms',
         description:
             'Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus. Aenean fermentum. Donec ut mauris eget massa tempor convallis.',
-        storyPoints: 1,
+        storyPoint: 1,
         projectId: 5,
     },
     {
         iid: 21,
+        state: IssueStatus.open,
         title: 'seize 24/365 relationships',
         description:
             'Morbi ut odio. Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices.',
-        storyPoints: 9,
+        storyPoint: 9,
         projectId: 1,
     },
     {
         iid: 22,
+        state: IssueStatus.open,
         title: 'enhance proactive channels',
         description:
             'Phasellus in felis. Donec semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.',
-        storyPoints: 6,
+        storyPoint: 6,
         projectId: 2,
     },
     {
         iid: 23,
+        state: IssueStatus.open,
         title: 'reintermediate leading-edge e-tailers',
         description:
             'Proin at turpis a pede posuere nonummy. Integer non velit. Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi.',
-        storyPoints: 5,
+        storyPoint: 5,
         projectId: 3,
     },
     {
         iid: 24,
+        state: IssueStatus.open,
         title: 'target robust convergence',
         description:
             'In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc.',
-        storyPoints: 8,
+        storyPoint: 8,
         projectId: 4,
     },
     {
         iid: 25,
+        state: IssueStatus.open,
         title: 'matrix transparent vortals',
         description: 'Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.',
-        storyPoints: 5,
+        storyPoint: 5,
         projectId: 5,
     },
     {
         iid: 26,
+        state: IssueStatus.open,
         title: 'utilize back-end mindshare',
         description:
             'Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros. Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo. Etiam pretium iaculis justo. In hac habitasse platea dictumst. Etiam faucibus cursus urna.',
-        storyPoints: 10,
+        storyPoint: 10,
         projectId: 1,
     },
     {
         iid: 27,
+        state: IssueStatus.open,
         title: 'extend mission-critical vortals',
         description: 'Duis at velit eu est congue elementum. In hac habitasse platea dictumst.',
-        storyPoints: 6,
+        storyPoint: 6,
         projectId: 2,
     },
     {
         iid: 28,
+        state: IssueStatus.open,
         title: 'iterate frictionless deliverables',
         description: 'Duis bibendum. Morbi non quam nec dui luctus rutrum.',
-        storyPoints: 12,
+        storyPoint: 12,
         projectId: 3,
     },
     {
         iid: 29,
+        state: IssueStatus.closed,
         title: 'cultivate sticky metrics',
         description:
             'Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio. Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices.',
-        storyPoints: 9,
+        storyPoint: 9,
         projectId: 4,
     },
     {
         iid: 30,
+        state: IssueStatus.closed,
         title: 'whiteboard killer e-commerce',
         description: 'Donec quis orci eget orci vehicula condimentum.',
-        storyPoints: 7,
+        storyPoint: 7,
         projectId: 5,
     },
     {
         iid: 31,
+        state: IssueStatus.closed,
         title: 'redefine cross-platform eyeballs',
         description:
             'Nunc nisl. Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum. In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.',
-        storyPoints: 6,
+        storyPoint: 6,
         projectId: 1,
     },
     {
         iid: 32,
+        state: IssueStatus.closed,
         title: 'strategize synergistic infomediaries',
         description:
             'Etiam pretium iaculis justo. In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus. Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.',
-        storyPoints: 6,
+        storyPoint: 6,
         projectId: 2,
     },
     {
         iid: 33,
+        state: IssueStatus.closed,
         title: 'grow scalable schemas',
         description: 'Nullam varius. Nulla facilisi.',
-        storyPoints: 12,
+        storyPoint: 12,
         projectId: 3,
     },
     {
         iid: 34,
+        state: IssueStatus.closed,
         title: 'monetize bricks-and-clicks experiences',
         description:
             'In congue. Etiam justo. Etiam pretium iaculis justo. In hac habitasse platea dictumst. Etiam faucibus cursus urna.',
-        storyPoints: 12,
+        storyPoint: 12,
         projectId: 4,
     },
     {
         iid: 35,
+        state: IssueStatus.open,
         title: 'maximize vertical systems',
         description:
             'Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.',
-        storyPoints: 13,
+        storyPoint: 13,
         projectId: 5,
     },
     {
         iid: 36,
+        state: IssueStatus.open,
         title: 'incubate cutting-edge action-items',
         description:
             'Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.',
-        storyPoints: 9,
+        storyPoint: 9,
         projectId: 1,
     },
     {
         iid: 37,
+        state: IssueStatus.open,
         title: 'innovate synergistic niches',
         description:
             'Vivamus in felis eu sapien cursus vestibulum. Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem. Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.',
-        storyPoints: 11,
+        storyPoint: 11,
         projectId: 2,
     },
     {
         iid: 38,
+        state: IssueStatus.open,
         title: 'benchmark back-end e-services',
         description:
             'Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede. Morbi porttitor lorem id ligula.',
-        storyPoints: 9,
+        storyPoint: 9,
         projectId: 3,
     },
     {
         iid: 39,
+        state: IssueStatus.open,
         title: 'e-enable 24/7 e-commerce',
         description: 'In hac habitasse platea dictumst.',
-        storyPoints: 5,
+        storyPoint: 5,
         projectId: 4,
     },
     {
         iid: 40,
+        state: IssueStatus.closed,
         title: 'synergize scalable infrastructures',
         description:
             'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi.',
-        storyPoints: 2,
+        storyPoint: 2,
         projectId: 5,
     },
 ];

@@ -3,6 +3,8 @@ import { useContext, useEffect } from 'preact/hooks';
 import { lazy, Suspense } from 'preact/compat';
 import { Route, route, Router } from 'preact-router';
 
+import Notifications from 'react-notify-toast';
+
 import { TopBar } from 'components/Core/TopBar';
 import AuthSuccess from 'routes/Auth/authSuccess';
 import Login from 'routes/Auth/login';
@@ -15,6 +17,7 @@ const Sprint = lazy(() => import('routes/Sprint'));
 const App: FunctionalComponent = () => {
     return (
         <div id="app" class="bg-blue-100">
+            <Notifications />
             <TopBar />
             <Suspense fallback={<Fallback />}>
                 <Router>

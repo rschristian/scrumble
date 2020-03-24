@@ -4,11 +4,20 @@ import { useEffect, useContext } from 'preact/hooks';
 import { WorkspaceCard } from 'components/Cards/workspace';
 import { SearchBar } from 'components/SearchBar';
 import { workspaces } from 'data';
+
 import { fetchUserInfo } from 'services/api/auth';
 import { AuthStoreContext } from 'stores';
 
 const Home: FunctionalComponent = () => {
     const authStore = useContext(AuthStoreContext);
+
+    const handleOnKeyDown = (e: KeyboardEvent): void => {
+        if (e.key === 'Enter') {
+            console.log('Enter selected');
+        }
+    };
+
+    const handleOnInput = (e: any): void => console.log((e.target as HTMLSelectElement).value);
 
     useEffect(() => {
         fetchUserInfo().then((response) => authStore.setCurrentUser(response));
@@ -22,7 +31,11 @@ const Home: FunctionalComponent = () => {
                     <h1 class="page-heading">Your Workspaces</h1>
                     <button class="btn-create my-auto">New Workspace</button>
                 </div>
-                <SearchBar placeholder="Search by name" />
+                <SearchBar
+                    placeholder="Search by name"
+                    handleOnInput={handleOnInput}
+                    handleOnKeyDown={handleOnKeyDown}
+                />
                 <div class="rounded bg-white overflow-hidden shadow-lg">
                     {workspaces.map((workspace, index) => {
                         return (

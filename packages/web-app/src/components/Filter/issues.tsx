@@ -1,16 +1,15 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 
-import { SearchBar } from 'components/SearchBar';
-
 interface IProps {
     setFilter: (filterFor: string) => void;
 }
 
 enum FilterStatus {
-    open = 'open',
+    open = 'opened',
     closed = 'closed',
     unplanned = 'unplanned',
+    all = 'all',
 }
 
 export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
@@ -24,6 +23,12 @@ export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
     return (
         <div class="my-4 flex flex-col items-start">
             <div class="flex rounded shadow">
+                <button
+                    className={`btn-filter ${filterStatus === FilterStatus.all ? 'btn-filter-active' : ''}`}
+                    onClick={(): void => updateFilter(FilterStatus.all)}
+                >
+                    All
+                </button>
                 <button
                     class={`btn-filter ${filterStatus === FilterStatus.open ? 'btn-filter-active' : ''}`}
                     onClick={(): void => updateFilter(FilterStatus.open)}
@@ -43,7 +48,6 @@ export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
                     Unplanned
                 </button>
             </div>
-            <SearchBar placeholder="Search by name" />
         </div>
     );
 };

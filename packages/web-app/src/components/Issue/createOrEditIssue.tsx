@@ -14,15 +14,16 @@ interface IProps {
 export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
     const [title, setTitle] = useState(props.issue?.title || '');
     const [description, setDescription] = useState(props.issue?.description || '');
-    const [storyPoints, setStoryPoints] = useState(props.issue?.storyPoints || 0);
+    const [storyPoint, setStoryPoint] = useState(props.issue?.storyPoint || 0);
     const [projectId, setProjectId] = useState(props.issue?.projectId || 0);
 
     const createIssue = (): Issue => {
         return {
             iid: props.issue?.iid || 0,
+            state: props.issue?.state,
             title,
             description,
-            storyPoints,
+            storyPoint,
             projectId,
         };
     };
@@ -50,8 +51,8 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
                 class="form-input"
                 type="number"
                 placeholder="Issue Story Points (Optional)"
-                value={storyPoints}
-                onInput={(e): void => setStoryPoints(parseInt((e.target as HTMLSelectElement).value, 10))}
+                value={storyPoint}
+                onInput={(e): void => setStoryPoint(parseInt((e.target as HTMLSelectElement).value, 10))}
             />
             <label class="form-label">Project to Attach To</label>
             <select
