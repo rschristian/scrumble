@@ -29,7 +29,7 @@ export const IssuesList: FunctionalComponent = observer(() => {
         setIssueFilter(filterFor);
     };
 
-    const handleOnKeyDown = (e: KeyboardEvent) => {
+    const handleOnKeyDown = (e: KeyboardEvent): void => {
         if (e.key === 'Enter') {
             searchIssueByTitleDescription(23, searchFor, issueFilter).then((res) => {
                 if (typeof res === 'string') {

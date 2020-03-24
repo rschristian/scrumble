@@ -17,8 +17,8 @@ export const SearchBar: FunctionalComponent<IProps> = (props: IProps) => {
                 type="text"
                 placeholder="Search by title or description"
                 class="ml-5 bg-transparent search-input"
-                onKeyDown={(e) => props.handleOnKeyDown(e)}
-                onInput={(e) => props.handleOnInput(e)}
+                onKeyDown={(e): void => props.handleOnKeyDown(e)}
+                onInput={(e): void => props.handleOnInput(e)}
             />
         </div>
     );

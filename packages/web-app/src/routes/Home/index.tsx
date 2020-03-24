@@ -11,7 +11,7 @@ import { AuthStoreContext } from 'stores';
 const Home: FunctionalComponent = () => {
     const authStore = useContext(AuthStoreContext);
 
-    const handleOnKeyDown = (e: KeyboardEvent) => {
+    const handleOnKeyDown = (e: KeyboardEvent): void => {
         if (e.key === 'Enter') {
             console.log('Enter selected');
         }

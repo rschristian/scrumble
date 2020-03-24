@@ -21,7 +21,7 @@ export const SprintFilter: FunctionalComponent<IProps> = (props: IProps) => {
         setFilterStatus(filterStatus);
     };
 
-    const handleOnKeyDown = (e: KeyboardEvent) => {
+    const handleOnKeyDown = (e: KeyboardEvent): void => {
         if (e.key === 'Enter') {
             console.log('Enter selected');
         }
