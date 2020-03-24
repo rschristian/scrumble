@@ -1,7 +1,7 @@
-import { FunctionalComponent, h } from 'preact';
-import { useContext } from 'preact/hooks';
+import { FunctionalComponent, h, VNode } from 'preact';
+import { useContext, useEffect } from 'preact/hooks';
 import { lazy, Suspense } from 'preact/compat';
-import { Route, route, Router, RouterOnChangeArgs } from 'preact-router';
+import { Route, route, Router } from 'preact-router';
 
 import { TopBar } from 'components/Core/TopBar';
 import AuthSuccess from 'routes/Auth/authSuccess';
@@ -13,25 +13,16 @@ const Workspace = lazy(() => import('routes/Workspace'));
 const Sprint = lazy(() => import('routes/Sprint'));
 
 const App: FunctionalComponent = () => {
-    const authStore = useContext(AuthStoreContext);
-
-    const publicRoutes = ['/login'];
-
-    const authGuard = (e: RouterOnChangeArgs): void => {
-        const oAuthRedirect = RegExp(/\/oauth-success\?token=(.*)/);
-        if (!publicRoutes.includes(e.url) && !authStore.isAuthenticated && !oAuthRedirect.test(e.url)) route('/login');
-    };
-
     return (
         <div id="app" class="bg-blue-100">
             <TopBar />
             <Suspense fallback={<Fallback />}>
-                <Router onChange={authGuard}>
-                    <Route path="/" component={Home} />
+                <Router>
+                    <AuthenticatedRoute path="/" component={Home} />
                     <Route path="/login" component={Login} />
                     <Route path="/oauth-success" component={AuthSuccess} />
-                    <Route path="/workspace/:workspaceId/:subPage?" component={Workspace} />
-                    <Route path="/workspace/:workspaceId/sprint/:sprintId/:subPage?" component={Sprint} />
+                    <AuthenticatedRoute path="/workspace/:workspaceId/:subPage?" component={Workspace} />
+                    <AuthenticatedRoute path="/workspace/:workspaceId/sprint/:sprintId/:subPage?" component={Sprint} />
                 </Router>
             </Suspense>
         </div>
@@ -46,6 +37,18 @@ const Fallback: FunctionalComponent = () => {
             </div>
         </div>
     );
+};
+
+const AuthenticatedRoute = (props: { path: string; component: FunctionalComponent }): VNode => {
+    const isLoggedIn = useContext(AuthStoreContext).isAuthenticated;
+
+    useEffect(() => {
+        if (!isLoggedIn) route('/login', true);
+    }, [isLoggedIn]);
+
+    if (!isLoggedIn) return null;
+
+    return <Route {...props} />;
 };
 
 export default App;
