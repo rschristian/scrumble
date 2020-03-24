@@ -32,6 +32,8 @@
     "preact-feather": "^4.1.0",
     "preact-render-to-string": "^5.1.4",
     "preact-router": "^3.2.1",
+    "qs": "^6.9.1",
+    "react-notify-toast": "^0.5.1",
     "tailwindcss": "^1.2.0",
     "ts-api-toolkit": "^2.0.1"
   },
@@ -40,6 +42,7 @@
     "@types/react": "^16.9.23",
     "@typescript-eslint/eslint-plugin": "^2.22.0",
     "@typescript-eslint/parser": "^2.22.0",
+    "@types/react-notify-toast": "^0.5.2",
     "eslint": "^6.8.0",
     "eslint-config-preact": "^1.1.1",
     "eslint-config-prettier": "^6.10.0",
