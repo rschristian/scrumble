@@ -1,7 +1,6 @@
 package com.nsa.bt.scrumble.services.implementations;
 
 import com.nsa.bt.scrumble.dto.Issue;
-import com.nsa.bt.scrumble.services.IIssuePagingService;
 import com.nsa.bt.scrumble.services.IIssueService;
 
 import org.slf4j.Logger;
@@ -36,9 +35,6 @@ public class IssueService implements IIssueService {
 
     @Autowired
     WorkspaceService workspaceService;
-
-    @Autowired
-    IIssuePagingService issuePagingService;
 
     @Override
     public void setStoryPoint(Issue issue) {

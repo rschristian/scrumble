@@ -37,7 +37,6 @@ public class IssuePagingService implements IIssuePagingService {
     @Autowired
     IIssueService issueService;
 
-
     private static final int ISSUE_PAGE_SIZE = 20;
 
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
@@ -168,6 +167,7 @@ public class IssuePagingService implements IIssuePagingService {
                 issuePageResult.setNextResource(getNextResource(queryUri, issuesResponse.getHeaders().getFirst("Link"), workspaceId, projectId, page));
                 return issuePageResult;
             } else if(isLastProject(workspaceId, projectId)) {
+                // If last project and it doesn't have any results for the query, send back 0 values to indicate this to client
                 issuePageResult.setNextResource(new NextResource());
                 return issuePageResult;
             }
