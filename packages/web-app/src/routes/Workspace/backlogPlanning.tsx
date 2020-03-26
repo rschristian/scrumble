@@ -9,7 +9,7 @@ import { Issue } from 'models/Issue';
 import { observer } from 'services/mobx';
 import { UserLocationStoreContext } from 'stores';
 import { createIssue } from 'services/api/issues';
-import { IssuesList } from 'components/Lists/issues';
+import { IssuesList } from 'components/CommonRoutes/Issues';
 import { successColour } from 'services/Notification/colours';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {

@@ -3,7 +3,7 @@ import { useState } from 'preact/hooks';
 
 import { SprintCard } from 'components/Cards/sprint';
 import { SprintFilter } from 'components/Filter/sprints';
-import { IssuesList } from 'components/Lists/issues';
+import { IssuesList } from 'components/CommonRoutes/Issues';
 import { sprints } from 'data';
 import { SprintStatus } from 'models/Sprint';
 
