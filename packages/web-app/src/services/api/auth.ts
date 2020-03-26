@@ -2,16 +2,16 @@ import { apiService, authStorageService } from 'ts-api-toolkit';
 
 import { User } from 'models/User';
 
-export const login = async (shortLivedJwt: string): Promise<boolean> => {
+export const login = async (shortLivedJwt: string): Promise<void | string> => {
     authStorageService.saveToken(shortLivedJwt);
     return await apiService
         .get('/auth/token')
         .then((response) => {
             authStorageService.saveToken(response.data.jwt);
-            return true;
+            return;
         })
-        .catch(() => {
-            return false;
+        .catch(({ response }) => {
+            return response.data?.message || 'Unknown error while exchanging tokens';
         });
 };
 

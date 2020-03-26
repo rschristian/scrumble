@@ -11,14 +11,11 @@ class AuthStore {
         this.currentUser = user;
     }
 
-    @action async login(shortLivedJwt: string): Promise<boolean> {
-        return await login(shortLivedJwt).then((success) => {
-            if (success) {
-                this.isAuthenticated = true;
-                return this.isAuthenticated;
-            }
-            return false;
-        });
+    @action async login(shortLivedJwt: string): Promise<void | string> {
+        const error = await login(shortLivedJwt);
+
+        if (error) return error;
+        this.isAuthenticated = true;
     }
 
     @action async logout(): Promise<boolean> {
