@@ -2,9 +2,11 @@ import { FunctionalComponent, h } from 'preact';
 import { useContext, useState } from 'preact/hooks';
 import { Link, route } from 'preact-router';
 import { Menu, X } from 'preact-feather';
+import { notify } from 'react-notify-toast';
 
 import scrumCards from 'assets/icons/scrumCards.png';
 import avatar from 'assets/gitlab_avatar.png';
+import { errorColour } from 'services/Notification/colours';
 import { AuthStoreContext } from 'stores';
 
 export const TopBar: FunctionalComponent = () => {
@@ -13,8 +15,11 @@ export const TopBar: FunctionalComponent = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
 
-    const logout = (): void => {
-        authStore.logout().then(() => route('/login'));
+    const logout = async (): Promise<void> => {
+        const error = await authStore.logout();
+
+        if (error) notify.show(error, 'error', 5000, errorColour);
+        else route('/login', true);
     };
 
     return (

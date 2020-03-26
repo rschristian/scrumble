@@ -15,15 +15,15 @@ export const login = async (shortLivedJwt: string): Promise<void | string> => {
         });
 };
 
-export const destroyOAuthToken = async (): Promise<boolean> => {
+export const destroyOAuthToken = async (): Promise<void | string> => {
     return await apiService
-        .delete('/auth/token/delete')
+        .delete('/auth/token')
         .then(() => {
             authStorageService.destroyToken();
-            return true;
+            return;
         })
-        .catch(() => {
-            return false;
+        .catch(({ response }) => {
+            return response.data?.message || 'Unknown error while deleting token';
         });
 };
 

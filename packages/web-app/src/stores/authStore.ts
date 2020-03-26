@@ -18,11 +18,11 @@ class AuthStore {
         this.isAuthenticated = true;
     }
 
-    @action async logout(): Promise<boolean> {
-        return await destroyOAuthToken().then(() => {
-            this.isAuthenticated = false;
-            return true;
-        });
+    @action async logout(): Promise<void | string> {
+        const error = await destroyOAuthToken();
+
+        if (error) return error;
+        this.isAuthenticated = false;
     }
 }
 
