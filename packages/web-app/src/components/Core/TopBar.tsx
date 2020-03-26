@@ -12,8 +12,7 @@ import { AuthStoreContext } from 'stores';
 export const TopBar: FunctionalComponent = () => {
     const authStore = useContext(AuthStoreContext);
 
-    const [isOpen, setIsOpen] = useState(false);
-    const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
+    const [showAccountDropdown, setShowAccountDropdown] = useState(false);
 
     const logout = async (): Promise<void> => {
         const error = await authStore.logout();
@@ -32,38 +31,38 @@ export const TopBar: FunctionalComponent = () => {
                     </Link>
                     <div class="sm:hidden">
                         <button
-                            onClick={(): void => setIsOpen(!isOpen)}
-                            onBlur={(): void => setIsOpen(false)}
+                            onClick={(): void => setShowAccountDropdown(!showAccountDropdown)}
+                            onBlur={(): void => setShowAccountDropdown(false)}
                             type="button"
                             class="block text-deep-space-sparkle hover:text-gray-400 focus:outline-none"
                         >
                             <div class="flex items-start items-baseline min-h-12">
-                                <div class={`my-auto ml-2 ${!isOpen ? 'block' : 'hidden'}`}>
+                                <div class={`my-auto ml-2 ${!showAccountDropdown ? 'block' : 'hidden'}`}>
                                     <Menu size={20} />
                                 </div>
-                                <div class={`my-auto ml-2 ${isOpen ? 'block' : 'hidden'}`}>
+                                <div class={`my-auto ml-2 ${showAccountDropdown ? 'block' : 'hidden'}`}>
                                     <X size={20} />
                                 </div>
                             </div>
                         </button>
                     </div>
                 </div>
-                <nav class={`sm:block ${isOpen ? '' : 'hidden'}`}>
+                <nav class={`sm:block ${showAccountDropdown ? '' : 'hidden'}`}>
                     <div class="sm:flex sm:p-0">
                         <div class="hidden sm:block sm:ml-6">
                             <div class="relative">
                                 <button
-                                    onClick={(): void => setIsAccountDropdownOpen(!isAccountDropdownOpen)}
-                                    onBlur={(): void => setIsAccountDropdownOpen(false)}
+                                    onClick={(): void => setShowAccountDropdown(!showAccountDropdown)}
+                                    onBlur={(): void => setShowAccountDropdown(false)}
                                     class={`btn-account-dropdown ${
-                                        isAccountDropdownOpen ? 'outline-none border-white' : ''
+                                        showAccountDropdown ? 'outline-none border-white' : ''
                                     }`}
                                 >
                                     <img class="avatar" src={avatar} alt="Your avatar" />
                                 </button>
                                 <div
                                     class={`btn-sign-out shadow-lg is-clickable ${
-                                        isAccountDropdownOpen ? 'block' : 'hidden'
+                                        showAccountDropdown ? 'block' : 'hidden'
                                     }`}
                                     onMouseDown={logout}
                                 >
@@ -76,7 +75,7 @@ export const TopBar: FunctionalComponent = () => {
             </div>
             <div
                 class={`sm:hidden z-20 fixed w-full mt-16 bg-gray-200 border-b border-gray-500 ${
-                    isOpen ? 'block' : 'hidden'
+                    showAccountDropdown ? 'block' : 'hidden'
                 }`}
             >
                 <div class="flex items-center border-b border-gray-300 py-2">
