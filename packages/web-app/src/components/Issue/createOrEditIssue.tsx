@@ -41,7 +41,6 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
             <label class="form-label">Description</label>
             <textarea
                 class="form-input"
-                type="text"
                 placeholder="Issue Description (Optional)"
                 value={description}
                 onInput={(e): void => setDescription((e.target as HTMLInputElement).value)}

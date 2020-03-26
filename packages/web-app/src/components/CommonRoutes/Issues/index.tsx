@@ -2,14 +2,14 @@ import { FunctionalComponent, h } from 'preact';
 import { useState, useEffect, useContext } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
-import { errorColour, warningColour } from 'services/Notification/colours';
 import { IssueCard } from 'components/Cards/issue';
 import { IssueFilter } from 'components/Filter/issues';
+import { SearchBar } from 'components/SearchBar';
 import { Issue, IssueStatus } from 'models/Issue';
 import { fetchWorkspaceIssues, searchIssueByTitleDescription } from 'services/api/issues';
 import { observer } from 'services/mobx';
+import { errorColour, warningColour } from 'services/Notification/colours';
 import { UserLocationStoreContext } from 'stores';
-import { SearchBar } from 'components/SearchBar';
 
 export const IssuesList: FunctionalComponent = observer(() => {
     const userLocationStore = useContext(UserLocationStoreContext);
@@ -28,22 +28,19 @@ export const IssuesList: FunctionalComponent = observer(() => {
         setIssueFilter(filterFor);
     };
 
-    const handleOnKeyDown = (e: KeyboardEvent): void => {
+    const handleOnKeyDown = async (e: KeyboardEvent): Promise<void> => {
         if (e.key === 'Enter') {
-            searchIssueByTitleDescription(23, searchFor, issueFilter).then((res) => {
-                if (typeof res === 'string') {
-                    notify.show(res, 'error', 5000, errorColour);
-                } else if (res.length === 0) {
-                    notify.show(
-                        `No search results for '${searchFor}' with filter '${issueFilter}'`,
-                        'custom',
-                        5000,
-                        warningColour,
-                    );
-                } else {
-                    setIssuesArray(res);
-                }
-            });
+            const result = await searchIssueByTitleDescription(23, searchFor, issueFilter);
+
+            if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
+            else if (result.length === 0) {
+                notify.show(
+                    `No search results for '${searchFor}' with filter '${issueFilter}'`,
+                    'custom',
+                    5000,
+                    warningColour,
+                );
+            } else setIssuesArray(result);
         }
     };
 
@@ -52,28 +49,29 @@ export const IssuesList: FunctionalComponent = observer(() => {
     });
 
     useEffect(() => {
-        fetchMore();
-    }, [issueFilter]);
+        fetchMore().then();
+    }, []);
 
-    const fetchMore = (): void => {
-        fetchWorkspaceIssues(userLocationStore.currentWorkspace.id, issueFilter, currentProjectId, currentPageNum).then(
-            (issuePagination) => {
-                if (typeof issuePagination == 'string') {
-                    notify.show(issuePagination, 'error', 5000, errorColour);
-                } else {
-                    setIssuesArray(issuesArray.concat(issuePagination.issues));
-                    const projectId = issuePagination.nextResource.projectId;
-                    const pageNumber = issuePagination.nextResource.pageNumber;
-
-                    if (projectId == 0 && pageNumber == 0) {
-                        setAreMoreIssues(false);
-                    } else {
-                        setCurrentProjectId(projectId);
-                        setCurrentPageNum(pageNumber);
-                    }
-                }
-            },
+    const fetchMore = async (): Promise<void> => {
+        const issuePagination = await fetchWorkspaceIssues(
+            userLocationStore.currentWorkspace.id,
+            issueFilter,
+            currentProjectId,
+            currentPageNum,
         );
+
+        if (typeof issuePagination == 'string') notify.show(issuePagination, 'error', 5000, errorColour);
+        else {
+            setIssuesArray(issuesArray.concat(issuePagination.issues));
+            const projectId = issuePagination.nextResource.projectId;
+            const pageNumber = issuePagination.nextResource.pageNumber;
+
+            if (projectId == 0 && pageNumber == 0) setAreMoreIssues(false);
+            else {
+                setCurrentProjectId(projectId);
+                setCurrentPageNum(pageNumber);
+            }
+        }
     };
 
     return (
