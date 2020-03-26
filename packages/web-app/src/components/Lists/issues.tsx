@@ -6,7 +6,7 @@ import { notify } from 'react-notify-toast';
 import { error, warning } from 'services/Notification/colours';
 import { IssueCard } from 'components/Cards/issue';
 import { IssueFilter } from 'components/Filter/issues';
-import { Issue } from 'models/Issue';
+import { Issue, IssueStatus } from 'models/Issue';
 import { fetchWorkspaceIssues, searchIssueByTitleDescription } from 'services/api/issues';
 import { observer } from 'services/mobx';
 import { UserLocationStoreContext } from 'stores';
@@ -16,11 +16,11 @@ export const IssuesList: FunctionalComponent = observer(() => {
     const userLocationStore = useContext(UserLocationStoreContext);
 
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
-    const [issueFilter, setIssueFilter] = useState<string>('opened');
-    const [currentPageNum, setCurrentPageNum] = useState<number>(0);
-    const [currentProjectId, setCurrentProjectId] = useState<number>(0);
-    const [areMoreIssues, setAreMoreIssues] = useState<boolean>(true);
-    const [searchFor, setSearchFor] = useState<string>('');
+    const [issueFilter, setIssueFilter] = useState(IssueStatus.open.toString());
+    const [currentPageNum, setCurrentPageNum] = useState(0);
+    const [currentProjectId, setCurrentProjectId] = useState(0);
+    const [areMoreIssues, setAreMoreIssues] = useState(true);
+    const [searchFor, setSearchFor] = useState('');
 
     const updateIssueFilter = (filterFor: string): void => {
         setCurrentPageNum(0);
@@ -47,8 +47,6 @@ export const IssuesList: FunctionalComponent = observer(() => {
             });
         }
     };
-
-    const handleOnInput = (e: any): void => setSearchFor((e.target as HTMLSelectElement).value);
 
     const issueCardList = issuesArray.map((issue, index) => {
         return <IssueCard key={index} issue={issue} />;
@@ -84,7 +82,7 @@ export const IssuesList: FunctionalComponent = observer(() => {
             <IssueFilter setFilter={updateIssueFilter} />
             <SearchBar
                 placeholder="Search by title or description"
-                handleOnInput={handleOnInput}
+                handleOnInput={(term: string): void => setSearchFor(term)}
                 handleOnKeyDown={handleOnKeyDown}
             />
             <div class="w-full">

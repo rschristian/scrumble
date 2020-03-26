@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 
-import { User } from 'models/user';
+import { User } from 'models/User';
 import { login, destroyOAuthToken } from 'services/api/auth';
 
 class AuthStore {

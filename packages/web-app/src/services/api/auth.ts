@@ -1,5 +1,6 @@
 import { apiService, authStorageService } from 'ts-api-toolkit';
-import { User } from 'models/user';
+
+import { User } from 'models/User';
 
 export const login = async (shortLivedJwt: string): Promise<boolean> => {
     authStorageService.saveToken(shortLivedJwt);
