@@ -10,7 +10,7 @@ import { observer } from 'services/mobx';
 import { UserLocationStoreContext } from 'stores';
 import { createIssue } from 'services/api/issues';
 import { IssuesList } from 'components/Lists/issues';
-import { success } from 'services/Notification/colours';
+import { successColour } from 'services/Notification/colours';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const userLocationStore = useContext(UserLocationStoreContext);
@@ -23,7 +23,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             if (error) {
                 setNewIssueErrorMessage(error);
             } else {
-                notify.show('New issue created!', 'success', 5000, success);
+                notify.show('New issue created!', 'success', 5000, successColour);
             }
         });
     };

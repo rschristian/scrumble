@@ -1,9 +1,8 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState, useEffect, useContext } from 'preact/hooks';
-
 import { notify } from 'react-notify-toast';
 
-import { error, warning } from 'services/Notification/colours';
+import { errorColour, warningColour } from 'services/Notification/colours';
 import { IssueCard } from 'components/Cards/issue';
 import { IssueFilter } from 'components/Filter/issues';
 import { Issue, IssueStatus } from 'models/Issue';
@@ -33,13 +32,13 @@ export const IssuesList: FunctionalComponent = observer(() => {
         if (e.key === 'Enter') {
             searchIssueByTitleDescription(23, searchFor, issueFilter).then((res) => {
                 if (typeof res === 'string') {
-                    notify.show(res, 'error', 5000, error);
+                    notify.show(res, 'error', 5000, errorColour);
                 } else if (res.length === 0) {
                     notify.show(
                         `No search results for '${searchFor}' with filter '${issueFilter}'`,
                         'custom',
                         5000,
-                        warning,
+                        warningColour,
                     );
                 } else {
                     setIssuesArray(res);
@@ -60,7 +59,7 @@ export const IssuesList: FunctionalComponent = observer(() => {
         fetchWorkspaceIssues(userLocationStore.currentWorkspace.id, issueFilter, currentProjectId, currentPageNum).then(
             (issuePagination) => {
                 if (typeof issuePagination == 'string') {
-                    notify.show(issuePagination, 'error', 5000, error);
+                    notify.show(issuePagination, 'error', 5000, errorColour);
                 } else {
                     setIssuesArray(issuesArray.concat(issuePagination.issues));
                     const projectId = issuePagination.nextResource.projectId;
