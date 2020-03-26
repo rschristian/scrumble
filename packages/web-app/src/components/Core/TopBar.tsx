@@ -28,6 +28,7 @@ export const TopBar: FunctionalComponent = () => {
                     <div class="sm:hidden">
                         <button
                             onClick={(): void => setIsOpen(!isOpen)}
+                            onBlur={(): void => setIsOpen(false)}
                             type="button"
                             class="block text-deep-space-sparkle hover:text-gray-400 focus:outline-none"
                         >
@@ -56,10 +57,12 @@ export const TopBar: FunctionalComponent = () => {
                                     <img class="avatar" src={avatar} alt="Your avatar" />
                                 </button>
                                 <div
-                                    onFocus={(): void => logout()}
-                                    class={`btn-sign-out shadow-lg ${isAccountDropdownOpen ? 'block' : 'hidden'}`}
+                                    class={`btn-sign-out shadow-lg is-clickable ${
+                                        isAccountDropdownOpen ? 'block' : 'hidden'
+                                    }`}
+                                    onMouseDown={logout}
                                 >
-                                    <span class="block px-4 py-2 text-white text-center"> Sign Out </span>
+                                    <span class="block px-4 py-2 text-white text-center">Sign Out</span>
                                 </div>
                             </div>
                         </div>
@@ -75,7 +78,7 @@ export const TopBar: FunctionalComponent = () => {
                     <img class="ml-3 avatar" src={avatar} alt="Your avatar" />
                     <span class="ml-3 font-semibold text-deep-space-sparkle">Greg</span>
                 </div>
-                <div onClick={(): void => logout()} class="my-4 ml-3">
+                <div class="my-4 ml-3 is-clickable" onClick={logout}>
                     <span class="top-nav-dropdown-link">Sign out</span>
                 </div>
             </div>
