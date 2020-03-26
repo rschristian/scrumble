@@ -3,13 +3,13 @@ import { useState } from 'preact/hooks';
 
 import { SprintCard } from 'components/Cards/sprint';
 import { SprintFilter } from 'components/Filter/sprints';
+import { IssuesList } from 'components/Lists/issues';
 import { sprints } from 'data';
 import { SprintStatus } from 'models/Sprint';
-import { IssuesList } from 'components/Lists/issues';
 
 const SprintPlanning: FunctionalComponent = () => {
     const [isSprintView, setIsSprintView] = useState(false);
-    const [sprintFilter, setSprintFilter] = useState('active');
+    const [sprintFilter, setSprintFilter] = useState(SprintStatus.active.toString());
 
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
