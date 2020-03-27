@@ -36,7 +36,7 @@ export const TopBar: FunctionalComponent = observer(() => {
                                 onClick={(): void => setShowAccountDropdown(!showAccountDropdown)}
                                 onBlur={(): void => setShowAccountDropdown(false)}
                                 type="button"
-                                class="block text-deep-space-sparkle hover:text-gray-400 focus:outline-none"
+                                class="block text-deep-space-sparkle"
                             >
                                 <div class="flex items-start items-baseline min-h-12">
                                     <div class={`my-auto ml-2 ${!showAccountDropdown ? 'block' : 'hidden'}`}>
@@ -58,11 +58,13 @@ export const TopBar: FunctionalComponent = observer(() => {
                                     <button
                                         onClick={(): void => setShowAccountDropdown(!showAccountDropdown)}
                                         onBlur={(): void => setShowAccountDropdown(false)}
-                                        class={`btn-account-dropdown ${
-                                            showAccountDropdown ? 'outline-none border-white' : ''
-                                        }`}
+                                        class="btn-account-dropdown"
                                     >
-                                        <img class="avatar" src={avatar} alt="Your avatar" />
+                                        <img
+                                            class={`avatar ${showAccountDropdown ? 'border-orange-500' : ''}`}
+                                            src={avatar}
+                                            alt="Your avatar"
+                                        />
                                     </button>
                                     <div
                                         class={`btn-sign-out shadow-lg is-clickable ${
