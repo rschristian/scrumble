@@ -4,6 +4,7 @@ import { lazy, Suspense } from 'preact/compat';
 import { Route, route, Router } from 'preact-router';
 import Notifications from 'react-notify-toast';
 
+import { TopBar } from 'components/Core/TopBar';
 import AuthSuccess from 'routes/Auth/authSuccess';
 import Login from 'routes/Auth/login';
 import Home from 'routes/Home';
@@ -16,6 +17,7 @@ const App: FunctionalComponent = () => {
     return (
         <div id="app" class="bg-blue-100">
             <Notifications />
+            <TopBar />
             <Suspense fallback={<Fallback />}>
                 <Router>
                     <AuthenticatedRoute path="/" component={Home} />

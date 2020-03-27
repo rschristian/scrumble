@@ -1,9 +1,8 @@
-import { ComponentChild, Fragment, FunctionalComponent, h } from 'preact';
+import { ComponentChild, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
 import { BreadCrumbs } from 'components/BreadCrumbs';
 import { SideBar } from 'components/Core/SideBar';
-import { TopBar } from 'components/Core/TopBar';
 import { workspaces } from 'data';
 
 import SprintPlanning from './sprintPlannning';
@@ -55,22 +54,19 @@ const Workspace: FunctionalComponent<IProps> = (props: IProps) => {
     }, [props.workspaceId, props.subPage]);
 
     return (
-        <Fragment>
-            <TopBar showLoggedIn={true} />
-            <div class="page">
-                <div class="flex">
-                    <SideBar links={sideNavItems} />
-                    <div class="main-content">
-                        <BreadCrumbs
-                            workspaceId={props.workspaceId}
-                            workspaceName={workspaceName}
-                            currentPage={currentPageTitle}
-                        />
-                        {subPage}
-                    </div>
+        <div class="page">
+            <div class="flex">
+                <SideBar links={sideNavItems} />
+                <div class="main-content">
+                    <BreadCrumbs
+                        workspaceId={props.workspaceId}
+                        workspaceName={workspaceName}
+                        currentPage={currentPageTitle}
+                    />
+                    {subPage}
                 </div>
             </div>
-        </Fragment>
+        </div>
     );
 };
 
