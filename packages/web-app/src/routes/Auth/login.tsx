@@ -1,10 +1,12 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 
 import scrumCards from 'assets/icons/scrumCards.png';
+import { TopBar } from 'components/Core/TopBar';
 
 const Login: FunctionalComponent = () => {
     return (
         <Fragment>
+            <TopBar showLoggedIn={false} />
             <div class="login-page">
                 <div class="form-container login-form">
                     <h1 class="login-title">Scrumble</h1>

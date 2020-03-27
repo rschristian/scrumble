@@ -2,6 +2,7 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { useContext, useEffect, useState } from 'preact/hooks';
 import { getCurrentUrl, route } from 'preact-router';
 
+import { TopBar } from 'components/Core/TopBar';
 import { Error } from 'components/Error';
 import { AuthStoreContext } from 'stores';
 
@@ -23,6 +24,7 @@ const AuthSuccess: FunctionalComponent = () => {
 
     return (
         <Fragment>
+            <TopBar showLoggedIn={false} />
             <div className="main-content overflow-hidden">
                 {!errorMessage ? (
                     <div className="loader mx-auto mt-20 block" />
