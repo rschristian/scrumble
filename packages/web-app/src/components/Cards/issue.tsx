@@ -2,7 +2,7 @@ import { FunctionalComponent, h } from 'preact';
 import { useContext, useState } from 'preact/hooks';
 
 import { Modal } from 'components/Modal';
-import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
+import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
 import { Issue } from 'models/Issue';
 import { editIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
