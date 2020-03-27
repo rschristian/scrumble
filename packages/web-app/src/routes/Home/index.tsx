@@ -4,25 +4,23 @@ import { useEffect, useContext } from 'preact/hooks';
 import { WorkspaceCard } from 'components/Cards/workspace';
 import { SearchBar } from 'components/SearchBar';
 import { workspaces } from 'data';
-
 import { fetchUserInfo } from 'services/api/auth';
-import { AuthStoreContext } from 'stores';
+import { AuthStoreContext, UserLocationStoreContext } from 'stores';
 
 const Home: FunctionalComponent = () => {
     const authStore = useContext(AuthStoreContext);
+    const userLocationStore = useContext(UserLocationStoreContext);
 
     const handleOnKeyDown = (e: KeyboardEvent): void => {
-        if (e.key === 'Enter') {
-            console.log('Enter selected');
-        }
+        if (e.key === 'Enter') console.log('Enter selected');
     };
 
     const handleOnInput = (e: any): void => console.log((e.target as HTMLSelectElement).value);
 
     useEffect(() => {
         fetchUserInfo().then((response) => authStore.setCurrentUser(response));
-        localStorage.setItem('activeListItem', String(0));
-    }, [authStore]);
+        userLocationStore.setActiveSideBarItem(0);
+    }, [authStore, userLocationStore]);
 
     return (
         <div class="mt-16 flex justify-center bg-blue-100">

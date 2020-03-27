@@ -1,15 +1,23 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
+import { useContext, useEffect, useState } from 'preact/hooks';
 
 import { SprintCard } from 'components/Cards/sprint';
 import { SprintFilter } from 'components/Filter/sprints';
 import { IssuesList } from 'components/CommonRoutes/Issues';
 import { sprints } from 'data';
 import { SprintStatus } from 'models/Sprint';
+import { observer } from 'services/mobx';
+import { UserLocationStoreContext } from 'stores';
 
-const SprintPlanning: FunctionalComponent = () => {
+const SprintPlanning: FunctionalComponent = observer(() => {
+    const userLocationStore = useContext(UserLocationStoreContext);
+
     const [isSprintView, setIsSprintView] = useState(false);
     const [sprintFilter, setSprintFilter] = useState(SprintStatus.active.toString());
+
+    useEffect(() => {
+        userLocationStore.setActiveSideBarItem(0);
+    }, [userLocationStore]);
 
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
@@ -56,6 +64,6 @@ const SprintPlanning: FunctionalComponent = () => {
             </div>
         </Fragment>
     );
-};
+});
 
 export default SprintPlanning;
