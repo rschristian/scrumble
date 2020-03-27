@@ -14,7 +14,7 @@
 .search-bar {
   @apply my-5 shadow appearance-none border flex bg-white rounded w-full py-2 px-3 text-gray-700 leading-tight;
 
-  &:focus {
+  &:focus-within {
     @apply outline-none shadow-outline;
   }
 }
