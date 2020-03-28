@@ -26,6 +26,7 @@
     ]
   },
   "dependencies": {
+    "@types/regression": "^2.0.0",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^1.5.2",
     "preact": "^10.3.3",
@@ -33,6 +34,7 @@
     "preact-render-to-string": "^5.1.4",
     "preact-router": "^3.2.1",
     "react-notify-toast": "^0.5.1",
+    "regression": "^2.0.1",
     "tailwindcss": "^1.2.0",
     "ts-api-toolkit": "^2.0.1"
   },
