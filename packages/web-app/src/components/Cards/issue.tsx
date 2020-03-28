@@ -6,7 +6,6 @@ import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
 import { Issue } from 'models/Issue';
 import { editIssue, addEstimate } from 'services/api/issues';
 import { observer } from 'services/mobx';
-import { DataPoint } from 'regression';
 
 import { UserLocationStoreContext } from 'stores';
 

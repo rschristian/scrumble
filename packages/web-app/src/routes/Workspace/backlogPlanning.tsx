@@ -11,9 +11,7 @@ import { UserLocationStoreContext } from 'stores';
 import { createIssue } from 'services/api/issues';
 import { IssuesList } from 'components/Lists/issues';
 import { success } from 'services/Notification/colours';
-import { linearRegression, timeConvertion, dataGrabber } from 'regressionModel/linearRegression';
-import { DataPoint } from 'regression';
-import { useEffect } from 'react';
+import { dataGrabber } from 'regressionModel/linearRegression';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const userLocationStore = useContext(UserLocationStoreContext);
@@ -30,11 +28,6 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             }
         });
     };
-
-    useEffect(() => {
-        const data: DataPoint[] = [];
-        console.log(timeConvertion(linearRegression(data, 2)));
-    });
 
     return (
         <div class={showNewIssueModal ? 'modal-active' : ''}>
