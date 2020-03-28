@@ -4,7 +4,7 @@ import { Issue } from 'models/Issue';
 export const dataGrabber = (issues: Issue[]): number[][] => {
     const dataPoints: number[][] = [];
     issues.forEach((issue) => {
-        if (issue.timeSpent !== null) {
+        if (issue.timeSpent > 0) {
             dataPoints.push([issue.storyPoints, issue.timeSpent]);
         }
     });
