@@ -46,12 +46,17 @@ export const timeConvertion = (time: number): string => {
 };
 
 // Grabs data to feed model
-export const dataGrabber = (issues: Issue[]): DataPoint[] => {
-    const datapoints: DataPoint[] = [];
+export const dataGrabber = (issues: Issue[]): Record<string, any> => {
+    const xValues: number[] = [];
+    const yValues: number[] = [];
     issues.forEach((issue) => {
         if (issue.timeSpent !== null) {
-            datapoints.push([issue.storyPoints, issue.timeSpent]);
+            xValues.push(issue.storyPoints);
+            yValues.push(issue.timeSpent);
         }
     });
-    return datapoints;
+    return {
+        storyPoints: xValues,
+        timeSpent: yValues,
+    };
 };

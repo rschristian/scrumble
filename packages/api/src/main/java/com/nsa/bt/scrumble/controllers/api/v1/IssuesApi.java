@@ -1,16 +1,17 @@
 package com.nsa.bt.scrumble.controllers.api.v1;
 
 import com.nsa.bt.scrumble.dto.Issue;
+import com.nsa.bt.scrumble.regression.LinearRegression;
 import com.nsa.bt.scrumble.dto.IssuePageResult;
 import com.nsa.bt.scrumble.services.IIssuePagingService;
 import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.services.IIssueService;
 import com.nsa.bt.scrumble.services.IUserService;
-
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,9 @@ public class IssuesApi {
 
     @Autowired
     OAuth2AuthorizedClientService auth2AuthorizedClientService;
+
+    @Autowired
+    LinearRegression linearRegression;
 
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabBaseUrl;
@@ -87,6 +91,20 @@ public class IssuesApi {
         var res = new HashMap<String, String>();
         res.put("message", authErrorMsg);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
+    }
+
+    @PostMapping("/{projectId}/addEstimate")
+    public ResponseEntity<String> addEstimate(Authentication authentication, @PathVariable(value="projectId") int projectId, @RequestParam(value="x") int[] storyPoints, @RequestParam(value="y") int[] timeSpent, @RequestBody Issue issue){
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        linearRegression.trianModel(storyPoints, timeSpent);
+        String estimate = linearRegression.timeConvertion(linearRegression.predict(issue.getStoryPoints()));
+        if(accessTokenOptional.isPresent()) {
+            String uri = String.format("%1s/projects/%2s/issues/%3s/time_estimate?duration=%4s&access_token=%5s", gitLabBaseUrl, projectId, issue.getIid(), estimate, accessTokenOptional.get());
+            return ResponseEntity.ok().body(restTemplate.postForObject(uri, null , String.class));
+        }
+        logger.error("Unable to authenticate with authentication provider");
+        return ResponseEntity.ok().body("Something went wrong...");
     }
 
     @PutMapping("/workspace/{workspaceId}/project/{projectId}/issue/{issueId}")

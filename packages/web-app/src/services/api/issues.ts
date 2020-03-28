@@ -79,10 +79,10 @@ export const searchIssueByTitleDescription = async (
 };
 
 // GitLab API: POST /projects/:id/issues/:issue_iid/time_estimate
-export const addEstimate = async (projectId: number, data: DataPoint[], issue: Issue): Promise<void | string> => {
+export const addEstimate = async (projectId: number, data: any, issue: Issue): Promise<void | string> => {
     const time: string = timeConvertion(linearRegression(data, issue.storyPoints));
     await apiService
-        .post(`issues/${projectId}/addEstimate/${time}`, issue)
+        .post(`issues/${projectId}/addEstimate/?x=${data.storyPoints}&y=${data.timeSpent}`, issue)
         .then(() => {
             return;
         })
