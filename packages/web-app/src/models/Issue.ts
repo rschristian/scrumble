@@ -13,6 +13,6 @@ export interface Issue {
     state: IssueStatus;
     labels?: string[];
     projectId: number;
-    timeSpent: number;
+    timeSpent?: number;
     sprint?: Sprint;
 }
