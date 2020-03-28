@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public class LinearRegression {
     private double c, m;
 
-    public void trianModel(int[][] dataPoints) {
+    public void trainModel(int[][] dataPoints) {
         if(dataPoints.length < 10) { // if not enough data given resorts to defualt values
             dataPoints = new int[][]{{1,28800},{2,86400},{3,144000},{5,201600},{8,288000}};
         }
