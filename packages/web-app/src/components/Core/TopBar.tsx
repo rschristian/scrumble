@@ -61,19 +61,21 @@ export const TopBar: FunctionalComponent = observer(() => {
                                         class="btn-account-dropdown"
                                     >
                                         <img
-                                            class={`avatar ${showAccountDropdown ? 'border-orange-500' : ''}`}
-                                            src={avatar}
                                             alt="Your avatar"
+                                            class={`avatar ${
+                                                showAccountDropdown ? 'border-2 border-deep-space-sparkle' : ''
+                                            }`}
+                                            src={avatar}
                                         />
                                     </button>
-                                    <div
+                                    <button
                                         class={`btn-sign-out shadow-lg is-clickable ${
                                             showAccountDropdown ? 'block' : 'hidden'
                                         }`}
                                         onMouseDown={logout}
                                     >
                                         <span class="block px-4 py-2 text-white text-center">Sign Out</span>
-                                    </div>
+                                    </button>
                                 </div>
                             </div>
                         </div>

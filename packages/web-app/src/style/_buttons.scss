@@ -1,11 +1,10 @@
 @import 'variables';
 
 .btn-create {
-  @apply align-baseline text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow-md;
-  background-color: $theme-deep-space-sparkle;
+  @apply align-baseline text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow-md bg-deep-space-sparkle;
 
   &:hover {
-    background-color: #778b93;
+    @apply bg-l-deep-space-sparkle;
   }
 }
 .btn-edit {
