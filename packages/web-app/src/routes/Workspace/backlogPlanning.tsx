@@ -8,7 +8,7 @@ import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
 import { observer } from 'services/mobx';
 import { UserLocationStoreContext } from 'stores';
-import { createIssue } from 'services/api/issues';
+import { fetchIssues, createIssue, addEstimate } from 'services/api/issues';
 import { IssuesList } from 'components/Lists/issues';
 import { success } from 'services/Notification/colours';
 import { dataGrabber } from 'regressionModel/linearRegression';

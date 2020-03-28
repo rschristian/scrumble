@@ -25,7 +25,7 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
             description,
             storyPoint,
             projectId,
-            timeSpent: props.issue.timeSpent,
+            timeSpent: props.issue?.timeSpent || 0,
         };
     };
 
