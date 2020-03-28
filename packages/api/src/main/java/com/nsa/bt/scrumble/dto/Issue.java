@@ -9,7 +9,7 @@ public class Issue implements Serializable {
     private int iid;
     @JsonAlias("milestone")
     private Sprint sprint;
-    @JsonAlias("project_id")
+    @JsonAlias({"project_id", "projectId"})
     private int projectId;
     private String title;
     private String description;
