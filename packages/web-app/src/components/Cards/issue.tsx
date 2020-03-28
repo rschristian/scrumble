@@ -4,8 +4,9 @@ import { useContext, useState } from 'preact/hooks';
 import { Modal } from 'components/Modal';
 import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
 import { Issue } from 'models/Issue';
-import { editIssue } from 'services/api/issues';
+import { editIssue, addEstimate } from 'services/api/issues';
 import { observer } from 'services/mobx';
+import { DataPoint } from 'regression';
 
 import { UserLocationStoreContext } from 'stores';
 
@@ -27,6 +28,7 @@ export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
 
 interface IProps {
     issue: Issue;
+    data?: DataPoint[];
 }
 
 export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
@@ -36,15 +38,13 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleIssueEdit = async (issue: Issue): Promise<void> => {
-        return await editIssue(
-            userLocationStore.currentWorkspace.id,
-            props.issue.projectId,
-            props.issue.iid,
-            issue,
-        ).then((error) => {
-            if (error) setErrorMessage(error);
-            else setShowEditIssueModal(false);
-        });
+        await editIssue(userLocationStore.currentWorkspace.id, props.issue.projectId, props.issue.iid, issue).then(
+            (error) => {
+                if (error) setErrorMessage(error);
+                else setShowEditIssueModal(false);
+            },
+        );
+        await addEstimate(props.issue.projectId, props.data, issue);
     };
 
     return (

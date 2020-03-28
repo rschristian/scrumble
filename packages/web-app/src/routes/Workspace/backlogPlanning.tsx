@@ -11,7 +11,7 @@ import { UserLocationStoreContext } from 'stores';
 import { createIssue } from 'services/api/issues';
 import { IssuesList } from 'components/Lists/issues';
 import { success } from 'services/Notification/colours';
-import { linearRegression, timeConvertion } from 'regressionModel/linearRegression';
+import { linearRegression, timeConvertion, dataGrabber } from 'regressionModel/linearRegression';
 import { DataPoint } from 'regression';
 import { useEffect } from 'react';
 
