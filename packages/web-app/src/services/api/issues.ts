@@ -1,8 +1,6 @@
 import { apiService } from 'ts-api-toolkit';
 
 import { Issue } from 'models/Issue';
-import { linearRegression, timeConvertion } from 'regressionModel/linearRegression';
-import { DataPoint } from 'regression';
 import { IssuePagination } from 'models/IssuePagination';
 
 export async function fetchIssues(workspaceId: number): Promise<Issue[] | string> {
@@ -79,10 +77,9 @@ export const searchIssueByTitleDescription = async (
 };
 
 // GitLab API: POST /projects/:id/issues/:issue_iid/time_estimate
-export const addEstimate = async (projectId: number, data: any, issue: Issue): Promise<void | string> => {
-    const time: string = timeConvertion(linearRegression(data, issue.storyPoints));
+export const addEstimate = async (projectId: number, dataPoints: number[][], issue: Issue): Promise<void | string> => {
     await apiService
-        .post(`issues/${projectId}/addEstimate/?x=${data.storyPoints}&y=${data.timeSpent}`, issue)
+        .post(`issues/${projectId}/addEstimate/?dataPoints=${dataPoints}`, issue)
         .then(() => {
             return;
         })

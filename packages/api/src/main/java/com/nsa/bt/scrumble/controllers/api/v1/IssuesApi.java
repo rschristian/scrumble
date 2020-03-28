@@ -94,10 +94,10 @@ public class IssuesApi {
     }
 
     @PostMapping("/{projectId}/addEstimate")
-    public ResponseEntity<String> addEstimate(Authentication authentication, @PathVariable(value="projectId") int projectId, @RequestParam(value="x") int[] storyPoints, @RequestParam(value="y") int[] timeSpent, @RequestBody Issue issue){
+    public ResponseEntity<String> addEstimate(Authentication authentication, @PathVariable(value="projectId") int projectId, @RequestParam(value="dataPoints") int[][] dataPoints, @RequestBody Issue issue){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-        linearRegression.trianModel(storyPoints, timeSpent);
+        linearRegression.trianModel(dataPoints);
         String estimate = linearRegression.timeConvertion(linearRegression.predict(issue.getStoryPoints()));
         if(accessTokenOptional.isPresent()) {
             String uri = String.format("%1s/projects/%2s/issues/%3s/time_estimate?duration=%4s&access_token=%5s", gitLabBaseUrl, projectId, issue.getIid(), estimate, accessTokenOptional.get());

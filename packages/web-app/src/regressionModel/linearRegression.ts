@@ -1,17 +1,12 @@
 import { Issue } from 'models/Issue';
 
 // Grabs data to feed model
-export const dataGrabber = (issues: Issue[]): Record<string, any> => {
-    const xValues: number[] = [];
-    const yValues: number[] = [];
+export const dataGrabber = (issues: Issue[]): number[][] => {
+    const dataPoints: number[][] = [];
     issues.forEach((issue) => {
         if (issue.timeSpent !== null) {
-            xValues.push(issue.storyPoints);
-            yValues.push(issue.timeSpent);
+            dataPoints.push([issue.storyPoints, issue.timeSpent]);
         }
     });
-    return {
-        storyPoints: xValues,
-        timeSpent: yValues,
-    };
+    return dataPoints;
 };

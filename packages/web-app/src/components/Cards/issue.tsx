@@ -27,7 +27,7 @@ export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
 
 interface IProps {
     issue: Issue;
-    data?: Record<string, any>;
+    data?: number[][];
 }
 
 export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
