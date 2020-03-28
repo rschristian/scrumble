@@ -1,6 +1,17 @@
 import regression, { DataPoint } from 'regression';
 
 export const linearRegression = (data: DataPoint[], storyPoint: number): number => {
+    if (data.length < 10) {
+        const defaultData: DataPoint[] = [
+            [1, 28800],
+            [2, 86400],
+            [3, 144000],
+            [5, 201600],
+            [8, 288000],
+        ];
+        const result = regression.linear(defaultData);
+        return result.predict(storyPoint)[1];
+    }
     const result = regression.linear(data);
     return result.predict(storyPoint)[1];
 };

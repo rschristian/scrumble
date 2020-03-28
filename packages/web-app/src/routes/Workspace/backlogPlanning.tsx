@@ -32,13 +32,8 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
     };
 
     useEffect(() => {
-        const data: DataPoint[] = [
-            [1, 3600],
-            [2, 28800],
-            [4, 57600],
-            [8, 114000],
-        ];
-        console.log(timeConvertion(linearRegression(data, 69)));
+        const data: DataPoint[] = [];
+        console.log(timeConvertion(linearRegression(data, 2)));
     });
 
     return (
