@@ -1,8 +1,10 @@
 import { FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
+import { useContext, useEffect, useState } from 'preact/hooks';
 import { Menu, X } from 'preact-feather';
 
 import { SideBarItem } from 'components/Core/SideBar/SideBarItem';
+import { observer } from 'services/mobx';
+import { UserLocationStoreContext } from 'stores';
 
 export interface SideBarLink {
     label: string;
@@ -14,13 +16,13 @@ interface IProps {
     links: SideBarLink[];
 }
 
-export const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
-    const [activeListItem, setActiveListItem] = useState(parseInt(localStorage.getItem('activeListItem'), 10) || 0);
+export const SideBar: FunctionalComponent<IProps> = observer((props: IProps) => {
+    const userLocationStore = useContext(UserLocationStoreContext);
+
     const [isOpen, setIsOpen] = useState(false);
 
     const listItemOnClick = (index: number): void => {
-        localStorage.setItem('activeListItem', String(index));
-        setActiveListItem(index);
+        userLocationStore.setActiveSideBarItem(index);
     };
 
     const sensors = props.links.map((menuItem, index) => {
@@ -30,7 +32,7 @@ export const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
                 menuItem={menuItem}
                 index={index}
                 isOpen={isOpen}
-                active={activeListItem == index}
+                active={userLocationStore.activeSideBarItem == index}
                 onClick={listItemOnClick}
             />
         );
@@ -54,4 +56,4 @@ export const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
             </ul>
         </div>
     );
-};
+});

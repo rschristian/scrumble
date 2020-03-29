@@ -41,10 +41,10 @@ const WorkspaceEdit: FunctionalComponent = () => {
                             onInput={(e): void => setName((e.target as HTMLInputElement).value)}
                         />
                     </div>
-                    <div className="m-4">
-                        <label className="form-label">Workspace Description</label>
+                    <div class="m-4">
+                        <label class="form-label">Workspace Description</label>
                         <input
-                            className="form-input"
+                            class="form-input"
                             type="text"
                             placeholder="Workspace Description"
                             value={description}
@@ -63,7 +63,7 @@ const WorkspaceEdit: FunctionalComponent = () => {
                             // onInput={(e): void => setWorkspaceName((e.target as HTMLInputElement).value)}
                         />
                     </div>
-                    <div className="error">{errorMessage}</div>
+                    <div class="error">{errorMessage}</div>
                 </Fragment>
             }
             onSubmit={onSubmit}

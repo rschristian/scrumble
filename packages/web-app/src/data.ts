@@ -387,15 +387,6 @@ export const issues: Issue[] = [
         storyPoint: 5,
         projectId: 4,
     },
-    {
-        iid: 40,
-        state: IssueStatus.closed,
-        title: 'synergize scalable infrastructures',
-        description:
-            'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi.',
-        storyPoint: 2,
-        projectId: 5,
-    },
 ];
 
 export const projects: Project[] = [

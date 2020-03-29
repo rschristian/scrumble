@@ -5,16 +5,16 @@ import { notify } from 'react-notify-toast';
 
 import { WorkspaceCard } from 'components/Cards/workspace';
 import { SearchBar } from 'components/SearchBar';
-
 import { fetchUserInfo } from 'services/api/auth';
 import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
 import { Workspace } from 'models/Workspace';
 import { CreateWorkspaceModal } from 'components/Modal/createWorkspaceModal';
-import { error, success } from 'services/Notification/colours';
-import { AuthStoreContext } from 'stores';
+import { AuthStoreContext, UserLocationStoreContext } from 'stores';
+import { errorColour, successColour } from 'services/Notification/colours';
 
 const Home: FunctionalComponent = () => {
     const authStore = useContext(AuthStoreContext);
+    const userLocationStore = useContext(UserLocationStoreContext);
 
     const [workspacesArray, setWorkspacesArray] = useState<Workspace[]>([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -24,15 +24,13 @@ const Home: FunctionalComponent = () => {
             if (typeof res !== 'string') {
                 setWorkspacesArray(res);
             } else {
-                notify.show(res, 'error', 5000, error);
+                notify.show(res, 'error', 5000, errorColour);
             }
         });
     }, []);
 
     const handleOnKeyDown = (e: KeyboardEvent): void => {
-        if (e.key === 'Enter') {
-            console.log('Enter selected');
-        }
+        if (e.key === 'Enter') console.log('Enter selected');
     };
 
     const submitNewWorkspace = (name: string, description: string): void => {
@@ -40,9 +38,9 @@ const Home: FunctionalComponent = () => {
             if (typeof res !== 'string') {
                 setWorkspacesArray([...workspacesArray, res]);
                 closeModal();
-                notify.show('Workspace created!', 'success', 5000, success);
+                notify.show('Workspace created!', 'success', 5000, successColour);
             } else {
-                notify.show(res, 'error', 5000, error);
+                notify.show(res, 'error', 5000, errorColour);
             }
         });
     };
@@ -55,8 +53,8 @@ const Home: FunctionalComponent = () => {
 
     useEffect(() => {
         fetchUserInfo().then((response) => authStore.setCurrentUser(response));
-        localStorage.setItem('activeListItem', String(0));
-    }, [authStore]);
+        userLocationStore.setActiveSideBarItem(0);
+    }, [authStore, userLocationStore]);
 
     return (
         <div class="mt-16 flex justify-center bg-blue-100">

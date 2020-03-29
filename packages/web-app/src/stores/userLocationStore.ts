@@ -1,20 +1,27 @@
 import { observable, action } from 'mobx';
+import { AsyncTrunk } from 'mobx-sync';
+
 import { Workspace } from 'models/Workspace';
 import { Sprint } from 'models/Sprint';
 
 class UserLocationStore {
-    @observable currentWorkspace: Workspace | null = JSON.parse(localStorage.getItem('currentWorkspace')) || null;
-    @observable currentSprint: Sprint | null = JSON.parse(localStorage.getItem('currentSprint')) || null;
+    @observable currentWorkspace: Workspace = null;
+    @observable currentSprint: Sprint = null;
+    @observable activeSideBarItem = 0;
 
     @action setWorkspace(workspace: Workspace): void {
-        localStorage.setItem('currentWorkspace', JSON.stringify(workspace));
         this.currentWorkspace = workspace;
     }
 
     @action setSprint(sprint: Sprint): void {
-        localStorage.setItem('currentSprint', JSON.stringify(sprint));
         this.currentSprint = sprint;
+    }
+
+    @action setActiveSideBarItem(index: number): void {
+        this.activeSideBarItem = index;
     }
 }
 
 export const userLocationStore = new UserLocationStore();
+
+new AsyncTrunk(userLocationStore, { storage: localStorage }).init().then();
