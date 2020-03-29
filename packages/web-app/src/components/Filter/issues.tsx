@@ -26,7 +26,7 @@ export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
         <div class="my-4 flex flex-col items-start">
             <div class="flex rounded shadow">
                 <button
-                    className={`btn-filter ${filterStatus === filterStatusEnum.all ? 'btn-filter-active' : ''}`}
+                    class={`btn-filter ${filterStatus === filterStatusEnum.all ? 'btn-filter-active' : ''}`}
                     onClick={(): void => updateFilter(filterStatusEnum.all)}
                 >
                     All

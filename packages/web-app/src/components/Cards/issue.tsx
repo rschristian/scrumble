@@ -71,7 +71,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                 <span class="story-pnt">{props.issue.storyPoint}</span>
                 <span class="text-gray-700">{props.issue.projectId}</span>
                 <button
-                    className="float-right btn-edit my-auto"
+                    class="float-right btn-edit my-auto"
                     onClick={(): void => {
                         setShowEditIssueModal(true);
                         setErrorMessage('');

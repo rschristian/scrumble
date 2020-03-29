@@ -22,11 +22,11 @@ const AuthSuccess: FunctionalComponent = () => {
     });
 
     return (
-        <div className="main-content overflow-hidden">
+        <div class="main-content overflow-hidden">
             {!errorMessage ? (
-                <div className="loader mx-auto mt-20 block" />
+                <div class="loader mx-auto mt-20 block" />
             ) : (
-                <div className="mt-20 sm:w-4/5 lg:w-3/5 block">
+                <div class="mt-20 sm:w-4/5 lg:w-3/5 block">
                     <Error message={errorMessage} />
                 </div>
             )}

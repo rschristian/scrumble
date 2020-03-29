@@ -87,9 +87,7 @@ export const IssuesList: FunctionalComponent = observer(() => {
                     Fetch More Issues
                 </button>
             </div>
-            <div className="rounded bg-white overflow-hidden shadow-lg overflow-y-scroll issuesList">
-                {issueCardList}
-            </div>
+            <div class="rounded bg-white overflow-hidden shadow-lg overflow-y-scroll issuesList">{issueCardList}</div>
         </div>
     );
 });

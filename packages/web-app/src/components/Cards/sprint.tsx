@@ -35,7 +35,7 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
     const openingModalContent = (
         <div>
             Are you sure you want to open this sprint?
-            <div className="error">{errorMessage}</div>
+            <div class="error">{errorMessage}</div>
         </div>
     );
 
