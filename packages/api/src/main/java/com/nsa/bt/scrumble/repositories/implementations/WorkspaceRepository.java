@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class WorkspaceRepository  implements IWorkspaceRepository {
+public class WorkspaceRepository implements IWorkspaceRepository {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
