@@ -21,11 +21,8 @@ const Home: FunctionalComponent = () => {
 
     useEffect(() => {
         getWorkspaces().then((res) => {
-            if (typeof res !== 'string') {
-                setWorkspacesArray(res);
-            } else {
-                notify.show(res, 'error', 5000, errorColour);
-            }
+            if (typeof res !== 'string') setWorkspacesArray(res);
+            else notify.show(res, 'error', 5000, errorColour);
         });
     }, []);
 
