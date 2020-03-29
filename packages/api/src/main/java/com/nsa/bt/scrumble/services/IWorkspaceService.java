@@ -9,8 +9,6 @@ public interface IWorkspaceService {
 
     int[] getProjectIdsForWorkspace(int workspaceId);
 
-//    List<Integer> getProjectIdsForWorkspace(int workspaceId);
-
     Workspace createWorkspace(Workspace workspace, User user);
 
     List<Workspace> getAllWorkspaces();
