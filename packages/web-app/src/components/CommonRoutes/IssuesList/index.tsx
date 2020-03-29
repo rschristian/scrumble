@@ -50,7 +50,7 @@ export const IssuesList: FunctionalComponent = observer(() => {
 
     useEffect(() => {
         fetchMore().then();
-    }, []);
+    }, [issueFilter]);
 
     const fetchMore = async (): Promise<void> => {
         const issuePagination = await fetchWorkspaceIssues(
