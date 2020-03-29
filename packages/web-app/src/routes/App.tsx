@@ -2,7 +2,6 @@ import { FunctionalComponent, h, VNode } from 'preact';
 import { useContext, useEffect } from 'preact/hooks';
 import { lazy, Suspense } from 'preact/compat';
 import { Route, route, Router } from 'preact-router';
-
 import Notifications from 'react-notify-toast';
 
 import { TopBar } from 'components/Core/TopBar';

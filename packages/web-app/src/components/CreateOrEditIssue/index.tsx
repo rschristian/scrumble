@@ -41,7 +41,6 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
             <label class="form-label">Description</label>
             <textarea
                 class="form-input"
-                type="text"
                 placeholder="Issue Description (Optional)"
                 value={description}
                 onInput={(e): void => setDescription((e.target as HTMLInputElement).value)}
@@ -70,21 +69,21 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
                     );
                 })}
             </select>
-            <div className="flex justify-end pt-2">
+            <div class="flex justify-end pt-2">
                 <button
-                    className="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
+                    class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
                     onClick={(): void => props.submit(createIssue(), projectId)}
                 >
                     Confirm
                 </button>
                 <button
-                    className="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
+                    class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
                     onClick={props.close}
                 >
                     Cancel
                 </button>
             </div>
-            <div className="error">{props.error}</div>
+            <div class="error">{props.error}</div>
         </Fragment>
     );
 };

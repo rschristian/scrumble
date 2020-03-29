@@ -4,11 +4,12 @@ import { useEffect, useState } from 'preact/hooks';
 import { BreadCrumbs } from 'components/BreadCrumbs';
 import { SideBar } from 'components/Core/SideBar';
 import { workspaces } from 'data';
-import WorkspaceEdit from './edit';
-import WorkspaceMetrics from './metrics';
-import { sideNavItems } from './util';
-import BacklogPlanning from './backlogPlanning';
+
 import SprintPlanning from './sprintPlannning';
+import BacklogPlanning from './backlogPlanning';
+import WorkspaceMetrics from './metrics';
+import WorkspaceEdit from './edit';
+import { sideNavItems } from './util';
 
 interface IProps {
     workspaceId: number;

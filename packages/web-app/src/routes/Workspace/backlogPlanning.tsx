@@ -1,16 +1,15 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState, useContext } from 'preact/hooks';
-
 import { notify } from 'react-notify-toast';
 
-import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
+import { IssuesList } from 'components/CommonRoutes/IssuesList';
+import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
 import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
-import { observer } from 'services/mobx';
-import { UserLocationStoreContext } from 'stores';
 import { createIssue } from 'services/api/issues';
-import { IssuesList } from 'components/Lists/issues';
-import { success } from 'services/Notification/colours';
+import { observer } from 'services/mobx';
+import { successColour } from 'services/Notification/colours';
+import { UserLocationStoreContext } from 'stores';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const userLocationStore = useContext(UserLocationStoreContext);
@@ -23,7 +22,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             if (error) {
                 setNewIssueErrorMessage(error);
             } else {
-                notify.show('New issue created!', 'success', 5000, success);
+                notify.show('New issue created!', 'success', 5000, successColour);
             }
         });
     };

@@ -4,12 +4,13 @@ import { useEffect, useState } from 'preact/hooks';
 import { BreadCrumbs } from 'components/BreadCrumbs';
 import { SideBar } from 'components/Core/SideBar';
 import { sprints, workspaces } from 'data';
-import SprintEdit from './edit';
-import SprintMetrics from './metrics';
-import SprintShowAndTell from './showAndTell';
-import { sideNavItems } from './util';
-import IssuesBoard from './IssuesBoard';
+
 import DailyStandUp from './dailyStandUp';
+import IssuesBoard from './issuesBoard';
+import SprintShowAndTell from './showAndTell';
+import SprintMetrics from './metrics';
+import SprintEdit from './edit';
+import { sideNavItems } from './util';
 
 interface IProps {
     workspaceId: number;
