@@ -38,7 +38,7 @@ public class WorkspaceApi {
         return ResponseEntity.ok().body(workspaceService.getAllWorkspaces());
     }
 
-    @PostMapping("/workspaces/create")
+    @PostMapping("/workspace")
     public ResponseEntity<Object> createWorkspace(Authentication authentication, @RequestBody Workspace workspace){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());

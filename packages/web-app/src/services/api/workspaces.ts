@@ -16,7 +16,7 @@ export const editWorkspace = async (workspaceId: number, updatedWorkspace: Works
 
 export const createWorkspace = async (name: string, description: string): Promise<Workspace | string> => {
     return await apiService
-        .post('/workspaces/create', { name, description })
+        .post('/workspace', { name, description })
         .then((res) => {
             return res.data;
         })
