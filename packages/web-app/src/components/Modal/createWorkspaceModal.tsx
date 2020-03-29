@@ -12,28 +12,28 @@ export const CreateWorkspaceModal: FunctionalComponent<IProps> = (props: IProps)
     const [description, setDescription] = useState('');
 
     const formContent = (
-        <div className="form-container overflow-auto relative">
-            <div className="m-4">
-                <label className="form-label">Workspace Name</label>
+        <div class="form-container overflow-auto relative">
+            <div class="m-4">
+                <label class="form-label">Workspace Name</label>
                 <input
-                    className="form-input"
+                    class="form-input"
                     type="text"
                     placeholder="Workspace Name"
                     value={name}
                     onInput={(e): void => setName((e.target as HTMLInputElement).value)}
                 />
             </div>
-            <div className="m-4">
-                <label className="form-label">Workspace Description</label>
+            <div class="m-4">
+                <label class="form-label">Workspace Description</label>
                 <input
-                    className="form-input"
+                    class="form-input"
                     type="text"
                     placeholder="Workspace Description"
                     value={description}
                     onInput={(e): void => setDescription((e.target as HTMLInputElement).value)}
                 />
             </div>
-            <button className="btn-create mx-auto mb-4 ml-4" onClick={() => props.submit(name, description)}>
+            <button class="btn-create mx-auto mb-4 ml-4" onClick={() => props.submit(name, description)}>
                 Save
             </button>
         </div>
