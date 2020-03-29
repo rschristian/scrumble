@@ -4,10 +4,10 @@ import { useContext, useState } from 'preact/hooks';
 import { Modal } from 'components/Modal';
 import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
 import { Issue } from 'models/Issue';
-import { editIssue, addEstimate } from 'services/api/issues';
 import { observer } from 'services/mobx';
 
 import { UserLocationStoreContext } from 'stores';
+import { editIssue, addEstimate } from 'services/api/issues';
 
 export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
     return (
@@ -28,6 +28,7 @@ export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
 interface IProps {
     issue: Issue;
     data?: number[][];
+    update?: () => void;
 }
 
 export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
@@ -39,8 +40,12 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
     const handleIssueEdit = async (issue: Issue): Promise<void> => {
         await editIssue(userLocationStore.currentWorkspace.id, props.issue.projectId, props.issue.iid, issue).then(
             (error) => {
-                if (error) setErrorMessage(error);
-                else setShowEditIssueModal(false);
+                if (error) {
+                    setErrorMessage(error);
+                } else {
+                    setShowEditIssueModal(false);
+                    props.update();
+                }
             },
         );
         await addEstimate(props.issue.projectId, props.data, issue);
@@ -62,22 +67,23 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                     close={(): void => setShowEditIssueModal(false)}
                 />
             ) : null}
-
             <div class="px-4 py-2 flex min-w-0">
                 <div class="truncate">{props.issue.title}</div>
             </div>
             <div class="px-4 py-2 z-1">
-                <span class="story-pnt">{props.issue.storyPoint}</span>
-                <span class="text-gray-700">{props.issue.projectId}</span>
-                <button
-                    className="float-right btn-edit my-auto"
-                    onClick={(): void => {
-                        setShowEditIssueModal(true);
-                        setErrorMessage('');
-                    }}
-                >
-                    Edit
-                </button>
+                {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
+                <span class="text-gray-700"> Project ID: {props.issue.projectId}</span>
+                <div>
+                    <button
+                        className="float-right btn-edit my-auto"
+                        onClick={(): void => {
+                            setShowEditIssueModal(true);
+                            setErrorMessage('');
+                        }}
+                    >
+                        Edit
+                    </button>
+                </div>
             </div>
         </div>
     );

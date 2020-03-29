@@ -4,19 +4,19 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Issue implements Serializable {
     private int iid;
     @JsonAlias("milestone")
     private Sprint sprint;
-    @JsonAlias({"project_id", "projectId"})
+    @JsonAlias("project_id")
     private int projectId;
     private String title;
     private String description;
     private int storyPoint;
     private String state;
     private ArrayList<String> labels;
-    @JsonAlias({"total_time_spent"})
     private int timeSpent;
 
     public Issue(){}
@@ -101,6 +101,12 @@ public class Issue implements Serializable {
         return timeSpent;
     }
 
+    @JsonAlias("time_stats")
+    public void setTimeSpent(Map<String, String> timeSpent) {
+        this.timeSpent = Integer.parseInt(timeSpent.get("total_time_spent"));
+    }
+
+    @JsonAlias("timeSpent")
     public void setTimeSpent(int timeSpent) {
         this.timeSpent = timeSpent;
     }
