@@ -1,14 +1,17 @@
 import { ComponentChild, FunctionalComponent, h } from 'preact';
 import { useContext, useEffect, useState } from 'preact/hooks';
 
+import sprinter from 'assets/icons/sprinter.png';
+import list from 'assets/icons/list.png';
+import metrics from 'assets/icons/metrics.png';
+import edit from 'assets/icons/edit.png';
 import { BreadCrumbs } from 'components/BreadCrumbs';
-import { SideBar } from 'components/Core/SideBar';
+import { SideBar, SideBarLink } from 'components/Core/SideBar';
 
+import SprintPlanning from './sprintPlannning';
+import BacklogPlanning from './backlogPlanning';
 import WorkspaceMetrics from './metrics';
 import WorkspaceEdit from './edit';
-import { sideNavItems } from './util';
-import BacklogPlanning from './backlogPlanning';
-import SprintPlanning from './sprintPlannning';
 import { UserLocationStoreContext } from 'stores';
 
 interface IProps {
@@ -23,7 +26,7 @@ enum SubPage {
     edit = 'edit',
 }
 
-const Workspace: FunctionalComponent<IProps> = (props: IProps) => {
+const WorkspaceContainer: FunctionalComponent<IProps> = (props: IProps) => {
     const userLocationStore = useContext(UserLocationStoreContext);
     const [currentPageTitle, setCurrentPageTitle] = useState('');
     const [subPage, setSubPage] = useState<ComponentChild>(null);
@@ -66,4 +69,27 @@ const Workspace: FunctionalComponent<IProps> = (props: IProps) => {
     );
 };
 
-export default Workspace;
+const sideNavItems: SideBarLink[] = [
+    {
+        label: 'Sprint Planning',
+        icon: sprinter,
+        path: '/',
+    },
+    {
+        label: 'Backlog Planning',
+        icon: list,
+        path: '/backlogPlanning',
+    },
+    {
+        label: 'Metrics',
+        icon: metrics,
+        path: '/metrics',
+    },
+    {
+        label: 'Edit',
+        icon: edit,
+        path: '/edit',
+    },
+];
+
+export default WorkspaceContainer;

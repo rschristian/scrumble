@@ -1,16 +1,15 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useContext, useState } from 'preact/hooks';
-
 import { notify } from 'react-notify-toast';
 
 import { WorkspaceCard } from 'components/Cards/workspace';
+import { Modal } from 'components/Modal';
 import { SearchBar } from 'components/SearchBar';
+import { Workspace } from 'models/Workspace';
 import { fetchUserInfo } from 'services/api/auth';
 import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
-import { Workspace } from 'models/Workspace';
-import { AuthStoreContext, UserLocationStoreContext } from 'stores';
 import { errorColour, successColour } from 'services/Notification/colours';
-import { Modal } from 'components/Modal';
+import { AuthStoreContext, UserLocationStoreContext } from 'stores';
 
 interface IProps {
     submit?: (name: string, description: string) => void;
