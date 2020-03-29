@@ -19,7 +19,7 @@ const AuthSuccess: FunctionalComponent = () => {
             if (error) setErrorMessage(error);
             else route('/', true);
         });
-    });
+    }, []);
 
     return (
         <div class="main-content overflow-hidden">
