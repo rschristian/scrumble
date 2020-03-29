@@ -3,7 +3,7 @@ import { useEffect, useState } from 'preact/hooks';
 
 import { BreadCrumbs } from 'components/BreadCrumbs';
 import { SideBar } from 'components/Core/SideBar';
-import { sprints, workspaces } from 'data';
+import { sprints } from 'data';
 import SprintEdit from './edit';
 import SprintMetrics from './metrics';
 import SprintShowAndTell from './showAndTell';
@@ -13,6 +13,7 @@ import DailyStandUp from './dailyStandUp';
 
 interface IProps {
     workspaceId: number;
+    workspaceName: string;
     sprintId: number;
     subPage?: SubPage;
 }
@@ -26,15 +27,11 @@ enum SubPage {
 }
 
 const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
-    const [workspaceName, setWorkspaceName] = useState('');
     const [sprintName, setSprintName] = useState('');
     const [subPageTitle, setSubPageTitle] = useState('');
     const [subPageContent, setSubPageContent] = useState<ComponentChild>(null);
 
     useEffect(() => {
-        for (const workspace of workspaces) {
-            if (workspace.id == props.workspaceId) setWorkspaceName(workspace.name);
-        }
         for (const sprint of sprints) {
             if (sprint.id == props.sprintId) setSprintName(sprint.title);
         }
@@ -70,7 +67,7 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
                 <div class="main-content">
                     <BreadCrumbs
                         workspaceId={props.workspaceId}
-                        workspaceName={workspaceName}
+                        workspaceName={props.workspaceName}
                         currentPage={subPageTitle}
                         sprintId={props.sprintId}
                         sprintName={sprintName}

@@ -18,7 +18,7 @@ const AuthSuccess: FunctionalComponent = () => {
             if (success) route('/');
             else setIsError(true);
         });
-    });
+    }, []);
 
     return (
         <Fragment>

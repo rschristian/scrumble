@@ -1,20 +1,54 @@
 import { FunctionalComponent, h } from 'preact';
-import { useEffect, useContext } from 'preact/hooks';
+import { useEffect, useContext, useState } from 'preact/hooks';
+
+import { notify } from 'react-notify-toast';
 
 import { WorkspaceCard } from 'components/Cards/workspace';
 import { SearchBar } from 'components/SearchBar';
-import { workspaces } from 'data';
 
 import { fetchUserInfo } from 'services/api/auth';
+import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
+import { Workspace } from 'models/Workspace';
+import { CreateWorkspaceModal } from 'components/Modal/createWorkspaceModal';
+import { error, success } from 'services/Notification/colours';
 import { AuthStoreContext } from 'stores';
 
 const Home: FunctionalComponent = () => {
     const authStore = useContext(AuthStoreContext);
 
+    const [workspacesArray, setWorkspacesArray] = useState<Workspace[]>([]);
+    const [showCreateModal, setShowCreateModal] = useState(false);
+
+    useEffect(() => {
+        getWorkspaces().then((res) => {
+            if (typeof res !== 'string') {
+                setWorkspacesArray(res);
+            } else {
+                notify.show(res, 'error', 5000, error);
+            }
+        });
+    }, []);
+
     const handleOnKeyDown = (e: KeyboardEvent): void => {
         if (e.key === 'Enter') {
             console.log('Enter selected');
         }
+    };
+
+    const submitNewWorkspace = (name: string, description: string): void => {
+        createWorkspace(name, description).then((res) => {
+            if (typeof res !== 'string') {
+                setWorkspacesArray([...workspacesArray, res]);
+                closeModal();
+                notify.show('Workspace created!', 'success', 5000, success);
+            } else {
+                notify.show(res, 'error', 5000, error);
+            }
+        });
+    };
+
+    const closeModal = (): void => {
+        setShowCreateModal(false);
     };
 
     const handleOnInput = (e: any): void => console.log((e.target as HTMLSelectElement).value);
@@ -26,10 +60,13 @@ const Home: FunctionalComponent = () => {
 
     return (
         <div class="mt-16 flex justify-center bg-blue-100">
+            {showCreateModal ? <CreateWorkspaceModal close={closeModal} submit={submitNewWorkspace} /> : null}
             <div class="mx-3 flex justify-center flex-col w-3/4">
                 <div class="create-bar">
                     <h1 class="page-heading">Your Workspaces</h1>
-                    <button class="btn-create my-auto">New Workspace</button>
+                    <button class="btn-create my-auto" onClick={() => setShowCreateModal(true)}>
+                        New Workspace
+                    </button>
                 </div>
                 <SearchBar
                     placeholder="Search by name"
@@ -37,7 +74,7 @@ const Home: FunctionalComponent = () => {
                     handleOnKeyDown={handleOnKeyDown}
                 />
                 <div class="rounded bg-white overflow-hidden shadow-lg">
-                    {workspaces.map((workspace, index) => {
+                    {workspacesArray.map((workspace, index) => {
                         return (
                             <WorkspaceCard
                                 key={index}

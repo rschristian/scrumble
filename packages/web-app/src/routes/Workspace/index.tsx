@@ -1,14 +1,14 @@
 import { ComponentChild, FunctionalComponent, h } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { useContext, useEffect, useState } from 'preact/hooks';
 
 import { BreadCrumbs } from 'components/BreadCrumbs';
 import { SideBar } from 'components/Core/SideBar';
-import { workspaces } from 'data';
 import WorkspaceEdit from './edit';
 import WorkspaceMetrics from './metrics';
 import { sideNavItems } from './util';
 import BacklogPlanning from './backlogPlanning';
 import SprintPlanning from './sprintPlannning';
+import { UserLocationStoreContext } from 'stores';
 
 interface IProps {
     workspaceId: number;
@@ -23,15 +23,11 @@ enum SubPage {
 }
 
 const Workspace: FunctionalComponent<IProps> = (props: IProps) => {
-    const [workspaceName, setWorkspaceName] = useState('');
+    const userLocationStore = useContext(UserLocationStoreContext);
     const [currentPageTitle, setCurrentPageTitle] = useState('');
     const [subPage, setSubPage] = useState<ComponentChild>(null);
 
     useEffect(() => {
-        for (const workspace of workspaces) {
-            if (workspace.id == props.workspaceId) setWorkspaceName(workspace.name);
-        }
-
         switch (props.subPage) {
             case SubPage.backlogPlanning:
                 setCurrentPageTitle('Backlog Planning');
@@ -59,7 +55,7 @@ const Workspace: FunctionalComponent<IProps> = (props: IProps) => {
                 <div class="main-content">
                     <BreadCrumbs
                         workspaceId={props.workspaceId}
-                        workspaceName={workspaceName}
+                        workspaceName={userLocationStore.currentWorkspace.name}
                         currentPage={currentPageTitle}
                     />
                     {subPage}

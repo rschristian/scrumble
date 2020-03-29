@@ -1,5 +1,5 @@
 export interface User {
     id: number;
-    name: string;
-    username: string;
+    serviceId: number;
+    providerId: string;
 }
