@@ -17,8 +17,8 @@ export const editWorkspace = async (workspaceId: number, updatedWorkspace: Works
 export const createWorkspace = async (name: string, description: string): Promise<Workspace | string> => {
     return await apiService
         .post('/workspace', { name, description })
-        .then((res) => {
-            return res.data;
+        .then((response) => {
+            return response.data;
         })
         .catch(({ response }) => {
             return response.data?.message || 'Unknown error while updating workspace details';
@@ -28,8 +28,8 @@ export const createWorkspace = async (name: string, description: string): Promis
 export const getWorkspaces = async (): Promise<Workspace[] | string> => {
     return await apiService
         .get('/workspaces')
-        .then((res) => {
-            return res.data;
+        .then((response) => {
+            return response.data;
         })
         .catch(({ response }) => {
             return response.data?.message || 'Unknown error while updating workspace details';

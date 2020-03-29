@@ -76,12 +76,12 @@ const Home: FunctionalComponent = () => {
 
     const submitNewWorkspace = (name: string, description: string): void => {
         createWorkspace(name, description).then((res) => {
-            if (typeof res !== 'string') {
+            if (typeof res === 'string') {
+                notify.show(res, 'error', 5000, errorColour);
+            } else {
                 setWorkspacesArray([...workspacesArray, res]);
                 setShowCreateModal(false);
                 notify.show('Workspace created!', 'success', 5000, successColour);
-            } else {
-                notify.show(res, 'error', 5000, errorColour);
             }
         });
     };
@@ -107,7 +107,7 @@ const Home: FunctionalComponent = () => {
             <div class="mx-3 flex justify-center flex-col w-3/4">
                 <div class="create-bar">
                     <h1 class="page-heading">Your Workspaces</h1>
-                    <button class="btn-create my-auto" onClick={() => setShowCreateModal(true)}>
+                    <button class="btn-create my-auto" onClick={(): void => setShowCreateModal(true)}>
                         New Workspace
                     </button>
                 </div>
