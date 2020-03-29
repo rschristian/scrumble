@@ -10,6 +10,7 @@ These instructions will get you a copy of the project up and running on your loc
 NodeJS v12
 NPM
 Java v11
+Flyway 6.3.2
 Docker (optional)
 PostgreSQL (optional)
 ```
@@ -25,6 +26,12 @@ docker-compose -f packages/api/docker-compose.yml up --build -d
 ```
 
 If you choose to use some other Postgres source, you will need to edit the [application.properties](packages/api/src/main/resources/application.properties) file and provide your database configuration details.
+
+To run database migrations, run the following command from within the directory packages/api:
+
+```
+flyway migrate
+```
 
 Once you have the database prepared, the API server can be started with the following commands:
 
