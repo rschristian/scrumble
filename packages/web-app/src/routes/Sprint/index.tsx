@@ -1,5 +1,5 @@
 import { ComponentChild, FunctionalComponent, h } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { useContext, useEffect, useState } from 'preact/hooks';
 
 import { BreadCrumbs } from 'components/BreadCrumbs';
 import { SideBar } from 'components/Core/SideBar';
@@ -11,10 +11,10 @@ import SprintShowAndTell from './showAndTell';
 import SprintMetrics from './metrics';
 import SprintEdit from './edit';
 import { sideNavItems } from './util';
+import { UserLocationStoreContext } from 'stores';
 
 interface IProps {
     workspaceId: number;
-    workspaceName: string;
     sprintId: number;
     subPage?: SubPage;
 }
@@ -28,6 +28,7 @@ enum SubPage {
 }
 
 const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
+    const userLocationStore = useContext(UserLocationStoreContext);
     const [sprintName, setSprintName] = useState('');
     const [subPageTitle, setSubPageTitle] = useState('');
     const [subPageContent, setSubPageContent] = useState<ComponentChild>(null);
@@ -68,7 +69,7 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
                 <div class="main-content">
                     <BreadCrumbs
                         workspaceId={props.workspaceId}
-                        workspaceName={props.workspaceName}
+                        workspaceName={userLocationStore.currentWorkspace.name}
                         currentPage={subPageTitle}
                         sprintId={props.sprintId}
                         sprintName={sprintName}
