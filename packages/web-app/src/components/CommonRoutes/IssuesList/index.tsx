@@ -50,10 +50,6 @@ export const IssuesList: FunctionalComponent<IProps> = observer((props: IProps) 
         }
     };
 
-    // const issueCardList = issuesArray.map((issue, index) => {
-    //     return <IssueCard key={index} issue={issue} />;
-    // });
-
     useEffect(() => {
         fetchMore().then();
     }, [issueFilter]);
