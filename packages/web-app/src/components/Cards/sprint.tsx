@@ -74,15 +74,18 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
             <div class="lst-itm-container" onClick={linkTo}>
                 <div class="px-4 py-2 flex min-w-0 justify-between">
                     <div class="truncate">{props.sprint.title}</div>
-                    <div class="more-vertical">
-                        <MoreVertical
-                            class="hover:text-orange-600"
-                            onClick={(e: MouseEvent): void => {
-                                e.stopPropagation();
-                                if (!props.closed) setShowClosureModal(true);
-                                else setShowOpeningModal(true);
-                            }}
-                        />
+                    <div>{`${props.sprint.startDate.toDateString()} - ${props.sprint.dueDate.toDateString()}`}</div>
+                    <div>
+                        <div className="more-vertical">
+                            <MoreVertical
+                                class="hover:text-orange-600"
+                                onClick={(e: MouseEvent): void => {
+                                    e.stopPropagation();
+                                    if (!props.closed) setShowClosureModal(true);
+                                    else setShowOpeningModal(true);
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
                 <div class="px-4 py-2 flex min-w-0">
