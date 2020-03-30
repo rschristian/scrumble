@@ -1,5 +1,5 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useContext, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 import { getCurrentUrl, route } from 'preact-router';
 import { MoreVertical } from 'preact-feather';
 
@@ -7,7 +7,7 @@ import { Modal } from 'components/Modal';
 import { Sprint } from 'models/Sprint';
 import { toggleSprintStatus } from 'services/api/sprints';
 import { observer } from 'services/mobx';
-import { UserLocationStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 interface IProps {
     sprint: Sprint;
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) => {
-    const userLocationStore = useContext(UserLocationStoreContext);
+    const userLocationStore = useStore().userLocationStore;
 
     const [showClosureModal, setShowClosureModal] = useState(false);
     const [showOpeningModal, setShowOpeningModal] = useState(false);

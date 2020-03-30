@@ -1,12 +1,12 @@
 import { FunctionalComponent, h, VNode } from 'preact';
-import { useContext, useEffect } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 import { lazy, Suspense } from 'preact/compat';
 import { Route, route, Router } from 'preact-router';
 import Notifications from 'react-notify-toast';
 
 import { TopBar } from 'components/Core/TopBar';
 import Login from 'routes/Auth/login';
-import { AuthStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 const AuthSuccess = lazy(() => import('routes/Auth/authSuccess'));
 const Home = lazy(() => import('routes/Home'));
@@ -42,7 +42,7 @@ const Fallback: FunctionalComponent = () => {
 };
 
 const AuthenticatedRoute = (props: { path: string; component: FunctionalComponent }): VNode => {
-    const isLoggedIn = useContext(AuthStoreContext).isAuthenticated;
+    const isLoggedIn = useStore().authStore.isAuthenticated;
 
     useEffect(() => {
         if (!isLoggedIn) route('/login', true);

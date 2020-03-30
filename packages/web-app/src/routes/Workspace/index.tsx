@@ -12,7 +12,7 @@ import SprintPlanning from './sprintPlannning';
 import BacklogPlanning from './backlogPlanning';
 import WorkspaceMetrics from './metrics';
 import WorkspaceEdit from './edit';
-import { UserLocationStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 interface IProps {
     workspaceId: number;
@@ -27,7 +27,8 @@ enum SubPage {
 }
 
 const WorkspaceContainer: FunctionalComponent<IProps> = (props: IProps) => {
-    const userLocationStore = useContext(UserLocationStoreContext);
+    const userLocationStore = useStore().userLocationStore;
+
     const [currentPageTitle, setCurrentPageTitle] = useState('');
     const [subPage, setSubPage] = useState<ComponentChild>(null);
 

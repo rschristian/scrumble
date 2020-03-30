@@ -1,5 +1,4 @@
 import { observable, action } from 'mobx';
-import { AsyncTrunk } from 'mobx-sync';
 
 import { User } from 'models/User';
 import { login, destroyOAuthToken } from 'services/api/auth';
@@ -26,5 +25,3 @@ class AuthStore {
 }
 
 export const authStore = new AuthStore();
-
-new AsyncTrunk(authStore, { storage: localStorage }).init().then();

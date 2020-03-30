@@ -1,5 +1,5 @@
 import { FunctionalComponent, h } from 'preact';
-import { useState, useContext } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
 import { IssuesList } from 'components/CommonRoutes/IssuesList';
@@ -9,10 +9,10 @@ import { Issue } from 'models/Issue';
 import { createIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
 import { successColour } from 'services/Notification/colours';
-import { UserLocationStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
-    const userLocationStore = useContext(UserLocationStoreContext);
+    const userLocationStore = useStore().userLocationStore;
 
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
     const [newIssueErrorMessage, setNewIssueErrorMessage] = useState('');

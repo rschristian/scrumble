@@ -1,5 +1,5 @@
 import { FunctionalComponent, h } from 'preact';
-import { useState, useEffect, useContext } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
 import { IssueCard } from 'components/Cards/issue';
@@ -9,10 +9,10 @@ import { Issue, IssueStatus } from 'models/Issue';
 import { fetchWorkspaceIssues, searchIssueByTitleDescription } from 'services/api/issues';
 import { observer } from 'services/mobx';
 import { errorColour, warningColour } from 'services/Notification/colours';
-import { UserLocationStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 export const IssuesList: FunctionalComponent = observer(() => {
-    const userLocationStore = useContext(UserLocationStoreContext);
+    const userLocationStore = useStore().userLocationStore;
 
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
     const [issueFilter, setIssueFilter] = useState(IssueStatus.open.toString());

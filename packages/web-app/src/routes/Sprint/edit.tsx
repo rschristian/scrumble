@@ -4,10 +4,10 @@ import { useContext, useState } from 'preact/hooks';
 import { GenericEdit } from 'components/CommonRoutes/Edit';
 import { Sprint } from 'models/Sprint';
 import { editSprint } from 'services/api/sprints';
-import { UserLocationStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 const SprintEdit: FunctionalComponent = () => {
-    const userLocationStore = useContext(UserLocationStoreContext);
+    const userLocationStore = useStore().userLocationStore;
     const currentSprint: Sprint = userLocationStore.currentSprint;
 
     const [title, setTitle] = useState(currentSprint.title);

@@ -1,5 +1,5 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useEffect, useContext, useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
 import { WorkspaceCard } from 'components/Cards/workspace';
@@ -9,7 +9,7 @@ import { Workspace } from 'models/Workspace';
 import { fetchUserInfo } from 'services/api/auth';
 import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
 import { errorColour, successColour } from 'services/Notification/colours';
-import { AuthStoreContext, UserLocationStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 interface IProps {
     submit?: (name: string, description: string) => void;
@@ -19,6 +19,7 @@ interface IProps {
 const CreateWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+
     return (
         <Fragment>
             <div class="overflow-auto relative">
@@ -56,8 +57,8 @@ const CreateWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
 };
 
 const Home: FunctionalComponent = () => {
-    const authStore = useContext(AuthStoreContext);
-    const userLocationStore = useContext(UserLocationStoreContext);
+    const rootStore = useStore();
+    const { authStore, userLocationStore } = rootStore;
 
     const [workspacesArray, setWorkspacesArray] = useState<Workspace[]>([]);
     const [showCreateModal, setShowCreateModal] = useState(false);

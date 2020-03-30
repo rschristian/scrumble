@@ -1,7 +1,16 @@
 import { createContext } from 'preact';
+import { useContext } from 'preact/hooks';
 
 import { authStore } from 'stores/authStore';
 import { userLocationStore } from 'stores/userLocationStore';
 
-export const AuthStoreContext = createContext(authStore);
-export const UserLocationStoreContext = createContext(userLocationStore);
+export class RootStore {
+    authStore = authStore;
+    userLocationStore = userLocationStore;
+}
+
+export const rootStore = new RootStore();
+
+export const StoreContext = createContext<RootStore>(null as any);
+export const StoreProvider = StoreContext.Provider;
+export const useStore = (): RootStore => useContext(StoreContext);
