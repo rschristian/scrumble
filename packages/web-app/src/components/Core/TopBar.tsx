@@ -58,7 +58,7 @@ export const TopBar: FunctionalComponent = observer(() => {
                                             showAccountDropdown ? 'outline-none border-white' : ''
                                         }`}
                                     >
-                                        <img class="avatar" src={avatar} alt="Your avatar" />
+                                        <img class="avatar" src={authStore.currentUser?.avatarUrl} alt="Your avatar" />
                                     </button>
                                     <div
                                         class={`btn-sign-out shadow-lg is-clickable ${
