@@ -1,7 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState, useEffect, useContext } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
-
+import { dataGrabber } from 'regressionModel/linearRegression';
 import { IssueCard } from 'components/Cards/issue';
 import { IssueFilter } from 'components/Filter/issues';
 import { SearchBar } from 'components/SearchBar';
@@ -11,7 +11,13 @@ import { observer } from 'services/mobx';
 import { errorColour, warningColour } from 'services/Notification/colours';
 import { UserLocationStoreContext } from 'stores';
 
-export const IssuesList: FunctionalComponent = observer(() => {
+interface IProps {
+    updateIssueData?: (issue: Issue[]) => void;
+    updatingIssuesList?: () => void;
+    updateIssueList?: boolean;
+}
+
+export const IssuesList: FunctionalComponent<IProps> = observer((props: IProps) => {
     const userLocationStore = useContext(UserLocationStoreContext);
 
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
@@ -44,13 +50,17 @@ export const IssuesList: FunctionalComponent = observer(() => {
         }
     };
 
-    const issueCardList = issuesArray.map((issue, index) => {
-        return <IssueCard key={index} issue={issue} />;
-    });
+    // const issueCardList = issuesArray.map((issue, index) => {
+    //     return <IssueCard key={index} issue={issue} />;
+    // });
 
     useEffect(() => {
         fetchMore().then();
     }, [issueFilter]);
+
+    useEffect(() => {
+        updateIssue();
+    }, [props.updateIssueList]);
 
     const fetchMore = async (): Promise<void> => {
         const issuePagination = await fetchWorkspaceIssues(
@@ -73,6 +83,24 @@ export const IssuesList: FunctionalComponent = observer(() => {
             }
         }
     };
+
+    const updateIssue = (): void => {
+        fetchWorkspaceIssues(userLocationStore.currentWorkspace.id, issueFilter, currentProjectId, 0).then(
+            (issuePagination) => {
+                if (typeof issuePagination == 'string') {
+                    notify.show(issuePagination, 'error', 5000, errorColour);
+                } else {
+                    props.updateIssueData !== undefined ? props.updateIssueData(issuePagination.issues) : null;
+                    props.updateIssueList !== undefined && true ? props.updatingIssuesList() : null;
+                    setIssuesArray(issuePagination.issues);
+                }
+            },
+        );
+    };
+
+    const issueCardList = issuesArray.map((issue, index) => {
+        return <IssueCard key={index} issue={issue} update={updateIssue} data={dataGrabber(issuesArray)} />;
+    });
 
     return (
         <div class="mr-4">
