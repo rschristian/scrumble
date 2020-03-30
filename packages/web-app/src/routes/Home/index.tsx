@@ -1,5 +1,5 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useEffect, useContext, useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
 import { WorkspaceCard } from 'components/Cards/workspace';
@@ -9,7 +9,7 @@ import { Workspace } from 'models/Workspace';
 import { fetchUserInfo } from 'services/api/auth';
 import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
 import { errorColour, successColour } from 'services/Notification/colours';
-import { AuthStoreContext, UserLocationStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 interface IProps {
     submit?: (name: string, description: string) => void;
@@ -19,6 +19,7 @@ interface IProps {
 const CreateWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+
     return (
         <Fragment>
             <div class="overflow-auto relative">
@@ -45,7 +46,7 @@ const CreateWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
                 <div className="flex justify-end pt-2">
                     <button
                         class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
-                        onClick={() => props.submit(name, description)}
+                        onClick={(): void => props.submit(name, description)}
                     >
                         Save
                     </button>
@@ -56,8 +57,8 @@ const CreateWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
 };
 
 const Home: FunctionalComponent = () => {
-    const authStore = useContext(AuthStoreContext);
-    const userLocationStore = useContext(UserLocationStoreContext);
+    const rootStore = useStore();
+    const { authStore, userLocationStore } = rootStore;
 
     const [workspacesArray, setWorkspacesArray] = useState<Workspace[]>([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -85,8 +86,6 @@ const Home: FunctionalComponent = () => {
         });
     };
 
-    const handleOnInput = (e: any): void => console.log((e.target as HTMLSelectElement).value);
-
     useEffect(() => {
         fetchUserInfo().then((response) => authStore.setCurrentUser(response));
         userLocationStore.setActiveSideBarItem(0);
@@ -112,7 +111,7 @@ const Home: FunctionalComponent = () => {
                 </div>
                 <SearchBar
                     placeholder="Search by name"
-                    handleOnInput={handleOnInput}
+                    handleOnInput={(term: string): void => console.log(term)}
                     handleOnKeyDown={handleOnKeyDown}
                 />
                 <div class="rounded bg-white overflow-hidden shadow-lg">

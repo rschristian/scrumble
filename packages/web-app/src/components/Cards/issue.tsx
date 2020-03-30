@@ -1,11 +1,11 @@
 import { FunctionalComponent, h } from 'preact';
-import { useContext, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 
 import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
 import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
 import { observer } from 'services/mobx';
-import { UserLocationStoreContext } from 'stores';
+import { useStore } from 'stores';
 import { editIssue, addEstimate } from 'services/api/issues';
 
 export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
@@ -30,7 +30,7 @@ interface IProps {
 }
 
 export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
-    const userLocationStore = useContext(UserLocationStoreContext);
+    const userLocationStore = useStore().userLocationStore;
 
     const [showEditIssueModal, setShowEditIssueModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');

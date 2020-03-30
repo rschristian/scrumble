@@ -29,8 +29,6 @@ export const SprintFilter: FunctionalComponent<IProps> = (props: IProps) => {
         if (e.key === 'Enter') console.log('Enter selected');
     };
 
-    const handleOnInput = (e: any): void => console.log((e.target as HTMLSelectElement).value);
-
     return (
         <div class="my-4 flex flex-col items-start">
             <div class="flex rounded shadow">
@@ -53,7 +51,11 @@ export const SprintFilter: FunctionalComponent<IProps> = (props: IProps) => {
                     All
                 </button>
             </div>
-            <SearchBar placeholder="Search by name" handleOnInput={handleOnInput} handleOnKeyDown={handleOnKeyDown} />
+            <SearchBar
+                placeholder="Search by name"
+                handleOnInput={(term: string): void => console.log(term)}
+                handleOnKeyDown={handleOnKeyDown}
+            />
         </div>
     );
 };

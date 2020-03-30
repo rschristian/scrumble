@@ -10,28 +10,44 @@ These instructions will get you a copy of the project up and running on your loc
 NodeJS v12
 NPM
 Java v11
-Flyway 6.3.2
-Docker (optional)
+Docker/Docker-Compose (optional)
 PostgreSQL (optional)
+Flyway 6.3.2 (optional)
 ```
 
 ### Running
 
 #### API Server
 
-A Docker-Compose file is included in the project for easily setting up the database, should you choose to use it. If you do, run from the root repository directory: 
+A Docker-Compose file is included in the project for easily setting up the database, should you choose to use it. If you do, run from the [API directory](packages/api) directory: 
 
 ```
-docker-compose -f packages/api/docker-compose.yml up --build -d
+docker-compose up --build -d
 ```
 
 If you choose to use some other Postgres source, you will need to edit the [application.properties](packages/api/src/main/resources/application.properties) file and provide your database configuration details.
 
-To run database migrations, run the following command from within the directory packages/api:
+To run database migrations, run the following command again from within the [API directory](packages/api)
 
 ```
-flyway migrate
+docker run --rm \
+    -v "$PWD/src/main/resources/db/migration/:/flyway/sql" \
+    -v "$PWD:/flyway/conf" \
+    --network="api_default" \
+    flyway/flyway:latest-alpine migrate
 ```
+
+The Docker image built for flyway will run "Flyway" without any arguments, making the container act like a normal CLI. However, that very large command is necessary upon every use. It is therefore recommend creating an alias in a .bashrc or .zshrc, so the tool can be just called with "flyway-cli [command]". An example of this alias:
+
+```
+alias flyway-cli='docker run --rm \
+    -v "$PWD/src/main/resources/db/migration/:/flyway/sql" \
+    -v "$PWD:/flyway/conf" \
+    --network="api_default" \
+    flyway/flyway:latest-alpine';
+```
+
+This Flyway container uses a configuration file [flyway.conf](packages/api/flyway.conf), which will need to be edited if you are not using the Docker-Compose database, but your own Postgres source.
 
 Once you have the database prepared, the API server can be started with the following commands:
 

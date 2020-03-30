@@ -1,12 +1,12 @@
 import { FunctionalComponent, h } from 'preact';
-import { useContext, useEffect, useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { getCurrentUrl, route } from 'preact-router';
 
 import { Error } from 'components/Error';
-import { AuthStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 const AuthSuccess: FunctionalComponent = () => {
-    const authStore = useContext(AuthStoreContext);
+    const authStore = useStore().authStore;
 
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -19,7 +19,7 @@ const AuthSuccess: FunctionalComponent = () => {
             if (error) setErrorMessage(error);
             else route('/', true);
         });
-    }, []);
+    }, [authStore]);
 
     return (
         <div class="main-content overflow-hidden">

@@ -1,5 +1,5 @@
 import { ComponentChild, FunctionalComponent, h } from 'preact';
-import { useContext, useEffect, useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 
 import team from 'assets/icons/team.png';
 import kanbanBoard from 'assets/icons/kanbanBoard.png';
@@ -15,7 +15,7 @@ import IssuesBoard from './issuesBoard';
 import SprintShowAndTell from './showAndTell';
 import SprintMetrics from './metrics';
 import SprintEdit from './edit';
-import { UserLocationStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 interface IProps {
     workspaceId: number;
@@ -32,7 +32,8 @@ enum SubPage {
 }
 
 const SprintContainer: FunctionalComponent<IProps> = (props: IProps) => {
-    const userLocationStore = useContext(UserLocationStoreContext);
+    const userLocationStore = useStore().userLocationStore;
+
     const [sprintName, setSprintName] = useState('');
     const [subPageTitle, setSubPageTitle] = useState('');
     const [subPageContent, setSubPageContent] = useState<ComponentChild>(null);
