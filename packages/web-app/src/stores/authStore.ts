@@ -21,6 +21,7 @@ class AuthStore {
     @action async logout(): Promise<void> {
         await destroyOAuthToken();
         this.isAuthenticated = false;
+        this.currentUser = null;
     }
 }
 
