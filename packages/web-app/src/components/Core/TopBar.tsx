@@ -2,12 +2,10 @@ import { FunctionalComponent, h } from 'preact';
 import { useContext, useState } from 'preact/hooks';
 import { Link, route } from 'preact-router';
 import { Menu, X } from 'preact-feather';
-import { notify } from 'react-notify-toast';
 
 import scrumCards from 'assets/icons/scrumCards.png';
 import avatar from 'assets/gitlab_avatar.png';
 import { observer } from 'services/mobx';
-import { errorColour } from 'services/Notification/colours';
 import { AuthStoreContext } from 'stores';
 
 export const TopBar: FunctionalComponent = observer(() => {
@@ -16,10 +14,8 @@ export const TopBar: FunctionalComponent = observer(() => {
     const [showAccountDropdown, setShowAccountDropdown] = useState(false);
 
     const logout = async (): Promise<void> => {
-        const error = await authStore.logout();
-
-        if (error) notify.show(error, 'error', 5000, errorColour);
-        else route('/login', true);
+        await authStore.logout();
+        route('/login', true);
     };
 
     return (

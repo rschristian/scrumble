@@ -19,10 +19,8 @@ class AuthStore {
         this.isAuthenticated = true;
     }
 
-    @action async logout(): Promise<void | string> {
-        const error = await destroyOAuthToken();
-
-        if (error) return error;
+    @action async logout(): Promise<void> {
+        await destroyOAuthToken();
         this.isAuthenticated = false;
     }
 }
