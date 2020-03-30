@@ -14,9 +14,9 @@ import { createIssue, fetchWorkspaceIssues, addEstimate } from 'services/api/iss
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const userLocationStore = useContext(UserLocationStoreContext);
-    const [showNewIssueModal, setShowNewIssueModal] = useState<boolean>(false);
-    const [newIssueErrorMessage, setNewIssueErrorMessage] = useState<string>('');
-    const [updateIssues, setUpdateIssues] = useState<boolean>(false);
+    const [showNewIssueModal, setShowNewIssueModal] = useState(false);
+    const [newIssueErrorMessage, setNewIssueErrorMessage] = useState('');
+    const [updateIssues, setUpdateIssues] = useState(false);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
         return await createIssue(userLocationStore.currentWorkspace.id, projectId, newIssue).then((error) => {
