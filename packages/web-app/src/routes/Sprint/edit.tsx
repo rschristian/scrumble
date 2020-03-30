@@ -1,5 +1,5 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useContext, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 
 import { GenericEdit } from 'components/CommonRoutes/Edit';
 import { Sprint } from 'models/Sprint';

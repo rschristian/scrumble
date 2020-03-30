@@ -1,5 +1,5 @@
 import { ComponentChild, FunctionalComponent, h } from 'preact';
-import { useContext, useEffect, useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 
 import sprinter from 'assets/icons/sprinter.png';
 import list from 'assets/icons/list.png';

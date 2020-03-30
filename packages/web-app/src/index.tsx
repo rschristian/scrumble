@@ -7,7 +7,7 @@ import { rootStore, StoreProvider } from 'stores';
 import 'style/index.scss';
 
 const Index: FunctionalComponent = () => {
-    const initialState: any = JSON.parse(localStorage.getItem('__mobx_sync__')) || {
+    const initialState = JSON.parse(localStorage.getItem('__mobx_sync__')) || {
         authStore: {
             isAuthenticated: false,
             currentUser: null,
