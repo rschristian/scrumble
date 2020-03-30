@@ -80,7 +80,7 @@ const SprintEdit: FunctionalComponent = () => {
                             onInput={(e): void => setDueDate(new Date((e.target as HTMLInputElement).value))}
                         />
                     </div>
-                    <div className="error">{errorMessage}</div>
+                    <div class="error">{errorMessage}</div>
                 </Fragment>
             }
             onSubmit={onSubmit}

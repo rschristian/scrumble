@@ -1,11 +1,10 @@
 import { FunctionalComponent, h } from 'preact';
 import { useContext, useState } from 'preact/hooks';
 
+import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
 import { Modal } from 'components/Modal';
-import { CreateOrEditIssue } from 'components/Issue/createOrEditIssue';
 import { Issue } from 'models/Issue';
 import { observer } from 'services/mobx';
-
 import { UserLocationStoreContext } from 'stores';
 import { editIssue, addEstimate } from 'services/api/issues';
 

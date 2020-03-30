@@ -17,7 +17,6 @@ export async function fetchIssues(workspaceId: number): Promise<Issue[] | string
 export const createIssue = async (workspaceId: number, projectId: number, issue: Issue): Promise<void | string> => {
     return await apiService
         .post(`/workspace/${workspaceId}/project/${projectId}/issue`, issue)
-
         .then(() => {
             return;
         })

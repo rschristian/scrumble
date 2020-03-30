@@ -3,8 +3,8 @@ import { useContext } from 'preact/hooks';
 import { Link } from 'preact-router';
 
 import { Workspace } from 'models/Workspace';
-import { UserLocationStoreContext } from 'stores';
 import { observer } from 'services/mobx';
+import { UserLocationStoreContext } from 'stores';
 
 export const WorkspaceCard: FunctionalComponent<Workspace> = observer((props: Workspace) => {
     const userLocationStore = useContext(UserLocationStoreContext);

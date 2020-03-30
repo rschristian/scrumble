@@ -8,12 +8,11 @@ const IssuesBoard: FunctionalComponent = () => {
     // TODO This is horrendous, but an easy way to split up test data. Delete all once real data is set up
     const [open, setOpen] = useState<ComponentChild[]>([]);
     const [inProgress, setInProgress] = useState<ComponentChild[]>([]);
-    const [forReview, setForReview] = useState<ComponentChild[]>([]);
     const [closed, setClosed] = useState<ComponentChild[]>([]);
 
     useEffect(() => {
         issues.map((issue, index) => {
-            if (index < 10) {
+            if (index < 13) {
                 setOpen((oldValues) => [
                     ...oldValues,
                     <IssueBoardCard
@@ -26,21 +25,8 @@ const IssuesBoard: FunctionalComponent = () => {
                         projectId={issue.projectId}
                     />,
                 ]);
-            } else if (index < 20) {
+            } else if (index < 26) {
                 setInProgress((oldValues) => [
-                    ...oldValues,
-                    <IssueBoardCard
-                        key={index}
-                        iid={issue.iid}
-                        state={issue.state}
-                        title={issue.title}
-                        description={issue.description}
-                        storyPoint={issue.storyPoint}
-                        projectId={issue.projectId}
-                    />,
-                ]);
-            } else if (index < 30) {
-                setForReview((oldValues) => [
                     ...oldValues,
                     <IssueBoardCard
                         key={index}
@@ -86,12 +72,6 @@ const IssuesBoard: FunctionalComponent = () => {
                         <h2 class="issue-list-title">In Progress</h2>
                     </div>
                     {inProgress}
-                </div>
-                <div class="issue-list border-l border-deep-space-sparkle">
-                    <div class="issue-list-title-holder bg-yellow-300">
-                        <h2 class="issue-list-title">For Review</h2>
-                    </div>
-                    {forReview}
                 </div>
                 <div class="issue-list border-l border-deep-space-sparkle">
                     <div class="issue-list-title-holder bg-green-300">

@@ -17,14 +17,14 @@ export const sideNavItems: SideBarLink[] = [
         path: '/issuesBoard',
     },
     {
-        label: 'Metrics',
-        icon: metrics,
-        path: '/metrics',
-    },
-    {
         label: 'Show and Tell',
         icon: presentation,
         path: '/showAndTell',
+    },
+    {
+        label: 'Metrics',
+        icon: metrics,
+        path: '/metrics',
     },
     {
         label: 'Edit',

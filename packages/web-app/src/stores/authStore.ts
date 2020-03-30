@@ -1,6 +1,7 @@
 import { observable, action } from 'mobx';
+import { AsyncTrunk } from 'mobx-sync';
 
-import { User } from 'models/user';
+import { User } from 'models/User';
 import { login, destroyOAuthToken } from 'services/api/auth';
 
 class AuthStore {
@@ -11,22 +12,21 @@ class AuthStore {
         this.currentUser = user;
     }
 
-    @action async login(shortLivedJwt: string): Promise<boolean> {
-        return await login(shortLivedJwt).then((success) => {
-            if (success) {
-                this.isAuthenticated = true;
-                return this.isAuthenticated;
-            }
-            return false;
-        });
+    @action async login(shortLivedJwt: string): Promise<void | string> {
+        const error = await login(shortLivedJwt);
+
+        if (error) return error;
+        this.isAuthenticated = true;
     }
 
-    @action async logout(): Promise<boolean> {
-        return await destroyOAuthToken().then(() => {
-            this.isAuthenticated = false;
-            return true;
-        });
+    @action async logout(): Promise<void | string> {
+        const error = await destroyOAuthToken();
+
+        if (error) return error;
+        this.isAuthenticated = false;
     }
 }
 
 export const authStore = new AuthStore();
+
+new AsyncTrunk(authStore, { storage: localStorage }).init().then();

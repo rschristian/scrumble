@@ -3,13 +3,6 @@
 import { Issue, IssueStatus } from 'models/Issue';
 import { Project } from 'models/Project';
 import { Sprint, SprintStatus } from 'models/Sprint';
-import { Workspace } from 'models/Workspace';
-
-export const workspaces: Workspace[] = [
-    { id: 1, name: 'CUBRIC', description: 'Brain Tinder' },
-    { id: 2, name: 'Sappo', description: 'Frogs n stuff' },
-    { id: 3, name: 'Spot a Bee', description: 'Bees and Foxgloves' },
-];
 
 export const sprints: Sprint[] = [
     {
@@ -386,15 +379,6 @@ export const issues: Issue[] = [
         description: 'In hac habitasse platea dictumst.',
         storyPoint: 5,
         projectId: 4,
-    },
-    {
-        iid: 40,
-        state: IssueStatus.closed,
-        title: 'synergize scalable infrastructures',
-        description:
-            'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi.',
-        storyPoint: 2,
-        projectId: 5,
     },
 ];
 

@@ -1,28 +1,28 @@
 .btn-create {
   @apply align-baseline bg-blue-500 text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow-md;
+
+  &:hover {
+    @apply bg-gray-100 text-gray-800;
+  }
 }
 .btn-edit {
   @apply align-baseline bg-green-500 text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow-xl;
+
+  &:hover {
+    @apply bg-gray-100 text-gray-800;
+  }
 }
 
 .btn-disable {
   @apply align-baseline bg-red-500 text-white font-semibold py-2 px-4 border border-gray-400 opacity-50 rounded cursor-not-allowed;
 }
 
-.btn-create:hover {
-  @apply bg-gray-100 text-gray-800;
-}
-
-.btn-edit:hover {
-  @apply bg-gray-100 text-gray-800;
-}
-
 .btn-filter {
   @apply align-baseline bg-gray-100 text-gray-800 py-1 px-2 font-semibold border border-gray-300;
-}
 
-.btn-filter:hover {
-  @apply bg-blue-400 text-white;
+  &:hover {
+    @apply bg-blue-400 text-white;
+  }
 }
 
 .btn-filter-active {
@@ -31,10 +31,10 @@
 
 .btn-pagination {
   @apply bg-transparent text-deep-space-sparkle font-semibold py-2 px-4 border border-gray-300;
-}
 
-.btn-pagination:hover {
-  @apply bg-gray-400;
+  &:hover {
+    @apply bg-gray-400;
+  }
 }
 
 .btn-pagination-active {
@@ -43,10 +43,10 @@
 
 .btn-page-move {
   @apply bg-gray-100 text-deep-space-sparkle font-bold py-2 px-4 rounded-l m-3 border border-gray-300;
-}
 
-.btn-page-move:hover {
-  @apply bg-gray-500 text-white;
+  &:hover {
+    @apply bg-gray-500 text-white;
+  }
 }
 
 // Media Queries
