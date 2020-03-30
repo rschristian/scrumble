@@ -1,7 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState, useEffect, useContext } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
-import { dataGrabber } from 'regressionModel/linearRegression';
+import { dataGrabber } from 'services/RegressionModel/dataGrabber';
 import { IssueCard } from 'components/Cards/issue';
 import { IssueFilter } from 'components/Filter/issues';
 import { SearchBar } from 'components/SearchBar';
@@ -49,6 +49,8 @@ export const IssuesList: FunctionalComponent<IProps> = observer((props: IProps) 
             } else setIssuesArray(result);
         }
     };
+
+    console.log(issuesArray);
 
     useEffect(() => {
         fetchMore().then();

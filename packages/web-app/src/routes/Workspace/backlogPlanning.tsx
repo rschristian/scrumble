@@ -11,7 +11,7 @@ import { observer } from 'services/mobx';
 import { successColour } from 'services/Notification/colours';
 import { UserLocationStoreContext } from 'stores';
 import { createIssue, fetchWorkspaceIssues, addEstimate } from 'services/api/issues';
-import { dataGrabber } from 'regressionModel/linearRegression';
+import { dataGrabber } from 'services/RegressionModel/dataGrabber';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const userLocationStore = useContext(UserLocationStoreContext);
