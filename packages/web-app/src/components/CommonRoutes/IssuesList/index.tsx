@@ -32,6 +32,8 @@ export const IssuesList: FunctionalComponent<IProps> = observer((props: IProps) 
         setIssueFilter(filterFor);
     };
 
+    console.log(issuesArray);
+
     const handleOnKeyDown = async (e: KeyboardEvent): Promise<void> => {
         if (e.key === 'Enter') {
             const result = await searchIssueByTitleDescription(23, searchFor, issueFilter);
@@ -84,7 +86,7 @@ export const IssuesList: FunctionalComponent<IProps> = observer((props: IProps) 
                 if (typeof issuePagination == 'string') {
                     notify.show(issuePagination, 'error', 5000, errorColour);
                 } else {
-                    props.updateIssueList !== undefined && true ? props.updatingIssuesList() : null;
+                    props.updateIssueList ? props.updatingIssuesList() : null;
                     setIssuesArray(issuePagination.issues);
                 }
             },

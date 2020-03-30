@@ -19,20 +19,12 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
     const [updateIssues, setUpdateIssues] = useState(false);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
-        return await createIssue(userLocationStore.currentWorkspace.id, projectId, newIssue).then((error) => {
-            if (error) {
-                setNewIssueErrorMessage(error);
-            } else {
-                fetchWorkspaceIssues(userLocationStore.currentWorkspace.id, 'open', projectId, 0).then(
-                    (response: IssuePagination) => {
-                        addEstimate(response.issues[0].projectId, response.issues[0]);
-                    },
-                );
-                notify.show('New issue created!', 'success', 5000, successColour);
-                setShowNewIssueModal(false);
-                setUpdateIssues(true);
-            }
-        });
+        return await createIssue(userLocationStore.currentWorkspace.id, projectId, newIssue).then((response: Issue) => {
+            notify.show('New issue created!', 'success', 5000, successColour);
+            setShowNewIssueModal(false);
+            setUpdateIssues(true);
+            addEstimate(response.projectId, response);
+        })
     };
     return (
         <div class={showNewIssueModal ? 'modal-active' : ''}>
