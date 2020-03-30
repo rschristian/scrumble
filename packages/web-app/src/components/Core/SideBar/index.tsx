@@ -1,10 +1,10 @@
 import { FunctionalComponent, h } from 'preact';
-import { useContext, useEffect, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 import { Menu, X } from 'preact-feather';
 
 import { SideBarItem } from 'components/Core/SideBar/SideBarItem';
 import { observer } from 'services/mobx';
-import { UserLocationStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 export interface SideBarLink {
     label: string;
@@ -17,7 +17,7 @@ interface IProps {
 }
 
 export const SideBar: FunctionalComponent<IProps> = observer((props: IProps) => {
-    const userLocationStore = useContext(UserLocationStoreContext);
+    const userLocationStore = useStore().userLocationStore;
 
     const [isOpen, setIsOpen] = useState(false);
 

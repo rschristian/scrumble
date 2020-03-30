@@ -1,5 +1,5 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useContext, useEffect, useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 
 import { SprintCard } from 'components/Cards/sprint';
 import { SprintFilter } from 'components/Filter/sprints';
@@ -7,10 +7,10 @@ import { IssuesList } from 'components/CommonRoutes/IssuesList';
 import { sprints } from 'data';
 import { SprintStatus } from 'models/Sprint';
 import { observer } from 'services/mobx';
-import { UserLocationStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 const SprintPlanning: FunctionalComponent = observer(() => {
-    const userLocationStore = useContext(UserLocationStoreContext);
+    const userLocationStore = useStore().userLocationStore;
 
     const [isSprintView, setIsSprintView] = useState(false);
     const [sprintFilter, setSprintFilter] = useState(SprintStatus.active.toString());

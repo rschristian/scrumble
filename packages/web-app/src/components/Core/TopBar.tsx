@@ -1,15 +1,15 @@
 import { FunctionalComponent, h } from 'preact';
-import { useContext, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 import { Link, route } from 'preact-router';
 import { Menu, X } from 'preact-feather';
 
 import scrumCards from 'assets/icons/scrumCards.png';
 import avatar from 'assets/gitlab_avatar.png';
 import { observer } from 'services/mobx';
-import { AuthStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 export const TopBar: FunctionalComponent = observer(() => {
-    const authStore = useContext(AuthStoreContext);
+    const authStore = useStore().authStore;
 
     const [showAccountDropdown, setShowAccountDropdown] = useState(false);
 
