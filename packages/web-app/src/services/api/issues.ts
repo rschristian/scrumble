@@ -76,9 +76,9 @@ export const searchIssueByTitleDescription = async (
 };
 
 // GitLab API: POST /projects/:id/issues/:issue_iid/time_estimate
-export const addEstimate = async (projectId: number, dataPoints: number[][], issue: Issue): Promise<void | string> => {
+export const addEstimate = async (projectId: number, issue: Issue): Promise<void | string> => {
     await apiService
-        .post(`/workspace/${projectId}/addEstimate/?dataPoints=${dataPoints}`, issue)
+        .post(`/workspace/${projectId}/addEstimate`, issue)
         .then(() => {
             return;
         })

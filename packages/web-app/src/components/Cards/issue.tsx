@@ -26,7 +26,6 @@ export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
 
 interface IProps {
     issue: Issue;
-    data?: number[][];
     update?: () => void;
 }
 
@@ -47,7 +46,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                 }
             },
         );
-        await addEstimate(props.issue.projectId, props.data, issue);
+        await addEstimate(props.issue.projectId, issue);
     };
 
     return (

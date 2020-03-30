@@ -2,6 +2,7 @@ package com.nsa.bt.scrumble.controllers.api.v1;
 
 import com.nsa.bt.scrumble.dto.Issue;
 import com.nsa.bt.scrumble.regression.LinearRegression;
+import com.nsa.bt.scrumble.regression.DataGrabber;
 import com.nsa.bt.scrumble.dto.IssuePageResult;
 import com.nsa.bt.scrumble.services.IIssuePagingService;
 import com.nsa.bt.scrumble.security.UserPrincipal;
@@ -17,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.core.ParameterizedTypeReference;
+
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +58,9 @@ public class IssuesApi {
 
     @Autowired
     IIssueService issueService;
+
+    @Autowired
+    DataGrabber dataGrabber;
 
     @GetMapping("/workspace/{id}/issues")
     public ResponseEntity<Object> getIssues(
@@ -94,12 +101,15 @@ public class IssuesApi {
     }
 
     @PostMapping("/workspace/{projectId}/addEstimate")
-    public ResponseEntity<String> addEstimate(Authentication authentication, @PathVariable(value="projectId") int projectId, @RequestParam(value="dataPoints") int[][] dataPoints, @RequestBody Issue issue){
+    public ResponseEntity<String> addEstimate(Authentication authentication, @PathVariable(value="projectId") int projectId, @RequestBody Issue issue){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-        linearRegression.trainModel(dataPoints);
-        String estimate = linearRegression.timeConversion(linearRegression.predict(issue.getStoryPoint()));
         if(accessTokenOptional.isPresent()) {
+            Issue[] closedIssues = dataGrabber.getClosedIssues(gitLabBaseUrl, projectId, accessTokenOptional);
+            dataGrabber.setDataPoints(closedIssues);
+            int[][] dataPoints = dataGrabber.getDataPoints();
+            linearRegression.trainModel(dataPoints);
+            String estimate = linearRegression.timeConversion(linearRegression.predict(issue.getStoryPoint()));
             String uri = String.format("%1s/projects/%2s/issues/%3s/time_estimate?duration=%4s&access_token=%5s", gitLabBaseUrl, projectId, issue.getIid(), estimate, accessTokenOptional.get());
             return ResponseEntity.ok().body(restTemplate.postForObject(uri, null , String.class));
         }
