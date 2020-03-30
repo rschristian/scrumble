@@ -61,4 +61,23 @@ public class WorkspaceApi {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(authErrorMsg);
     }
+
+    @PostMapping("/workspace/{workspaceId}/projects")
+//    public ResponseEntity<Object> updateProjectsInWorkspace(
+//            Authentication authentication,
+//            @PathVariable(value="workspaceId") int workspaceId,
+//            @RequestBody int[] projectIds) {
+    public ResponseEntity<Object> updateProjectsInWorkspace(
+            Authentication authentication,
+            @PathVariable(value="workspaceId") int workspaceId) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        var projectIds = new int[]{4, 5, 8};
+        if(accessTokenOptional.isPresent()) {
+            logger.info("Associating project ids");
+            workspaceService.associateProjectsWithWorkspace(workspaceId, projectIds);
+            return ResponseEntity.ok().body(null);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(authErrorMsg);
+    }
 }

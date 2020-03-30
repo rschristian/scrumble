@@ -3,16 +3,6 @@ import { apiService } from 'ts-api-toolkit';
 import { Issue } from 'models/Issue';
 import { IssuePagination } from 'models/IssuePagination';
 
-export async function fetchIssues(workspaceId: number): Promise<Issue[] | string> {
-    return await apiService
-        .get(`/workspace/${workspaceId}/issues`)
-        .then((response) => {
-            return response.data;
-        })
-        .catch(({ response }) => {
-            return response.data?.message || 'Unknown error while retrieving issues';
-        });
-}
 // GitLab API: POST /projects/:id/issues
 export const createIssue = async (workspaceId: number, projectId: number, issue: Issue): Promise<void | string> => {
     return await apiService

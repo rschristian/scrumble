@@ -35,3 +35,17 @@ export const getWorkspaces = async (): Promise<Workspace[] | string> => {
             return response.data?.message || 'Unknown error while updating workspace details';
         });
 };
+
+export const associateProjectsWithWorkspace = async (
+    workspaceId: number,
+    projectIds: number[],
+): Promise<void | string> => {
+    return await apiService
+        .post(`/workspace/${workspaceId}/projects`, {})
+        .then((response) => {
+            return response.data;
+        })
+        .catch(({ response }) => {
+            return response.data?.message || 'Unknown error while updating workspace details';
+        });
+};

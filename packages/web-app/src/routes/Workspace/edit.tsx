@@ -2,8 +2,11 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 
 import { GenericEdit } from 'components/CommonRoutes/Edit';
-import { editWorkspace } from 'services/api/workspaces';
+
 import { useStore } from 'stores';
+import { associateProjectsWithWorkspace, editWorkspace } from 'services/api/workspaces';
+
+import { Workspace } from 'models/Workspace';
 
 const WorkspaceEdit: FunctionalComponent = () => {
     const currentWorkspace = useStore().userLocationStore.currentWorkspace;
@@ -25,6 +28,11 @@ const WorkspaceEdit: FunctionalComponent = () => {
         });
     };
 
+    const x = (): void => {
+        associateProjectsWithWorkspace(1, [1, 3, 4, 5, 8]).then((result) => {
+            if (result) console.log('error');
+        });
+    };
     return (
         <GenericEdit
             editForm={
@@ -61,6 +69,9 @@ const WorkspaceEdit: FunctionalComponent = () => {
                             // onInput={(e): void => setWorkspaceName((e.target as HTMLInputElement).value)}
                         />
                     </div>
+                    <button class="btn-create" onClick={(): void => x()}>
+                        Assign Projects
+                    </button>
                     <div class="error">{errorMessage}</div>
                 </Fragment>
             }
