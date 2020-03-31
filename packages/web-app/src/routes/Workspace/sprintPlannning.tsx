@@ -1,28 +1,61 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { notify } from 'react-notify-toast';
 
+import { IssueCard } from 'components/Cards/issue';
 import { SprintCard } from 'components/Cards/sprint';
+import { filterStatusEnum, IssueFilter } from 'components/Filter/issues';
 import { SprintFilter } from 'components/Filter/sprints';
-import { IssuesList } from 'components/CommonRoutes/IssuesList';
 import { sprints } from 'data';
+import { Issue, IssueStatus } from 'models/Issue';
 import { SprintStatus } from 'models/Sprint';
-import { observer } from 'services/mobx';
+import { fetchWorkspaceIssues } from 'services/api/issues';
+import { errorColour } from 'services/Notification/colours';
 import { useStore } from 'stores';
 
-const SprintPlanning: FunctionalComponent = observer(() => {
+const SprintPlanning: FunctionalComponent = () => {
     const userLocationStore = useStore().userLocationStore;
 
     const [isSprintView, setIsSprintView] = useState(false);
+
+    const [issueFilter, setIssueFilter] = useState(IssueStatus.open.toString());
+    const [issueFilterTerm, setIssueFilterTerm] = useState('');
     const [sprintFilter, setSprintFilter] = useState(SprintStatus.active.toString());
+
+    const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
+    const [currentPageNum, setCurrentPageNum] = useState(0);
+    const [currentProjectId, setCurrentProjectId] = useState(0);
 
     useEffect(() => {
         userLocationStore.setActiveSideBarItem(0);
     }, [userLocationStore]);
 
+    const updateIssueFilter = (filterFor: string): void => {
+        setCurrentPageNum(0);
+        setCurrentProjectId(0);
+        setIssuesArray([]);
+        if (Object.values(filterStatusEnum).includes(filterFor)) setIssueFilter(filterFor);
+        else setIssueFilterTerm(filterFor);
+    };
+
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
-        }
-    });
+    useEffect(() => {
+        fetchWorkspaceIssues(
+            userLocationStore.currentWorkspace.id,
+            currentProjectId,
+            currentPageNum,
+            issueFilter,
+            issueFilterTerm,
+        ).then((result) => {
+            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
+            else {
+                setIssuesArray((oldValues) => oldValues.concat(result.issues));
+                setCurrentPageNum(result.nextResource.pageNumber);
+                setCurrentProjectId(result.nextResource.projectId);
+            }
+        });
+    }, [issueFilter, issueFilterTerm]);
 
     return (
         <Fragment>
@@ -37,7 +70,16 @@ const SprintPlanning: FunctionalComponent = observer(() => {
                             Sprints
                         </button>
                     </div>
-                    <IssuesList />
+                    <div class="md:mr-4">
+                        <IssueFilter setFilter={updateIssueFilter} />
+                    </div>
+                    <div class="md:mr-4 rounded bg-white overflow-hidden shadow-lg overflow-y-scroll issuesList">
+                        {issuesArray.map((issue, index) => {
+                            if (issueFilter === 'all' || issue.state.toString() === issueFilter) {
+                                return <IssueCard key={index} issue={issue} />;
+                            }
+                        })}
+                    </div>
                 </div>
                 <div
                     class={`md:border-l border-gray-300 w-11/12 md:w-1/2 md:block " ${isSprintView ? '' : 'sm:hidden'}`}
@@ -71,6 +113,6 @@ const SprintPlanning: FunctionalComponent = observer(() => {
             </div>
         </Fragment>
     );
-});
+};
 
 export default SprintPlanning;
