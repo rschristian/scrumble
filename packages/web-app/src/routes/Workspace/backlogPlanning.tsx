@@ -6,10 +6,9 @@ import { IssuesList } from 'components/CommonRoutes/IssuesList';
 import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
 import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
-import { IssuePagination } from 'models/IssuePagination';
 import { observer } from 'services/mobx';
 import { successColour } from 'services/Notification/colours';
-import { createIssue, fetchWorkspaceIssues, addEstimate } from 'services/api/issues';
+import { createIssue } from 'services/api/issues';
 import { useStore } from 'stores';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
@@ -23,7 +22,6 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             notify.show('New issue created!', 'success', 5000, successColour);
             setShowNewIssueModal(false);
             setUpdateIssues(true);
-            addEstimate(response.projectId, response);
         })
     };
     return (

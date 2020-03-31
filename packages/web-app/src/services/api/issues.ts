@@ -74,16 +74,3 @@ export const searchIssueByTitleDescription = async (
             return response.data?.message || 'Unknown error while searching for issue';
         });
 };
-
-// GitLab API: POST /projects/:id/issues/:issue_iid/time_estimate
-export const addEstimate = async (projectId: number, issue: Issue): Promise<void | string> => {
-    await apiService
-        .post(`/workspace/${projectId}/addEstimate`, issue)
-        .then(() => {
-            return;
-        })
-        .catch(({ response }) => {
-            if (response.data !== '') return response.data.message;
-            return 'Unknown error while adding estimate';
-        });
-};

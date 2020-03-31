@@ -1,6 +1,7 @@
 package com.nsa.bt.scrumble.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -101,7 +102,7 @@ public class Issue implements Serializable {
         return timeSpent;
     }
 
-    @JsonAlias("time_stats")
+    @JsonProperty("time_stats")
     public void setTimeSpent(Map<String, String> timeSpent) {
         this.timeSpent = Integer.parseInt(timeSpent.get("total_time_spent"));
     }

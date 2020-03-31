@@ -6,7 +6,7 @@ import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
 import { observer } from 'services/mobx';
 import { useStore } from 'stores';
-import { editIssue, addEstimate } from 'services/api/issues';
+import { editIssue } from 'services/api/issues';
 
 export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
     return (
@@ -46,7 +46,6 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                 }
             },
         );
-        await addEstimate(props.issue.projectId, issue);
     };
 
     return (

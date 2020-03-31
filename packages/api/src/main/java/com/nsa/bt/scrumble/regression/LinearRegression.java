@@ -1,11 +1,22 @@
 package com.nsa.bt.scrumble.regression;
-import org.springframework.stereotype.Service; 
+import com.nsa.bt.scrumble.dto.Issue;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Optional;
 
 // Based off of Least Square regression
 // Read more here https://www.mathsisfun.com/data/least-squares-regression.html
 @Service
 public class LinearRegression {
     private double c, m;
+
+    @Autowired
+    RestTemplate restTemplate;
+
+    @Autowired
+    DataGrabber dataGrabber;
 
     public void trainModel(int[][] dataPoints) {
         if(dataPoints.length < 10) { // if not enough data given resorts to default values
@@ -67,5 +78,15 @@ public class LinearRegression {
             tmp = tmp - round * 3600;
         }
         return timeString;
+    }
+
+    public void setEstimate(String gitLabBaseUrl, int projectId, Issue issue, Optional<String> accessTokenOptional) {
+        Issue[] closedIssues = dataGrabber.getClosedIssues(gitLabBaseUrl, projectId, accessTokenOptional);
+        dataGrabber.setDataPoints(closedIssues);
+        int[][] dataPoints = dataGrabber.getDataPoints();
+        this.trainModel(dataPoints);
+        String estimate = this.timeConversion(this.predict(issue.getStoryPoint()));
+        String uri = String.format("%1s/projects/%2s/issues/%3s/time_estimate?duration=%4s&access_token=%5s", gitLabBaseUrl, projectId, issue.getIid(), estimate, accessTokenOptional.get());
+        restTemplate.postForObject(uri, null, String.class);
     }
 }

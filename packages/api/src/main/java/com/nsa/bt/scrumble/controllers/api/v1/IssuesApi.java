@@ -93,30 +93,13 @@ public class IssuesApi {
             String uri = String.format("%1s/projects/%2s/issues?title=%3s&description=%4s&labels=%5s&access_token=%6s",
                     gitLabBaseUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(),accessTokenOptional.get());
             Issue newIssue = restTemplate.postForObject(uri, null , Issue.class);
-            issueService.setStoryPoint(newIssue);
+            linearRegression.setEstimate(gitLabBaseUrl, projectId, newIssue, accessTokenOptional);
             return ResponseEntity.ok().body(newIssue);
         }
         logger.error("Unable to authenticate with authentication provider");
         var res = new HashMap<String, String>();
         res.put("message", authErrorMsg);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
-    }
-
-    @PostMapping("/workspace/{projectId}/addEstimate")
-    public ResponseEntity<String> addEstimate(Authentication authentication, @PathVariable(value="projectId") int projectId, @RequestBody Issue issue){
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-        if(accessTokenOptional.isPresent()) {
-            Issue[] closedIssues = dataGrabber.getClosedIssues(gitLabBaseUrl, projectId, accessTokenOptional);
-            dataGrabber.setDataPoints(closedIssues);
-            int[][] dataPoints = dataGrabber.getDataPoints();
-            linearRegression.trainModel(dataPoints);
-            String estimate = linearRegression.timeConversion(linearRegression.predict(issue.getStoryPoint()));
-            String uri = String.format("%1s/projects/%2s/issues/%3s/time_estimate?duration=%4s&access_token=%5s", gitLabBaseUrl, projectId, issue.getIid(), estimate, accessTokenOptional.get());
-            return ResponseEntity.ok().body(restTemplate.postForObject(uri, null , String.class));
-        }
-        logger.error("Unable to authenticate with authentication provider");
-        return ResponseEntity.ok().body("Something went wrong...");
     }
 
     @PutMapping("/workspace/{workspaceId}/project/{projectId}/issue/{issueId}")
@@ -132,6 +115,7 @@ public class IssuesApi {
             String uri = String.format("%1s/projects/%2s/issues/%3s?title=%4s&description=%5s&labels=%6s&access_token=%7s",
                     gitLabBaseUrl, projectId, issue.getIid(), issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), accessTokenOptional.get());
             restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
+            linearRegression.setEstimate(gitLabBaseUrl, projectId, issue, accessTokenOptional);
             return ResponseEntity.ok().body("issue updated");
         }
         logger.error("Unable to authenticate with authentication provider");

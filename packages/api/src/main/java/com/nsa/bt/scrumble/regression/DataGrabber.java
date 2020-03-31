@@ -6,7 +6,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
-import java.util.Arrays;
 
 @Service
 public class DataGrabber {
