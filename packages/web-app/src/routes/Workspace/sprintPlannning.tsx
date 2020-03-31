@@ -21,9 +21,6 @@ const SprintPlanning: FunctionalComponent = observer(() => {
 
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
-    const sprintCardList = sprints.map((sprint, index) => {
-        if (sprintFilter === 'all' || sprint.status.toString() === sprintFilter) {
-            return <SprintCard key={index} sprint={sprint} closed={sprint.status === SprintStatus.closed} />;
         }
     });
 
@@ -57,7 +54,19 @@ const SprintPlanning: FunctionalComponent = observer(() => {
                     <div class="md:ml-4">
                         <SprintFilter setFilter={updateSprintFilter} />
                     </div>
-                    <div class="md:ml-4 rounded bg-white overflow-hidden shadow-lg">{sprintCardList}</div>
+                    <div class="md:ml-4 rounded bg-white overflow-hidden shadow-lg">
+                        {sprints.map((sprint, index) => {
+                            if (sprintFilter === 'all' || sprint.status.toString() === sprintFilter) {
+                                return (
+                                    <SprintCard
+                                        key={index}
+                                        sprint={sprint}
+                                        closed={sprint.status === SprintStatus.closed}
+                                    />
+                                );
+                            }
+                        })}
+                    </div>
                 </div>
             </div>
         </Fragment>
