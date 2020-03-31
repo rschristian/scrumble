@@ -30,7 +30,7 @@ const SprintPlanning: FunctionalComponent = observer(() => {
     return (
         <Fragment>
             <div class="flex">
-                <div class={`h-full w-11/12 md:w-1/2 md:block " ${!isSprintView ? '' : 'sm:hidden'}`}>
+                <div class={`w-11/12 md:w-1/2 md:block " ${!isSprintView ? '' : 'sm:hidden'}`}>
                     <div class="create-bar">
                         <h1 class="page-heading items-baseline">Backlog</h1>
                         <button
@@ -43,9 +43,7 @@ const SprintPlanning: FunctionalComponent = observer(() => {
                     <IssuesList />
                 </div>
                 <div
-                    class={`md:border-l border-gray-300 h-screen w-11/12 md:w-1/2 md:block " ${
-                        isSprintView ? '' : 'sm:hidden'
-                    }`}
+                    class={`md:border-l border-gray-300 w-11/12 md:w-1/2 md:block " ${isSprintView ? '' : 'sm:hidden'}`}
                 >
                     <div class="create-bar">
                         <h1 class="md:ml-4 page-heading">Sprints</h1>
