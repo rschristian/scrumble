@@ -124,8 +124,6 @@ public class IssuesApi {
             return ResponseEntity.ok().body(issueService.searchForIssue(workspaceId, searchFor, filter, accessTokenOptional.get()));
         }
         logger.error("Unable to authenticate with authentication provider");
-        var res = new HashMap<String, String>();
-        res.put("message", authErrorMsg);
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(authErrorMsg);
     }
 }

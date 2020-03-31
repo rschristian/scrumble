@@ -11,9 +11,9 @@ export const GenericEdit: FunctionalComponent<IProps> = (props: IProps) => {
             <div class="create-bar">
                 <h1 class="page-heading">Edit</h1>
             </div>
-            <div class="form-container overflow-auto relative">
+            <div class="form-container form-height overflow-y-auto relative">
                 {props.editForm}
-                <button class="btn-create mx-auto mb-4 ml-4" onClick={props.onSubmit}>
+                <button class="btn-create mx-auto mb-4 ml-4 absolute left-0 bottom-0" onClick={props.onSubmit}>
                     Save Changes
                 </button>
             </div>
