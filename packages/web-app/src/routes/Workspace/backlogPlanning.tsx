@@ -6,27 +6,24 @@ import { IssuesList } from 'components/CommonRoutes/IssuesList';
 import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
 import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
-import { createIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
 import { successColour } from 'services/Notification/colours';
+import { createIssue } from 'services/api/issues';
 import { useStore } from 'stores';
 
 const BacklogPlanning: FunctionalComponent = observer(() => {
     const userLocationStore = useStore().userLocationStore;
-
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
     const [newIssueErrorMessage, setNewIssueErrorMessage] = useState('');
+    const [updateIssues, setUpdateIssues] = useState(false);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
-        return await createIssue(userLocationStore.currentWorkspace.id, projectId, newIssue).then((error) => {
-            if (error) {
-                setNewIssueErrorMessage(error);
-            } else {
-                notify.show('New issue created!', 'success', 5000, successColour);
-            }
-        });
+        return await createIssue(userLocationStore.currentWorkspace.id, projectId, newIssue).then((response: Issue) => {
+            notify.show('New issue created!', 'success', 5000, successColour);
+            setShowNewIssueModal(false);
+            setUpdateIssues(true);
+        })
     };
-
     return (
         <div class={showNewIssueModal ? 'modal-active' : ''}>
             <div class="create-bar">
@@ -56,7 +53,10 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                 />
             ) : null}
             <div>
-                <IssuesList />
+                <IssuesList
+                    updatingIssuesList={(): void => setUpdateIssues(false)}
+                    updateIssueList={updateIssues}
+                />
             </div>
         </div>
     );
