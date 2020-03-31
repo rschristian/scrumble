@@ -53,10 +53,13 @@ public class IssuesApi {
 
     @GetMapping("/workspace/{id}/issues")
     public ResponseEntity<Object> getIssues(
-            Authentication auth, @PathVariable(value="id") int id,
-            @RequestParam(value="filter") String filter,
-            @RequestParam(value="projectId") int projectId,
-            @RequestParam(value="page") int page) {
+        Authentication auth,
+        @PathVariable(value="id") int workspaceId,
+        @RequestParam(value="projectId") int projectId,
+        @RequestParam(value="page") int page,
+        @RequestParam(value="filter") String filter,
+        @RequestParam(value="searchFor") String searchTerm
+    ) {
 
         Optional<String> accessTokenOptional = userService.getToken(((UserPrincipal) auth.getPrincipal()).getId());
         if(accessTokenOptional.isEmpty()) {
@@ -66,7 +69,7 @@ public class IssuesApi {
         }
 
         String accessToken = accessTokenOptional.get();
-        IssuePageResult issuePageResult = issuePagingService.getPageOfIssues(id, projectId, page, filter, accessToken);
+        IssuePageResult issuePageResult = issuePagingService.getPageOfIssues(workspaceId, projectId, page, filter, searchTerm, accessToken);
 
         return ResponseEntity.ok().body(issuePageResult);
     }
@@ -118,11 +121,13 @@ public class IssuesApi {
             @RequestParam(value="searchFor") String searchFor) {
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+
         if(accessTokenOptional.isPresent()) {
             var res = new HashMap<String, ArrayList<Issue>>();
             res.put("issues", issueService.searchForIssue(workspaceId, searchFor, filter, accessTokenOptional.get()));
             return ResponseEntity.ok().body(issueService.searchForIssue(workspaceId, searchFor, filter, accessTokenOptional.get()));
         }
+
         logger.error("Unable to authenticate with authentication provider");
         var res = new HashMap<String, String>();
         res.put("message", authErrorMsg);
