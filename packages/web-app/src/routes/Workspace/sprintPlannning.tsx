@@ -23,7 +23,7 @@ const SprintPlanning: FunctionalComponent = () => {
     const [sprintFilter, setSprintFilter] = useState(SprintStatus.active.toString());
 
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
-    const [currentPageNum, setCurrentPageNum] = useState(0);
+    const [currentPageNumber, setCurrentPageNumber] = useState(0);
     const [currentProjectId, setCurrentProjectId] = useState(0);
 
     useEffect(() => {
@@ -31,7 +31,7 @@ const SprintPlanning: FunctionalComponent = () => {
     }, [userLocationStore]);
 
     const updateIssueFilter = (filterFor: string): void => {
-        setCurrentPageNum(0);
+        setCurrentPageNumber(0);
         setCurrentProjectId(0);
         setIssuesArray([]);
         if (Object.values(filterStatusEnum).includes(filterFor)) setIssueFilter(filterFor);
@@ -40,22 +40,33 @@ const SprintPlanning: FunctionalComponent = () => {
 
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
-    useEffect(() => {
+    const fetchIssues = (): void => {
         fetchWorkspaceIssues(
             userLocationStore.currentWorkspace.id,
             currentProjectId,
-            currentPageNum,
+            currentPageNumber,
             issueFilter,
             issueFilterTerm,
         ).then((result) => {
             if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
             else {
                 setIssuesArray((oldValues) => oldValues.concat(result.issues));
-                setCurrentPageNum(result.nextResource.pageNumber);
+                setCurrentPageNumber(result.nextResource.pageNumber);
                 setCurrentProjectId(result.nextResource.projectId);
             }
         });
-    }, [issueFilter, issueFilterTerm]);
+    };
+
+    useEffect(() => {
+        fetchIssues();
+        // TODO I really hate that this is a warning, as it's legitimate, but I don't know enough to fix it.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const scrollCheck = (e: HTMLDivElement): void => {
+        const bottom = e.scrollHeight - e.scrollTop === e.clientHeight;
+        if (bottom) fetchIssues();
+    };
 
     return (
         <Fragment>
@@ -73,7 +84,10 @@ const SprintPlanning: FunctionalComponent = () => {
                     <div class="md:mr-4">
                         <IssueFilter setFilter={updateIssueFilter} />
                     </div>
-                    <div class="md:mr-4 rounded bg-white overflow-hidden shadow-lg overflow-y-scroll issuesList">
+                    <div
+                        class="md:mr-4 rounded bg-white overflow-hidden shadow-lg overflow-y-scroll issuesList"
+                        onScroll={(e): void => scrollCheck(e.target as HTMLDivElement)}
+                    >
                         {issuesArray.map((issue, index) => {
                             if (issueFilter === 'all' || issue.state.toString() === issueFilter) {
                                 return <IssueCard key={index} issue={issue} />;
