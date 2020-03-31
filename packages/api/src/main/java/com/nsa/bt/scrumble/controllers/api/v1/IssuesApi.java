@@ -112,25 +112,4 @@ public class IssuesApi {
         res.put("message", authErrorMsg);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
     }
-
-    @GetMapping("/workspace/{workspaceId}/issues/search")
-    public ResponseEntity<Object> searchForIssue(
-            Authentication auth,
-            @PathVariable(value="workspaceId") int workspaceId,
-            @RequestParam(value="filter") String filter,
-            @RequestParam(value="searchFor") String searchFor) {
-        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-
-        if(accessTokenOptional.isPresent()) {
-            var res = new HashMap<String, ArrayList<Issue>>();
-            res.put("issues", issueService.searchForIssue(workspaceId, searchFor, filter, accessTokenOptional.get()));
-            return ResponseEntity.ok().body(issueService.searchForIssue(workspaceId, searchFor, filter, accessTokenOptional.get()));
-        }
-
-        logger.error("Unable to authenticate with authentication provider");
-        var res = new HashMap<String, String>();
-        res.put("message", authErrorMsg);
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
-    }
 }
