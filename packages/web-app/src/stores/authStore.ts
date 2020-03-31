@@ -8,7 +8,12 @@ class AuthStore {
     @observable currentUser: User = null;
 
     @action setCurrentUser(user: User): void {
-        this.currentUser = user;
+        this.currentUser = {
+            id: user.id,
+            name: user.name,
+            username: user.username,
+            avatarUrl: `https://gitlab.ryanchristian.dev${user.avatarUrl.slice(user.avatarUrl.indexOf('/uploads'))}`,
+        };
     }
 
     @action async login(shortLivedJwt: string): Promise<void | string> {
