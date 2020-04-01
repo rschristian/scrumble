@@ -80,7 +80,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
             <div class="lst-itm-container cursor-move">
                 <div class="px-4 py-2 flex min-w-0">
                     <div 
-                        class="truncate cursor-pointer"
+                        class="truncate cursor-pointer underline font-semibold hover:text-blue-500"
                         onClick={(): void => {
                             setShowIssueCardInformation(true);
                             setErrorMessage('');
