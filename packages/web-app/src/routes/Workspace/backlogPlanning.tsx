@@ -103,9 +103,9 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                 onScroll={(e): void => scrollCheck(e.target as HTMLDivElement)}
             >
                 {issuesArray.map((issue, index) => {
-                    if (issueFilter === 'all' || issue.state.toString() === issueFilter) {
-                        return <IssueCard key={index} issue={issue} />;
-                    }
+                    // if (issueFilter === 'all' || issue.state.toString() === issueFilter) {
+                    return <IssueCard key={index} issue={issue} />;
+                    // }
                 })}
             </div>
         </div>
