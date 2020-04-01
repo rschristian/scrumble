@@ -10,7 +10,7 @@ export interface Issue {
     title: string;
     description?: string;
     storyPoint?: number;
-    state: IssueStatus;
+    status: IssueStatus;
     labels?: string[];
     projectId: number;
     sprint?: Sprint;
