@@ -2,11 +2,13 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { getCurrentUrl, route } from 'preact-router';
 import { MoreVertical } from 'preact-feather';
+import { notify } from 'react-notify-toast';
 
 import { Modal } from 'components/Modal';
 import { Sprint } from 'models/Sprint';
 import { toggleSprintStatus } from 'services/api/sprints';
 import { observer } from 'services/mobx';
+import { errorColour } from 'services/Notification/colours';
 import { useStore } from 'stores';
 
 interface IProps {
@@ -19,25 +21,14 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
 
     const [showClosureModal, setShowClosureModal] = useState(false);
     const [showOpeningModal, setShowOpeningModal] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
 
     const linkTo = (): void => {
         route(`${getUrlSubstringAndFix()}/sprint/${props.sprint.id}/`);
         userLocationStore.setSprint(props.sprint);
     };
 
-    const closureModalContent = (
-        <div>
-            Are you sure you want to close this sprint?
-            <div class="error">{errorMessage}</div>
-        </div>
-    );
-    const openingModalContent = (
-        <div>
-            Are you sure you want to open this sprint?
-            <div class="error">{errorMessage}</div>
-        </div>
-    );
+    const closureModalContent = <div>Are you sure you want to close this sprint?</div>;
+    const openingModalContent = <div>Are you sure you want to open this sprint?</div>;
 
     const handleToggleSprintStatus = async (): Promise<void> => {
         return await toggleSprintStatus(
@@ -45,7 +36,7 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
             props.sprint.projectId,
             props.sprint.id,
         ).then((error) => {
-            if (error) setErrorMessage(error);
+            if (error) notify.show(error, 'error', 5000, errorColour);
             else {
                 setShowClosureModal(false);
                 setShowOpeningModal(false);
@@ -74,18 +65,14 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
             <div class="lst-itm-container" onClick={linkTo}>
                 <div class="px-4 py-2 flex min-w-0 justify-between">
                     <div class="truncate">{props.sprint.title}</div>
-                    <div>
-                        <div className="more-vertical">
-                            <MoreVertical
-                                class="hover:text-orange-600"
-                                onClick={(e: MouseEvent): void => {
-                                    e.stopPropagation();
-                                    if (!props.closed) setShowClosureModal(true);
-                                    else setShowOpeningModal(true);
-                                }}
-                            />
-                        </div>
-                    </div>
+                    <MoreVertical
+                        class="hover:text-orange-600"
+                        onClick={(e: MouseEvent): void => {
+                            e.stopPropagation();
+                            if (!props.closed) setShowClosureModal(true);
+                            else setShowOpeningModal(true);
+                        }}
+                    />
                 </div>
                 <div class="px-4 py-2 flex min-w-0 text-sm">{`${props.sprint.startDate.toDateString()} - ${props.sprint.dueDate.toDateString()}`}</div>
                 <div class="px-4 py-2 flex min-w-0 justify-between">
