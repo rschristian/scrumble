@@ -74,7 +74,6 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
             <div class="lst-itm-container" onClick={linkTo}>
                 <div class="px-4 py-2 flex min-w-0 justify-between">
                     <div class="truncate">{props.sprint.title}</div>
-                    <div>{`${props.sprint.startDate.toDateString()} - ${props.sprint.dueDate.toDateString()}`}</div>
                     <div>
                         <div className="more-vertical">
                             <MoreVertical
@@ -88,11 +87,18 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
                         </div>
                     </div>
                 </div>
+                <div class="px-4 py-2 flex min-w-0 text-sm">{`${props.sprint.startDate.toDateString()} - ${props.sprint.dueDate.toDateString()}`}</div>
                 <div class="px-4 py-2 flex min-w-0 justify-between">
                     <p class="itm-description">{props.sprint.description}</p>
                     <div>
-                        <span className="num-issues">{props.sprint.totalNumberOfIssues}</span>
-                        <span className="story-pnt">{props.sprint.totalStoryPoint}</span>
+                        <span className="num-issues tooltip">
+                            {props.sprint.totalNumberOfIssues}
+                            <span className="tooltip-text">Total Number of Issues Assigned to Sprint</span>
+                        </span>
+                        <span className="story-pnt tooltip">
+                            {props.sprint.totalStoryPoint}
+                            <span className="tooltip-text">Total Number of Story Points Assigned to Sprint</span>
+                        </span>
                     </div>
                 </div>
             </div>

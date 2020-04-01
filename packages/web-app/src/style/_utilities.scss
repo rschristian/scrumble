@@ -43,6 +43,20 @@
   text-overflow: ellipsis;
 }
 
+// Don't hate me for messing with your CSS plz
+.tooltip .tooltip-text {
+  @apply invisible text-center py-1 px-1 absolute z-50;
+}
+
+.tooltip:hover .tooltip-text {
+  @apply visible;
+}
+
+.tooltip-text {
+  @apply bg-gray-600 border rounded border-gray-300 text-white -mt-8 -ml-40;
+  opacity: 0.85;
+}
+
 .loader {
   border: 16px solid #909090; /* Light grey */
   border-top: 16px solid #3498db; /* Blue */
