@@ -14,6 +14,8 @@ export const sprints: Sprint[] = [
         status: SprintStatus.closed,
         startDate: new Date(2020, 2, 11),
         dueDate: new Date(2020, 2, 20),
+        totalStoryPoint: 35,
+        totalNumberOfIssues: 15,
     },
     {
         id: 134,
@@ -24,6 +26,8 @@ export const sprints: Sprint[] = [
         status: SprintStatus.closed,
         startDate: new Date(2020, 2, 20),
         dueDate: new Date(2020, 2, 5),
+        totalStoryPoint: 40,
+        totalNumberOfIssues: 20,
     },
     {
         id: 140,

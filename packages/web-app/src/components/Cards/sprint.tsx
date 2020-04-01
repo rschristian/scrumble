@@ -88,8 +88,12 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
                         </div>
                     </div>
                 </div>
-                <div class="px-4 py-2 flex min-w-0">
+                <div class="px-4 py-2 flex min-w-0 justify-between">
                     <p class="itm-description">{props.sprint.description}</p>
+                    <div>
+                        <span className="num-issues">{props.sprint.totalNumberOfIssues}</span>
+                        <span className="story-pnt">{props.sprint.totalStoryPoint}</span>
+                    </div>
                 </div>
             </div>
         </Fragment>
