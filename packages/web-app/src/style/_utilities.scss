@@ -4,7 +4,7 @@
 }
 
 .main-content {
-  @apply flex flex-col content-center mx-auto w-5/6 overflow-auto;
+  @apply flex flex-col content-center mx-auto px-3 w-5/6 overflow-auto;
 }
 
 .page-heading {
@@ -14,7 +14,7 @@
 .search-bar {
   @apply my-5 shadow appearance-none border flex bg-white rounded w-full py-2 px-3 text-gray-700 leading-tight;
 
-  &:focus {
+  &:focus-within {
     @apply outline-none shadow-outline;
   }
 }
@@ -41,6 +41,20 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+// Don't hate me for messing with your CSS plz
+.tooltip .tooltip-text {
+  @apply invisible text-center py-1 px-1 absolute z-50;
+}
+
+.tooltip:hover .tooltip-text {
+  @apply visible;
+}
+
+.tooltip-text {
+  @apply bg-gray-600 border rounded border-gray-300 text-white -mt-8 -ml-40;
+  opacity: 0.85;
 }
 
 .loader {

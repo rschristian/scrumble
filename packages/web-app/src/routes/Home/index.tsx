@@ -43,7 +43,7 @@ const CreateWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
                         onInput={(e): void => setDescription((e.target as HTMLInputElement).value)}
                     />
                 </div>
-                <div className="flex justify-end pt-2">
+                <div class="flex justify-end pt-2">
                     <button
                         class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
                         onClick={(): void => props.submit(name, description)}

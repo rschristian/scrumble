@@ -17,6 +17,7 @@ export const SearchBar: FunctionalComponent<IProps> = (props: IProps) => {
                 type="text"
                 placeholder="Search by title or description"
                 class="ml-5 bg-transparent search-input"
+                aria-label="Search for content by title or description"
                 onKeyDown={(e): void => props.handleOnKeyDown(e)}
                 onInput={(e): void => props.handleOnInput((e.target as HTMLInputElement).value)}
             />

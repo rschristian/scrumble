@@ -13,15 +13,24 @@
 }
 
 .avatar {
-  @apply h-auto w-8 border-2 border-gray-600 rounded-full object-cover;
+  @apply h-auto w-8 rounded-full object-cover;
 }
 
 .btn-account-dropdown {
-  @apply relative z-10 block h-8 w-8 rounded-full overflow-hidden border-2 border-gray-100;
+  @apply relative z-10 block h-8 w-8 rounded-full overflow-hidden;
 }
 
 .top-nav-dropdown-link {
   @apply mt-2 block text-deep-space-sparkle;
+}
+
+.btn-sign-out {
+  @apply absolute right-0 mt-2 w-32 bg-deep-space-sparkle shadow-2xl rounded-lg shadow-xl;
+
+  &:hover,
+  &:focus {
+    @apply bg-l-deep-space-sparkle;
+  }
 }
 
 .sidebar {
@@ -39,14 +48,6 @@
 @screen sm {
   .header {
     @apply flex justify-between items-center px-4 py-3;
-  }
-}
-
-.btn-sign-out {
-  @apply absolute right-0 mt-2 w-32 bg-deep-space-sparkle shadow-2xl rounded-lg shadow-xl;
-
-  &:hover {
-    @apply bg-orange-500;
   }
 }
 
