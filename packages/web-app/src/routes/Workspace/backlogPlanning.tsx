@@ -60,7 +60,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
     useEffect(() => {
         fetchIssues();
         // TODO This is a completely legitimate warning, but I don't know how to fix it correctly. Help?
-    }, []);
+    }, [issueFilter, issueFilterTerm]);
 
     const scrollCheck = (e: HTMLDivElement): void => {
         const bottom = e.scrollHeight - e.scrollTop === e.clientHeight;

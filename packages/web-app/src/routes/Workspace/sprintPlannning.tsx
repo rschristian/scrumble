@@ -59,9 +59,8 @@ const SprintPlanning: FunctionalComponent = () => {
 
     useEffect(() => {
         fetchIssues();
-        // TODO I really hate that this is a warning, as it's legitimate, but I don't know enough to fix it.
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        // TODO This is a completely legitimate warning, but I don't know how to fix it correctly. Help?
+    }, [issueFilter, issueFilterTerm]);
 
     const scrollCheck = (e: HTMLDivElement): void => {
         const bottom = e.scrollHeight - e.scrollTop === e.clientHeight;
@@ -89,9 +88,10 @@ const SprintPlanning: FunctionalComponent = () => {
                         onScroll={(e): void => scrollCheck(e.target as HTMLDivElement)}
                     >
                         {issuesArray.map((issue, index) => {
-                            if (issueFilter === 'all' || issue.state.toString() === issueFilter) {
-                                return <IssueCard key={index} issue={issue} />;
-                            }
+                            // console.log(`Issue State: ${issue.state.toString()} Issue Filter: ${issueFilter}`);
+                            // if (issueFilter === 'all' || issue.state.toString() === issueFilter) {
+                            return <IssueCard key={index} issue={issue} />;
+                            // }
                         })}
                     </div>
                 </div>
