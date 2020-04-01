@@ -12,8 +12,8 @@ const SprintEdit: FunctionalComponent = () => {
 
     const [title, setTitle] = useState(currentSprint.title);
     const [description, setDescription] = useState(currentSprint.description);
-    const [startDate, setStartDate] = useState(currentSprint.startDate);
-    const [dueDate, setDueDate] = useState(currentSprint.dueDate);
+    const [startDate, setStartDate] = useState(new Date(currentSprint.startDate));
+    const [dueDate, setDueDate] = useState(new Date(currentSprint.dueDate));
 
     const [errorMessage, setErrorMessage] = useState('');
 
