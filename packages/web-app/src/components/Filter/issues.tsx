@@ -48,7 +48,7 @@ export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
                     Unplanned
                 </button>
                 <button
-                    className={`btn-filter ${filterStatus === filterStatusEnum.all ? 'btn-filter-active' : ''}`}
+                    class={`btn-filter ${filterStatus === filterStatusEnum.all ? 'btn-filter-active' : ''}`}
                     onClick={(): void => updateFilter(filterStatusEnum.all)}
                 >
                     All
