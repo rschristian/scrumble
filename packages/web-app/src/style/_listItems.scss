@@ -10,3 +10,11 @@
 .story-pnt {
   @apply bg-orange-600 rounded-full shadow-lg px-3 py-1 text-sm font-semibold text-white mr-2;
 }
+
+.open {
+  @apply bg-green-400 rounded-full shadow-lg px-3 py-1 text-sm font-semibold text-white mr-2;
+}
+
+.closed {
+  @apply bg-red-600 rounded-full shadow-lg px-3 py-1 text-sm font-semibold text-white mr-2;
+}

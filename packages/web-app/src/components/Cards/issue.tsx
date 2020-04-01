@@ -3,7 +3,7 @@ import { useState } from 'preact/hooks';
 
 import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
 import { Modal } from 'components/Modal';
-import { Issue } from 'models/Issue';
+import { Issue, IssueStatus } from 'models/Issue';
 import { observer } from 'services/mobx';
 import { useStore } from 'stores';
 import { editIssue } from 'services/api/issues';
@@ -51,7 +51,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
     };
 
     return (
-        <div class="cursor-default">
+        <div class="cursor-default capitalize">
              {showEditIssueModal ? (
                     <Modal
                         title="Edit Issue"
@@ -91,6 +91,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                     
                 </div>
                 <div class="px-4 py-2 z-1">
+                    <span class={props.issue.state === IssueStatus.open ? "open" : "closed" }>{props.issue.state}</span>
                     {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
                     <span class="text-gray-700"> Project ID: {props.issue.projectId}</span>
                     <div>
@@ -104,6 +105,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                             Edit
                         </button>
                         <span class="float-right text-gray-700 py-2 px-4"> <span class="font-medium">Author:</span> {props.issue.author}</span>
+                        <span class="float-left text-gray-700 py-2"> <span class="font-medium">Assignee:</span> {props.issue.assignee}</span>
                     </div>
                 </div>
             </div>
