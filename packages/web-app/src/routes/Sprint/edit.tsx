@@ -27,6 +27,8 @@ const SprintEdit: FunctionalComponent = () => {
             status: currentSprint.status,
             startDate,
             dueDate,
+            totalStoryPoint: currentSprint.totalStoryPoint,
+            totalNumberOfIssues: currentSprint.totalNumberOfIssues,
         }).then((error) => {
             if (error) setErrorMessage(error);
             else console.log('Success');

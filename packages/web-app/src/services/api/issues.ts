@@ -24,7 +24,7 @@ export const fetchWorkspaceIssues = async (
 // GitLab API: POST /projects/:id/issues
 export const createIssue = async (workspaceId: number, projectId: number, issue: Issue): Promise<void | string> => {
     return await apiService
-        .post(`/workspace/${workspaceId}/project/${projectId}/issue`, { issue })
+        .post(`/workspace/${workspaceId}/project/${projectId}/issue`, issue)
         .then(() => {
             return;
         })
@@ -41,7 +41,7 @@ export const editIssue = async (
     issue: Issue,
 ): Promise<void | string> => {
     return await apiService
-        .put(`/workspace/${workspaceId}/project/${projectId}/issue/${issueId}`, { issue })
+        .put(`/workspace/${workspaceId}/project/${projectId}/issue/${issueId}`, issue)
         .then(() => {
             return;
         })

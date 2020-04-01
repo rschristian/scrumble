@@ -16,7 +16,6 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
     const userLocationStore = useStore().userLocationStore;
 
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
-    const [newIssueErrorMessage, setNewIssueErrorMessage] = useState('');
 
     const [issueFilter, setIssueFilter] = useState(IssueStatus.open.toString());
     const [issueFilterTerm, setIssueFilterTerm] = useState('');
@@ -27,8 +26,11 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
         return await createIssue(userLocationStore.currentWorkspace.id, projectId, newIssue).then((error) => {
-            if (error) setNewIssueErrorMessage(error);
-            else notify.show('New issue created!', 'success', 5000, successColour);
+            if (error) notify.show(error, 'error', 5000, errorColour);
+            else {
+                notify.show('New issue created!', 'success', 5000, successColour);
+                fetchIssues();
+            }
         });
     };
 
@@ -76,7 +78,6 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                         <CreateOrEditIssue
                             submit={handleIssueCreation}
                             close={(): void => setShowNewIssueModal(false)}
-                            error={newIssueErrorMessage}
                         />
                     }
                     close={(): void => setShowNewIssueModal(false)}
@@ -85,13 +86,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
             <div class="create-bar">
                 <h1 class="page-heading">Backlog Planning</h1>
-                <button
-                    class="btn-create my-auto"
-                    onClick={(): void => {
-                        setShowNewIssueModal(true);
-                        setNewIssueErrorMessage('');
-                    }}
-                >
+                <button class="btn-create my-auto" onClick={(): void => setShowNewIssueModal(true)}>
                     New Issue
                 </button>
             </div>
@@ -104,7 +99,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             >
                 {issuesArray.map((issue, index) => {
                     // if (issueFilter === 'all' || issue.state.toString() === issueFilter) {
-                    return <IssueCard key={index} issue={issue} />;
+                    return <IssueCard key={index} issue={issue} refresh={fetchIssues} />;
                     // }
                 })}
             </div>

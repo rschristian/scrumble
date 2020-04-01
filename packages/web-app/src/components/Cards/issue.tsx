@@ -1,11 +1,13 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
+import { notify } from 'react-notify-toast';
 
 import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
 import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
 import { editIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
+import { errorColour } from 'services/Notification/colours';
 import { useStore } from 'stores';
 
 export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
@@ -26,13 +28,13 @@ export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
 
 interface IProps {
     issue: Issue;
+    refresh: () => void;
 }
 
 export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
     const userLocationStore = useStore().userLocationStore;
 
     const [showEditIssueModal, setShowEditIssueModal] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
 
     const handleIssueEdit = async (issue: Issue): Promise<void> => {
         return await editIssue(
@@ -41,8 +43,11 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
             props.issue.iid,
             issue,
         ).then((error) => {
-            if (error) setErrorMessage(error);
-            else setShowEditIssueModal(false);
+            if (error) notify.show(error, 'error', 5000, errorColour);
+            else {
+                setShowEditIssueModal(false);
+                props.refresh();
+            }
         });
     };
 
@@ -56,7 +61,6 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                             issue={props.issue}
                             submit={handleIssueEdit}
                             close={(): void => setShowEditIssueModal(false)}
-                            error={errorMessage}
                         />
                     }
                     close={(): void => setShowEditIssueModal(false)}
@@ -67,15 +71,9 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                 <div class="truncate">{props.issue.title}</div>
             </div>
             <div class="px-4 py-2 z-1">
-                <span class="story-pnt">{props.issue.storyPoint}</span>
-                <span class="text-gray-700">{props.issue.projectId}</span>
-                <button
-                    class="float-right btn-edit my-auto"
-                    onClick={(): void => {
-                        setShowEditIssueModal(true);
-                        setErrorMessage('');
-                    }}
-                >
+                {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
+                <span class="text-gray-700">Project ID: ${props.issue.projectId}</span>
+                <button class="float-right btn-edit my-auto" onClick={(): void => setShowEditIssueModal(true)}>
                     Edit
                 </button>
             </div>

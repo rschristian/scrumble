@@ -90,7 +90,7 @@ const SprintPlanning: FunctionalComponent = () => {
                         {issuesArray.map((issue, index) => {
                             // console.log(`Issue State: ${issue.state.toString()} Issue Filter: ${issueFilter}`);
                             // if (issueFilter === 'all' || issue.state.toString() === issueFilter) {
-                            return <IssueCard key={index} issue={issue} />;
+                            return <IssueCard key={index} issue={issue} refresh={fetchIssues} />;
                             // }
                         })}
                     </div>

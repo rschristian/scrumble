@@ -8,7 +8,6 @@ interface IProps {
     issue?: Issue;
     submit: (newIssue: Issue, projectId?: number) => void;
     close: () => void;
-    error: string;
 }
 
 export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
@@ -83,7 +82,6 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
                     Cancel
                 </button>
             </div>
-            <div class="error">{props.error}</div>
         </Fragment>
     );
 };

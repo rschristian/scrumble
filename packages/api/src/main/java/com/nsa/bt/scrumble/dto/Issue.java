@@ -1,9 +1,11 @@
 package com.nsa.bt.scrumble.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Issue implements Serializable {
     private int iid;
@@ -17,10 +19,11 @@ public class Issue implements Serializable {
     @JsonAlias("state")
     private String status;
     private ArrayList<String> labels;
+    private int timeSpent;
 
     public Issue(){}
 
-    public Issue(int iid, Sprint sprint, int projectId, String title, String description, int storyPoint, String status, ArrayList<String> labels) {
+    public Issue(int iid, Sprint sprint, int projectId, String title, String description, int storyPoint, String status, ArrayList<String> labels, int timeSpent) {
         this.iid = iid;
         this.sprint = sprint;
         this.projectId = projectId;
@@ -29,6 +32,7 @@ public class Issue implements Serializable {
         this.storyPoint = storyPoint;
         this.status = status;
         this.labels = labels;
+        this.timeSpent = timeSpent;
     }
 
     public int getIid() {
@@ -93,5 +97,19 @@ public class Issue implements Serializable {
 
     public void setLabels(ArrayList<String> labels) {
         this.labels = labels;
+    }
+
+    public int getTimeSpent() {
+        return timeSpent;
+    }
+
+    @JsonProperty("time_stats")
+    public void setTimeSpent(Map<String, String> timeSpent) {
+        this.timeSpent = Integer.parseInt(timeSpent.get("total_time_spent"));
+    }
+
+    @JsonAlias("timeSpent")
+    public void setTimeSpent(int timeSpent) {
+        this.timeSpent = timeSpent;
     }
 }
