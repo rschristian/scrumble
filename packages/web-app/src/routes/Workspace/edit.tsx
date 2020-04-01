@@ -19,7 +19,7 @@ const WorkspaceEdit: FunctionalComponent = () => {
     const [usersProjects, setUsersProjects] = useState<Project[]>([]); // TODO: Figure this out
     const [showProjectSelect, setShowProjectSelect] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [selectedProjectIds, setSelectedProjectIds] = useState<number[]>([currentWorkspace.projectIds]);
+    const [selectedProjectIds, setSelectedProjectIds] = useState(currentWorkspace.projectIds);
 
     useEffect(() => {
         getProjects().then((result) => {
@@ -143,7 +143,5 @@ const WorkspaceEdit: FunctionalComponent = () => {
         />
     );
 };
-
-import { ChangeEvent } from 'react';
 
 export default WorkspaceEdit;

@@ -84,6 +84,7 @@ public class IssueService implements IIssueService {
 
             ResponseEntity<ArrayList<Issue>> issuesResponse =  restTemplate.exchange(uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
             var matchingIssues = issuesResponse.getBody();
+            filterAndSetStoryPoint(issues);
             if(!matchingIssues.isEmpty()) {
                 issues.addAll(matchingIssues);
             }

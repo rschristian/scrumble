@@ -5,15 +5,25 @@ public class Workspace {
     private User createdBy;
     private String name;
     private String description;
+    private int[] projectIds;
 
     public Workspace(int id, User createdBy, String name, String description) {
         this.id = id;
         this.createdBy = createdBy;
         this.name = name;
         this.description = description;
+        this.projectIds = new int[] {1, 3, 5, 8, 11, 12};
     }
 
     public Workspace() {
+    }
+
+    public int[] getProjectIds() {
+        return projectIds;
+    }
+
+    public void setProjectIds(int[] projectIds) {
+        this.projectIds = projectIds;
     }
 
     public int getId() {

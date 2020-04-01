@@ -22,7 +22,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             notify.show('New issue created!', 'success', 5000, successColour);
             setShowNewIssueModal(false);
             setUpdateIssues(true);
-        })
+        });
     };
     return (
         <div class={showNewIssueModal ? 'modal-active' : ''}>
@@ -53,10 +53,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                 />
             ) : null}
             <div>
-                <IssuesList
-                    updatingIssuesList={(): void => setUpdateIssues(false)}
-                    updateIssueList={updateIssues}
-                />
+                <IssuesList updatingIssuesList={(): void => setUpdateIssues(false)} updateIssueList={updateIssues} />
             </div>
         </div>
     );
