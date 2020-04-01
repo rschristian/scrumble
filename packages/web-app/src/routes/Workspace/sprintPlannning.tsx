@@ -49,7 +49,7 @@ const SprintPlanning: FunctionalComponent = () => {
             issueFilterTerm,
         ).then((result) => {
             if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-            else {
+            else if (result.nextResource.pageNumber !== 0) {
                 setIssuesArray((oldValues) => oldValues.concat(result.issues));
                 setCurrentPageNumber(result.nextResource.pageNumber);
                 setCurrentProjectId(result.nextResource.projectId);
