@@ -15,4 +15,7 @@ export interface Issue {
     projectId: number;
     timeSpent?: number;
     sprint?: Sprint;
+    author?: string;
+    assignee?: string;
+    createdAt?: Date;
 }

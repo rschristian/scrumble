@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class Issue implements Serializable {
     private int iid;
@@ -18,11 +20,16 @@ public class Issue implements Serializable {
     private int storyPoint;
     private String state;
     private ArrayList<String> labels;
+    @JsonAlias("timeSpent")
     private int timeSpent;
+    private String author;
+    @JsonAlias("created_at")
+    private String createdAt;
+    private String assignee;
 
     public Issue(){}
 
-    public Issue(int iid, Sprint sprint, int projectId, String title, String description, int storyPoint, String state, ArrayList<String> labels, int timeSpent) {
+    public Issue(int iid, Sprint sprint, int projectId, String title, String description, int storyPoint, String state, ArrayList<String> labels, int timeSpent, String author, String createdAt, String assignee) {
         this.iid = iid;
         this.sprint = sprint;
         this.projectId = projectId;
@@ -32,6 +39,9 @@ public class Issue implements Serializable {
         this.state = state;
         this.labels = labels;
         this.timeSpent = timeSpent;
+        this.author = author;
+        this.createdAt = createdAt;
+        this.assignee = assignee;
     }
 
     public int getIid() {
@@ -103,12 +113,50 @@ public class Issue implements Serializable {
     }
 
     @JsonProperty("time_stats")
-    public void setTimeSpent(Map<String, String> timeSpent) {
-        this.timeSpent = Integer.parseInt(timeSpent.get("total_time_spent"));
+    public void setTimeSpent(Map<String, Object> timeSpent) {
+        if(timeSpent != null) {
+            this.timeSpent = (Integer)timeSpent.get("total_time_spent");
+        } else {
+            this.timeSpent = 0;
+        }
+        
     }
 
     @JsonAlias("timeSpent")
     public void setTimeSpent(int timeSpent) {
         this.timeSpent = timeSpent;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    @JsonProperty("author")
+    public void setAuthor(Map<String, Object> author) {
+        this.author = (String)author.get("name");
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String strDate= formatter.format(createdAt);
+        this.createdAt = strDate;
+    }
+
+    public String getAssignee() {
+        return assignee;
+    }
+
+    @JsonProperty("assignee")
+    public void setAssignee(Map<String, Object> assignedTo) {
+        if (assignedTo != null) {
+            this.assignee = (String)assignedTo.get("name");
+        } else {
+            this.assignee = "Unassigned";
+        }
+        
     }
 }
