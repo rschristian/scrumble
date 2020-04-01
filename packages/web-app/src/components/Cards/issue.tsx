@@ -72,7 +72,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
             </div>
             <div class="px-4 py-2 z-1">
                 {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
-                <span class="text-gray-700">Project ID: ${props.issue.projectId}</span>
+                <span class="text-gray-700">Project ID: {props.issue.projectId}</span>
                 <button class="float-right btn-edit my-auto" onClick={(): void => setShowEditIssueModal(true)}>
                     Edit
                 </button>
