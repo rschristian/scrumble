@@ -4,7 +4,7 @@
 }
 
 .main-content {
-  @apply flex flex-col content-center mx-auto w-5/6 overflow-auto;
+  @apply flex flex-col content-center mx-auto p-3 w-5/6 overflow-auto;
 }
 
 .page-heading {
@@ -14,7 +14,7 @@
 .search-bar {
   @apply my-5 shadow appearance-none border flex bg-white rounded w-full py-2 px-3 text-gray-700 leading-tight;
 
-  &:focus {
+  &:focus-within {
     @apply outline-none shadow-outline;
   }
 }

@@ -30,12 +30,6 @@ export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
         <div class="my-4 flex flex-col items-start">
             <div class="flex rounded shadow">
                 <button
-                    class={`btn-filter ${filterStatus === filterStatusEnum.all ? 'btn-filter-active' : ''}`}
-                    onClick={(): void => updateFilter(filterStatusEnum.all)}
-                >
-                    All
-                </button>
-                <button
                     class={`btn-filter ${filterStatus === filterStatusEnum.open ? 'btn-filter-active' : ''}`}
                     onClick={(): void => updateFilter(filterStatusEnum.open)}
                 >
@@ -52,6 +46,12 @@ export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
                     onClick={(): void => updateFilter(filterStatusEnum.unplanned)}
                 >
                     Unplanned
+                </button>
+                <button
+                    className={`btn-filter ${filterStatus === filterStatusEnum.all ? 'btn-filter-active' : ''}`}
+                    onClick={(): void => updateFilter(filterStatusEnum.all)}
+                >
+                    All
                 </button>
             </div>
             <SearchBar
