@@ -59,7 +59,6 @@ export const TopBar: FunctionalComponent = observer(() => {
                                         <img
                                             alt="Your avatar"
                                             class={`avatar ${
-                                        
                                                 showAccountDropdown ? 'border-2 border-deep-space-sparkle' : ''
                                             }`}
                                             src={authStore.currentUser?.avatarUrl}

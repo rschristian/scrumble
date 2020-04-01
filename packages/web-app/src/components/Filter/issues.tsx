@@ -1,7 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 
-import { Issue, IssueStatus } from 'models/Issue';
+import { IssueStatus } from 'models/Issue';
 import { SearchBar } from 'components/SearchBar';
 
 interface IProps {
