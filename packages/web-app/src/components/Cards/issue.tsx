@@ -1,13 +1,12 @@
 import { FunctionalComponent, h } from 'preact';
-import { useContext, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 
-import { Modal } from 'components/Modal';
 import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
+import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
 import { editIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
-
-import { UserLocationStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
     return (
@@ -30,7 +29,7 @@ interface IProps {
 }
 
 export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
-    const userLocationStore = useContext(UserLocationStoreContext);
+    const userLocationStore = useStore().userLocationStore;
 
     const [showEditIssueModal, setShowEditIssueModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -71,7 +70,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                 <span class="story-pnt">{props.issue.storyPoint}</span>
                 <span class="text-gray-700">{props.issue.projectId}</span>
                 <button
-                    className="float-right btn-edit my-auto"
+                    class="float-right btn-edit my-auto"
                     onClick={(): void => {
                         setShowEditIssueModal(true);
                         setErrorMessage('');

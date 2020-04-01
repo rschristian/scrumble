@@ -1,5 +1,5 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useContext, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 import { getCurrentUrl, route } from 'preact-router';
 import { MoreVertical } from 'preact-feather';
 
@@ -7,7 +7,7 @@ import { Modal } from 'components/Modal';
 import { Sprint } from 'models/Sprint';
 import { toggleSprintStatus } from 'services/api/sprints';
 import { observer } from 'services/mobx';
-import { UserLocationStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 interface IProps {
     sprint: Sprint;
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) => {
-    const userLocationStore = useContext(UserLocationStoreContext);
+    const userLocationStore = useStore().userLocationStore;
 
     const [showClosureModal, setShowClosureModal] = useState(false);
     const [showOpeningModal, setShowOpeningModal] = useState(false);
@@ -35,7 +35,7 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
     const openingModalContent = (
         <div>
             Are you sure you want to open this sprint?
-            <div className="error">{errorMessage}</div>
+            <div class="error">{errorMessage}</div>
         </div>
     );
 
@@ -74,15 +74,18 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
             <div class="lst-itm-container" onClick={linkTo}>
                 <div class="px-4 py-2 flex min-w-0 justify-between">
                     <div class="truncate">{props.sprint.title}</div>
-                    <div class="more-vertical">
-                        <MoreVertical
-                            class="hover:text-orange-600"
-                            onClick={(e: MouseEvent): void => {
-                                e.stopPropagation();
-                                if (!props.closed) setShowClosureModal(true);
-                                else setShowOpeningModal(true);
-                            }}
-                        />
+                    <div>{`${props.sprint.startDate.toDateString()} - ${props.sprint.dueDate.toDateString()}`}</div>
+                    <div>
+                        <div className="more-vertical">
+                            <MoreVertical
+                                class="hover:text-orange-600"
+                                onClick={(e: MouseEvent): void => {
+                                    e.stopPropagation();
+                                    if (!props.closed) setShowClosureModal(true);
+                                    else setShowOpeningModal(true);
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
                 <div class="px-4 py-2 flex min-w-0">

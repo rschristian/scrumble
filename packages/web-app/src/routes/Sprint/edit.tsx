@@ -1,13 +1,13 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useContext, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 
 import { GenericEdit } from 'components/CommonRoutes/Edit';
 import { Sprint } from 'models/Sprint';
 import { editSprint } from 'services/api/sprints';
-import { UserLocationStoreContext } from 'stores';
+import { useStore } from 'stores';
 
 const SprintEdit: FunctionalComponent = () => {
-    const userLocationStore = useContext(UserLocationStoreContext);
+    const userLocationStore = useStore().userLocationStore;
     const currentSprint: Sprint = userLocationStore.currentSprint;
 
     const [title, setTitle] = useState(currentSprint.title);
@@ -80,7 +80,7 @@ const SprintEdit: FunctionalComponent = () => {
                             onInput={(e): void => setDueDate(new Date((e.target as HTMLInputElement).value))}
                         />
                     </div>
-                    <div className="error">{errorMessage}</div>
+                    <div class="error">{errorMessage}</div>
                 </Fragment>
             }
             onSubmit={onSubmit}

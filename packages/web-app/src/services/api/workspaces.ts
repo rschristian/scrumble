@@ -13,3 +13,25 @@ export const editWorkspace = async (workspaceId: number, updatedWorkspace: Works
             return response.data?.message || 'Unknown error while updating workspace details';
         });
 };
+
+export const createWorkspace = async (name: string, description: string): Promise<Workspace | string> => {
+    return await apiService
+        .post('/workspace', { name, description })
+        .then((response) => {
+            return response.data;
+        })
+        .catch(({ response }) => {
+            return response.data?.message || 'Unknown error while updating workspace details';
+        });
+};
+
+export const getWorkspaces = async (): Promise<Workspace[] | string> => {
+    return await apiService
+        .get('/workspaces')
+        .then((response) => {
+            return response.data;
+        })
+        .catch(({ response }) => {
+            return response.data?.message || 'Unknown error while updating workspace details';
+        });
+};

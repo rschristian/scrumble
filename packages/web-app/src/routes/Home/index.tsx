@@ -1,21 +1,90 @@
-import { FunctionalComponent, h } from 'preact';
-import { useEffect, useContext } from 'preact/hooks';
+import { Fragment, FunctionalComponent, h } from 'preact';
+import { useEffect, useState } from 'preact/hooks';
+import { notify } from 'react-notify-toast';
 
 import { WorkspaceCard } from 'components/Cards/workspace';
+import { Modal } from 'components/Modal';
 import { SearchBar } from 'components/SearchBar';
-import { workspaces } from 'data';
+import { Workspace } from 'models/Workspace';
 import { fetchUserInfo } from 'services/api/auth';
-import { AuthStoreContext, UserLocationStoreContext } from 'stores';
+import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
+import { errorColour, successColour } from 'services/Notification/colours';
+import { useStore } from 'stores';
+
+interface IProps {
+    submit?: (name: string, description: string) => void;
+    close: () => void;
+}
+
+const CreateWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+
+    return (
+        <Fragment>
+            <div class="overflow-auto relative">
+                <div class="m-4">
+                    <label class="form-label">Workspace Name</label>
+                    <input
+                        class="form-input"
+                        type="text"
+                        placeholder="Workspace Name"
+                        value={name}
+                        onInput={(e): void => setName((e.target as HTMLInputElement).value)}
+                    />
+                </div>
+                <div class="m-4">
+                    <label class="form-label">Workspace Description</label>
+                    <input
+                        class="form-input"
+                        type="text"
+                        placeholder="Workspace Description"
+                        value={description}
+                        onInput={(e): void => setDescription((e.target as HTMLInputElement).value)}
+                    />
+                </div>
+                <div class="flex justify-end pt-2">
+                    <button
+                        class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
+                        onClick={(): void => props.submit(name, description)}
+                    >
+                        Save
+                    </button>
+                </div>
+            </div>
+        </Fragment>
+    );
+};
 
 const Home: FunctionalComponent = () => {
-    const authStore = useContext(AuthStoreContext);
-    const userLocationStore = useContext(UserLocationStoreContext);
+    const rootStore = useStore();
+    const { authStore, userLocationStore } = rootStore;
+
+    const [workspacesArray, setWorkspacesArray] = useState<Workspace[]>([]);
+    const [showCreateModal, setShowCreateModal] = useState(false);
+
+    useEffect(() => {
+        getWorkspaces().then((res) => {
+            if (typeof res !== 'string') setWorkspacesArray(res);
+            else notify.show(res, 'error', 5000, errorColour);
+        });
+    }, []);
 
     const handleOnKeyDown = (e: KeyboardEvent): void => {
         if (e.key === 'Enter') console.log('Enter selected');
     };
 
-    const handleOnInput = (e: any): void => console.log((e.target as HTMLSelectElement).value);
+    const submitNewWorkspace = (name: string, description: string): void => {
+        createWorkspace(name, description).then((res) => {
+            if (typeof res === 'string') {
+                notify.show(res, 'error', 5000, errorColour);
+            } else {
+                setWorkspacesArray([...workspacesArray, res]);
+                setShowCreateModal(false);
+                notify.show('Workspace created!', 'success', 5000, successColour);
+            }
+        });
+    };
 
     useEffect(() => {
         fetchUserInfo().then((response) => authStore.setCurrentUser(response));
@@ -23,19 +92,30 @@ const Home: FunctionalComponent = () => {
     }, [authStore, userLocationStore]);
 
     return (
-        <div className="mt-16 flex justify-center bg-blue-100">
-            <div className="mx-3 flex justify-center flex-col w-3/4">
-                <div className="create-bar">
-                    <h1 className="page-heading">Your Workspaces</h1>
-                    <button className="btn-create my-auto">New Workspace</button>
+        <div class="mt-16 flex justify-center bg-blue-100">
+            {showCreateModal ? (
+                <Modal
+                    title="Create New Workspace"
+                    close={(): void => setShowCreateModal(false)}
+                    content={
+                        <CreateWorkspace close={(): void => setShowCreateModal(false)} submit={submitNewWorkspace} />
+                    }
+                />
+            ) : null}
+            <div class="mx-3 flex justify-center flex-col w-3/4">
+                <div class="create-bar">
+                    <h1 class="page-heading">Your Workspaces</h1>
+                    <button class="btn-create my-auto" onClick={(): void => setShowCreateModal(true)}>
+                        New Workspace
+                    </button>
                 </div>
                 <SearchBar
                     placeholder="Search by name"
-                    handleOnInput={handleOnInput}
+                    handleOnInput={(term: string): void => console.log(term)}
                     handleOnKeyDown={handleOnKeyDown}
                 />
-                <div className="rounded bg-white overflow-hidden shadow-lg">
-                    {workspaces.map((workspace, index) => {
+                <div class="rounded bg-white overflow-hidden shadow-lg">
+                    {workspacesArray.map((workspace, index) => {
                         return (
                             <WorkspaceCard
                                 key={index}

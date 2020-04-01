@@ -1,15 +1,18 @@
 import { ComponentChild, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
+import sprinter from 'assets/icons/sprinter.png';
+import list from 'assets/icons/list.png';
+import metrics from 'assets/icons/metrics.png';
+import edit from 'assets/icons/edit.png';
 import { BreadCrumbs } from 'components/BreadCrumbs';
-import { SideBar } from 'components/Core/SideBar';
-import { workspaces } from 'data';
+import { SideBar, SideBarLink } from 'components/Core/SideBar';
 
 import SprintPlanning from './sprintPlannning';
 import BacklogPlanning from './backlogPlanning';
 import WorkspaceMetrics from './metrics';
 import WorkspaceEdit from './edit';
-import { sideNavItems } from './util';
+import { useStore } from 'stores';
 
 interface IProps {
     workspaceId: number;
@@ -23,16 +26,13 @@ enum SubPage {
     edit = 'edit',
 }
 
-const Workspace: FunctionalComponent<IProps> = (props: IProps) => {
-    const [workspaceName, setWorkspaceName] = useState('');
+const WorkspaceContainer: FunctionalComponent<IProps> = (props: IProps) => {
+    const userLocationStore = useStore().userLocationStore;
+
     const [currentPageTitle, setCurrentPageTitle] = useState('');
     const [subPage, setSubPage] = useState<ComponentChild>(null);
 
     useEffect(() => {
-        for (const workspace of workspaces) {
-            if (workspace.id == props.workspaceId) setWorkspaceName(workspace.name);
-        }
-
         switch (props.subPage) {
             case SubPage.backlogPlanning:
                 setCurrentPageTitle('Backlog Planning');
@@ -60,7 +60,7 @@ const Workspace: FunctionalComponent<IProps> = (props: IProps) => {
                 <div class="main-content">
                     <BreadCrumbs
                         workspaceId={props.workspaceId}
-                        workspaceName={workspaceName}
+                        workspaceName={userLocationStore.currentWorkspace.name}
                         currentPage={currentPageTitle}
                     />
                     {subPage}
@@ -70,4 +70,27 @@ const Workspace: FunctionalComponent<IProps> = (props: IProps) => {
     );
 };
 
-export default Workspace;
+const sideNavItems: SideBarLink[] = [
+    {
+        label: 'Sprint Planning',
+        icon: sprinter,
+        path: '/',
+    },
+    {
+        label: 'Backlog Planning',
+        icon: list,
+        path: '/backlogPlanning',
+    },
+    {
+        label: 'Metrics',
+        icon: metrics,
+        path: '/metrics',
+    },
+    {
+        label: 'Edit',
+        icon: edit,
+        path: '/edit',
+    },
+];
+
+export default WorkspaceContainer;

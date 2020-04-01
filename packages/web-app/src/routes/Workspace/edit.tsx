@@ -1,14 +1,12 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useContext, useState } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 
 import { GenericEdit } from 'components/CommonRoutes/Edit';
 import { editWorkspace } from 'services/api/workspaces';
-import { UserLocationStoreContext } from 'stores';
-import { Workspace } from 'models/Workspace';
+import { useStore } from 'stores';
 
 const WorkspaceEdit: FunctionalComponent = () => {
-    const userLocationStore = useContext(UserLocationStoreContext);
-    const currentWorkspace: Workspace = userLocationStore.currentWorkspace;
+    const currentWorkspace = useStore().userLocationStore.currentWorkspace;
 
     const [name, setName] = useState(currentWorkspace.name);
     const [description, setDescription] = useState(currentWorkspace.description);
@@ -17,7 +15,7 @@ const WorkspaceEdit: FunctionalComponent = () => {
     const [errorMessage, setErrorMessage] = useState('');
 
     const onSubmit = (): void => {
-        editWorkspace(userLocationStore.currentWorkspace.id, {
+        editWorkspace(currentWorkspace.id, {
             id: currentWorkspace.id,
             name,
             description,
@@ -41,10 +39,10 @@ const WorkspaceEdit: FunctionalComponent = () => {
                             onInput={(e): void => setName((e.target as HTMLInputElement).value)}
                         />
                     </div>
-                    <div className="m-4">
-                        <label className="form-label">Workspace Description</label>
+                    <div class="m-4">
+                        <label class="form-label">Workspace Description</label>
                         <input
-                            className="form-input"
+                            class="form-input"
                             type="text"
                             placeholder="Workspace Description"
                             value={description}
@@ -63,7 +61,7 @@ const WorkspaceEdit: FunctionalComponent = () => {
                             // onInput={(e): void => setWorkspaceName((e.target as HTMLInputElement).value)}
                         />
                     </div>
-                    <div className="error">{errorMessage}</div>
+                    <div class="error">{errorMessage}</div>
                 </Fragment>
             }
             onSubmit={onSubmit}

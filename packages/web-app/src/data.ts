@@ -3,13 +3,6 @@
 import { Issue, IssueStatus } from 'models/Issue';
 import { Project } from 'models/Project';
 import { Sprint, SprintStatus } from 'models/Sprint';
-import { Workspace } from 'models/Workspace';
-
-export const workspaces: Workspace[] = [
-    { id: 1, name: 'CUBRIC', description: 'Brain Tinder' },
-    { id: 2, name: 'Sappo', description: 'Frogs n stuff' },
-    { id: 3, name: 'Spot a Bee', description: 'Bees and Foxgloves' },
-];
 
 export const sprints: Sprint[] = [
     {

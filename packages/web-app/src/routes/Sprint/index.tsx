@@ -1,16 +1,21 @@
 import { ComponentChild, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
+import team from 'assets/icons/team.png';
+import kanbanBoard from 'assets/icons/kanbanBoard.png';
+import presentation from 'assets/icons/presentation.png';
+import metrics from 'assets/icons/metrics.png';
+import edit from 'assets/icons/edit.png';
 import { BreadCrumbs } from 'components/BreadCrumbs';
-import { SideBar } from 'components/Core/SideBar';
-import { sprints, workspaces } from 'data';
+import { SideBar, SideBarLink } from 'components/Core/SideBar';
+import { sprints } from 'data';
 
 import DailyStandUp from './dailyStandUp';
 import IssuesBoard from './issuesBoard';
 import SprintShowAndTell from './showAndTell';
 import SprintMetrics from './metrics';
 import SprintEdit from './edit';
-import { sideNavItems } from './util';
+import { useStore } from 'stores';
 
 interface IProps {
     workspaceId: number;
@@ -26,16 +31,14 @@ enum SubPage {
     edit = 'edit',
 }
 
-const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
-    const [workspaceName, setWorkspaceName] = useState('');
+const SprintContainer: FunctionalComponent<IProps> = (props: IProps) => {
+    const userLocationStore = useStore().userLocationStore;
+
     const [sprintName, setSprintName] = useState('');
     const [subPageTitle, setSubPageTitle] = useState('');
     const [subPageContent, setSubPageContent] = useState<ComponentChild>(null);
 
     useEffect(() => {
-        for (const workspace of workspaces) {
-            if (workspace.id == props.workspaceId) setWorkspaceName(workspace.name);
-        }
         for (const sprint of sprints) {
             if (sprint.id == props.sprintId) setSprintName(sprint.title);
         }
@@ -71,7 +74,7 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
                 <div class="main-content">
                     <BreadCrumbs
                         workspaceId={props.workspaceId}
-                        workspaceName={workspaceName}
+                        workspaceName={userLocationStore.currentWorkspace.name}
                         currentPage={subPageTitle}
                         sprintId={props.sprintId}
                         sprintName={sprintName}
@@ -83,4 +86,32 @@ const Sprint: FunctionalComponent<IProps> = (props: IProps) => {
     );
 };
 
-export default Sprint;
+const sideNavItems: SideBarLink[] = [
+    {
+        label: 'Daily Stand-up',
+        icon: team,
+        path: '/',
+    },
+    {
+        label: 'Issues Board',
+        icon: kanbanBoard,
+        path: '/issuesBoard',
+    },
+    {
+        label: 'Show and Tell',
+        icon: presentation,
+        path: '/showAndTell',
+    },
+    {
+        label: 'Metrics',
+        icon: metrics,
+        path: '/metrics',
+    },
+    {
+        label: 'Edit',
+        icon: edit,
+        path: '/edit',
+    },
+];
+
+export default SprintContainer;

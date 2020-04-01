@@ -1,13 +1,13 @@
-package com.nsa.bt.scrumble.services;
+package com.nsa.bt.scrumble.repositories;
 
 import com.nsa.bt.scrumble.models.User;
 import com.nsa.bt.scrumble.models.Workspace;
 
 import java.util.List;
 
-public interface IWorkspaceService {
+public interface IWorkspaceRepository {
 
-    int[] getProjectIdsForWorkspace(int workspaceId);
+    List<Integer> projectIdsForWorkspace(int workspaceId);
 
     Workspace createWorkspace(Workspace workspace, User user);
 

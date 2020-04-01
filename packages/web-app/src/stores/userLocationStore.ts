@@ -1,5 +1,4 @@
 import { observable, action } from 'mobx';
-import { AsyncTrunk } from 'mobx-sync';
 
 import { Workspace } from 'models/Workspace';
 import { Sprint } from 'models/Sprint';
@@ -23,5 +22,3 @@ class UserLocationStore {
 }
 
 export const userLocationStore = new UserLocationStore();
-
-new AsyncTrunk(userLocationStore, { storage: localStorage }).init().then();

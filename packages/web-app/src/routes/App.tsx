@@ -1,15 +1,15 @@
 import { FunctionalComponent, h, VNode } from 'preact';
-import { useContext, useEffect } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 import { lazy, Suspense } from 'preact/compat';
 import { Route, route, Router } from 'preact-router';
 import Notifications from 'react-notify-toast';
 
 import { TopBar } from 'components/Core/TopBar';
-import AuthSuccess from 'routes/Auth/authSuccess';
 import Login from 'routes/Auth/login';
-import Home from 'routes/Home';
-import { AuthStoreContext } from 'stores';
+import { useStore } from 'stores';
 
+const AuthSuccess = lazy(() => import('routes/Auth/authSuccess'));
+const Home = lazy(() => import('routes/Home'));
 const Workspace = lazy(() => import('routes/Workspace'));
 const Sprint = lazy(() => import('routes/Sprint'));
 
@@ -20,9 +20,9 @@ const App: FunctionalComponent = () => {
             <TopBar />
             <Suspense fallback={<Fallback />}>
                 <Router>
-                    <AuthenticatedRoute path="/" component={Home} />
                     <Route path="/login" component={Login} />
                     <Route path="/oauth-success" component={AuthSuccess} />
+                    <AuthenticatedRoute path="/" component={Home} />
                     <AuthenticatedRoute path="/workspace/:workspaceId/:subPage?" component={Workspace} />
                     <AuthenticatedRoute path="/workspace/:workspaceId/sprint/:sprintId/:subPage?" component={Sprint} />
                 </Router>
@@ -42,7 +42,7 @@ const Fallback: FunctionalComponent = () => {
 };
 
 const AuthenticatedRoute = (props: { path: string; component: FunctionalComponent }): VNode => {
-    const isLoggedIn = useContext(AuthStoreContext).isAuthenticated;
+    const isLoggedIn = useStore().authStore.isAuthenticated;
 
     useEffect(() => {
         if (!isLoggedIn) route('/login', true);

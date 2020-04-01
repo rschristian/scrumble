@@ -1,5 +1,7 @@
 package com.nsa.bt.scrumble.controllers.api.v1;
 
+import com.nsa.bt.scrumble.dto.ScrumbleUser;
+import com.nsa.bt.scrumble.dto.User;
 import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.services.IUserService;
 
@@ -51,7 +53,8 @@ public class UserDetailsApi {
         int serviceId = userPrincipal.getServiceId();
         if(accessTokenOptional.isPresent()) {
             String uri = String.format("%1s/users/%2s?access_token=%3s", gitLabBaseUrlApi, serviceId, accessTokenOptional.get());
-            return ResponseEntity.ok().body(restTemplate.getForObject(uri, String.class));
+            User currentUser = restTemplate.getForObject(uri, User.class);
+			return ResponseEntity.ok().body(new ScrumbleUser(currentUser.getId(), currentUser.getName(), currentUser.getUsername(), currentUser.getAvatarUrl()));
         }
         logger.error("Unable to authenticate with authentication provider");
         var res = new HashMap<String, String>();
