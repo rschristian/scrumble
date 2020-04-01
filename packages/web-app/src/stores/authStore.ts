@@ -2,6 +2,7 @@ import { observable, action } from 'mobx';
 
 import { User } from 'models/User';
 import { login, destroyOAuthToken } from 'services/api/auth';
+import { authStorageService } from 'ts-api-toolkit';
 
 class AuthStore {
     @observable isAuthenticated = false;
@@ -24,7 +25,7 @@ class AuthStore {
     }
 
     @action async logout(): Promise<void> {
-        await destroyOAuthToken();
+        if (authStorageService.getToken()) await destroyOAuthToken();
         this.isAuthenticated = false;
         this.currentUser = null;
     }
