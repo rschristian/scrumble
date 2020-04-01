@@ -18,12 +18,8 @@
     }
   },
   "lint-staged": {
-    "*.{css,md,scss}": [
-      "prettier --write"
-    ],
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --fix"
-    ]
+    "*.{css,md,scss}": "prettier --write",
+    "*.{js,jsx,ts,tsx}": "eslint --fix"
   },
   "dependencies": {
     "mobx": "^5.15.4",
