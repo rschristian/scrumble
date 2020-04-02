@@ -1,21 +1,18 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { notify } from 'react-notify-toast';
 
 import { SprintCard } from 'components/Cards/sprint';
+import { CreateOrEditSprint } from 'components/CreateOrEdit/sprint';
 import { SprintFilter } from 'components/Filter/sprint';
+import { Modal } from 'components/Modal';
 import { sprints } from 'data';
 import { Sprint, SprintStatus } from 'models/Sprint';
+import { createSprint } from 'services/api/sprints';
+import { errorColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 import Backlog from './Backlog';
-import { Modal } from 'components/Modal';
-import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
-import { CreateOrEditSprint } from 'components/CreateOrEdit/sprint';
-import { Issue } from 'models/Issue';
-import { createIssue } from 'services/api/issues';
-import { notify } from 'react-notify-toast';
-import { errorColour, successColour } from 'services/notification/colours';
-import { createSprint, getSprints } from 'services/api/sprints';
 
 const SprintPlanning: FunctionalComponent = () => {
     const userLocationStore = useStore().userLocationStore;
