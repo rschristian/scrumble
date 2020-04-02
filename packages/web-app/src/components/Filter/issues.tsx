@@ -1,6 +1,8 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
+
 import { IssueStatus } from 'models/Issue';
+import { SearchBar } from 'components/SearchBar';
 
 interface IProps {
     setFilter: (filterFor: string) => void;
@@ -8,7 +10,7 @@ interface IProps {
 
 // This is a rather ugly way to extend an enum.
 type filterStatusEnum = IssueStatus | string;
-const filterStatusEnum = {
+export const filterStatusEnum = {
     ...IssueStatus,
     unplanned: 'unplanned',
     all: 'all',
@@ -16,6 +18,8 @@ const filterStatusEnum = {
 
 export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
     const [filterStatus, setFilterStatus] = useState<filterStatusEnum>(filterStatusEnum.open);
+
+    const [searchTerm, setSearchTerm] = useState('');
 
     const updateFilter = (filterStatus: string): void => {
         props.setFilter(filterStatus.toString());
@@ -25,12 +29,6 @@ export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
     return (
         <div class="my-4 flex flex-col items-start">
             <div class="flex rounded shadow">
-                <button
-                    class={`btn-filter ${filterStatus === filterStatusEnum.all ? 'btn-filter-active' : ''}`}
-                    onClick={(): void => updateFilter(filterStatusEnum.all)}
-                >
-                    All
-                </button>
                 <button
                     class={`btn-filter ${filterStatus === filterStatusEnum.open ? 'btn-filter-active' : ''}`}
                     onClick={(): void => updateFilter(filterStatusEnum.open)}
@@ -49,7 +47,20 @@ export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
                 >
                     Unplanned
                 </button>
+                <button
+                    class={`btn-filter ${filterStatus === filterStatusEnum.all ? 'btn-filter-active' : ''}`}
+                    onClick={(): void => updateFilter(filterStatusEnum.all)}
+                >
+                    All
+                </button>
             </div>
+            <SearchBar
+                placeholder="Search by title or description"
+                handleOnInput={(term: string): void => setSearchTerm(term)}
+                handleOnKeyDown={(e): void => {
+                    if (e.key === 'Enter') setFilterStatus(searchTerm);
+                }}
+            />
         </div>
     );
 };

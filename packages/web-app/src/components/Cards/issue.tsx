@@ -1,12 +1,14 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
+import { notify } from 'react-notify-toast';
 
 import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
 import { Modal } from 'components/Modal';
-import { Issue, IssueStatus } from 'models/Issue';
-import { observer } from 'services/mobx';
-import { useStore } from 'stores';
+import { Issue } from 'models/Issue';
 import { editIssue } from 'services/api/issues';
+import { observer } from 'services/mobx';
+import { errorColour } from 'services/Notification/colours';
+import { useStore } from 'stores';
 import { IssueInformation } from 'components/IssueInformation'
 
 export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
@@ -27,7 +29,7 @@ export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
 
 interface IProps {
     issue: Issue;
-    update?: () => void;
+    refresh: () => void;
 }
 
 export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
@@ -38,16 +40,18 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleIssueEdit = async (issue: Issue): Promise<void> => {
-        await editIssue(userLocationStore.currentWorkspace.id, props.issue.projectId, props.issue.iid, issue).then(
-            (error) => {
-                if (error) {
-                    setErrorMessage(error);
-                } else {
-                    setShowEditIssueModal(false);
-                    props.update();
-                }
-            },
-        );
+        return await editIssue(
+            userLocationStore.currentWorkspace.id,
+            props.issue.projectId,
+            props.issue.iid,
+            issue,
+        ).then((error) => {
+            if (error) notify.show(error, 'error', 5000, errorColour);
+            else {
+                setShowEditIssueModal(false);
+                props.refresh();
+            }
+        });
     };
 
     return (

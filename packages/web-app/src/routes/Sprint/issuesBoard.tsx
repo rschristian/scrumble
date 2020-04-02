@@ -18,7 +18,7 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         iid={issue.iid}
-                        state={issue.state}
+                        status={issue.status}
                         title={issue.title}
                         description={issue.description}
                         storyPoint={issue.storyPoint}
@@ -31,7 +31,7 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         iid={issue.iid}
-                        state={issue.state}
+                        status={issue.status}
                         title={issue.title}
                         description={issue.description}
                         storyPoint={issue.storyPoint}
@@ -44,7 +44,7 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         iid={issue.iid}
-                        state={issue.state}
+                        status={issue.status}
                         title={issue.title}
                         description={issue.description}
                         storyPoint={issue.storyPoint}

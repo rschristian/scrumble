@@ -32,7 +32,7 @@ export const TopBar: FunctionalComponent = observer(() => {
                                 onClick={(): void => setShowAccountDropdown(!showAccountDropdown)}
                                 onBlur={(): void => setShowAccountDropdown(false)}
                                 type="button"
-                                class="block text-deep-space-sparkle hover:text-gray-400 focus:outline-none"
+                                class="block text-deep-space-sparkle"
                             >
                                 <div class="flex items-start items-baseline min-h-12">
                                     <div class={`my-auto ml-2 ${!showAccountDropdown ? 'block' : 'hidden'}`}>
@@ -54,20 +54,24 @@ export const TopBar: FunctionalComponent = observer(() => {
                                     <button
                                         onClick={(): void => setShowAccountDropdown(!showAccountDropdown)}
                                         onBlur={(): void => setShowAccountDropdown(false)}
-                                        class={`btn-account-dropdown ${
-                                            showAccountDropdown ? 'outline-none border-white' : ''
-                                        }`}
+                                        class="btn-account-dropdown"
                                     >
-                                        <img class="avatar" src={authStore.currentUser?.avatarUrl} alt="Your avatar" />
+                                        <img
+                                            alt="Your avatar"
+                                            class={`avatar ${
+                                                showAccountDropdown ? 'border-2 border-deep-space-sparkle' : ''
+                                            }`}
+                                            src={authStore.currentUser?.avatarUrl}
+                                        />
                                     </button>
-                                    <div
+                                    <button
                                         class={`btn-sign-out shadow-lg is-clickable ${
                                             showAccountDropdown ? 'block' : 'hidden'
                                         }`}
                                         onMouseDown={logout}
                                     >
                                         <span class="block px-4 py-2 text-white text-center">Sign Out</span>
-                                    </div>
+                                    </button>
                                 </div>
                             </div>
                         </div>

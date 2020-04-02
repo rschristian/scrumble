@@ -19,7 +19,8 @@ public class Issue implements Serializable {
     private String title;
     private String description;
     private int storyPoint;
-    private String state;
+    @JsonAlias("state")
+    private String status;
     private ArrayList<String> labels;
     @JsonAlias("timeSpent")
     private int timeSpent;
@@ -37,7 +38,7 @@ public class Issue implements Serializable {
         this.title = title;
         this.description = description;
         this.storyPoint = storyPoint;
-        this.state = state;
+        this.status = status;
         this.labels = labels;
         this.timeSpent = timeSpent;
         this.author = author;
@@ -102,12 +103,12 @@ public class Issue implements Serializable {
         this.storyPoint = storyPoint;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public ArrayList<String> getLabels() {
