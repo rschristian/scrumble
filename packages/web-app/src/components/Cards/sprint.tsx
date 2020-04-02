@@ -8,7 +8,7 @@ import { Modal } from 'components/Modal';
 import { Sprint } from 'models/Sprint';
 import { toggleSprintStatus } from 'services/api/sprints';
 import { observer } from 'services/mobx';
-import { errorColour } from 'services/Notification/colours';
+import { errorColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 interface IProps {

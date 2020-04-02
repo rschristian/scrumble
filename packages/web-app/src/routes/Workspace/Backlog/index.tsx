@@ -8,7 +8,7 @@ import { filterStatusEnum, IssueFilter } from 'components/Filter/issue';
 import { Modal } from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
 import { createIssue, fetchWorkspaceIssues } from 'services/api/issues';
-import { errorColour, successColour } from 'services/Notification/colours';
+import { errorColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 const Backlog: FunctionalComponent = () => {

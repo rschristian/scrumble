@@ -8,7 +8,7 @@ import { SearchBar } from 'components/SearchBar';
 import { Workspace } from 'models/Workspace';
 import { fetchUserInfo } from 'services/api/auth';
 import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
-import { errorColour, successColour } from 'services/Notification/colours';
+import { errorColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 interface IProps {
