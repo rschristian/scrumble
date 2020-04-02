@@ -16,20 +16,21 @@ public class Issue implements Serializable {
     private String title;
     private String description;
     private int storyPoint;
-    private String state;
+    @JsonAlias("state")
+    private String status;
     private ArrayList<String> labels;
     private int timeSpent;
 
     public Issue(){}
 
-    public Issue(int iid, Sprint sprint, int projectId, String title, String description, int storyPoint, String state, ArrayList<String> labels, int timeSpent) {
+    public Issue(int iid, Sprint sprint, int projectId, String title, String description, int storyPoint, String status, ArrayList<String> labels, int timeSpent) {
         this.iid = iid;
         this.sprint = sprint;
         this.projectId = projectId;
         this.title = title;
         this.description = description;
         this.storyPoint = storyPoint;
-        this.state = state;
+        this.status = status;
         this.labels = labels;
         this.timeSpent = timeSpent;
     }
@@ -82,12 +83,12 @@ public class Issue implements Serializable {
         this.storyPoint = storyPoint;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public ArrayList<String> getLabels() {

@@ -144,14 +144,14 @@ public class IssuePagingService implements IIssuePagingService {
     }
 
     @Override
-    public IssuePageResult getPageOfIssues(int workspaceId, int projectId, int page, String filter, String accessToken) {
+    public IssuePageResult getPageOfIssues(int workspaceId, int projectId, int page, String filter, String searchTerm, String accessToken) {
         // Initial call for a workspaces issues will pass number 0 for page and project id.
         // SB works out which project it should start from
         page = getPageNumber(page);
         projectId = getProjectId(workspaceId, projectId);
 
-        String queryUri = String.format("%s/projects/%d/issues?%s&page=%d&access_token=%s",
-                gitLabApiUrl, projectId, issueService.getFilterQuery(filter), page, accessToken);
+        String queryUri = String.format("%s/projects/%d/issues?%s&search=%s&page=%d&access_token=%s",
+                gitLabApiUrl, projectId, issueService.getFilterQuery(filter), searchTerm, page, accessToken);
 
         ArrayList<Issue> issues;
         IssuePageResult issuePageResult = new IssuePageResult();

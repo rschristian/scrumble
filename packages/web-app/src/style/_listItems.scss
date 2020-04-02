@@ -6,7 +6,10 @@
   @apply text-gray-700 text-base truncate;
 }
 
-// Issue Specific
 .story-pnt {
   @apply bg-orange-600 rounded-full shadow-lg px-3 py-1 text-sm font-semibold text-white mr-2;
+}
+
+.num-issues {
+  @apply bg-blue-600 rounded-full shadow-lg px-3 py-1 text-sm font-semibold text-white mr-2;
 }
