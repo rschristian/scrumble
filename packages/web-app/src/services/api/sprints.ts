@@ -3,14 +3,14 @@ import { apiService } from 'ts-api-toolkit';
 import { Sprint } from 'models/Sprint';
 
 // GitLab API: PUT /projects/:id/milestones
-export const getSprints = async (workspaceId: number, projectId: number): Promise<Sprint[] | string> => {
+export const getSprints = async (workspaceId: number): Promise<Sprint[] | string> => {
     return await apiService
-        .get(`/workspace/${workspaceId}/project/${projectId}/sprints`)
+        .get(`/workspace/${workspaceId}/sprints`)
         .then((response) => {
             return response.data;
         })
         .catch(({ response }) => {
-            return response.data?.message || 'Unknown error while updating sprint details';
+            return response.data?.message || 'Unknown error while retrieving sprints';
         });
 };
 
