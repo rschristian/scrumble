@@ -57,6 +57,24 @@ const SprintPlanning: FunctionalComponent = () => {
         });
     };
 
+    const updateIssue = (): void => {
+        fetchWorkspaceIssues(
+            userLocationStore.currentWorkspace.id,
+            currentProjectId,
+            0,
+            issueFilter,
+            issueFilterTerm)
+            .then((issuePagination) => {
+                if (typeof issuePagination == 'string') {
+                    notify.show(issuePagination, 'error', 5000, errorColour);
+                } else {
+                    setIssuesArray(issuePagination.issues);
+                }
+            },
+        );
+    };
+
+
     useEffect(() => {
         fetchIssues();
         // TODO This is a completely legitimate warning, but I don't know how to fix it correctly. Help?
@@ -89,7 +107,7 @@ const SprintPlanning: FunctionalComponent = () => {
                     >
                         {issuesArray.map((issue, index) => {
                             // if (issueFilter === 'all' || issue.state.toString() === issueFilter) {
-                            return <IssueCard key={index} issue={issue} refresh={fetchIssues} />;
+                            return <IssueCard key={index} issue={issue} refresh={fetchIssues} updateIssue={updateIssue} />;
                             // }
                         })}
                     </div>

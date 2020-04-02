@@ -15,6 +15,7 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
     const [description, setDescription] = useState(props.issue?.description || '');
     const [storyPoint, setStoryPoint] = useState(props.issue?.storyPoint || 0);
     const [projectId, setProjectId] = useState(props.issue?.projectId || 0);
+    const [projectName, setProjectName] = useState(props.issue?.projectName);
 
     const createIssue = (): Issue => {
         return {
@@ -24,6 +25,7 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
             description,
             storyPoint,
             projectId,
+            projectName,
         };
     };
 

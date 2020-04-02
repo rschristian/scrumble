@@ -29,7 +29,8 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             if (error) notify.show(error, 'error', 5000, errorColour);
             else {
                 notify.show('New issue created!', 'success', 5000, successColour);
-                fetchIssues();
+                updateIssue();
+                setShowNewIssueModal(false);
             }
         });
     };
@@ -57,6 +58,23 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                 setCurrentProjectId(result.nextResource.projectId);
             }
         });
+    };
+
+    const updateIssue = (): void => {
+        fetchWorkspaceIssues(
+            userLocationStore.currentWorkspace.id,
+            currentProjectId,
+            0,
+            issueFilter,
+            issueFilterTerm)
+            .then((issuePagination) => {
+                if (typeof issuePagination == 'string') {
+                    notify.show(issuePagination, 'error', 5000, errorColour);
+                } else {
+                    setIssuesArray(issuePagination.issues);
+                }
+            },
+        );
     };
 
     useEffect(() => {
@@ -99,7 +117,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             >
                 {issuesArray.map((issue, index) => {
                     // if (issueFilter === 'all' || issue.state.toString() === issueFilter) {
-                    return <IssueCard key={index} issue={issue} refresh={fetchIssues} />;
+                    return <IssueCard key={index} issue={issue} refresh={fetchIssues} updateIssue={updateIssue} />;
                     // }
                 })}
             </div>

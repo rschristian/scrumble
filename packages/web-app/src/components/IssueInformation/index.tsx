@@ -43,7 +43,7 @@ export const IssueInformation: FunctionalComponent<IProps> = (props: IProps) => 
                         State:
                     </div>
                     <div class="table-row">
-                        <span class={props.issue.state === IssueStatus.open ? "open" : "closed" }>{props.issue.state}</span>
+                        <span class={props.issue.status === IssueStatus.open ? "open" : "closed" }>{props.issue.status}</span>
                     </div>
                     <div class="info-label">
                         Description:

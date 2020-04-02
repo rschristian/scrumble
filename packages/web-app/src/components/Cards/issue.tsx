@@ -4,7 +4,7 @@ import { notify } from 'react-notify-toast';
 
 import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
 import { Modal } from 'components/Modal';
-import { Issue } from 'models/Issue';
+import { Issue, IssueStatus } from 'models/Issue';
 import { editIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
 import { errorColour } from 'services/Notification/colours';
@@ -30,6 +30,7 @@ export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
 interface IProps {
     issue: Issue;
     refresh: () => void;
+    updateIssue: () => void;
 }
 
 export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
@@ -49,7 +50,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
             if (error) notify.show(error, 'error', 5000, errorColour);
             else {
                 setShowEditIssueModal(false);
-                props.refresh();
+                props.updateIssue();
             }
         });
     };
@@ -64,7 +65,6 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                                 issue={props.issue}
                                 submit={handleIssueEdit}
                                 close={(): void => setShowEditIssueModal(false)}
-                                error={errorMessage}
                             />
                         }
                         close={(): void => setShowEditIssueModal(false)}
@@ -95,7 +95,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                     
                 </div>
                 <div class="px-4 py-2 z-1">
-                    <span class={props.issue.state === IssueStatus.open ? "open" : "closed" }>{props.issue.state}</span>
+                    <span class={props.issue.status === IssueStatus.open ? "open" : "closed" }>{props.issue.status}</span>
                     {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
                     <span class="text-gray-700"> Project Name: {props.issue.projectName}</span>
                     <div>
