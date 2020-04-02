@@ -8,7 +8,7 @@ import { Modal } from 'components/Modal';
 import { Sprint } from 'models/Sprint';
 import { toggleSprintStatus } from 'services/api/sprints';
 import { observer } from 'services/mobx';
-import { errorColour } from 'services/Notification/colours';
+import { errorColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 interface IProps {
@@ -31,11 +31,7 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
     const openingModalContent = <div>Are you sure you want to open this sprint?</div>;
 
     const handleToggleSprintStatus = async (): Promise<void> => {
-        return await toggleSprintStatus(
-            userLocationStore.currentWorkspace.id,
-            props.sprint.projectId,
-            props.sprint.id,
-        ).then((error) => {
+        return await toggleSprintStatus(userLocationStore.currentWorkspace.id, props.sprint.id).then((error) => {
             if (error) notify.show(error, 'error', 5000, errorColour);
             else {
                 setShowClosureModal(false);

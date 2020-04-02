@@ -3,16 +3,15 @@ import { useEffect, useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
 import { IssueCard } from 'components/Cards/issue';
-import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
-import { filterStatusEnum, IssueFilter } from 'components/Filter/issues';
+import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
+import { filterStatusEnum, IssueFilter } from 'components/Filter/issue';
 import { Modal } from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
-import { createIssue, fetchWorkspaceIssues } from 'services/api/issues';
-import { observer } from 'services/mobx';
-import { errorColour, successColour } from 'services/Notification/colours';
+import { createIssue, getIssues } from 'services/api/issues';
+import { errorColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
-const BacklogPlanning: FunctionalComponent = observer(() => {
+const Backlog: FunctionalComponent = () => {
     const userLocationStore = useStore().userLocationStore;
 
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
@@ -43,7 +42,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
     };
 
     const fetchIssues = (): void => {
-        fetchWorkspaceIssues(
+        getIssues(
             userLocationStore.currentWorkspace.id,
             currentProjectId,
             currentPageNumber,
@@ -90,11 +89,11 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
                     New Issue
                 </button>
             </div>
-            <div class="md:mr-4">
+            <div>
                 <IssueFilter setFilter={updateIssueFilter} />
             </div>
             <div
-                class="md:mr-4 rounded bg-white overflow-hidden shadow-lg overflow-y-scroll issuesList"
+                class="rounded bg-white overflow-hidden shadow-lg overflow-y-scroll issuesList"
                 onScroll={(e): void => scrollCheck(e.target as HTMLDivElement)}
             >
                 {issuesArray.map((issue, index) => {
@@ -105,6 +104,6 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             </div>
         </div>
     );
-});
+};
 
-export default BacklogPlanning;
+export default Backlog;

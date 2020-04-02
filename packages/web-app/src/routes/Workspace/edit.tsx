@@ -64,7 +64,6 @@ const WorkspaceEdit: FunctionalComponent = () => {
                     <div class="error">{errorMessage}</div>
                 </Fragment>
             }
-            onSubmit={onSubmit}
         />
     );
 };
