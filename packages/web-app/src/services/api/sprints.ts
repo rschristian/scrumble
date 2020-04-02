@@ -14,6 +14,18 @@ export const getSprints = async (workspaceId: number, projectId: number): Promis
         });
 };
 
+// GitLab API: POST /projects/:id/milestones/
+export const createSprint = async (workspaceId: number, newSprint: Sprint): Promise<void | string> => {
+    return await apiService
+        .post(`/workspace/${workspaceId}/sprint`, newSprint)
+        .then(() => {
+            return;
+        })
+        .catch(({ response }) => {
+            return response.data?.message || 'Unknown error while creating sprint';
+        });
+};
+
 // GitLab API: PUT /projects/:id/milestones/:milestone_id
 export const editSprint = async (
     workspaceId: number,
