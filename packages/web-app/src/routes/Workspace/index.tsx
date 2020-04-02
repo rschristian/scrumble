@@ -20,7 +20,6 @@ interface IProps {
 
 enum SubPage {
     sprintPlanning = 'sprintPlanning',
-    backlogPlanning = 'backlogPlanning',
     metrics = 'metrics',
     edit = 'edit',
 }

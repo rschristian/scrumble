@@ -2,11 +2,12 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
 import { SprintCard } from 'components/Cards/sprint';
-import { SprintFilter } from 'components/Filter/sprints';
+import { SprintFilter } from 'components/Filter/sprint';
 import { sprints } from 'data';
 import { SprintStatus } from 'models/Sprint';
 import { useStore } from 'stores';
-import Backlog from 'components/CommonRoutes/Backlog';
+
+import Backlog from './Backlog';
 
 const SprintPlanning: FunctionalComponent = () => {
     const userLocationStore = useStore().userLocationStore;

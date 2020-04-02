@@ -4,7 +4,7 @@ import { notify } from 'react-notify-toast';
 
 import { IssueCard } from 'components/Cards/issue';
 import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
-import { filterStatusEnum, IssueFilter } from 'components/Filter/issues';
+import { filterStatusEnum, IssueFilter } from 'components/Filter/issue';
 import { Modal } from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
 import { createIssue, fetchWorkspaceIssues } from 'services/api/issues';
