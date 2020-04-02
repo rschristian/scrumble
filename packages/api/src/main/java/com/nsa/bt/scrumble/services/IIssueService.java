@@ -10,6 +10,8 @@ public interface IIssueService {
 
     void setStoryPoint(Issue issue);
 
+    void setProjectName(String gitLabBaseUrl, Issue issue, String accessToken);
+
     void filterAndSetStoryPoint(ArrayList<Issue> issues);
 
     ArrayList<Issue> searchForIssue(int workspaceId, String searchFor, String filter, String accessToken);

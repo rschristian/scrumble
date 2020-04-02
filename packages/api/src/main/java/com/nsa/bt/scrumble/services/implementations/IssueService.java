@@ -1,6 +1,7 @@
 package com.nsa.bt.scrumble.services.implementations;
 
 import com.nsa.bt.scrumble.dto.Issue;
+import com.nsa.bt.scrumble.dto.Project;
 import com.nsa.bt.scrumble.services.IIssueService;
 
 import org.slf4j.Logger;
@@ -16,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.OptionalInt;
-
 
 @Service
 public class IssueService implements IIssueService {
@@ -113,5 +113,13 @@ public class IssueService implements IIssueService {
         var headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         return new HttpEntity(headers);
+    }
+
+    @Override
+    public void setProjectName(String gitLabBaseUrl, Issue issue, String accessToken) {
+        String uri = String.format("%1s/projects/%2s?access_token=%3s", gitLabBaseUrl, issue.getProjectId(), accessToken);
+        ResponseEntity<Project> projectResponse = restTemplate.getForEntity(uri, Project.class);
+        Project project = projectResponse.getBody();
+        issue.setProjectName(project.getName());
     }
 }

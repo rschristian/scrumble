@@ -162,6 +162,7 @@ public class IssuePagingService implements IIssuePagingService {
 
             issues = issuesResponse.getBody();
             issues.forEach((issue)->issueService.setStoryPoint(issue));
+            issues.forEach((issue)->issueService.setProjectName(gitLabApiUrl, issue, accessToken));
             issuePageResult.setIssues(issues);
 
             if (!issues.isEmpty()) {

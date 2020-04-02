@@ -93,7 +93,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                 <div class="px-4 py-2 z-1">
                     <span class={props.issue.state === IssueStatus.open ? "open" : "closed" }>{props.issue.state}</span>
                     {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
-                    <span class="text-gray-700"> Project ID: {props.issue.projectId}</span>
+                    <span class="text-gray-700"> Project Name: {props.issue.projectName}</span>
                     <div>
                         <button
                             class="float-right btn-edit my-auto"

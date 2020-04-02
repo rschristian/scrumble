@@ -15,6 +15,7 @@ public class Issue implements Serializable {
     private Sprint sprint;
     @JsonAlias("project_id")
     private int projectId;
+    private String projectName;
     private String title;
     private String description;
     private int storyPoint;
@@ -29,7 +30,7 @@ public class Issue implements Serializable {
 
     public Issue(){}
 
-    public Issue(int iid, Sprint sprint, int projectId, String title, String description, int storyPoint, String state, ArrayList<String> labels, int timeSpent, String author, String createdAt, String assignee) {
+    public Issue(int iid, Sprint sprint, int projectId, String projectName, String title, String description, int storyPoint, String state, ArrayList<String> labels, int timeSpent, String author, String createdAt, String assignee) {
         this.iid = iid;
         this.sprint = sprint;
         this.projectId = projectId;
@@ -42,6 +43,7 @@ public class Issue implements Serializable {
         this.author = author;
         this.createdAt = createdAt;
         this.assignee = assignee;
+        this.projectName = projectName;
     }
 
     public int getIid() {
@@ -66,6 +68,14 @@ public class Issue implements Serializable {
 
     public void setProjectId(int projectId) {
         this.projectId = projectId;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public String getTitle() {
@@ -157,6 +167,5 @@ public class Issue implements Serializable {
         } else {
             this.assignee = "Unassigned";
         }
-        
     }
 }

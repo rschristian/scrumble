@@ -1,5 +1,4 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks/src';
 import { Issue, IssueStatus } from 'models/Issue';
 
 interface IProps {
@@ -10,6 +9,12 @@ export const IssueInformation: FunctionalComponent<IProps> = (props: IProps) => 
         <Fragment>
             <div class="table w-full capitalize">
                 <div class="table-row-group">
+                    <div class="info-label">
+                        Project:
+                    </div>
+                    <div class="table-row">
+                        <span class="text-gray-700"> {props.issue.projectName} </span>
+                    </div>
                     <div class="info-label">
                         Created At:
                     </div>
