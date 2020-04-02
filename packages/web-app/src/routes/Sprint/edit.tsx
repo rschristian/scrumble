@@ -20,7 +20,6 @@ const SprintEdit: FunctionalComponent = () => {
     const onSubmit = (): void => {
         editSprint(userLocationStore.currentWorkspace.id, 1, currentSprint.id, {
             id: currentSprint.id,
-            iid: currentSprint.iid,
             projectId: currentSprint.projectId,
             title,
             description,
