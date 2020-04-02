@@ -53,12 +53,6 @@ public class WorkspaceApi {
 
     @PutMapping("/workspace/{id}")
     public ResponseEntity<Object> editWorkspace(Authentication authentication, @RequestBody Workspace workspace){
-        logger.info("Updated workspace");
-        logger.info(workspace.getName());
-        logger.info("Project ids are now");
-        for(int projectId : workspace.getProjectIds()) {
-            logger.info(projectId + "");
-        }
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {

@@ -5,9 +5,9 @@ public class Workspace {
     private User createdBy;
     private String name;
     private String description;
-    private int[] projectIds;
+    private Object projectIds;
 
-    public Workspace(int id, User createdBy, String name, String description, int[] projectIds) {
+    public Workspace(int id, User createdBy, String name, String description, Object projectIds) {
         this.id = id;
         this.createdBy = createdBy;
         this.name = name;
@@ -18,7 +18,7 @@ public class Workspace {
     public Workspace() {
     }
 
-    public int[] getProjectIds() {
+    public Object getProjectIds() {
         return projectIds;
     }
 

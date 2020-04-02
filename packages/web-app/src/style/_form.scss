@@ -22,6 +22,20 @@
   @apply text-sm font-bold;
 }
 
+select[multiple] option {
+  padding: 5px 0 7px 0;
+  @apply w-full m-0 p-2 border-b border-gray-200;
+}
+
+select[multiple] {
+  @apply p-0 m-0;
+}
+
+option:hover {
+  padding: 5px 0 7px 0;
+  @apply w-full m-0 bg-gray-300;
+}
+
 @screen md {
   .form-container {
     @apply p-4 w-3/4;

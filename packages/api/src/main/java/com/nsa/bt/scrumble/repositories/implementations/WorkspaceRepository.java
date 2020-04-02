@@ -1,5 +1,6 @@
 package com.nsa.bt.scrumble.repositories.implementations;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nsa.bt.scrumble.models.User;
 import com.nsa.bt.scrumble.models.Workspace;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,11 +39,27 @@ public class WorkspaceRepository implements IWorkspaceRepository {
 
     @Override
     public Workspace createWorkspace(Workspace workspace, User user) {
-        String insertStatement = "INSERT INTO workspaces (name, created_by_user, description) VALUES (?, ?, ?);";
-        Object[] params = new Object[]{ workspace.getName(), user.getId(), workspace.getDescription()};
-        int[] types = new int[]{ Types.VARCHAR, Types.INTEGER, Types.VARCHAR };
+        String insertStatement = "INSERT INTO workspaces (name, created_by_user, description, workspace_data) VALUES (?, ?, ?, ?);";
+        Object[] params = new Object[]{ workspace.getName(), user.getId(), workspace.getDescription(), getWorkspaceJsonbData(workspace)};
+        int[] types = new int[]{ Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.OTHER };
         jdbcTemplate.update(insertStatement, params, types);
         return workspace;
+    }
+
+    private PGobject getWorkspaceJsonbData(Workspace workspace) {
+        try {
+            Map<Object, Object> dataMap = new HashMap<>();
+            dataMap.put("project_ids", workspace.getProjectIds());
+            PGobject jsonObject = new PGobject();
+            ObjectMapper objectMapper = new ObjectMapper();
+            String Map_Json_String = objectMapper.writeValueAsString(dataMap);
+            jsonObject.setType("jsonb");
+            jsonObject.setValue(Map_Json_String);
+            return jsonObject;
+        } catch (SQLException |JsonProcessingException exception) {
+            logger.error(exception.getMessage());
+            return null;
+        }
     }
 
     @Override
@@ -54,7 +72,7 @@ public class WorkspaceRepository implements IWorkspaceRepository {
                         new User(rs.getInt("created_by_user"), rs.getInt("service_id"), rs.getString("provider_id")),
                         rs.getString("name"),
                         rs.getString("description"),
-                        new int[] {1, 3, 5}))
+                        rs.getObject("workspace_data")))
                 .forEach(entry -> workspaces.add(entry));
         return workspaces;
     }
@@ -87,8 +105,8 @@ public class WorkspaceRepository implements IWorkspaceRepository {
         try {
             Map<Object, Object> dataMap = new HashMap<>();
             dataMap.put("project_ids", projectIds);
-            String updateProjectIds = "UPDATE workspaces SET workspace_data = workspace_data || ? WHERE id = ?;";
-
+//            String updateProjectIds = "UPDATE workspaces SET workspace_data = workspace_data || ? WHERE id = ?;";
+            String updateProjectIds = "UPDATE workspaces SET workspace_data = jsonb_set(workspace_data, '{projectIds}', '\"Mary\"', true) WHERE id = 1; ";
             ObjectMapper objectMapper = new ObjectMapper();
             PGobject jsonObject = new PGobject();
             String Map_Json_String = objectMapper.writeValueAsString(dataMap);
