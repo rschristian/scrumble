@@ -2,7 +2,7 @@ import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
-import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
+import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
 import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
 import { editIssue } from 'services/api/issues';
