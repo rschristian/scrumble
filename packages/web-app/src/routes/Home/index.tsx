@@ -5,12 +5,12 @@ import { notify } from 'react-notify-toast';
 import { WorkspaceCard } from 'components/Cards/workspace';
 import { Modal } from 'components/Modal';
 import { SearchBar } from 'components/SearchBar';
-import { Workspace } from 'models/Workspace';
+import { CreateOrEditWorkspace } from 'components/CreateOrEdit/workspace';
 import { fetchUserInfo } from 'services/api/auth';
 import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
 import { errorColour, successColour } from 'services/Notification/colours';
+import { Workspace } from 'models/Workspace';
 import { useStore } from 'stores';
-import { CreateOrEditWorkspace } from '../../components/CreateOrEdit/workspace';
 
 interface IProps {
     submit?: (name: string, description: string) => void;
