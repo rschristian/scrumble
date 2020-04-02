@@ -5,7 +5,7 @@ import { GenericEdit } from 'components/CommonRoutes/Edit';
 import { CreateOrEditSprint } from 'components/CreateOrEdit/sprint';
 import { Sprint } from 'models/Sprint';
 import { createSprint } from 'services/api/sprints';
-import { errorColour } from 'services/notification/colours';
+import { errorColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 const SprintEdit: FunctionalComponent = () => {
@@ -14,7 +14,7 @@ const SprintEdit: FunctionalComponent = () => {
     const onSubmit = (newSprint: Sprint): void => {
         createSprint(userLocationStore.currentWorkspace.id, newSprint).then((error) => {
             if (error) notify.show(error, 'error', 5000, errorColour);
-            else console.log('Success');
+            else notify.show('Sprint has been updated!', 'success', 5000, successColour);
         });
     };
 
