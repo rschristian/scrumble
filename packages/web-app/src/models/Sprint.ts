@@ -4,8 +4,7 @@ export enum SprintStatus {
 }
 
 export interface Sprint {
-    id: number; // Id is for all projects on a GL instance.
-    projectId: number;
+    id: number;
     title: string;
     description?: string;
     status: SprintStatus;
