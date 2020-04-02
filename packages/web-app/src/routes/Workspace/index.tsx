@@ -71,11 +71,6 @@ const sideNavItems: SideBarLink[] = [
         path: '/',
     },
     {
-        label: 'Backlog Planning',
-        icon: list,
-        path: '/backlogPlanning',
-    },
-    {
         label: 'Metrics',
         icon: metrics,
         path: '/metrics',
