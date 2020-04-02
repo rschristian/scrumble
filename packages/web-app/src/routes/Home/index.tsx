@@ -10,6 +10,7 @@ import { fetchUserInfo } from 'services/api/auth';
 import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
 import { errorColour, successColour } from 'services/Notification/colours';
 import { useStore } from 'stores';
+import { CreateOrEditWorkspace } from '../../components/CreateOrEdit/workspace';
 
 interface IProps {
     submit?: (name: string, description: string) => void;
@@ -74,8 +75,8 @@ const Home: FunctionalComponent = () => {
         if (e.key === 'Enter') console.log('Enter selected');
     };
 
-    const submitNewWorkspace = (name: string, description: string): void => {
-        createWorkspace(name, description).then((res) => {
+    const submitNewWorkspace = (workspace: Workspace): void => {
+        createWorkspace(workspace).then((res) => {
             if (typeof res === 'string') {
                 notify.show(res, 'error', 5000, errorColour);
             } else {
@@ -98,7 +99,10 @@ const Home: FunctionalComponent = () => {
                     title="Create New Workspace"
                     close={(): void => setShowCreateModal(false)}
                     content={
-                        <CreateWorkspace close={(): void => setShowCreateModal(false)} submit={submitNewWorkspace} />
+                        <CreateOrEditWorkspace
+                            close={(): void => setShowCreateModal(false)}
+                            submit={submitNewWorkspace}
+                        />
                     }
                 />
             ) : null}
@@ -122,6 +126,7 @@ const Home: FunctionalComponent = () => {
                                 id={workspace.id}
                                 name={workspace.name}
                                 description={workspace.description}
+                                projectIds={workspace.projectIds}
                             />
                         );
                     })}

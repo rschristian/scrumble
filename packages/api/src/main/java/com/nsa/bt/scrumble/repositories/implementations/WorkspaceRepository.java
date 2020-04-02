@@ -53,7 +53,8 @@ public class WorkspaceRepository implements IWorkspaceRepository {
                         rs.getInt("id"),
                         new User(rs.getInt("created_by_user"), rs.getInt("service_id"), rs.getString("provider_id")),
                         rs.getString("name"),
-                        rs.getString("description")))
+                        rs.getString("description"),
+                        new int[] {1, 3, 5}))
                 .forEach(entry -> workspaces.add(entry));
         return workspaces;
     }

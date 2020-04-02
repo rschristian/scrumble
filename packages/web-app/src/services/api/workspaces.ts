@@ -14,9 +14,9 @@ export const editWorkspace = async (workspaceId: number, updatedWorkspace: Works
         });
 };
 
-export const createWorkspace = async (name: string, description: string): Promise<Workspace | string> => {
+export const createWorkspace = async (workspace: Workspace): Promise<Workspace | string> => {
     return await apiService
-        .post('/workspace', { name, description })
+        .post('/workspace', workspace)
         .then((response) => {
             return response.data;
         })
@@ -28,20 +28,6 @@ export const createWorkspace = async (name: string, description: string): Promis
 export const getWorkspaces = async (): Promise<Workspace[] | string> => {
     return await apiService
         .get('/workspaces')
-        .then((response) => {
-            return response.data;
-        })
-        .catch(({ response }) => {
-            return response.data?.message || 'Unknown error while updating workspace details';
-        });
-};
-
-export const associateProjectsWithWorkspace = async (
-    workspaceId: number,
-    projectIds: number[],
-): Promise<void | string> => {
-    return await apiService
-        .post(`/workspace/${workspaceId}/projects`, {})
         .then((response) => {
             return response.data;
         })

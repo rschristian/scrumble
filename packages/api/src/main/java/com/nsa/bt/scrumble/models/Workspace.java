@@ -7,12 +7,12 @@ public class Workspace {
     private String description;
     private int[] projectIds;
 
-    public Workspace(int id, User createdBy, String name, String description) {
+    public Workspace(int id, User createdBy, String name, String description, int[] projectIds) {
         this.id = id;
         this.createdBy = createdBy;
         this.name = name;
         this.description = description;
-        this.projectIds = new int[] {1, 3, 5, 8, 11, 12};
+        this.projectIds = projectIds;
     }
 
     public Workspace() {

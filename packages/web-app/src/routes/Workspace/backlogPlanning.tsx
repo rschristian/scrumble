@@ -3,7 +3,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
 import { IssueCard } from 'components/Cards/issue';
-import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
+import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
 import { filterStatusEnum, IssueFilter } from 'components/Filter/issues';
 import { Modal } from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
