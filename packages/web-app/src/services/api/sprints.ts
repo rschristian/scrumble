@@ -44,13 +44,9 @@ export const editSprint = async (
 };
 
 // GitLab API: PUT /projects/:id/milestones/:milestone_id
-export const toggleSprintStatus = async (
-    workspaceId: number,
-    projectId: number,
-    sprintId: number,
-): Promise<void | string> => {
+export const toggleSprintStatus = async (workspaceId: number, sprintId: number): Promise<void | string> => {
     return await apiService
-        .put(`/workspace/${workspaceId}/project/${projectId}/sprint/${sprintId}/status/toggle`, {})
+        .put(`/workspace/${workspaceId}/sprint/${sprintId}/status/toggle`, {})
         .then(() => {
             return;
         })
