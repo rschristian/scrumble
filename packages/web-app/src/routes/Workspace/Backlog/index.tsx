@@ -1,11 +1,11 @@
 import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
-
 import { IssueCard } from 'components/Cards/issue';
 import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
 import { filterStatusEnum, IssueFilter } from 'components/Filter/issue';
 import { Modal } from 'components/Modal';
+import { DateTime } from 'luxon';
 import { Issue, IssueStatus } from 'models/Issue';
 import { createIssue, getIssues } from 'services/api/issues';
 import { errorColour, successColour } from 'services/notification/colours';
@@ -24,16 +24,13 @@ const Backlog: FunctionalComponent = () => {
     const [currentProjectId, setCurrentProjectId] = useState(0);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
-        return await createIssue(userLocationStore.currentWorkspace.id, projectId, newIssue).then((error) => {
-            if (error) notify.show(error, 'error', 5000, errorColour);
-            else {
-                notify.show('New issue created!', 'success', 5000, successColour);
-                updateIssue();
-                setShowNewIssueModal(false);
-            }
+        return await createIssue(userLocationStore.currentWorkspace.id, projectId, newIssue).then((result: Issue) => {
+            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
+            notify.show('New issue created!', 'success', 5000, successColour);
+            fetchIssues();
+            setShowNewIssueModal(false);
         });
     };
-
     const updateIssueFilter = (filterFor: string): void => {
         setCurrentPageNumber(0);
         setCurrentProjectId(0);
@@ -56,24 +53,21 @@ const Backlog: FunctionalComponent = () => {
                 setCurrentPageNumber(result.nextResource.pageNumber);
                 setCurrentProjectId(result.nextResource.projectId);
             }
+            else if (result.nextResource.pageNumber === 0) {
+                setIssuesArray(result.issues);
+            }
         });
     };
-
-    const updateIssue = (): void => {
-        getIssues(
-            userLocationStore.currentWorkspace.id,
-            currentProjectId,
-            0,
-            issueFilter,
-            issueFilterTerm)
-            .then((issuePagination) => {
-                if (typeof issuePagination == 'string') {
-                    notify.show(issuePagination, 'error', 5000, errorColour);
-                } else {
-                    setIssuesArray(issuePagination.issues);
+    const updateIssue = (updatedIssue: Issue): void => {
+        let arrayCopy = [...issuesArray];
+            issuesArray.forEach((issue: Issue, index) => {
+                if(issue.iid === updatedIssue.iid) {
+                    updatedIssue.createdAt = DateTime.local().toLocaleString();
+                    arrayCopy[index] = updatedIssue;
+                    setIssuesArray(arrayCopy);
                 }
-            },
-        );
+            });
+            
     };
 
     useEffect(() => {

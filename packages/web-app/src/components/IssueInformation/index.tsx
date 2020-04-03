@@ -25,13 +25,13 @@ export const IssueInformation: FunctionalComponent<IProps> = (props: IProps) => 
                         Created By:
                     </div>
                     <div class="table-row">
-                        <span class="text-gray-700">{props.issue.author} </span>
+                        <span class="text-gray-700">{props.issue.author.name} </span>
                     </div>
                     <div class="info-label">
                         Assigned To:
                     </div>
                     <div class="table-row">
-                        <span class="text-gray-700">{props.issue.assignee}</span>
+                        <span class="text-gray-700">{props.issue.assignee !== null && props.issue.assignee !== undefined ? props.issue.assignee.name : "Unassigned"}</span>
                     </div>
                     <div class="info-label">
                         Story Point:

@@ -24,10 +24,10 @@ public class Issue implements Serializable {
     private ArrayList<String> labels;
     @JsonAlias("timeSpent")
     private int timeSpent;
-    private String author;
+    private Object author;
     @JsonAlias("created_at")
     private String createdAt;
-    private String assignee;
+    private Object assignee;
 
     public Issue(){}
 
@@ -138,13 +138,13 @@ public class Issue implements Serializable {
         this.timeSpent = timeSpent;
     }
 
-    public String getAuthor() {
+    public Object getAuthor() {
         return author;
     }
 
     @JsonProperty("author")
     public void setAuthor(Map<String, Object> author) {
-        this.author = (String)author.get("name");
+        this.author = author;
     }
 
     public String getCreatedAt() {
@@ -157,16 +157,14 @@ public class Issue implements Serializable {
         this.createdAt = strDate;
     }
 
-    public String getAssignee() {
+    public Object getAssignee() {
         return assignee;
     }
 
     @JsonProperty("assignee")
     public void setAssignee(Map<String, Object> assignedTo) {
         if (assignedTo != null) {
-            this.assignee = (String)assignedTo.get("name");
-        } else {
-            this.assignee = "Unassigned";
+            this.assignee = assignedTo;
         }
     }
 }

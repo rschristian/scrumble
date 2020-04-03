@@ -30,7 +30,7 @@ export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
 interface IProps {
     issue: Issue;
     refresh: () => void;
-    updateIssue: () => void;
+    updateIssue: (issue: Issue) => void;
 }
 
 export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
@@ -49,7 +49,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
             if (error) notify.show(error, 'error', 5000, errorColour);
             else {
                 setShowEditIssueModal(false);
-                props.updateIssue();
+                props.updateIssue(issue);
             }
         });
     };
@@ -105,8 +105,8 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                         >
                             Edit
                         </button>
-                        <span class="float-right text-gray-700 py-2 px-4"> <span class="font-medium">Author:</span> {props.issue.author}</span>
-                        <span class="float-left text-gray-700 py-2"> <span class="font-medium">Assignee:</span> {props.issue.assignee}</span>
+                        <span class="float-right text-gray-700 py-2 px-4"> <span class="font-medium">Author:</span> {props.issue.author.name}</span>
+                        <span class="float-left text-gray-700 py-2"> <span class="font-medium">Assignee:</span> {props.issue.assignee !== null && props.issue.assignee !== undefined ? props.issue.assignee.name : "Unassigned"}</span>
                     </div>
                 </div>
             </div>

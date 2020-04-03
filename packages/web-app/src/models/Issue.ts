@@ -1,4 +1,5 @@
 import { Sprint } from './Sprint';
+import { User } from './User';
 
 export enum IssueStatus {
     open = 'opened',
@@ -13,10 +14,10 @@ export interface Issue {
     status: IssueStatus;
     labels?: string[];
     projectId: number;
-    projectName?: string;
+    projectName: string;
     timeSpent?: number;
     sprint?: Sprint;
-    author?: string;
-    assignee?: string;
-    createdAt?: Date;
+    author: User;
+    assignee?: User;
+    createdAt: Date | string;
 }
