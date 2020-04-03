@@ -2,12 +2,12 @@ import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
-import { CreateOrEditIssue } from 'components/CreateOrEditIssue';
+import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
 import { Modal } from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
 import { editIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
-import { errorColour } from 'services/Notification/colours';
+import { errorColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 import { IssueInformation } from 'components/IssueInformation'
 
