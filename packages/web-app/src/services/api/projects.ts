@@ -5,8 +5,6 @@ export const getProjects = async (): Promise<Project[] | string> => {
     return await apiService
         .get('/projects')
         .then((response) => {
-            console.log('projects');
-            console.log(response.data);
             return response.data;
         })
         .catch(({ response }) => {

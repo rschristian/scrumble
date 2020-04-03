@@ -28,8 +28,6 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
                 notify.show('You do not have any projects!', 'custom', 5000, infoColour);
             } else {
                 setUsersProjects(result);
-                console.log('users projects');
-                console.log(result);
             }
         });
     }, []);
