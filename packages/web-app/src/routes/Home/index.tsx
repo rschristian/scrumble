@@ -12,11 +12,6 @@ import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
 import { errorColour, successColour, warningColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
-interface IProps {
-    submit?: (name: string, description: string) => void;
-    close: () => void;
-}
-
 const Home: FunctionalComponent = () => {
     const rootStore = useStore();
     const { authStore, userLocationStore } = rootStore;

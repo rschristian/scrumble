@@ -8,7 +8,7 @@ import { filterStatusEnum, IssueFilter } from 'components/Filter/issue';
 import { Modal } from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
 import { createIssue, getIssues } from 'services/api/issues';
-import { errorColour, successColour } from 'services/notification/colours';
+import { errorColour, infoColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 const Backlog: FunctionalComponent = () => {
@@ -50,6 +50,8 @@ const Backlog: FunctionalComponent = () => {
             issueFilterTerm,
         ).then((result) => {
             if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
+            else if (result.issues.length == 0)
+                notify.show('No issues found for your filter', 'custom', 5000, infoColour);
             else {
                 setIssuesArray((oldValues) => oldValues.concat(result.issues));
                 setCurrentPageNumber(result.nextResource.pageNumber);
