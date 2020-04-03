@@ -70,7 +70,7 @@ const SprintPlanning: FunctionalComponent = () => {
                         >
                             Backlog
                         </button>
-                        <button className="btn-create my-auto" onClick={(): void => setShowNewSprintModal(true)}>
+                        <button class="btn-create my-auto" onClick={(): void => setShowNewSprintModal(true)}>
                             New Sprint
                         </button>
                     </div>

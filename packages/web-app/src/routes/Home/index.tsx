@@ -26,18 +26,11 @@ const Home: FunctionalComponent = () => {
         });
     }, []);
 
-    const handleOnKeyDown = (e: KeyboardEvent): void => {
-        if (e.key === 'Enter') console.log('Enter selected');
-    };
-
     const submitNewWorkspace = (workspace: Workspace): void => {
-        if (workspace.name === '') {
-            notify.show('You must provide a name', 'warning', 5000, warningColour);
-            return;
-        }
         createWorkspace(workspace.name, workspace.description, workspace.projectIds).then((res) => {
-            if (typeof res === 'string') notify.show(res, 'error', 5000, errorColour);
-            else {
+            if (typeof res === 'string') {
+                notify.show(res, 'error', 5000, errorColour);
+            } else {
                 setWorkspacesArray([...workspacesArray, res]);
                 setShowCreateModal(false);
                 notify.show('Workspace created!', 'success', 5000, successColour);
@@ -71,11 +64,7 @@ const Home: FunctionalComponent = () => {
                         New Workspace
                     </button>
                 </div>
-                <SearchBar
-                    placeholder="Search by name"
-                    handleOnInput={(term: string): void => console.log(term)}
-                    handleOnKeyDown={handleOnKeyDown}
-                />
+                <SearchBar handleOnInput={(term: string): void => console.log(term)} />
                 <div class="rounded bg-white overflow-hidden shadow-lg">
                     {workspacesArray.map((workspace, index) => {
                         return (
