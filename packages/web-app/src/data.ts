@@ -42,7 +42,7 @@ export const users: User[] = [
     },
     {
         id: 2,
-        name: "Lauren Haymer",
+        name: "Lauren Heymer",
         username: "laurenhaymer",
         avatarUrl: "www.com"
     },
