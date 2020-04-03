@@ -1,5 +1,5 @@
 export interface Workspace {
-    id: number;
+    id?: number;
     name: string;
     description: string | null;
     projectIds: number[];
