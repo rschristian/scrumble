@@ -60,7 +60,7 @@ const Backlog: FunctionalComponent = () => {
     };
 
     const updateIssue = (): void => {
-        fetchWorkspaceIssues(
+        getIssues(
             userLocationStore.currentWorkspace.id,
             currentProjectId,
             0,
