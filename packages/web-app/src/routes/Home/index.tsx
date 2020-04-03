@@ -27,15 +27,18 @@ const Home: FunctionalComponent = () => {
     }, []);
 
     const submitNewWorkspace = (workspace: Workspace): void => {
-        createWorkspace(workspace.name, workspace.description, workspace.projectIds).then((res) => {
-            if (typeof res === 'string') {
-                notify.show(res, 'error', 5000, errorColour);
-            } else {
-                setWorkspacesArray([...workspacesArray, res]);
-                setShowCreateModal(false);
-                notify.show('Workspace created!', 'success', 5000, successColour);
-            }
-        });
+        if (workspace.name === '') notify.show('You must provide a name', 'warning', 5000, warningColour);
+        else {
+            createWorkspace(workspace.name, workspace.description, workspace.projectIds).then((res) => {
+                if (typeof res === 'string') {
+                    notify.show(res, 'error', 5000, errorColour);
+                } else {
+                    setWorkspacesArray([...workspacesArray, res]);
+                    setShowCreateModal(false);
+                    notify.show('Workspace created!', 'success', 5000, successColour);
+                }
+            });
+        }
     };
 
     useEffect(() => {
