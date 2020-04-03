@@ -2,97 +2,62 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
-import { IssueCard } from 'components/Cards/issue';
 import { SprintCard } from 'components/Cards/sprint';
-import { filterStatusEnum, IssueFilter } from 'components/Filter/issues';
-import { SprintFilter } from 'components/Filter/sprints';
+import { CreateOrEditSprint } from 'components/CreateOrEdit/sprint';
+import { SprintFilter } from 'components/Filter/sprint';
+import { Modal } from 'components/Modal';
 import { sprints } from 'data';
-import { Issue, IssueStatus } from 'models/Issue';
-import { SprintStatus } from 'models/Sprint';
-import { fetchWorkspaceIssues } from 'services/api/issues';
-import { errorColour } from 'services/Notification/colours';
+import { Sprint, SprintStatus } from 'models/Sprint';
+import { createSprint } from 'services/api/sprints';
+import { errorColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
+
+import Backlog from './Backlog';
 
 const SprintPlanning: FunctionalComponent = () => {
     const userLocationStore = useStore().userLocationStore;
 
+    // For mobile
     const [isSprintView, setIsSprintView] = useState(false);
 
-    const [issueFilter, setIssueFilter] = useState(IssueStatus.open.toString());
-    const [issueFilterTerm, setIssueFilterTerm] = useState('');
+    const [showNewSprintModal, setShowNewSprintModal] = useState(false);
     const [sprintFilter, setSprintFilter] = useState(SprintStatus.active.toString());
-
-    const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
-    const [currentPageNumber, setCurrentPageNumber] = useState(0);
-    const [currentProjectId, setCurrentProjectId] = useState(0);
 
     useEffect(() => {
         userLocationStore.setActiveSideBarItem(0);
     }, [userLocationStore]);
 
-    const updateIssueFilter = (filterFor: string): void => {
-        setCurrentPageNumber(0);
-        setCurrentProjectId(0);
-        setIssuesArray([]);
-        if (Object.values(filterStatusEnum).includes(filterFor)) setIssueFilter(filterFor);
-        else setIssueFilterTerm(filterFor);
-    };
-
-    const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
-
-    const fetchIssues = (): void => {
-        fetchWorkspaceIssues(
-            userLocationStore.currentWorkspace.id,
-            currentProjectId,
-            currentPageNumber,
-            issueFilter,
-            issueFilterTerm,
-        ).then((result) => {
-            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-            else if (result.nextResource.pageNumber !== 0) {
-                setIssuesArray((oldValues) => oldValues.concat(result.issues));
-                setCurrentPageNumber(result.nextResource.pageNumber);
-                setCurrentProjectId(result.nextResource.projectId);
+    const handleSprintCreation = async (newSprint: Sprint): Promise<void> => {
+        return await createSprint(userLocationStore.currentWorkspace.id, newSprint).then((error) => {
+            if (error) notify.show(error, 'error', 5000, errorColour);
+            else {
+                notify.show('New sprint created!', 'success', 5000, successColour);
+                // TODO Need to do something with this eventually
+                // getSprints(userLocationStore.currentWorkspace.id);
             }
         });
     };
 
-    useEffect(() => {
-        fetchIssues();
-        // TODO This is a completely legitimate warning, but I don't know how to fix it correctly. Help?
-    }, [issueFilter, issueFilterTerm]);
-
-    const scrollCheck = (e: HTMLDivElement): void => {
-        const bottom = e.scrollHeight - e.scrollTop === e.clientHeight;
-        if (bottom) fetchIssues();
-    };
+    const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
     return (
         <Fragment>
+            {showNewSprintModal ? (
+                <Modal
+                    title="Create Sprint"
+                    content={
+                        <CreateOrEditSprint
+                            submit={handleSprintCreation}
+                            close={(): void => setShowNewSprintModal(false)}
+                        />
+                    }
+                    close={(): void => setShowNewSprintModal(false)}
+                />
+            ) : null}
+
             <div class="flex">
-                <div class={`w-11/12 md:w-1/2 md:block " ${!isSprintView ? '' : 'sm:hidden'}`}>
-                    <div class="create-bar">
-                        <h1 class="page-heading items-baseline">Backlog</h1>
-                        <button
-                            onClick={(): void => setIsSprintView(!isSprintView)}
-                            class="btn-create md:hidden my-auto mr-4"
-                        >
-                            Sprints
-                        </button>
-                    </div>
-                    <div class="md:mr-4">
-                        <IssueFilter setFilter={updateIssueFilter} />
-                    </div>
-                    <div
-                        class="md:mr-4 rounded bg-white overflow-hidden shadow-lg overflow-y-scroll issuesList"
-                        onScroll={(e): void => scrollCheck(e.target as HTMLDivElement)}
-                    >
-                        {issuesArray.map((issue, index) => {
-                            // if (issueFilter === 'all' || issue.state.toString() === issueFilter) {
-                            return <IssueCard key={index} issue={issue} refresh={fetchIssues} />;
-                            // }
-                        })}
-                    </div>
+                <div class={`w-11/12 md:w-1/2 md:block md:mr-4 ${!isSprintView ? '' : 'sm:hidden'}`}>
+                    <Backlog />
                 </div>
                 <div
                     class={`md:border-l border-gray-300 w-11/12 md:w-1/2 md:block " ${isSprintView ? '' : 'sm:hidden'}`}
@@ -104,6 +69,9 @@ const SprintPlanning: FunctionalComponent = () => {
                             class="btn-create md:hidden my-auto mr-4"
                         >
                             Backlog
+                        </button>
+                        <button class="btn-create my-auto" onClick={(): void => setShowNewSprintModal(true)}>
+                            New Sprint
                         </button>
                     </div>
                     <div class="md:ml-4">

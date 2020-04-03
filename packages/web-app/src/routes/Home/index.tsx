@@ -8,7 +8,7 @@ import { SearchBar } from 'components/SearchBar';
 import { Workspace } from 'models/Workspace';
 import { fetchUserInfo } from 'services/api/auth';
 import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
-import { errorColour, successColour } from 'services/Notification/colours';
+import { errorColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 interface IProps {
@@ -70,10 +70,6 @@ const Home: FunctionalComponent = () => {
         });
     }, []);
 
-    const handleOnKeyDown = (e: KeyboardEvent): void => {
-        if (e.key === 'Enter') console.log('Enter selected');
-    };
-
     const submitNewWorkspace = (name: string, description: string): void => {
         createWorkspace(name, description).then((res) => {
             if (typeof res === 'string') {
@@ -109,11 +105,7 @@ const Home: FunctionalComponent = () => {
                         New Workspace
                     </button>
                 </div>
-                <SearchBar
-                    placeholder="Search by name"
-                    handleOnInput={(term: string): void => console.log(term)}
-                    handleOnKeyDown={handleOnKeyDown}
-                />
+                <SearchBar handleOnInput={(term: string): void => console.log(term)} />
                 <div class="rounded bg-white overflow-hidden shadow-lg">
                     {workspacesArray.map((workspace, index) => {
                         return (
