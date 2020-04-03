@@ -106,7 +106,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                             Edit
                         </button>
                         <span class="float-right text-gray-700 py-2 px-4"> <span class="font-medium">Author:</span> {props.issue.author.name}</span>
-                        <span class="float-left text-gray-700 py-2"> <span class="font-medium">Assignee:</span> {props.issue.assignee !== null && props.issue.assignee !== undefined ? props.issue.assignee.name : "Unassigned"}</span>
+                        <span class="float-left text-gray-700 py-2"> <span class="font-medium">Assignee:</span> {props.issue.assignee !== null ? props.issue.assignee.name : "Unassigned"}</span>
                     </div>
                 </div>
             </div>

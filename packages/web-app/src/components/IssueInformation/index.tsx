@@ -31,7 +31,7 @@ export const IssueInformation: FunctionalComponent<IProps> = (props: IProps) => 
                         Assigned To:
                     </div>
                     <div class="table-row">
-                        <span class="text-gray-700">{props.issue.assignee !== null && props.issue.assignee !== undefined ? props.issue.assignee.name : "Unassigned"}</span>
+                        <span class="text-gray-700">{props.issue.assignee !== null ? props.issue.assignee.name : "Unassigned"}</span>
                     </div>
                     <div class="info-label">
                         Story Point:
