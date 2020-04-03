@@ -1,10 +1,10 @@
 import { FunctionalComponent, h } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { useCallback, useEffect, useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
 import { IssueCard } from 'components/Cards/issue';
 import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
-import { filterStatusEnum, IssueFilter } from 'components/Filter/issue';
+import { IssueFilter } from 'components/Filter/issue';
 import { Modal } from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
 import { createIssue, getIssues } from 'services/api/issues';
@@ -33,13 +33,13 @@ const Backlog: FunctionalComponent = () => {
         });
     };
 
-    const updateIssueFilter = (filterFor: string): void => {
+    const updateIssueFilter = useCallback((filterStatus: string, searchTerm: string): void => {
         setCurrentPageNumber(0);
         setCurrentProjectId(0);
         setIssuesArray([]);
-        if (Object.values(filterStatusEnum).includes(filterFor)) setIssueFilter(filterFor);
-        else setIssueFilterTerm(filterFor);
-    };
+        setIssueFilter(filterStatus);
+        setIssueFilterTerm(searchTerm);
+    }, []);
 
     const fetchIssues = (): void => {
         getIssues(
