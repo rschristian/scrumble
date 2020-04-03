@@ -7,8 +7,6 @@ import { Sprint, SprintStatus } from 'models/Sprint';
 export const sprints: Sprint[] = [
     {
         id: 133,
-        iid: 1,
-        projectId: 7381,
         title: 'Sprint 1',
         description: 'Insert insightful and creative description of a sprint here',
         status: SprintStatus.closed,
@@ -19,8 +17,6 @@ export const sprints: Sprint[] = [
     },
     {
         id: 134,
-        iid: 1,
-        projectId: 7381,
         title: 'Sprint 2',
         description: 'Insert insightful and creative description of a sprint here',
         status: SprintStatus.closed,
@@ -31,8 +27,6 @@ export const sprints: Sprint[] = [
     },
     {
         id: 140,
-        iid: 1,
-        projectId: 7381,
         title: 'Sprint 3',
         description: 'Insert insightful and creative description of a sprint here',
         status: SprintStatus.active,

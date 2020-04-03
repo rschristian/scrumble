@@ -3,13 +3,13 @@ import { useEffect, useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
 import { WorkspaceCard } from 'components/Cards/workspace';
+import { CreateOrEditWorkspace } from 'components/CreateOrEdit/workspace';
 import { Modal } from 'components/Modal';
 import { SearchBar } from 'components/SearchBar';
-import { CreateOrEditWorkspace } from 'components/CreateOrEdit/workspace';
+import { Workspace } from 'models/Workspace';
 import { fetchUserInfo } from 'services/api/auth';
 import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
-import { errorColour, successColour } from 'services/Notification/colours';
-import { Workspace } from 'models/Workspace';
+import { errorColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 interface IProps {
@@ -36,7 +36,7 @@ const Home: FunctionalComponent = () => {
     };
 
     const submitNewWorkspace = (workspace: Workspace): void => {
-        createWorkspace(workspace).then((res) => {
+        createWorkspace(workspace.name, workspace.description, workspace.projectIds).then((res) => {
             if (typeof res === 'string') notify.show(res, 'error', 5000, errorColour);
             else {
                 setWorkspacesArray([...workspacesArray, res]);

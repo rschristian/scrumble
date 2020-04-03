@@ -4,9 +4,7 @@ export enum SprintStatus {
 }
 
 export interface Sprint {
-    id: number; // Id is for all projects on a GL instance.
-    iid: number; // Iid, or internal ID, is the id that is unique to a project
-    projectId: number;
+    id: number;
     title: string;
     description?: string;
     status: SprintStatus;

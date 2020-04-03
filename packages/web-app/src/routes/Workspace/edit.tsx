@@ -5,7 +5,7 @@ import { CreateOrEditWorkspace } from 'components/CreateOrEdit/workspace';
 import { GenericEdit } from 'components/CommonRoutes/Edit';
 import { editWorkspace } from 'services/api/workspaces';
 import { Workspace } from 'models/Workspace';
-import { errorColour, infoColour } from 'services/Notification/colours';
+import { errorColour, infoColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 const WorkspaceEdit: FunctionalComponent = () => {

@@ -7,7 +7,7 @@ import { Modal } from 'components/Modal';
 import { Issue } from 'models/Issue';
 import { editIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
-import { errorColour } from 'services/Notification/colours';
+import { errorColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
