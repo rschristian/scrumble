@@ -51,7 +51,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
             issueFilterTerm,
         ).then((result) => {
             if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-            else if (result.nextResource.pageNumber !== 0) {
+            else {
                 setIssuesArray((oldValues) => oldValues.concat(result.issues));
                 setCurrentPageNumber(result.nextResource.pageNumber);
                 setCurrentProjectId(result.nextResource.projectId);
@@ -66,7 +66,7 @@ const BacklogPlanning: FunctionalComponent = observer(() => {
 
     const scrollCheck = (e: HTMLDivElement): void => {
         const bottom = e.scrollHeight - e.scrollTop === e.clientHeight;
-        if (bottom) fetchIssues();
+        if (bottom && currentPageNumber !== 0) fetchIssues();
     };
 
     return (

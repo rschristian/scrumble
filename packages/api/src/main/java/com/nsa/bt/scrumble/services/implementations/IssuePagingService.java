@@ -9,8 +9,6 @@ import com.nsa.bt.scrumble.services.IWorkspaceService;
 import com.nsa.bt.scrumble.util.GitLabLinkParser;
 import com.nsa.bt.scrumble.util.GitLabLinks;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +43,7 @@ public class IssuePagingService implements IIssuePagingService {
     @Override
     public int getNextProjectId(int workspaceId, int prevProjectId) {
         ArrayList<Integer> workspaceProjectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
-//        return workspaceProjectIds[(ArrayUtils.indexOf(workspaceProjectIds, prevProjectId) + 1)];
-        int nextProjectId = workspaceProjectIds.get(workspaceProjectIds.lastIndexOf(prevProjectId) + 1);
-        logger.info(String.format("Next project id: %d", nextProjectId));
-        return nextProjectId;
+        return workspaceProjectIds.get(workspaceProjectIds.lastIndexOf(prevProjectId) + 1);
     }
 
     @Override
@@ -120,6 +115,10 @@ public class IssuePagingService implements IIssuePagingService {
                     uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
 
             issues = issuesResponse.getBody();
+            logger.info("issues...");
+            for(Issue issue : issues) {
+                logger.info(String.format("%d: %s", issue.getProjectId(), issue.getTitle()));
+            }
             issues.forEach((issue)->issueService.setStoryPoint(issue));
             if (!issues.isEmpty()) {
                 nextResource.setProjectId(projectId);
@@ -137,11 +136,7 @@ public class IssuePagingService implements IIssuePagingService {
     @Override
     public boolean isLastProject(int workspaceId, int projectId) {
         ArrayList<Integer> workspaceProjectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
-//        logger.info("In isLastProject()");
-        boolean isLastProject = workspaceProjectIds.lastIndexOf(projectId) == workspaceProjectIds.size() - 1;
-        logger.info(String.format("project: %d, is last project: %b", projectId,  isLastProject));
-        return isLastProject;
-//        return ArrayUtils.indexOf(workspaceProjectIds, projectId) == workspaceProjectIds.length - 1;
+        return workspaceProjectIds.lastIndexOf(projectId) == workspaceProjectIds.size() - 1;
     }
 
     private HttpEntity<String> getApplicationJsonHeaders() {
@@ -164,7 +159,6 @@ public class IssuePagingService implements IIssuePagingService {
         IssuePageResult issuePageResult = new IssuePageResult();
 
         while(true) {
-            logger.info(queryUri);
             ResponseEntity<ArrayList<Issue>> issuesResponse = restTemplate.exchange(
                     queryUri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
 
