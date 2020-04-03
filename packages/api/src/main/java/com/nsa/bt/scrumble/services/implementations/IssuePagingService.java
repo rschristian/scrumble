@@ -9,8 +9,6 @@ import com.nsa.bt.scrumble.services.IWorkspaceService;
 import com.nsa.bt.scrumble.util.GitLabLinkParser;
 import com.nsa.bt.scrumble.util.GitLabLinks;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -23,8 +21,6 @@ import java.util.Arrays;
 
 @Service
 public class IssuePagingService implements IIssuePagingService {
-
-    private static final Logger logger = LoggerFactory.getLogger(IssuePagingService.class);
 
     @Autowired
     RestTemplate restTemplate;
@@ -115,10 +111,6 @@ public class IssuePagingService implements IIssuePagingService {
                     uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
 
             issues = issuesResponse.getBody();
-            logger.info("issues...");
-            for(Issue issue : issues) {
-                logger.info(String.format("%d: %s", issue.getProjectId(), issue.getTitle()));
-            }
             issues.forEach((issue)->issueService.setStoryPoint(issue));
             if (!issues.isEmpty()) {
                 nextResource.setProjectId(projectId);
