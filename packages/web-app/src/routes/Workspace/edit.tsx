@@ -2,7 +2,6 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 
 import { GenericEdit } from 'components/CommonRoutes/Edit';
-import { editWorkspace } from 'services/api/workspaces';
 import { useStore } from 'stores';
 
 const WorkspaceEdit: FunctionalComponent = () => {
@@ -13,17 +12,6 @@ const WorkspaceEdit: FunctionalComponent = () => {
     const [projectsInWorkspace, setProjectsInWorkspace] = useState<string[]>([]); // TODO: Figure this out
 
     const [errorMessage, setErrorMessage] = useState('');
-
-    const onSubmit = (): void => {
-        editWorkspace(currentWorkspace.id, {
-            id: currentWorkspace.id,
-            name,
-            description,
-        }).then((error) => {
-            if (error) setErrorMessage(error);
-            else console.log('Success');
-        });
-    };
 
     return (
         <GenericEdit

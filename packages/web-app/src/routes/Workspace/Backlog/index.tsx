@@ -1,5 +1,5 @@
 import { FunctionalComponent, h } from 'preact';
-import { useCallback, useEffect, useState } from 'preact/hooks';
+import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
 import { IssueCard } from 'components/Cards/issue';
@@ -12,7 +12,7 @@ import { errorColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 const Backlog: FunctionalComponent = () => {
-    const userLocationStore = useStore().userLocationStore;
+    const currentWorkspace = useStore().userLocationStore.currentWorkspace;
 
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
 
@@ -20,52 +20,46 @@ const Backlog: FunctionalComponent = () => {
     const [issueFilterTerm, setIssueFilterTerm] = useState('');
 
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
-    const [currentPageNumber, setCurrentPageNumber] = useState(0);
-    const [currentProjectId, setCurrentProjectId] = useState(0);
+    const projectId = useRef(0);
+    const pageNumber = useRef(0);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
-        return await createIssue(userLocationStore.currentWorkspace.id, projectId, newIssue).then((error) => {
+        return await createIssue(currentWorkspace.id, projectId, newIssue).then((error) => {
             if (error) notify.show(error, 'error', 5000, errorColour);
             else {
                 notify.show('New issue created!', 'success', 5000, successColour);
-                fetchIssues();
+                updateIssueFilter(issueFilter, issueFilterTerm);
             }
         });
     };
 
     const updateIssueFilter = useCallback((filterStatus: string, searchTerm: string): void => {
-        setCurrentPageNumber(0);
-        setCurrentProjectId(0);
+        projectId.current = 0;
+        pageNumber.current = 0;
         setIssuesArray([]);
         setIssueFilter(filterStatus);
         setIssueFilterTerm(searchTerm);
     }, []);
 
-    const fetchIssues = (): void => {
-        getIssues(
-            userLocationStore.currentWorkspace.id,
-            currentProjectId,
-            currentPageNumber,
-            issueFilter,
-            issueFilterTerm,
-        ).then((result) => {
-            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-            else if (result.nextResource.pageNumber !== 0) {
-                setIssuesArray((oldValues) => oldValues.concat(result.issues));
-                setCurrentPageNumber(result.nextResource.pageNumber);
-                setCurrentProjectId(result.nextResource.projectId);
-            }
-        });
-    };
+    const fetchIssues = useCallback((): void => {
+        getIssues(currentWorkspace.id, projectId.current, pageNumber.current, issueFilter, issueFilterTerm).then(
+            (result) => {
+                if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
+                else if (result.nextResource.pageNumber !== 0) {
+                    setIssuesArray((oldValues) => oldValues.concat(result.issues));
+                    projectId.current = result.nextResource.projectId;
+                    pageNumber.current = result.nextResource.pageNumber;
+                }
+            },
+        );
+    }, [currentWorkspace.id, issueFilter, issueFilterTerm]);
 
     useEffect(() => {
         fetchIssues();
-        // TODO This is a completely legitimate warning, but I don't know how to fix it correctly. Help?
-    }, [issueFilter, issueFilterTerm]);
+    }, [fetchIssues]);
 
     const scrollCheck = (e: HTMLDivElement): void => {
-        const bottom = e.scrollHeight - e.scrollTop === e.clientHeight;
-        if (bottom) fetchIssues();
+        if (e.scrollHeight - e.scrollTop === e.clientHeight) fetchIssues();
     };
 
     return (
@@ -97,9 +91,7 @@ const Backlog: FunctionalComponent = () => {
                 onScroll={(e): void => scrollCheck(e.target as HTMLDivElement)}
             >
                 {issuesArray.map((issue, index) => {
-                    // if (issueFilter === 'all' || issue.state.toString() === issueFilter) {
                     return <IssueCard key={index} issue={issue} refresh={fetchIssues} />;
-                    // }
                 })}
             </div>
         </div>
