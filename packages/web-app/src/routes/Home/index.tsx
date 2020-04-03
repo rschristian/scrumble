@@ -70,10 +70,6 @@ const Home: FunctionalComponent = () => {
         });
     }, []);
 
-    const handleOnKeyDown = (e: KeyboardEvent): void => {
-        if (e.key === 'Enter') console.log('Enter selected');
-    };
-
     const submitNewWorkspace = (name: string, description: string): void => {
         createWorkspace(name, description).then((res) => {
             if (typeof res === 'string') {
@@ -109,11 +105,7 @@ const Home: FunctionalComponent = () => {
                         New Workspace
                     </button>
                 </div>
-                <SearchBar
-                    placeholder="Search by name"
-                    handleOnInput={(term: string): void => console.log(term)}
-                    handleOnKeyDown={handleOnKeyDown}
-                />
+                <SearchBar handleOnInput={(term: string): void => console.log(term)} />
                 <div class="rounded bg-white overflow-hidden shadow-lg">
                     {workspacesArray.map((workspace, index) => {
                         return (
