@@ -4,7 +4,7 @@ import { notify } from 'react-notify-toast';
 import { Multiselect } from 'multiselect-react-dropdown';
 
 import { getProjects } from 'services/api/projects';
-import { errorColour, infoColour } from 'services/Notification/colours';
+import { errorColour, infoColour } from 'services/notification/colours';
 import { Project } from 'models/Project';
 import { Workspace } from 'models/Workspace';
 
