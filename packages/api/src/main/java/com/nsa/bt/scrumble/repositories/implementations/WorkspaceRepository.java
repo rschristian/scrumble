@@ -1,9 +1,7 @@
 package com.nsa.bt.scrumble.repositories.implementations;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nsa.bt.scrumble.models.User;
 import com.nsa.bt.scrumble.models.Workspace;
 import com.nsa.bt.scrumble.repositories.IWorkspaceRepository;
@@ -11,14 +9,19 @@ import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class WorkspaceRepository implements IWorkspaceRepository {
@@ -48,9 +51,18 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     @Override
     public Workspace createWorkspace(Workspace workspace, User user) {
         String insertStatement = "INSERT INTO workspaces (name, created_by_user, description, workspace_data) VALUES (?, ?, ?, ?);";
-        Object[] params = new Object[]{ workspace.getName(), user.getId(), workspace.getDescription(), getWorkspaceJsonbData(workspace)};
-        int[] types = new int[]{ Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.OTHER };
-        jdbcTemplate.update(insertStatement, params, types);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection
+                    .prepareStatement(insertStatement, new String[] {"id"});
+            ps.setString(1, workspace.getName());
+            ps.setInt(2, user.getId());
+            ps.setString(3, workspace.getDescription());
+            ps.setObject(4, getWorkspaceJsonbData(workspace));
+            return ps;
+        }, keyHolder);
+        workspace.setId(keyHolder.getKey().longValue());
         return workspace;
     }
 
@@ -109,7 +121,13 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     @Override
     public void editWorkspace(Workspace updatedWorkspace) {
         String deleteWorkspace = "UPDATE workspaces SET name = ?, description = ?, workspace_data = ? WHERE id = ?";
-        Object[] params = new Object[]{ updatedWorkspace.getName(), updatedWorkspace.getDescription(), getWorkspaceJsonbData(updatedWorkspace), updatedWorkspace.getId() };
+        Object[] params = new Object[]
+                {
+                    updatedWorkspace.getName(),
+                    updatedWorkspace.getDescription(),
+                    getWorkspaceJsonbData(updatedWorkspace),
+                    updatedWorkspace.getId()
+                };
         int[] types = new int[]{Types.VARCHAR, Types.VARCHAR, Types.OTHER, Types.INTEGER} ;
         jdbcTemplate.update(deleteWorkspace, params, types);
     }

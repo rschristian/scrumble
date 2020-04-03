@@ -74,7 +74,7 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
                     />
                 </div>
                 <button
-                    className="btn-create mx-auto mb-4 ml-4 absolute left-0 bottom-0"
+                    class="btn-create mx-auto mb-4 ml-4"
                     onClick={(): void =>
                         props.submit({
                             id: props.workspace?.id || 0,

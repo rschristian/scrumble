@@ -9,7 +9,7 @@ import { SearchBar } from 'components/SearchBar';
 import { Workspace } from 'models/Workspace';
 import { fetchUserInfo } from 'services/api/auth';
 import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
-import { errorColour, successColour } from 'services/notification/colours';
+import { errorColour, successColour, warningColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 interface IProps {
@@ -36,9 +36,15 @@ const Home: FunctionalComponent = () => {
     };
 
     const submitNewWorkspace = (workspace: Workspace): void => {
+        if (workspace.name === '') {
+            notify.show('You must provide a name', 'warning', 5000, warningColour);
+            return;
+        }
         createWorkspace(workspace.name, workspace.description, workspace.projectIds).then((res) => {
             if (typeof res === 'string') notify.show(res, 'error', 5000, errorColour);
             else {
+                console.log('workspace');
+                console.log(workspace);
                 setWorkspacesArray([...workspacesArray, res]);
                 setShowCreateModal(false);
                 notify.show('Workspace created!', 'success', 5000, successColour);
