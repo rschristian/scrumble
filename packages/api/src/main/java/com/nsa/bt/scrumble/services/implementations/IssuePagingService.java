@@ -44,8 +44,11 @@ public class IssuePagingService implements IIssuePagingService {
 
     @Override
     public int getNextProjectId(int workspaceId, int prevProjectId) {
-        int[] workspaceProjectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
-        return workspaceProjectIds[(ArrayUtils.indexOf(workspaceProjectIds, prevProjectId) + 1)];
+        ArrayList<Integer> workspaceProjectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
+//        return workspaceProjectIds[(ArrayUtils.indexOf(workspaceProjectIds, prevProjectId) + 1)];
+        int nextProjectId = workspaceProjectIds.get(workspaceProjectIds.lastIndexOf(prevProjectId) + 1);
+        logger.info(String.format("Next project id: %d", nextProjectId));
+        return nextProjectId;
     }
 
     @Override
@@ -59,7 +62,7 @@ public class IssuePagingService implements IIssuePagingService {
     @Override
     public int getProjectId(int workspaceId, int requestedPage) {
         if (requestedPage == 0) {
-            return workspaceService.getProjectIdsForWorkspace(workspaceId)[0];
+            return workspaceService.getProjectIdsForWorkspace(workspaceId).get(0);
         }
         return requestedPage;
     }
@@ -133,8 +136,12 @@ public class IssuePagingService implements IIssuePagingService {
 
     @Override
     public boolean isLastProject(int workspaceId, int projectId) {
-        int[] workspaceProjectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
-        return ArrayUtils.indexOf(workspaceProjectIds, projectId) == workspaceProjectIds.length - 1;
+        ArrayList<Integer> workspaceProjectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
+//        logger.info("In isLastProject()");
+        boolean isLastProject = workspaceProjectIds.lastIndexOf(projectId) == workspaceProjectIds.size() - 1;
+        logger.info(String.format("project: %d, is last project: %b", projectId,  isLastProject));
+        return isLastProject;
+//        return ArrayUtils.indexOf(workspaceProjectIds, projectId) == workspaceProjectIds.length - 1;
     }
 
     private HttpEntity<String> getApplicationJsonHeaders() {
@@ -157,6 +164,7 @@ public class IssuePagingService implements IIssuePagingService {
         IssuePageResult issuePageResult = new IssuePageResult();
 
         while(true) {
+            logger.info(queryUri);
             ResponseEntity<ArrayList<Issue>> issuesResponse = restTemplate.exchange(
                     queryUri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
 

@@ -74,7 +74,7 @@ public class IssueService implements IIssueService {
     @Override
     public  ArrayList<Issue> searchForIssue(int workspaceId, String searchFor, String filter, String accessToken) {
         var issues = new ArrayList<Issue>();
-        int[] projectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
+        ArrayList<Integer> projectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
         String uri;
 
         for(int projectId : projectIds) {

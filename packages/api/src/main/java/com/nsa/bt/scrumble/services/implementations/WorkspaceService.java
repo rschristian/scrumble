@@ -4,20 +4,25 @@ import com.nsa.bt.scrumble.models.User;
 import com.nsa.bt.scrumble.models.Workspace;
 import com.nsa.bt.scrumble.repositories.IWorkspaceRepository;
 import com.nsa.bt.scrumble.services.IWorkspaceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class WorkspaceService implements IWorkspaceService {
 
+    private static final Logger logger = LoggerFactory.getLogger(WorkspaceService.class);
+
     @Autowired
     IWorkspaceRepository workspaceRepository;
 
     @Override
-    public int[] getProjectIdsForWorkspace(int workspaceId) {
-        return new int[]{ 4, 1, 8, 3, 5, 11 };
+    public ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId) {
+        return workspaceRepository.projectIdsForWorkspace(workspaceId);
     }
 
     @Override

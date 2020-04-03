@@ -11,16 +11,14 @@ import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class WorkspaceRepository implements IWorkspaceRepository {
@@ -31,13 +29,20 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<Integer> projectIdsForWorkspace(int workspaceId) {
-        List<Integer> projectIds = new ArrayList<>();
-        String selectStatement = "SELECT * FROM workspace_projects";
-        jdbcTemplate.query(selectStatement,
-                (rs, row) -> rs.getInt("project_id"))
-                .forEach(entry -> projectIds.add(entry));
-        return projectIds;
+    public ArrayList<Integer> projectIdsForWorkspace(int workspaceId) {
+        return jdbcTemplate.queryForObject(
+                "SELECT workspace_data FROM workspaces WHERE id = ?;",
+                new Object[]{workspaceId},
+                (rs, rowNum) ->
+                {
+                    try {
+                        return parseJsonDataToProjectIds(((PGobject) rs.getObject("workspace_data")));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return new ArrayList<>();
+                }
+        );
     }
 
     @Override
