@@ -57,7 +57,7 @@ public class WorkspaceApi {
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
             workspaceService.editWorkspace(workspace);
-            return ResponseEntity.ok().body(null);
+            return ResponseEntity.ok().body(workspace);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(authErrorMsg);
     }

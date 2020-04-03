@@ -1,7 +1,9 @@
 package com.nsa.bt.scrumble.repositories.implementations;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.nsa.bt.scrumble.models.User;
 import com.nsa.bt.scrumble.models.Workspace;
 import com.nsa.bt.scrumble.repositories.IWorkspaceRepository;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -49,9 +52,10 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     private PGobject getWorkspaceJsonbData(Workspace workspace) {
         try {
             Map<Object, Object> dataMap = new HashMap<>();
-            dataMap.put("project_ids", workspace.getProjectIds());
             PGobject jsonObject = new PGobject();
             ObjectMapper objectMapper = new ObjectMapper();
+
+            dataMap.put("project_ids", workspace.getProjectIds());
             String Map_Json_String = objectMapper.writeValueAsString(dataMap);
             jsonObject.setType("jsonb");
             jsonObject.setValue(Map_Json_String);
@@ -67,14 +71,26 @@ public class WorkspaceRepository implements IWorkspaceRepository {
         List<Workspace> workspaces = new ArrayList<>();
         String selectStatement = "SELECT * FROM workspaces as workspaces INNER JOIN users AS users ON workspaces.created_by_user = users.id";
         jdbcTemplate.query(selectStatement,
-                (rs, row) -> new Workspace(
-                        rs.getInt("id"),
-                        new User(rs.getInt("created_by_user"), rs.getInt("service_id"), rs.getString("provider_id")),
-                        rs.getString("name"),
-                        rs.getString("description"),
-                        rs.getObject("workspace_data")))
+                (rs, row) -> {
+                    try {
+                        return new Workspace(
+                                rs.getInt("id"),
+                                new User(rs.getInt("created_by_user"), rs.getInt("service_id"), rs.getString("provider_id")),
+                                rs.getString("name"),
+                                rs.getString("description"),
+                                parseJsonDataToProjectIds(((PGobject) rs.getObject("workspace_data"))));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                })
                 .forEach(entry -> workspaces.add(entry));
         return workspaces;
+    }
+
+    private ArrayList<Integer> parseJsonDataToProjectIds(PGobject jsonData) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return (ArrayList<Integer>) mapper.readValue(jsonData.getValue(), Map.class).get("project_ids");
     }
 
     @Override
@@ -87,39 +103,9 @@ public class WorkspaceRepository implements IWorkspaceRepository {
 
     @Override
     public void editWorkspace(Workspace updatedWorkspace) {
-        String deleteWorkspace = "UPDATE workspaces SET name = ?, description = ? WHERE id = ?";
-        Object[] params = new Object[]{ updatedWorkspace.getName(), updatedWorkspace.getDescription(), updatedWorkspace.getId() };
-        int[] types = new int[]{ Types.VARCHAR, Types.VARCHAR, Types.INTEGER} ;
+        String deleteWorkspace = "UPDATE workspaces SET name = ?, description = ?, workspace_data = ? WHERE id = ?";
+        Object[] params = new Object[]{ updatedWorkspace.getName(), updatedWorkspace.getDescription(), getWorkspaceJsonbData(updatedWorkspace), updatedWorkspace.getId() };
+        int[] types = new int[]{Types.VARCHAR, Types.VARCHAR, Types.OTHER, Types.INTEGER} ;
         jdbcTemplate.update(deleteWorkspace, params, types);
-    }
-
-    @Override
-    public void associateProjectsWithWorkspace(int workspaceId, int[] projectIds) {
-        String appendProjectIds = "UPDATE workspaces SET workspace_data = (\n" +
-                "    CASE\n" +
-                "        WHEN workspace_data IS NULL THEN '[]'::JSONB\n" +
-                "        ELSE project_ids\n" +
-                "    END\n" +
-                ") || '[\"newString\"]'::JSONB WHERE id = ?;";
-
-        try {
-            Map<Object, Object> dataMap = new HashMap<>();
-            dataMap.put("project_ids", projectIds);
-//            String updateProjectIds = "UPDATE workspaces SET workspace_data = workspace_data || ? WHERE id = ?;";
-            String updateProjectIds = "UPDATE workspaces SET workspace_data = jsonb_set(workspace_data, '{projectIds}', '\"Mary\"', true) WHERE id = 1; ";
-            ObjectMapper objectMapper = new ObjectMapper();
-            PGobject jsonObject = new PGobject();
-            String Map_Json_String = objectMapper.writeValueAsString(dataMap);
-            jsonObject.setType("jsonb");
-            jsonObject.setValue(Map_Json_String);
-
-            Object[] params = new Object[]{ jsonObject, workspaceId };
-
-            int[] types = new int[]{ Types.OTHER, Types.INTEGER } ;
-            jdbcTemplate.update(updateProjectIds, params, types);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-
     }
 }

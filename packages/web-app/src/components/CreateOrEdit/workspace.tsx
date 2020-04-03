@@ -1,12 +1,11 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { notify } from 'react-notify-toast';
 import { Multiselect } from 'multiselect-react-dropdown';
 
-import { Project } from 'models/Project';
 import { getProjects } from 'services/api/projects';
-import { notify } from 'react-notify-toast';
 import { errorColour, infoColour } from 'services/Notification/colours';
-
+import { Project } from 'models/Project';
 import { Workspace } from 'models/Workspace';
 
 interface IProps {
@@ -20,12 +19,9 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
     const [description, setDescription] = useState(props.workspace?.description || '');
     const [usersProjects, setUsersProjects] = useState<Project[]>([]);
     const [selectedProjectIds, setSelectedProjectIds] = useState<number[]>(props.workspace?.projectIds || []);
-
     const selected = usersProjects.filter((project) => selectedProjectIds.includes(project.id));
 
     useEffect(() => {
-        console.log('selectedProjectIds');
-        console.log(selectedProjectIds);
         getProjects().then((result) => {
             if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
             else if (result.length === 0) {
@@ -37,6 +33,14 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
             }
         });
     }, []);
+
+    const onSelect = (selectedProjects: Project[], selectedProject: Project): void => {
+        setSelectedProjectIds([...selectedProjectIds, selectedProject.id]);
+    };
+
+    const onRemove = (selectedProjects: Project[], removedProject: Project): void => {
+        setSelectedProjectIds(selectedProjectIds.filter((id) => id != removedProject.id));
+    };
 
     return (
         <Fragment>
@@ -63,12 +67,23 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
                 </div>
                 <div className="m-4">
                     <label className="form-label">Projects in this workspace</label>
-                    <Multiselect options={usersProjects} selectedValues={selected} displayValue="name" />
+                    <Multiselect
+                        options={usersProjects}
+                        selectedValues={selected}
+                        displayValue="name"
+                        onSelect={onSelect}
+                        onRemove={onRemove}
+                    />
                 </div>
                 <button
                     className="btn-create mx-auto mb-4 ml-4 absolute left-0 bottom-0"
                     onClick={(): void =>
-                        props.submit({ name, description, projectIds: selected.map((project) => project.id) })
+                        props.submit({
+                            id: props.workspace?.id || 0,
+                            name,
+                            description,
+                            projectIds: selectedProjectIds,
+                        })
                     }
                 >
                     Submit

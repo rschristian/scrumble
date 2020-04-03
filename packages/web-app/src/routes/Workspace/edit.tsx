@@ -9,12 +9,16 @@ import { errorColour, infoColour } from 'services/Notification/colours';
 import { useStore } from 'stores';
 
 const WorkspaceEdit: FunctionalComponent = () => {
-    const currentWorkspace = useStore().userLocationStore.currentWorkspace;
+    const userLocationStore = useStore().userLocationStore;
+    const currentWorkspace = userLocationStore.currentWorkspace;
 
     const onSubmit = (workspace: Workspace): void => {
-        editWorkspace(currentWorkspace.id, workspace).then((error) => {
-            if (error) notify.show(error, 'error', 5000, errorColour);
-            else notify.show('Changes saved!', 'custom', 5000, infoColour);
+        editWorkspace(currentWorkspace.id, workspace).then((result) => {
+            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
+            else {
+                userLocationStore.setWorkspace(result);
+                notify.show('Changes saved!', 'custom', 5000, infoColour);
+            }
         });
     };
 

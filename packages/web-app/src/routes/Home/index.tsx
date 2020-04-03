@@ -1,4 +1,4 @@
-import { Fragment, FunctionalComponent, h } from 'preact';
+import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
@@ -16,46 +16,6 @@ interface IProps {
     submit?: (name: string, description: string) => void;
     close: () => void;
 }
-
-const CreateWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-
-    return (
-        <Fragment>
-            <div class="overflow-auto relative">
-                <div class="m-4">
-                    <label class="form-label">Workspace Name</label>
-                    <input
-                        class="form-input"
-                        type="text"
-                        placeholder="Workspace Name"
-                        value={name}
-                        onInput={(e): void => setName((e.target as HTMLInputElement).value)}
-                    />
-                </div>
-                <div class="m-4">
-                    <label class="form-label">Workspace Description</label>
-                    <input
-                        class="form-input"
-                        type="text"
-                        placeholder="Workspace Description"
-                        value={description}
-                        onInput={(e): void => setDescription((e.target as HTMLInputElement).value)}
-                    />
-                </div>
-                <div class="flex justify-end pt-2">
-                    <button
-                        class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
-                        onClick={(): void => props.submit(name, description)}
-                    >
-                        Save
-                    </button>
-                </div>
-            </div>
-        </Fragment>
-    );
-};
 
 const Home: FunctionalComponent = () => {
     const rootStore = useStore();
@@ -77,9 +37,8 @@ const Home: FunctionalComponent = () => {
 
     const submitNewWorkspace = (workspace: Workspace): void => {
         createWorkspace(workspace).then((res) => {
-            if (typeof res === 'string') {
-                notify.show(res, 'error', 5000, errorColour);
-            } else {
+            if (typeof res === 'string') notify.show(res, 'error', 5000, errorColour);
+            else {
                 setWorkspacesArray([...workspacesArray, res]);
                 setShowCreateModal(false);
                 notify.show('Workspace created!', 'success', 5000, successColour);

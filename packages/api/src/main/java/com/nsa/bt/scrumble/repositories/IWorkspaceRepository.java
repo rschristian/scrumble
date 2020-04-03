@@ -16,6 +16,4 @@ public interface IWorkspaceRepository {
     void deleteWorkspace(int workspaceId);
 
     void editWorkspace(Workspace updatedWorkspace);
-
-    void associateProjectsWithWorkspace(int workspaceId, int[] projectIds);
 }

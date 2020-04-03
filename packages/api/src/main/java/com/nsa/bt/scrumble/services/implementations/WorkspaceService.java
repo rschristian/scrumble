@@ -39,9 +39,4 @@ public class WorkspaceService implements IWorkspaceService {
     public void editWorkspace(Workspace updatedWorkspace) {
         workspaceRepository.editWorkspace(updatedWorkspace);
     }
-
-    @Override
-    public void associateProjectsWithWorkspace(int workspaceId, int[] projectIds) {
-        workspaceRepository.associateProjectsWithWorkspace(workspaceId, projectIds);
-    }
 }
