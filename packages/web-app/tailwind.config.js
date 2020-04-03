@@ -21,6 +21,9 @@ module.exports = {
                 'w-1/5': '30%',
                 'w-12': '3rem',
             },
+            maxWidth: {
+                'w-40': '10rem',
+            },
         },
     },
     variants: {},

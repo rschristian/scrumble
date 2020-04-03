@@ -8,7 +8,7 @@ import { IssueFilter } from 'components/Filter/issue';
 import { Modal } from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
 import { createIssue, getIssues } from 'services/api/issues';
-import { errorColour, successColour } from 'services/notification/colours';
+import { errorColour, infoColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 const Backlog: FunctionalComponent = () => {
@@ -40,12 +40,13 @@ const Backlog: FunctionalComponent = () => {
         setIssueFilter(filterStatus);
         setIssueFilterTerm(searchTerm);
     }, []);
-
     const fetchIssues = useCallback((): void => {
         getIssues(currentWorkspace.id, projectId.current, pageNumber.current, issueFilter, issueFilterTerm).then(
             (result) => {
                 if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-                else if (result.nextResource.pageNumber !== 0) {
+                else if (result.issues.length == 0)
+                    notify.show('No issues found for your filter', 'custom', 5000, infoColour);
+                else {
                     setIssuesArray((oldValues) => oldValues.concat(result.issues));
                     projectId.current = result.nextResource.projectId;
                     pageNumber.current = result.nextResource.pageNumber;
@@ -59,7 +60,7 @@ const Backlog: FunctionalComponent = () => {
     }, [fetchIssues]);
 
     const scrollCheck = (e: HTMLDivElement): void => {
-        if (e.scrollHeight - e.scrollTop === e.clientHeight) fetchIssues();
+        if (e.scrollHeight - e.scrollTop === e.clientHeight && pageNumber.current !== 0) fetchIssues();
     };
 
     return (

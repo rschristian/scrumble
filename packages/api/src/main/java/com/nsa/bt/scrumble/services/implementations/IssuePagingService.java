@@ -9,10 +9,6 @@ import com.nsa.bt.scrumble.services.IWorkspaceService;
 import com.nsa.bt.scrumble.util.GitLabLinkParser;
 import com.nsa.bt.scrumble.util.GitLabLinks;
 
-import org.apache.commons.lang3.ArrayUtils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -25,8 +21,6 @@ import java.util.Arrays;
 
 @Service
 public class IssuePagingService implements IIssuePagingService {
-
-    private static final Logger logger = LoggerFactory.getLogger(IssuePagingService.class);
 
     @Autowired
     RestTemplate restTemplate;
@@ -44,8 +38,8 @@ public class IssuePagingService implements IIssuePagingService {
 
     @Override
     public int getNextProjectId(int workspaceId, int prevProjectId) {
-        int[] workspaceProjectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
-        return workspaceProjectIds[(ArrayUtils.indexOf(workspaceProjectIds, prevProjectId) + 1)];
+        ArrayList<Integer> workspaceProjectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
+        return workspaceProjectIds.get(workspaceProjectIds.lastIndexOf(prevProjectId) + 1);
     }
 
     @Override
@@ -59,7 +53,7 @@ public class IssuePagingService implements IIssuePagingService {
     @Override
     public int getProjectId(int workspaceId, int requestedPage) {
         if (requestedPage == 0) {
-            return workspaceService.getProjectIdsForWorkspace(workspaceId)[0];
+            return workspaceService.getProjectIdsForWorkspace(workspaceId).get(0);
         }
         return requestedPage;
     }
@@ -133,8 +127,8 @@ public class IssuePagingService implements IIssuePagingService {
 
     @Override
     public boolean isLastProject(int workspaceId, int projectId) {
-        int[] workspaceProjectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
-        return ArrayUtils.indexOf(workspaceProjectIds, projectId) == workspaceProjectIds.length - 1;
+        ArrayList<Integer> workspaceProjectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
+        return workspaceProjectIds.lastIndexOf(projectId) == workspaceProjectIds.size() - 1;
     }
 
     private HttpEntity<String> getApplicationJsonHeaders() {
