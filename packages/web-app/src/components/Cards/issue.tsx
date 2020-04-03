@@ -38,7 +38,6 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
 
     const [showEditIssueModal, setShowEditIssueModal] = useState(false);
     const [showIssueCardInformation, setShowIssueCardInformation] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
 
     const handleIssueEdit = async (issue: Issue): Promise<void> => {
         return await editIssue(
@@ -87,7 +86,6 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                         class="truncate cursor-pointer underline font-semibold hover:text-blue-500"
                         onClick={(): void => {
                             setShowIssueCardInformation(true);
-                            setErrorMessage('');
                         }}
                     >
                         {props.issue.title}
@@ -103,7 +101,6 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                             class="float-right btn-edit my-auto"
                             onClick={(): void => {
                                 setShowEditIssueModal(true);
-                                setErrorMessage('');
                             }}
                         >
                             Edit
