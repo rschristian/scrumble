@@ -38,8 +38,6 @@ const Home: FunctionalComponent = () => {
         createWorkspace(workspace.name, workspace.description, workspace.projectIds).then((res) => {
             if (typeof res === 'string') notify.show(res, 'error', 5000, errorColour);
             else {
-                console.log('workspace');
-                console.log(workspace);
                 setWorkspacesArray([...workspacesArray, res]);
                 setShowCreateModal(false);
                 notify.show('Workspace created!', 'success', 5000, successColour);
