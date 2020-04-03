@@ -23,17 +23,6 @@ repositories {
     mavenCentral()
 }
 
-bootRun {
-    sourceResources sourceSets.main
-    if (project.hasProperty("profiles")) {
-        systemProperty 'spring.profiles.active', project.property('profiles')
-    } else {
-        systemProperty 'spring.profiles.active', 'dev'
-    }
-
-    main = 'com.nsa.bt.scrumble.ScrumbleApi'
-}
-
 jar {
     manifest {
         attributes 'Main-Class': 'com.nsa.bt.scrumble.ScrumbleApi'
