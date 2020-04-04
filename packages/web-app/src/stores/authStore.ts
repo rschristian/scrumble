@@ -2,17 +2,23 @@ import { observable, action } from 'mobx';
 
 import { User } from 'models/User';
 import { login, destroyOAuthToken } from 'services/api/auth';
+import { authStorageService } from 'ts-api-toolkit';
 
 class AuthStore {
     @observable isAuthenticated = false;
     @observable currentUser: User = null;
 
     @action setCurrentUser(user: User): void {
+        const avatarUrl: string =
+            user.avatarUrl.indexOf('gravatar.com') > -1
+                ? user.avatarUrl
+                : `https://gitlab.ryanchristian.dev${user.avatarUrl.slice(user.avatarUrl.indexOf('/uploads'))}`;
+
         this.currentUser = {
             id: user.id,
             name: user.name,
             username: user.username,
-            avatarUrl: `https://gitlab.ryanchristian.dev${user.avatarUrl.slice(user.avatarUrl.indexOf('/uploads'))}`,
+            avatarUrl,
         };
     }
 
@@ -24,7 +30,7 @@ class AuthStore {
     }
 
     @action async logout(): Promise<void> {
-        await destroyOAuthToken();
+        if (authStorageService.getToken()) await destroyOAuthToken();
         this.isAuthenticated = false;
         this.currentUser = null;
     }
