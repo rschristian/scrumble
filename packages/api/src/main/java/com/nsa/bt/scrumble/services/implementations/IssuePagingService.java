@@ -1,6 +1,7 @@
 package com.nsa.bt.scrumble.services.implementations;
 
 import com.nsa.bt.scrumble.dto.Issue;
+import com.nsa.bt.scrumble.dto.Project;
 import com.nsa.bt.scrumble.dto.IssuePageResult;
 import com.nsa.bt.scrumble.dto.NextResource;
 import com.nsa.bt.scrumble.services.IIssuePagingService;
@@ -144,6 +145,14 @@ public class IssuePagingService implements IIssuePagingService {
         page = getPageNumber(page);
         projectId = getProjectId(workspaceId, projectId);
 
+        var headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        var jsonHeaders = new HttpEntity(headers);
+
+        String uri = String.format("%s/projects?access_token=%s&simple=true&membership=true", gitLabApiUrl, accessToken);
+            ResponseEntity<ArrayList<Project>> userProjectsResponse = restTemplate.exchange(uri, HttpMethod.GET, jsonHeaders, new ParameterizedTypeReference<>() {});
+            ArrayList<Project> projects = userProjectsResponse.getBody();
+
         String queryUri = String.format("%s/projects/%d/issues?%s&search=%s&page=%d&access_token=%s",
                 gitLabApiUrl, projectId, issueService.getFilterQuery(filter), searchTerm, page, accessToken);
 
@@ -156,7 +165,7 @@ public class IssuePagingService implements IIssuePagingService {
 
             issues = issuesResponse.getBody();
             issues.forEach((issue)->issueService.setStoryPoint(issue));
-            issues.forEach((issue)->issueService.setProjectName(gitLabApiUrl, issue, accessToken));
+            issues.forEach((issue)-> issueService.setProjectName(issue, projects));
             issuePageResult.setIssues(issues);
 
             if (!issues.isEmpty()) {

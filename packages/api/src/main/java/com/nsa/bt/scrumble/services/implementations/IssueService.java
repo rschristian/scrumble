@@ -117,10 +117,11 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public void setProjectName(String gitLabBaseUrl, Issue issue, String accessToken) {
-        String uri = String.format("%1s/projects/%2s?access_token=%3s", gitLabBaseUrl, issue.getProjectId(), accessToken);
-        ResponseEntity<Project> projectResponse = restTemplate.getForEntity(uri, Project.class);
-        Project project = projectResponse.getBody();
-        issue.setProjectName(project.getName());
+    public void setProjectName(Issue issue, ArrayList<Project> projects) {
+        for(int i = 0; i< projects.size(); i++) {
+            if(issue.getProjectId() == projects.get(i).getId()) {
+                issue.setProjectName(projects.get(i).getName());
+            }
+        }
     }
 }
