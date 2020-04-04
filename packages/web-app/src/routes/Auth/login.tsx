@@ -16,7 +16,7 @@ const Login: FunctionalComponent = () => {
                 <img class="h-20 w-20 mx-auto" src={scrumCards} alt="Image of Scrum Cards" />
                 <button
                     class="btn-create mx-auto my-auto"
-                    onClick={(): string => (location.href = '/api/v1/oauth2/authorize/gitlab')}
+                    onClick={(): string => (location.href = '/api/oauth2/authorize/gitlab')}
                 >
                     Login with GitLab
                 </button>
