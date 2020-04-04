@@ -38,10 +38,6 @@ public class ProjectApi {
 
     @GetMapping("/projects")
     public ResponseEntity<Object> getIssues(Authentication auth) {
-
-//        Map<String, Map<String>>
-
-
         var headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         var jsonHeaders = new HttpEntity(headers);
