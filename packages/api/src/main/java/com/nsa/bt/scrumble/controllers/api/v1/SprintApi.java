@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
-public class ProjectApi {
+public class SprintApi {
 
     @Autowired
     RestTemplate restTemplate;
@@ -36,25 +36,21 @@ public class ProjectApi {
 
     private static final Logger logger = LoggerFactory.getLogger(ProjectApi.class);
 
-    @GetMapping("/projects")
-    public ResponseEntity<Object> getIssues(Authentication auth) {
-
-//        Map<String, Map<String>>
-
-
-        var headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        var jsonHeaders = new HttpEntity(headers);
-
-        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-        if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
-                    gitLabBaseUrl, accessTokenOptional.get());
-            ResponseEntity<ArrayList<Project>> userProjectsResponse =
-                    restTemplate.exchange(uri, HttpMethod.GET, jsonHeaders, new ParameterizedTypeReference<>() {});
-            return ResponseEntity.ok().body(userProjectsResponse.getBody());
-        }
-        return ResponseEntity.ok().body(authErrorMsg);
-    }
+//    @GetMapping("/projects")
+//    public ResponseEntity<Object> getIssues(Authentication auth) {
+//        var headers = new HttpHeaders();
+//        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+//        var jsonHeaders = new HttpEntity(headers);
+//
+//        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
+//        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+//        if(accessTokenOptional.isPresent()) {
+//            String uri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
+//                    gitLabBaseUrl, accessTokenOptional.get());
+//            ResponseEntity<ArrayList<Project>> userProjectsResponse =
+//                    restTemplate.exchange(uri, HttpMethod.GET, jsonHeaders, new ParameterizedTypeReference<>() {});
+//            return ResponseEntity.ok().body(userProjectsResponse.getBody());
+//        }
+//        return ResponseEntity.ok().body(authErrorMsg);
+//    }
 }

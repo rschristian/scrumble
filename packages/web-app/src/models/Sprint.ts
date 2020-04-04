@@ -10,6 +10,6 @@ export interface Sprint {
     status: SprintStatus;
     startDate: Date;
     dueDate: Date;
-    totalStoryPoint: number;
-    totalNumberOfIssues: number;
+    totalStoryPoint?: number;
+    totalNumberOfIssues?: number;
 }
