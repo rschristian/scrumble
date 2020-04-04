@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizationRequestRepository(cookieAuthorizationRequestRepository())
                 .and()
                 .redirectionEndpoint()
-                .baseUri("/api/login/oauth2/code/gitlab")
+                .baseUri("/api/login/oauth2/code")
                 .and()
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService)
