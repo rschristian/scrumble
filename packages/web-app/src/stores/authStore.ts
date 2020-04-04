@@ -9,11 +9,16 @@ class AuthStore {
     @observable currentUser: User = null;
 
     @action setCurrentUser(user: User): void {
+        const avatarUrl: string =
+            user.avatarUrl.indexOf('gravatar.com') > -1
+                ? user.avatarUrl
+                : `https://gitlab.ryanchristian.dev${user.avatarUrl.slice(user.avatarUrl.indexOf('/uploads'))}`;
+
         this.currentUser = {
             id: user.id,
             name: user.name,
             username: user.username,
-            avatarUrl: `https://gitlab.ryanchristian.dev${user.avatarUrl.slice(user.avatarUrl.indexOf('/uploads'))}`,
+            avatarUrl,
         };
     }
 
