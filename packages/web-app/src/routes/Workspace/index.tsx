@@ -2,7 +2,6 @@ import { ComponentChild, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
 import sprinter from 'assets/icons/sprinter.png';
-import list from 'assets/icons/list.png';
 import metrics from 'assets/icons/metrics.png';
 import edit from 'assets/icons/edit.png';
 import { BreadCrumbs } from 'components/BreadCrumbs';

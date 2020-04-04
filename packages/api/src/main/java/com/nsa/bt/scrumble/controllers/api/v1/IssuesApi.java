@@ -8,6 +8,7 @@ import com.nsa.bt.scrumble.services.IIssuePagingService;
 import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.services.IIssueService;
 import com.nsa.bt.scrumble.services.IUserService;
+import com.nsa.bt.scrumble.services.IWorkspaceService;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,14 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.core.ParameterizedTypeReference;
-
-import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -60,6 +57,9 @@ public class IssuesApi {
     IIssueService issueService;
 
     @Autowired
+    IWorkspaceService workspaceService;
+
+    @Autowired
     DataGrabber dataGrabber;
 
     @GetMapping("/workspace/{id}/issues")
@@ -77,6 +77,10 @@ public class IssuesApi {
             var res = new HashMap<String, String>();
             res.put("message", authErrorMsg);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
+        }
+
+        if (workspaceService.getProjectIdsForWorkspace(workspaceId).isEmpty()) {
+            return ResponseEntity.ok().body("You haven't added any projects to your workspace!");
         }
 
         String accessToken = accessTokenOptional.get();

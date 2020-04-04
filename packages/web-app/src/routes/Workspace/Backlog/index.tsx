@@ -1,18 +1,18 @@
 import { FunctionalComponent, h } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 import { IssueCard } from 'components/Cards/issue';
 import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
-import { filterStatusEnum, IssueFilter } from 'components/Filter/issue';
+import { IssueFilter } from 'components/Filter/issue';
 import { Modal } from 'components/Modal';
 import { DateTime } from 'luxon';
 import { Issue, IssueStatus } from 'models/Issue';
 import { createIssue, getIssues } from 'services/api/issues';
-import { errorColour, successColour } from 'services/notification/colours';
+import { errorColour, infoColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 const Backlog: FunctionalComponent = () => {
-    const userLocationStore = useStore().userLocationStore;
+    const currentWorkspace = useStore().userLocationStore.currentWorkspace;
 
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
 
@@ -20,44 +20,41 @@ const Backlog: FunctionalComponent = () => {
     const [issueFilterTerm, setIssueFilterTerm] = useState('');
 
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
-    const [currentPageNumber, setCurrentPageNumber] = useState(0);
-    const [currentProjectId, setCurrentProjectId] = useState(0);
+    const projectId = useRef(0);
+    const pageNumber = useRef(0);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
-        return await createIssue(userLocationStore.currentWorkspace.id, projectId, newIssue).then((result: Issue) => {
-            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-            notify.show('New issue created!', 'success', 5000, successColour);
-            fetchIssues();
-            setShowNewIssueModal(false);
+        return await createIssue(currentWorkspace.id, projectId, newIssue).then((error) => {
+            if (error) notify.show(error, 'error', 5000, errorColour);
+            else {
+                notify.show('New issue created!', 'success', 5000, successColour);
+                updateIssueFilter(issueFilter, issueFilterTerm);
+            }
         });
-    };
-    const updateIssueFilter = (filterFor: string): void => {
-        setCurrentPageNumber(0);
-        setCurrentProjectId(0);
-        setIssuesArray([]);
-        if (Object.values(filterStatusEnum).includes(filterFor)) setIssueFilter(filterFor);
-        else setIssueFilterTerm(filterFor);
     };
 
-    const fetchIssues = (): void => {
-        getIssues(
-            userLocationStore.currentWorkspace.id,
-            currentProjectId,
-            currentPageNumber,
-            issueFilter,
-            issueFilterTerm,
-        ).then((result) => {
-            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-            else if (result.nextResource.pageNumber !== 0) {
-                setIssuesArray((oldValues) => oldValues.concat(result.issues));
-                setCurrentPageNumber(result.nextResource.pageNumber);
-                setCurrentProjectId(result.nextResource.projectId);
-            }
-            else if (result.nextResource.pageNumber === 0) {
-                setIssuesArray(result.issues);
-            }
-        });
-    };
+    const updateIssueFilter = useCallback((filterStatus: string, searchTerm: string): void => {
+        projectId.current = 0;
+        pageNumber.current = 0;
+        setIssuesArray([]);
+        setIssueFilter(filterStatus);
+        setIssueFilterTerm(searchTerm);
+    }, []);
+    const fetchIssues = useCallback((): void => {
+        getIssues(currentWorkspace.id, projectId.current, pageNumber.current, issueFilter, issueFilterTerm).then(
+            (result) => {
+                if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
+                else if (result.issues.length == 0)
+                    notify.show('No issues found for your filter', 'custom', 5000, infoColour);
+                else {
+                    setIssuesArray((oldValues) => oldValues.concat(result.issues));
+                    projectId.current = result.nextResource.projectId;
+                    pageNumber.current = result.nextResource.pageNumber;
+                }
+            },
+        );
+    }, [currentWorkspace.id, issueFilter, issueFilterTerm]);
+
     const updateIssue = (updatedIssue: Issue): void => {
         let arrayCopy = [...issuesArray];
             issuesArray.forEach((issue: Issue, index) => {
@@ -67,17 +64,13 @@ const Backlog: FunctionalComponent = () => {
                     setIssuesArray(arrayCopy);
                 }
             });
-            
     };
-
     useEffect(() => {
         fetchIssues();
-        // TODO This is a completely legitimate warning, but I don't know how to fix it correctly. Help?
-    }, [issueFilter, issueFilterTerm]);
+    }, [fetchIssues]);
 
     const scrollCheck = (e: HTMLDivElement): void => {
-        const bottom = e.scrollHeight - e.scrollTop === e.clientHeight;
-        if (bottom) fetchIssues();
+        if (e.scrollHeight - e.scrollTop === e.clientHeight && pageNumber.current !== 0) fetchIssues();
     };
 
     return (
@@ -109,9 +102,7 @@ const Backlog: FunctionalComponent = () => {
                 onScroll={(e): void => scrollCheck(e.target as HTMLDivElement)}
             >
                 {issuesArray.map((issue, index) => {
-                    // if (issueFilter === 'all' || issue.state.toString() === issueFilter) {
                     return <IssueCard key={index} issue={issue} refresh={fetchIssues} updateIssue={updateIssue} />;
-                    // }
                 })}
             </div>
         </div>
