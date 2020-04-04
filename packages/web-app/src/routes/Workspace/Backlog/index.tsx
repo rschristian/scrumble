@@ -40,6 +40,7 @@ const Backlog: FunctionalComponent = () => {
         setIssueFilter(filterStatus);
         setIssueFilterTerm(searchTerm);
     }, []);
+
     const fetchIssues = useCallback((): void => {
         getIssues(currentWorkspace.id, projectId.current, pageNumber.current, issueFilter, issueFilterTerm).then(
             (result) => {
