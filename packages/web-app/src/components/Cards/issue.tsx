@@ -7,7 +7,7 @@ import { Modal } from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
 import { editIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
-import { errorColour } from 'services/notification/colours';
+import { errorColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 import { IssueInformation } from 'components/IssueInformation'
 
@@ -29,7 +29,6 @@ export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
 
 interface IProps {
     issue: Issue;
-    refresh: () => void;
     updateIssue: (issue: Issue) => void;
 }
 
@@ -48,6 +47,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
         ).then((error) => {
             if (error) notify.show(error, 'error', 5000, errorColour);
             else {
+                notify.show('Issue successfully updated!', 'success', 5000, successColour);
                 setShowEditIssueModal(false);
                 props.updateIssue(issue);
             }

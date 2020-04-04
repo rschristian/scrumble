@@ -9,27 +9,22 @@ export const projects: Project[] = [
     {
         id: 1,
         name: 'Fix San',
-        url: 'www.pm.com',
     },
     {
         id: 2,
         name: 'Zamit',
-        url: 'www.cw.com',
     },
     {
         id: 3,
         name: 'Fixflex',
-        url: 'www.rots.com',
     },
     {
         id: 4,
         name: 'Asoka',
-        url: 'www.rots.com',
     },
     {
         id: 5,
         name: 'Domainer',
-        url: 'www.rots.com',
     },
 ];
 

@@ -24,11 +24,12 @@ const Backlog: FunctionalComponent = () => {
     const pageNumber = useRef(0);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
-        return await createIssue(currentWorkspace.id, projectId, newIssue).then((error) => {
-            if (error) notify.show(error, 'error', 5000, errorColour);
+        return await createIssue(currentWorkspace.id, projectId, newIssue).then((result) => {
+            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
             else {
                 notify.show('New issue created!', 'success', 5000, successColour);
-                updateIssueFilter(issueFilter, issueFilterTerm);
+                setShowNewIssueModal(false);
+                updateIssue(result);
             }
         });
     };
@@ -40,6 +41,7 @@ const Backlog: FunctionalComponent = () => {
         setIssueFilter(filterStatus);
         setIssueFilterTerm(searchTerm);
     }, []);
+
     const fetchIssues = useCallback((): void => {
         getIssues(currentWorkspace.id, projectId.current, pageNumber.current, issueFilter, issueFilterTerm).then(
             (result) => {
@@ -57,6 +59,8 @@ const Backlog: FunctionalComponent = () => {
 
     const updateIssue = (updatedIssue: Issue): void => {
         let arrayCopy = [...issuesArray];
+        let found = arrayCopy.some(issue => updatedIssue.iid === issue.iid);
+        if(found) {
             issuesArray.forEach((issue: Issue, index) => {
                 if(issue.iid === updatedIssue.iid) {
                     updatedIssue.createdAt = DateTime.local().toLocaleString();
@@ -64,7 +68,12 @@ const Backlog: FunctionalComponent = () => {
                     setIssuesArray(arrayCopy);
                 }
             });
+        } else {
+            arrayCopy.unshift(updatedIssue);
+            setIssuesArray(arrayCopy);
+        }
     };
+
     useEffect(() => {
         fetchIssues();
     }, [fetchIssues]);
@@ -102,7 +111,7 @@ const Backlog: FunctionalComponent = () => {
                 onScroll={(e): void => scrollCheck(e.target as HTMLDivElement)}
             >
                 {issuesArray.map((issue, index) => {
-                    return <IssueCard key={index} issue={issue} refresh={fetchIssues} updateIssue={updateIssue} />;
+                    return <IssueCard key={index} issue={issue} updateIssue={updateIssue} />;
                 })}
             </div>
         </div>

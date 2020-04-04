@@ -98,8 +98,9 @@ public class IssuesApi {
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
             String uri = String.format("%1s/projects/%2s/issues?title=%3s&description=%4s&labels=%5s&access_token=%6s",
-                    gitLabBaseUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(),accessTokenOptional.get());
+                    gitLabBaseUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), accessTokenOptional.get());
             Issue newIssue = restTemplate.postForObject(uri, null , Issue.class);
+            issueService.setStoryPoint(newIssue);
             linearRegression.setEstimate(gitLabBaseUrl, projectId, newIssue, accessTokenOptional);
             return ResponseEntity.ok().body(newIssue);
         }
