@@ -34,8 +34,8 @@ export default {
         if (!env.isProd) {
             config.devServer.proxy = [
                 {
-                    path: '/api/v1',
-                    target: 'http://localhost:8000',
+                    path: '/api',
+                    target: 'http://localhost:8001',
                 },
             ];
         }
