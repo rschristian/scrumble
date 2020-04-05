@@ -22,7 +22,7 @@ export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) =
             }),
     );
 
-    const createIssue = (): Sprint => {
+    const createSprint = (): Sprint => {
         return {
             id: props.sprint?.id || 0,
             title,
@@ -81,22 +81,16 @@ export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) =
                 />
             </div>
             {!props.sprint ? (
-                <div class="flex justify-end pt-2">
-                    <button
-                        class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
-                        onClick={(): void => props.submit(createIssue())}
-                    >
+                <div class="flex justify-between pt-2">
+                    <button class="btn-create mb-4 ml-4" onClick={(): void => props.submit(createSprint())}>
                         Confirm
                     </button>
-                    <button
-                        class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
-                        onClick={props.close}
-                    >
+                    <button class="btn-close bg-transparent mb-4 mr-4" onClick={props.close}>
                         Cancel
                     </button>
                 </div>
             ) : (
-                <button class="btn-create mx-auto mb-4 ml-4" onClick={(): void => props.submit(createIssue())}>
+                <button class="btn-create mx-auto mb-4 ml-4" onClick={(): void => props.submit(createSprint())}>
                     Save Changes
                 </button>
             )}

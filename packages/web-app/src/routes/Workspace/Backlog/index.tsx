@@ -58,11 +58,11 @@ const Backlog: FunctionalComponent = () => {
     }, [currentWorkspace.id, issueFilter, issueFilterTerm]);
 
     const updateIssue = (updatedIssue: Issue): void => {
-        let arrayCopy = [...issuesArray];
-        let found = arrayCopy.some(issue => updatedIssue.iid === issue.iid);
-        if(found) {
+        const arrayCopy = [...issuesArray];
+        const found = arrayCopy.some((issue) => updatedIssue.iid === issue.iid);
+        if (found) {
             issuesArray.forEach((issue: Issue, index) => {
-                if(issue.iid === updatedIssue.iid) {
+                if (issue.iid === updatedIssue.iid) {
                     updatedIssue.createdAt = DateTime.local().toLocaleString();
                     arrayCopy[index] = updatedIssue;
                     setIssuesArray(arrayCopy);
