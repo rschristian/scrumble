@@ -97,16 +97,13 @@ public class IssuesApi {
             Authentication authentication, @PathVariable(value="workspaceId") int workspaceId,
             @PathVariable(value="projectId") int projectId,
             @RequestBody Issue issue) {
-        var headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        var jsonHeaders = new HttpEntity(headers);
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
             String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true", 
                     gitLabBaseUrl, accessTokenOptional.get());
-            ResponseEntity<ArrayList<Project>> userProjectsResponse = restTemplate.exchange(projectUri, HttpMethod.GET, jsonHeaders, new ParameterizedTypeReference<>() {});
-            ArrayList<Project> projects = userProjectsResponse.getBody();
+            ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(projectUri, Project[].class);
+            Project[] projects = userProjectsResponse.getBody();
             String issueUri = String.format("%1s/projects/%2s/issues?title=%3s&description=%4s&labels=%5s&access_token=%6s",
                     gitLabBaseUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), accessTokenOptional.get());
             Issue newIssue = restTemplate.postForObject(issueUri, null , Issue.class);

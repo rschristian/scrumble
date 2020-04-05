@@ -117,10 +117,10 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public void setProjectName(Issue issue, ArrayList<Project> projects) {
-        for(int i = 0; i< projects.size(); i++) {
-            if(issue.getProjectId() == projects.get(i).getId()) {
-                issue.setProjectName(projects.get(i).getName());
+    public void setProjectName(Issue issue, Project[] projects) {
+        for(int i = 0; i< projects.length; i++) {
+            if(issue.getProjectId() == projects[i].getId()) {
+                issue.setProjectName(projects[i].getName());
             }
         }
     }

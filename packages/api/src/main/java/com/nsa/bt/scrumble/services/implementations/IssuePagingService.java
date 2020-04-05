@@ -145,13 +145,9 @@ public class IssuePagingService implements IIssuePagingService {
         page = getPageNumber(page);
         projectId = getProjectId(workspaceId, projectId);
 
-        var headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        var jsonHeaders = new HttpEntity(headers);
-
         String uri = String.format("%s/projects?access_token=%s&simple=true&membership=true", gitLabApiUrl, accessToken);
-            ResponseEntity<ArrayList<Project>> userProjectsResponse = restTemplate.exchange(uri, HttpMethod.GET, jsonHeaders, new ParameterizedTypeReference<>() {});
-            ArrayList<Project> projects = userProjectsResponse.getBody();
+            ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(uri, Project[].class);
+            Project[] projects = userProjectsResponse.getBody();
 
         String queryUri = String.format("%s/projects/%d/issues?%s&search=%s&page=%d&access_token=%s",
                 gitLabApiUrl, projectId, issueService.getFilterQuery(filter), searchTerm, page, accessToken);

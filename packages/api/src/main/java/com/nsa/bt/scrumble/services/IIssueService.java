@@ -11,7 +11,7 @@ public interface IIssueService {
 
     void setStoryPoint(Issue issue);
 
-    void setProjectName(Issue issue, ArrayList<Project> projects);
+    void setProjectName(Issue issue, Project[] projects);
 
     void filterAndSetStoryPoint(ArrayList<Issue> issues);
 
