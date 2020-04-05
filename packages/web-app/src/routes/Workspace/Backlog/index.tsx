@@ -1,11 +1,11 @@
 import { FunctionalComponent, h } from 'preact';
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
-
 import { IssueCard } from 'components/Cards/issue';
 import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
 import { IssueFilter } from 'components/Filter/issue';
 import { Modal } from 'components/Modal';
+import { DateTime } from 'luxon';
 import { Issue, IssueStatus } from 'models/Issue';
 import { createIssue, getIssues } from 'services/api/issues';
 import { errorColour, infoColour, successColour } from 'services/notification/colours';
@@ -24,11 +24,12 @@ const Backlog: FunctionalComponent = () => {
     const pageNumber = useRef(0);
 
     const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
-        return await createIssue(currentWorkspace.id, projectId, newIssue).then((error) => {
-            if (error) notify.show(error, 'error', 5000, errorColour);
+        return await createIssue(currentWorkspace.id, projectId, newIssue).then((result) => {
+            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
             else {
                 notify.show('New issue created!', 'success', 5000, successColour);
-                updateIssueFilter(issueFilter, issueFilterTerm);
+                setShowNewIssueModal(false);
+                updateIssue(result);
             }
         });
     };
@@ -55,6 +56,23 @@ const Backlog: FunctionalComponent = () => {
             },
         );
     }, [currentWorkspace.id, issueFilter, issueFilterTerm]);
+
+    const updateIssue = (updatedIssue: Issue): void => {
+        const arrayCopy = [...issuesArray];
+        const found = arrayCopy.some((issue) => updatedIssue.iid === issue.iid);
+        if (found) {
+            issuesArray.forEach((issue: Issue, index) => {
+                if (issue.iid === updatedIssue.iid) {
+                    updatedIssue.createdAt = DateTime.local().toLocaleString();
+                    arrayCopy[index] = updatedIssue;
+                    setIssuesArray(arrayCopy);
+                }
+            });
+        } else {
+            arrayCopy.unshift(updatedIssue);
+            setIssuesArray(arrayCopy);
+        }
+    };
 
     useEffect(() => {
         fetchIssues();
@@ -93,7 +111,7 @@ const Backlog: FunctionalComponent = () => {
                 onScroll={(e): void => scrollCheck(e.target as HTMLDivElement)}
             >
                 {issuesArray.map((issue, index) => {
-                    return <IssueCard key={index} issue={issue} refresh={fetchIssues} />;
+                    return <IssueCard key={index} issue={issue} updateIssue={updateIssue} />;
                 })}
             </div>
         </div>

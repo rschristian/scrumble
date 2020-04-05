@@ -1,13 +1,13 @@
-import { FunctionalComponent, h } from 'preact';
+import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
 import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
 import { Modal } from 'components/Modal';
-import { Issue } from 'models/Issue';
+import { Issue, IssueStatus } from 'models/Issue';
 import { editIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
-import { errorColour } from 'services/notification/colours';
+import { errorColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
@@ -28,13 +28,14 @@ export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
 
 interface IProps {
     issue: Issue;
-    refresh: () => void;
+    updateIssue: (issue: Issue) => void;
 }
 
 export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
     const userLocationStore = useStore().userLocationStore;
 
     const [showEditIssueModal, setShowEditIssueModal] = useState(false);
+    const [showIssueCardInformation, setShowIssueCardInformation] = useState(false);
 
     const handleIssueEdit = async (issue: Issue): Promise<void> => {
         return await editIssue(
@@ -45,14 +46,15 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
         ).then((error) => {
             if (error) notify.show(error, 'error', 5000, errorColour);
             else {
+                notify.show('Issue successfully updated!', 'success', 5000, successColour);
                 setShowEditIssueModal(false);
-                props.refresh();
+                props.updateIssue(issue);
             }
         });
     };
 
     return (
-        <div class="lst-itm-container cursor-move">
+        <div class="cursor-default capitalize">
             {showEditIssueModal ? (
                 <Modal
                     title="Edit Issue"
@@ -66,17 +68,112 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                     close={(): void => setShowEditIssueModal(false)}
                 />
             ) : null}
-
-            <div class="px-4 py-2 flex min-w-0">
-                <div class="truncate">{props.issue.title}</div>
-            </div>
-            <div class="px-4 py-2 z-1">
-                {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
-                <span class="text-gray-700">Project ID: {props.issue.projectId}</span>
-                <button class="float-right btn-edit my-auto" onClick={(): void => setShowEditIssueModal(true)}>
-                    Edit
-                </button>
+            {showIssueCardInformation ? (
+                <Modal
+                    title={props.issue.title}
+                    content={<IssueInformation issue={props.issue} />}
+                    close={(): void => setShowIssueCardInformation(false)}
+                />
+            ) : null}
+            <div class="lst-itm-container cursor-move">
+                <div class="px-4 py-2 flex min-w-0">
+                    <div
+                        class="truncate cursor-pointer underline font-semibold hover:text-blue-500"
+                        onClick={(): void => {
+                            setShowIssueCardInformation(true);
+                        }}
+                    >
+                        {props.issue.title}
+                    </div>
+                </div>
+                <div class="px-4 py-2 z-1">
+                    <span class={props.issue.status === IssueStatus.open ? 'open' : 'closed'}>
+                        {props.issue.status}
+                    </span>
+                    {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
+                    <span class="text-gray-700"> Project Name: {props.issue.projectName}</span>
+                    <div>
+                        <button
+                            class="float-right btn-edit my-auto"
+                            onClick={(): void => {
+                                setShowEditIssueModal(true);
+                            }}
+                        >
+                            Edit
+                        </button>
+                        <span class="float-right text-gray-700 py-2 px-4">
+                            {' '}
+                            <span class="font-medium">Author:</span> {props.issue.author.name}
+                        </span>
+                        <span class="float-left text-gray-700 py-2">
+                            {' '}
+                            <span class="font-medium">Assignee:</span>{' '}
+                            {props.issue.assignee !== null ? props.issue.assignee.name : 'Unassigned'}
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     );
 });
+
+interface InformationProps {
+    issue: Issue;
+}
+export const IssueInformation: FunctionalComponent<InformationProps> = (props: InformationProps) => {
+    return (
+        <Fragment>
+            <div class="table w-full capitalize">
+                <div class="table-row-group">
+                    <div class="table-row">
+                        <div class="table-cell py-2">
+                            <span class="info-label"> Project: </span>
+                            <span class="text-gray-700"> {props.issue.projectName} </span>
+                        </div>
+                        <div class="table-cell py-2">
+                            <span class="info-label"> Created At: </span>
+                            <span class="text-gray-700"> {props.issue.createdAt} </span>
+                        </div>
+                    </div>
+                    <div class="table-row">
+                        <div class="table-cell py-2">
+                            <span class="info-label"> Created By: </span>
+                            <span class="text-gray-700">{props.issue.author.name} </span>
+                        </div>
+                        <div class="table-cell">
+                            <span class="info-label"> Assigned To: </span>
+                            <span class="text-gray-700">
+                                {props.issue.assignee !== null ? props.issue.assignee.name : 'Unassigned'}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="table-row">
+                        <div class="table-cell py-2">
+                            <span class="info-label"> Story Point: </span>
+                            <span class="story-pnt"> {props.issue.storyPoint} </span>
+                        </div>
+                        <div class="table-cell py-2">
+                            <span class="info-label"> State: </span>
+                            <span class={props.issue.status === IssueStatus.open ? 'open' : 'closed'}>
+                                {props.issue.status}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="py-2">
+                <span class="info-label"> Description: </span>
+                <div class="table-row normal-case">
+                    <span class="text-gray-700">
+                        {' '}
+                        {props.issue.description.trim() != '' ? (
+                            props.issue.description
+                        ) : (
+                            <span class="italic"> No Description Given</span>
+                        )}
+                    </span>
+                </div>
+            </div>
+        </Fragment>
+    );
+};

@@ -3,6 +3,8 @@ import { useState } from 'preact/hooks';
 
 import { projects } from 'data';
 import { Issue } from 'models/Issue';
+import { User } from 'models/User';
+import { useStore } from 'stores';
 
 interface IProps {
     issue?: Issue;
@@ -11,10 +13,13 @@ interface IProps {
 }
 
 export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
+    const authStore = useStore().authStore;
     const [title, setTitle] = useState(props.issue?.title || '');
     const [description, setDescription] = useState(props.issue?.description || '');
     const [storyPoint, setStoryPoint] = useState(props.issue?.storyPoint || 0);
     const [projectId, setProjectId] = useState(props.issue?.projectId || 0);
+    const [projectName, setProjectName] = useState(props.issue?.projectName || '');
+    const [assignee, setAssignee] = useState<User>(props.issue?.assignee || null);
 
     const createIssue = (): Issue => {
         return {
@@ -24,6 +29,10 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
             description,
             storyPoint,
             projectId,
+            projectName,
+            author: props.issue?.author || authStore.currentUser,
+            createdAt: new Date(),
+            assignee,
         };
     };
 
