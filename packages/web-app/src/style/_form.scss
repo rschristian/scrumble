@@ -7,6 +7,10 @@
   @apply bg-white w-11/12 shadow-xl mx-auto mt-4 mb-8 p-2 rounded-md;
 }
 
+.form-label {
+  @apply block text-deep-space-sparkle text-sm font-bold mb-2;
+}
+
 .form-input {
   @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight text-sm font-bold mb-2;
 
@@ -15,8 +19,11 @@
   }
 }
 
-.form-label {
-  @apply block text-deep-space-sparkle text-sm font-bold mb-2;
+// For the dropdowns
+.optionListContainer {
+  position: fixed !important;
+  width: auto !important;
+  z-index: 50 !important;
 }
 
 .form-option {
