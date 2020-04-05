@@ -160,8 +160,10 @@ public class IssuePagingService implements IIssuePagingService {
                     queryUri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
 
             issues = issuesResponse.getBody();
-            issues.forEach((issue)->issueService.setStoryPoint(issue));
-            issues.forEach((issue)-> issueService.setProjectName(issue, projects));
+            issues.forEach((issue)-> {
+                issueService.setStoryPoint(issue);
+                issueService.setProjectName(issue, projects);
+            });
             issuePageResult.setIssues(issues);
 
             if (!issues.isEmpty()) {

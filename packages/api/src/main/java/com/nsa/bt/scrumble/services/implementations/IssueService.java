@@ -121,6 +121,7 @@ public class IssueService implements IIssueService {
         for(int i = 0; i< projects.length; i++) {
             if(issue.getProjectId() == projects[i].getId()) {
                 issue.setProjectName(projects[i].getName());
+                return;
             }
         }
     }
