@@ -7,6 +7,15 @@
     @apply bg-l-deep-space-sparkle;
   }
 }
+
+.btn-close {
+  @apply align-baseline text-deep-space-sparkle font-semibold py-2 px-4 border border-deep-space-sparkle rounded shadow-md bg-white;
+
+  &:hover {
+    @apply bg-l-deep-space-sparkle text-white border-gray-400;
+  }
+}
+
 .btn-edit {
   @apply align-baseline bg-green-500 text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow-xl;
 

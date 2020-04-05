@@ -7,6 +7,7 @@ import { getProjects } from 'services/api/projects';
 import { errorColour, infoColour } from 'services/notification/colours';
 import { Project } from 'models/Project';
 import { Workspace } from 'models/Workspace';
+import { Sprint, SprintStatus } from 'models/Sprint';
 
 interface IProps {
     workspace?: Workspace;
@@ -27,6 +28,15 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
             else setProjects(result);
         });
     }, []);
+
+    const createWorkspace = (): Workspace => {
+        return {
+            id: props.workspace?.id || 0,
+            name,
+            description,
+            projectIds: selectedProjects.map((project) => project.id),
+        };
+    };
 
     return (
         <Fragment>
@@ -54,13 +64,15 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
                 <div class="m-4">
                     <label class="form-label">Projects in this workspace</label>
                     <Multiselect
+                        class="z-50"
+                        style={{ position: 'relative' }}
                         closeOnSelect={false}
                         avoidHighlightFirstOption={true}
                         options={projects}
                         selectedValues={selectedProjects}
                         displayValue="name"
                         onSelect={(doNotUseMe: Project[], selectedProject: Project): void => {
-                            setSelectedProjects((oldValues) => [...oldValues, selectedProject]);
+                            setSelectedProjects((oldValues) => Array.from(new Set([...oldValues, selectedProject])));
                         }}
                         onRemove={(doNotUseMe: Project[], selectedProject: Project): void => {
                             setSelectedProjects((oldValues) =>
@@ -69,19 +81,20 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
                         }}
                     />
                 </div>
-                <button
-                    class="btn-create mx-auto mb-4 ml-4"
-                    onClick={(): void =>
-                        props.submit({
-                            id: props.workspace?.id || 0,
-                            name,
-                            description,
-                            projectIds: selectedProjects.map((project) => project.id),
-                        })
-                    }
-                >
-                    Submit
-                </button>
+                {!props.workspace ? (
+                    <div class="flex justify-between pt-2">
+                        <button class="btn-create mb-4 ml-4" onClick={(): void => props.submit(createWorkspace())}>
+                            Confirm
+                        </button>
+                        <button class="btn-close bg-transparent mb-4 mr-4" onClick={props.close}>
+                            Cancel
+                        </button>
+                    </div>
+                ) : (
+                    <button class="btn-create mx-auto mb-4 ml-4" onClick={(): void => props.submit(createWorkspace())}>
+                        Save Changes
+                    </button>
+                )}
             </div>
         </Fragment>
     );

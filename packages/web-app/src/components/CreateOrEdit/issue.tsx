@@ -68,17 +68,11 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
                     );
                 })}
             </select>
-            <div class="flex justify-end pt-2">
-                <button
-                    class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
-                    onClick={(): void => props.submit(createIssue(), projectId)}
-                >
+            <div className="flex justify-between pt-2">
+                <button className="btn-create mb-4 ml-4" onClick={(): void => props.submit(createIssue())}>
                     Confirm
                 </button>
-                <button
-                    class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
-                    onClick={props.close}
-                >
+                <button className="btn-close bg-transparent mb-4 mr-4" onClick={props.close}>
                     Cancel
                 </button>
             </div>
