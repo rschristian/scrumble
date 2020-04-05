@@ -9,7 +9,7 @@
     "build:analyze": "npm run build -- --analyze",
     "lint": "eslint src/**/*.{js,ts,tsx} --fix",
     "prettier": "prettier src/**/*.{css,scss,json} --write",
-    "postinstall": "node ./mobx-postinstall.js",
+    "postinstall": "node mobx-postinstall.js",
     "dockerbuild": "npm install --unsafe-perm && npm run build"
   },
   "husky": {
