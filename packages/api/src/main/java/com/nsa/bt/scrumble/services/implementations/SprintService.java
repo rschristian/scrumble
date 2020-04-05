@@ -29,14 +29,14 @@ public class SprintService implements ISprintService {
     @Override
     public Sprint createSprint(int workspaceId, Sprint sprint, String accessToken) {
         String uri;
-        var projectMilestoneIds = new HashMap<Integer, Integer>();
+        var projectMilestoneIds = new HashMap<String, Integer>();
         ArrayList<Integer> projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId);
 
         for (int projectId: projectIds) {
             uri = String.format("%s/projects/%d/milestones?title=%s&description=%s&start_date=%tF&due_date=%tF&access_token=%s",
                     gitLabApiUrl, projectId, sprint.getTitle(), sprint.getDescription(), sprint.getStartDate(), sprint.getDueDate(), accessToken);
             Sprint milestone = restTemplate.postForObject(uri, null , Sprint.class);
-            projectMilestoneIds.put(projectId, Math.toIntExact(milestone.getId()));
+            projectMilestoneIds.put(Integer.toString(projectId), Math.toIntExact(milestone.getId()));
         }
         sprint.setProjectIdToMilestoneIds(projectMilestoneIds);
         return sprintRepository.createSprint(workspaceId, sprint);
@@ -49,6 +49,6 @@ public class SprintService implements ISprintService {
 
     @Override
     public List<Sprint> getAllSprintsForWorkspace(int workspaceId) {
-        return null;
+        return sprintRepository.getAllSprintsForWorkspace(workspaceId);
     }
 }

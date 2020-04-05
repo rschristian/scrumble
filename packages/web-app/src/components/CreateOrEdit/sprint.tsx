@@ -28,8 +28,8 @@ export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) =
             title,
             description,
             status: props.sprint?.status || SprintStatus.active,
-            startDate,
-            dueDate,
+            startDate: startDate.toISOString(),
+            dueDate: dueDate.toISOString(),
             totalStoryPoint: props.sprint?.totalStoryPoint || 0,
             totalNumberOfIssues: props.sprint?.totalNumberOfIssues || 0,
         };

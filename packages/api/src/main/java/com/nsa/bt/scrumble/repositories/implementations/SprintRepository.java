@@ -62,7 +62,9 @@ public class SprintRepository  implements ISprintRepository {
     @Override
     public List<Sprint> getAllSprintsForWorkspace(int workspaceId) {
         List<Sprint> sprints = new ArrayList<>();
-        String selectStatement = "SELECT * FROM sprints where workspace_id = ?";
+        String selectStatement = "SELECT * FROM sprints where workspace_id = 25";
+        Object[] params = new Object[]{ workspaceId };
+        int[] types = new int[]{Types.INTEGER};
         jdbcTemplate.query(selectStatement,
                 (rs, row) -> {
                     try {
@@ -73,13 +75,12 @@ public class SprintRepository  implements ISprintRepository {
                                 rs.getString("status"),
                                 rs.getDate("start_date"),
                                 rs.getDate("due_date"),
-                                parseJsonDataToMilestoneIds((PGobject) rs.getObject("projects_to_milestones")));
+                                parseJsonDataToMilestoneIds(((PGobject) rs.getObject("sprint_data"))));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     return null;
-                },
-                new MapSqlParameterSource(":workspaceId", workspaceId))
+                })
                 .forEach(entry -> sprints.add(entry));
         return sprints;
     }
@@ -89,11 +90,6 @@ public class SprintRepository  implements ISprintRepository {
             Map<Object, Object> dataMap = new HashMap<>();
             PGobject jsonObject = new PGobject();
             ObjectMapper objectMapper = new ObjectMapper();
-//
-//            Iterator iterator = sprint.getProjectIdToMilestoneIds().entrySet().iterator();
-//            while (iterator.hasNext()) {
-//                logger.info(((Map.Entry) iterator.next()).getKey().toString() + " : " + ((Map.Entry) iterator.next()).getValue().toString() );
-//            }
 
             dataMap.put("projects_to_milestones", sprint.getProjectIdToMilestoneIds());
             String Map_Json_String = objectMapper.writeValueAsString(dataMap);
@@ -106,8 +102,8 @@ public class SprintRepository  implements ISprintRepository {
         }
     }
 
-    private Map<Integer, Integer> parseJsonDataToMilestoneIds(PGobject jsonData) throws IOException {
+    private Map<String, Integer> parseJsonDataToMilestoneIds(PGobject jsonData) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return (Map<Integer, Integer>) mapper.readValue(jsonData.getValue(), Map.class).get("projects_to_milestones");
+        return (Map<String, Integer>) mapper.readValue(jsonData.getValue(), Map.class).get("projects_to_milestones");
     }
 }

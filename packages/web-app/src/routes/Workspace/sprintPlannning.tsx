@@ -12,6 +12,7 @@ import { errorColour, infoColour, successColour } from 'services/notification/co
 import { useStore } from 'stores';
 
 import Backlog from './Backlog';
+// import {sprints} from "../../data";
 
 const SprintPlanning: FunctionalComponent = () => {
     const userLocationStore = useStore().userLocationStore;
@@ -27,7 +28,10 @@ const SprintPlanning: FunctionalComponent = () => {
         userLocationStore.setActiveSideBarItem(0);
         getSprints(userLocationStore.currentWorkspace.id).then((result) => {
             if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-            else setSprints(result);
+            else {
+                console.log(result[0]);
+                setSprints(result);
+            }
         });
     }, [userLocationStore]);
 

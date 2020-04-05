@@ -8,8 +8,8 @@ export interface Sprint {
     title: string;
     description?: string;
     status: SprintStatus;
-    startDate: Date;
-    dueDate: Date;
+    startDate: string;
+    dueDate: string;
     totalStoryPoint?: number;
     totalNumberOfIssues?: number;
 }

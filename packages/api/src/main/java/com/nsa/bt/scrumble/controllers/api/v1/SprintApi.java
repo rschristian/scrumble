@@ -45,7 +45,20 @@ public class SprintApi {
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
-            return ResponseEntity.ok().body(sprintService.createSprint(workspaceId, sprint, accessTokenOptional.get()));
+            logger.info(sprint.getDueDate().toString());
+//            return ResponseEntity.ok().body(sprintService.createSprint(workspaceId, sprint, accessTokenOptional.get()));
+        }
+        return ResponseEntity.ok().body(authErrorMsg);
+    }
+
+    @GetMapping("/workspace/{workspaceId}/sprints")
+    public ResponseEntity<Object> getWorkspaceSprints(
+            Authentication auth,
+            @PathVariable(value="workspaceId") int workspaceId) {
+        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        if(accessTokenOptional.isPresent()) {
+            return ResponseEntity.ok().body(sprintService.getAllSprintsForWorkspace(workspaceId));
         }
         return ResponseEntity.ok().body(authErrorMsg);
     }

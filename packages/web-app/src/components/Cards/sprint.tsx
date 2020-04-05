@@ -73,7 +73,10 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
                     />
                 </div>
                 <div class="px-4 py-2 flex min-w-0 justify-between">
-                    <p class="itm-description">{`${props.sprint.startDate.toDateString()} - ${props.sprint.dueDate.toDateString()}`}</p>
+                    <p class="itm-description">
+                        {`${new Date(props.sprint.startDate).toDateString()} 
+                        - ${new Date(props.sprint.dueDate).toDateString()}`}
+                    </p>
                     <div>
                         <span class="num-issues tooltip">
                             {props.sprint.totalNumberOfIssues}
