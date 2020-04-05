@@ -21,3 +21,15 @@ docker-compose up --build -d
 ```
 
 This will start the Postgres DB in the background.
+
+Build the Dockerfile for running the API with:
+
+```
+docker build -t scrumbleapi .
+```
+
+Then run with:
+
+```
+docker run -p 8000:8000 --network="api_default" scrumbleapi
+```

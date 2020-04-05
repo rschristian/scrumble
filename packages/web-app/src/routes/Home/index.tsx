@@ -26,13 +26,12 @@ const Home: FunctionalComponent = () => {
         });
     }, []);
 
-    const submitNewWorkspace = (workspace: Workspace): void => {
-        if (workspace.name === '') notify.show('You must provide a name', 'warning', 5000, warningColour);
+    const submitNewWorkspace = (newWorkspace: Workspace): void => {
+        if (newWorkspace.name === '') notify.show('You must provide a name', 'warning', 5000, warningColour);
         else {
-            createWorkspace(workspace.name, workspace.description, workspace.projectIds).then((res) => {
-                if (typeof res === 'string') {
-                    notify.show(res, 'error', 5000, errorColour);
-                } else {
+            createWorkspace(newWorkspace).then((res) => {
+                if (typeof res === 'string') notify.show(res, 'error', 5000, errorColour);
+                else {
                     setWorkspacesArray([...workspacesArray, res]);
                     setShowCreateModal(false);
                     notify.show('Workspace created!', 'success', 5000, successColour);
