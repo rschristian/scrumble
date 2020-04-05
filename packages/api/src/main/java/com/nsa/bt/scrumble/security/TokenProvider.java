@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-// Adpated from https://github.com/callicoder/spring-boot-react-oauth2-social-login-demo/blob/master/spring-social/src/main/java/com/example/springsocial/security/TokenAuthenticationFilter.java
+// Adapted from https://github.com/callicoder/spring-boot-react-oauth2-social-login-demo/blob/master/spring-social/src/main/java/com/example/springsocial/security/TokenAuthenticationFilter.java
 @Service
 public class TokenProvider {
 
@@ -42,24 +42,31 @@ public class TokenProvider {
         return Long.parseLong(claims.getSubject());
     }
 
-    public boolean validateToken(String authToken) {
+    public void validateToken(String authToken) throws Exception{
+//        try {
+//            Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
+//        } catch (SignatureException ex) {
+//            logger.error("Invalid JWT signature");
+//            throw new Exception("Invalid JWT signature");
+//        } catch (MalformedJwtException ex) {
+//            logger.error("Invalid JWT token");
+//            throw new Exception("Invalid JWT token");
+//        } catch (NonceExpiredException ex) {
+//            logger.error("Expired JWT token");
+//            throw new Exception("Expired JWT token");
+//        } catch (UnsupportedJwtException ex) {
+//            logger.error("Unsupported JWT token");
+//            throw new Exception("Unsupported JWT token");
+//        } catch (IllegalArgumentException ex) {
+//            logger.error("JWT claims string is empty.");
+//            throw new Exception("JWT claims string is empty.");
+//        }
         try {
             Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
-            return true;
-        } catch (SignatureException ex) {
-            logger.error("Invalid JWT signature");
-        } catch (MalformedJwtException ex) {
-            logger.error("Invalid JWT token");
-//            TODO: Check if this exception is the right one to catch
-        } catch (NonceExpiredException ex) {
-            logger.error("Expired JWT token");
-        } catch (UnsupportedJwtException ex) {
-            logger.error("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            logger.error("JWT claims string is empty.");
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+            throw new Exception("Invalid JWT signature");
         }
-        return false;
     }
-
 }
 

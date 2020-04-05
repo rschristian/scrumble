@@ -43,8 +43,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwt = tokenUtils.getJwtFromRequest(request);
+            tokenProvider.validateToken(jwt);
 
-            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+            if (StringUtils.hasText(jwt)) {
                 Long userId = tokenProvider.getUserIdFromToken(jwt);
 
                 Optional<User> userOptional = userService.findUserById(userId.intValue());
