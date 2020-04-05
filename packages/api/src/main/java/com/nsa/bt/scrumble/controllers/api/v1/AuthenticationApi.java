@@ -55,14 +55,6 @@ public class AuthenticationApi {
         String jwt = tokenUtils.getJwtFromRequest(request);
         String longLifeToken = null;
 
-//        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-        try {
-            tokenProvider.validateToken(jwt);
-        } catch (Exception e) {
-            logger.info("we caught an error");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("reeeeeeeeeee");
-        }
-
         if (StringUtils.hasText(jwt)) {
             Long userId = tokenProvider.getUserIdFromToken(jwt);
             Optional<User> userOptional = userService.findUserById(userId.intValue());

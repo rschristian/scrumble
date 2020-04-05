@@ -43,7 +43,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwt = tokenUtils.getJwtFromRequest(request);
-            tokenProvider.validateToken(jwt);
+
+            if (!tokenProvider.isValidToken(jwt)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid authentication.");
+            }
 
             if (StringUtils.hasText(jwt)) {
                 Long userId = tokenProvider.getUserIdFromToken(jwt);

@@ -7,8 +7,7 @@ export const login = async (shortLivedJwt: string): Promise<void | string> => {
     return await apiService
         .get('/auth/token')
         .then((response) => {
-            // authStorageService.saveToken(response.data.jwt);
-            authStorageService.saveToken('gibberish');
+            authStorageService.saveToken(response.data.jwt);
             return;
         })
         .catch(({ response }) => {
@@ -16,16 +15,11 @@ export const login = async (shortLivedJwt: string): Promise<void | string> => {
         });
 };
 
-export const destroyOAuthToken = async (): Promise<void | string> => {
-    return await apiService
-        .delete('/auth/token')
-        .then(() => {
-            authStorageService.destroyToken();
-            return;
-        })
-        .catch((error) => {
-            console.log('an error');
-        });
+export const destroyOAuthToken = async (): Promise<void> => {
+    return await apiService.delete('/auth/token').then(() => {
+        authStorageService.destroyToken();
+        return;
+    });
 };
 
 export const fetchUserInfo = async (): Promise<User> => {

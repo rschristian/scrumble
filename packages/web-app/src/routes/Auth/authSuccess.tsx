@@ -15,10 +15,8 @@ const AuthSuccess: FunctionalComponent = () => {
             .match(/token=(.*)/)[0]
             .substring(6);
 
-        // authStore.login('gibberish').then((error) => {
-        // if (error) setErrorMessage(error);
         authStore.login(token).then((error) => {
-            if (error) console.log('we got an error');
+            if (error) setErrorMessage(error);
             else route('/', true);
         });
     }, [authStore]);
