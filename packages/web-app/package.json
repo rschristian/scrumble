@@ -22,7 +22,6 @@
     "*.{js,jsx,ts,tsx}": "eslint --fix"
   },
   "dependencies": {
-    "draggable": "^4.2.0",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^1.5.2",
     "mobx-sync": "^2.1.3",
