@@ -44,7 +44,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = tokenUtils.getJwtFromRequest(request);
 
-            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+            if (!tokenProvider.isValidToken(jwt)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid authentication.");
+            }
+
+            if (StringUtils.hasText(jwt)) {
                 Long userId = tokenProvider.getUserIdFromToken(jwt);
 
                 Optional<User> userOptional = userService.findUserById(userId.intValue());

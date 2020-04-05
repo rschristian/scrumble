@@ -55,9 +55,8 @@ public class AuthenticationApi {
         String jwt = tokenUtils.getJwtFromRequest(request);
         String longLifeToken = null;
 
-        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+        if (StringUtils.hasText(jwt)) {
             Long userId = tokenProvider.getUserIdFromToken(jwt);
-
             Optional<User> userOptional = userService.findUserById(userId.intValue());
 
             if (userOptional.isPresent()){
