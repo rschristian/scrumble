@@ -13,13 +13,9 @@ export const getWorkspaces = async (): Promise<Workspace[] | string> => {
         });
 };
 
-export const createWorkspace = async (
-    name: string,
-    description: string,
-    projectIds: number[],
-): Promise<Workspace | string> => {
+export const createWorkspace = async (newWorkspace: Workspace): Promise<Workspace | string> => {
     return await apiService
-        .post('/workspace', { name, description, projectIds })
+        .post('/workspace', newWorkspace)
         .then((response) => {
             return response.data;
         })

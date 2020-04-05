@@ -1,6 +1,6 @@
 export interface Workspace {
     id?: number;
     name: string;
-    description: string | null;
+    description: string;
     projectIds: number[];
 }
