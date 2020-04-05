@@ -31,23 +31,23 @@ export const projects: Project[] = [
 export const users: User[] = [
     {
         id: 1,
-        name: "James Buckland",
-        username: "jamesbuckland",
-        avatarUrl: "www.com"
+        name: 'James Buckland',
+        username: 'jamesbuckland',
+        avatarUrl: 'www.com',
     },
     {
         id: 2,
-        name: "Lauren Heymer",
-        username: "laurenhaymer",
-        avatarUrl: "www.com"
+        name: 'Lauren Heymer',
+        username: 'laurenhaymer',
+        avatarUrl: 'www.com',
     },
     {
         id: 3,
-        name: "Ryan Christian",
-        username: "ryanchristian",
-        avatarUrl: "www.com"
-    }
-]
+        name: 'Ryan Christian',
+        username: 'ryanchristian',
+        avatarUrl: 'www.com',
+    },
+];
 
 export const sprints: Sprint[] = [
     {
@@ -91,7 +91,7 @@ export const issues: Issue[] = [
             'Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo. Etiam pretium iaculis justo. In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus. Nulla ut erat id mauris vulputate elementum.',
         storyPoint: 11,
         projectId: 1,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
         projectName: projects[0].name,
     },
@@ -103,7 +103,7 @@ export const issues: Issue[] = [
             'Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus. Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.',
         storyPoint: 2,
         projectId: 2,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
         projectName: projects[1].name,
     },
@@ -115,7 +115,7 @@ export const issues: Issue[] = [
             'Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.',
         storyPoint: 9,
         projectId: 3,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
         projectName: projects[2].name,
     },
@@ -127,7 +127,7 @@ export const issues: Issue[] = [
             'Cras in purus eu magna vulputate luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
         storyPoint: 12,
         projectId: 4,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
         projectName: projects[3].name,
     },
@@ -139,7 +139,7 @@ export const issues: Issue[] = [
             'Suspendisse potenti. Cras in purus eu magna vulputate luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.',
         storyPoint: 5,
         projectId: 5,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
         projectName: projects[4].name,
     },
@@ -150,9 +150,9 @@ export const issues: Issue[] = [
         description: 'In hac habitasse platea dictumst.',
         storyPoint: 2,
         projectId: 1,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[0].name
+        projectName: projects[0].name,
     },
     {
         iid: 7,
@@ -162,7 +162,7 @@ export const issues: Issue[] = [
             'Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus. Pellentesque at nulla. Suspendisse potenti.',
         storyPoint: 7,
         projectId: 2,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
         projectName: projects[1].name,
     },
@@ -174,7 +174,7 @@ export const issues: Issue[] = [
             'Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus.',
         storyPoint: 6,
         projectId: 3,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
         projectName: projects[2].name,
     },
@@ -185,7 +185,7 @@ export const issues: Issue[] = [
         description: 'Etiam justo.',
         storyPoint: 11,
         projectId: 4,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
         projectName: projects[3].name,
     },
@@ -197,7 +197,7 @@ export const issues: Issue[] = [
             'Phasellus in felis. Donec semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius. Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.',
         storyPoint: 13,
         projectId: 5,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
         projectName: projects[4].name,
     },
@@ -208,7 +208,7 @@ export const issues: Issue[] = [
         description: 'Suspendisse potenti. Nullam porttitor lacus at turpis.',
         storyPoint: 6,
         projectId: 1,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
         projectName: projects[0].name,
     },
@@ -220,9 +220,9 @@ export const issues: Issue[] = [
             'Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem. Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci.',
         storyPoint: 3,
         projectId: 2,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[1].name
+        projectName: projects[1].name,
     },
     {
         iid: 13,
@@ -232,9 +232,9 @@ export const issues: Issue[] = [
             'Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat. Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.',
         storyPoint: 11,
         projectId: 3,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[2].name
+        projectName: projects[2].name,
     },
     {
         iid: 14,
@@ -244,9 +244,9 @@ export const issues: Issue[] = [
             'Nulla nisl. Nunc nisl. Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.',
         storyPoint: 11,
         projectId: 4,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[3].name
+        projectName: projects[3].name,
     },
     {
         iid: 15,
@@ -256,9 +256,9 @@ export const issues: Issue[] = [
             'Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.',
         storyPoint: 11,
         projectId: 5,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[4].name
+        projectName: projects[4].name,
     },
     {
         iid: 16,
@@ -268,9 +268,9 @@ export const issues: Issue[] = [
             'Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem. Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus. Pellentesque at nulla. Suspendisse potenti.',
         storyPoint: 1,
         projectId: 1,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[0].name
+        projectName: projects[0].name,
     },
     {
         iid: 17,
@@ -280,9 +280,9 @@ export const issues: Issue[] = [
             'Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus. Phasellus in felis. Donec semper sapien a libero.',
         storyPoint: 4,
         projectId: 2,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[1].name
+        projectName: projects[1].name,
     },
     {
         iid: 18,
@@ -292,9 +292,9 @@ export const issues: Issue[] = [
             'Donec dapibus. Duis at velit eu est congue elementum. In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor.',
         storyPoint: 13,
         projectId: 3,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[2].name
+        projectName: projects[2].name,
     },
     {
         iid: 19,
@@ -304,9 +304,9 @@ export const issues: Issue[] = [
             'Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede. Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus.',
         storyPoint: 6,
         projectId: 4,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[3].name
+        projectName: projects[3].name,
     },
     {
         iid: 20,
@@ -316,9 +316,9 @@ export const issues: Issue[] = [
             'Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante. Vivamus tortor. Duis mattis egestas metus. Aenean fermentum. Donec ut mauris eget massa tempor convallis.',
         storyPoint: 1,
         projectId: 5,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[4].name
+        projectName: projects[4].name,
     },
     {
         iid: 21,
@@ -328,9 +328,9 @@ export const issues: Issue[] = [
             'Morbi ut odio. Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices.',
         storyPoint: 9,
         projectId: 1,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[0].name
+        projectName: projects[0].name,
     },
     {
         iid: 22,
@@ -340,9 +340,9 @@ export const issues: Issue[] = [
             'Phasellus in felis. Donec semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.',
         storyPoint: 6,
         projectId: 2,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[1].name
+        projectName: projects[1].name,
     },
     {
         iid: 23,
@@ -352,9 +352,9 @@ export const issues: Issue[] = [
             'Proin at turpis a pede posuere nonummy. Integer non velit. Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi.',
         storyPoint: 5,
         projectId: 3,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[2].name
+        projectName: projects[2].name,
     },
     {
         iid: 24,
@@ -364,9 +364,9 @@ export const issues: Issue[] = [
             'In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc.',
         storyPoint: 8,
         projectId: 4,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[3].name
+        projectName: projects[3].name,
     },
     {
         iid: 25,
@@ -375,9 +375,9 @@ export const issues: Issue[] = [
         description: 'Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.',
         storyPoint: 5,
         projectId: 5,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[4].name
+        projectName: projects[4].name,
     },
     {
         iid: 26,
@@ -387,7 +387,7 @@ export const issues: Issue[] = [
             'Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros. Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo. Etiam pretium iaculis justo. In hac habitasse platea dictumst. Etiam faucibus cursus urna.',
         storyPoint: 10,
         projectId: 1,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
         projectName: projects[0].name,
     },
@@ -398,9 +398,9 @@ export const issues: Issue[] = [
         description: 'Duis at velit eu est congue elementum. In hac habitasse platea dictumst.',
         storyPoint: 6,
         projectId: 2,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[1].name
+        projectName: projects[1].name,
     },
     {
         iid: 28,
@@ -409,9 +409,9 @@ export const issues: Issue[] = [
         description: 'Duis bibendum. Morbi non quam nec dui luctus rutrum.',
         storyPoint: 12,
         projectId: 3,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[2].name
+        projectName: projects[2].name,
     },
     {
         iid: 29,
@@ -421,9 +421,9 @@ export const issues: Issue[] = [
             'Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio. Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices.',
         storyPoint: 9,
         projectId: 4,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[3].name
+        projectName: projects[3].name,
     },
     {
         iid: 30,
@@ -432,9 +432,9 @@ export const issues: Issue[] = [
         description: 'Donec quis orci eget orci vehicula condimentum.',
         storyPoint: 7,
         projectId: 5,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[4].name
+        projectName: projects[4].name,
     },
     {
         iid: 31,
@@ -444,9 +444,9 @@ export const issues: Issue[] = [
             'Nunc nisl. Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum. In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo. Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.',
         storyPoint: 6,
         projectId: 1,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[0].name
+        projectName: projects[0].name,
     },
     {
         iid: 32,
@@ -456,9 +456,9 @@ export const issues: Issue[] = [
             'Etiam pretium iaculis justo. In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus. Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.',
         storyPoint: 6,
         projectId: 2,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[1].name
+        projectName: projects[1].name,
     },
     {
         iid: 33,
@@ -467,9 +467,9 @@ export const issues: Issue[] = [
         description: 'Nullam varius. Nulla facilisi.',
         storyPoint: 12,
         projectId: 3,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[2].name
+        projectName: projects[2].name,
     },
     {
         iid: 34,
@@ -479,9 +479,9 @@ export const issues: Issue[] = [
             'In congue. Etiam justo. Etiam pretium iaculis justo. In hac habitasse platea dictumst. Etiam faucibus cursus urna.',
         storyPoint: 12,
         projectId: 4,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[3].name
+        projectName: projects[3].name,
     },
     {
         iid: 35,
@@ -491,9 +491,9 @@ export const issues: Issue[] = [
             'Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.',
         storyPoint: 13,
         projectId: 5,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[4].name
+        projectName: projects[4].name,
     },
     {
         iid: 36,
@@ -503,9 +503,9 @@ export const issues: Issue[] = [
             'Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.',
         storyPoint: 9,
         projectId: 1,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[0].name
+        projectName: projects[0].name,
     },
     {
         iid: 37,
@@ -515,7 +515,7 @@ export const issues: Issue[] = [
             'Vivamus in felis eu sapien cursus vestibulum. Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem. Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.',
         storyPoint: 11,
         projectId: 2,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
         projectName: projects[1].name,
     },
@@ -527,9 +527,9 @@ export const issues: Issue[] = [
             'Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede. Morbi porttitor lorem id ligula.',
         storyPoint: 9,
         projectId: 3,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[2].name
+        projectName: projects[2].name,
     },
     {
         iid: 39,
@@ -538,9 +538,9 @@ export const issues: Issue[] = [
         description: 'In hac habitasse platea dictumst.',
         storyPoint: 5,
         projectId: 4,
-        createdAt: new Date,
+        createdAt: new Date(),
         author: users[0],
-        projectName: projects[3].name
+        projectName: projects[3].name,
     },
 ];
 

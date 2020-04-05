@@ -55,33 +55,29 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
 
     return (
         <div class="cursor-default capitalize">
-             {showEditIssueModal ? (
-                    <Modal
-                        title="Edit Issue"
-                        content={
-                            <CreateOrEditIssue
-                                issue={props.issue}
-                                submit={handleIssueEdit}
-                                close={(): void => setShowEditIssueModal(false)}
-                            />
-                        }
-                        close={(): void => setShowEditIssueModal(false)}
-                    />
-                ) : null}
-                {showIssueCardInformation ? (
-                    <Modal
-                        title={props.issue.title}
-                        content={
-                            <IssueInformation
-                                issue = {props.issue}
-                            />
-                        }
-                        close={(): void => setShowIssueCardInformation(false)}
-                    />
-                ): null}
+            {showEditIssueModal ? (
+                <Modal
+                    title="Edit Issue"
+                    content={
+                        <CreateOrEditIssue
+                            issue={props.issue}
+                            submit={handleIssueEdit}
+                            close={(): void => setShowEditIssueModal(false)}
+                        />
+                    }
+                    close={(): void => setShowEditIssueModal(false)}
+                />
+            ) : null}
+            {showIssueCardInformation ? (
+                <Modal
+                    title={props.issue.title}
+                    content={<IssueInformation issue={props.issue} />}
+                    close={(): void => setShowIssueCardInformation(false)}
+                />
+            ) : null}
             <div class="lst-itm-container cursor-move">
                 <div class="px-4 py-2 flex min-w-0">
-                    <div 
+                    <div
                         class="truncate cursor-pointer underline font-semibold hover:text-blue-500"
                         onClick={(): void => {
                             setShowIssueCardInformation(true);
@@ -89,10 +85,11 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                     >
                         {props.issue.title}
                     </div>
-                    
                 </div>
                 <div class="px-4 py-2 z-1">
-                    <span class={props.issue.status === IssueStatus.open ? "open" : "closed" }>{props.issue.status}</span>
+                    <span class={props.issue.status === IssueStatus.open ? 'open' : 'closed'}>
+                        {props.issue.status}
+                    </span>
                     {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
                     <span class="text-gray-700"> Project Name: {props.issue.projectName}</span>
                     <div>
@@ -104,8 +101,15 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                         >
                             Edit
                         </button>
-                        <span class="float-right text-gray-700 py-2 px-4"> <span class="font-medium">Author:</span> {props.issue.author.name}</span>
-                        <span class="float-left text-gray-700 py-2"> <span class="font-medium">Assignee:</span> {props.issue.assignee !== null ? props.issue.assignee.name : "Unassigned"}</span>
+                        <span class="float-right text-gray-700 py-2 px-4">
+                            {' '}
+                            <span class="font-medium">Author:</span> {props.issue.author.name}
+                        </span>
+                        <span class="float-left text-gray-700 py-2">
+                            {' '}
+                            <span class="font-medium">Assignee:</span>{' '}
+                            {props.issue.assignee !== null ? props.issue.assignee.name : 'Unassigned'}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -138,7 +142,9 @@ export const IssueInformation: FunctionalComponent<InformationProps> = (props: I
                         </div>
                         <div class="table-cell">
                             <span class="info-label"> Assigned To: </span>
-                            <span class="text-gray-700">{props.issue.assignee !== null ? props.issue.assignee.name : "Unassigned"}</span>
+                            <span class="text-gray-700">
+                                {props.issue.assignee !== null ? props.issue.assignee.name : 'Unassigned'}
+                            </span>
                         </div>
                     </div>
                     <div class="table-row">
@@ -148,7 +154,9 @@ export const IssueInformation: FunctionalComponent<InformationProps> = (props: I
                         </div>
                         <div class="table-cell py-2">
                             <span class="info-label"> State: </span>
-                            <span class={props.issue.status === IssueStatus.open ? "open" : "closed" }>{props.issue.status}</span>
+                            <span class={props.issue.status === IssueStatus.open ? 'open' : 'closed'}>
+                                {props.issue.status}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -156,9 +164,16 @@ export const IssueInformation: FunctionalComponent<InformationProps> = (props: I
             <div class="py-2">
                 <span class="info-label"> Description: </span>
                 <div class="table-row normal-case">
-                    <span class="text-gray-700"> {props.issue.description.trim() != "" ? props.issue.description :<span class="italic"> No Description Given</span>}</span>
+                    <span class="text-gray-700">
+                        {' '}
+                        {props.issue.description.trim() != '' ? (
+                            props.issue.description
+                        ) : (
+                            <span class="italic"> No Description Given</span>
+                        )}
+                    </span>
                 </div>
             </div>
         </Fragment>
-    )
-}
+    );
+};

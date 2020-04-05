@@ -38,7 +38,6 @@
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^2.1.0",
     "@types/luxon": "^1.22.0",
-    "@types/react": "^16.9.23",
     "@types/react-notify-toast": "^0.5.2",
     "@typescript-eslint/eslint-plugin": "^2.22.0",
     "@typescript-eslint/parser": "^2.22.0",
