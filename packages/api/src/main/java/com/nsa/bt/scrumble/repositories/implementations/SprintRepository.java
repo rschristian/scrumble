@@ -13,16 +13,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+@Repository
 public class SprintRepository  implements ISprintRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(SprintRepository.class);
@@ -32,7 +31,7 @@ public class SprintRepository  implements ISprintRepository {
 
     @Override
     public Sprint createSprint(int workspaceId, Sprint sprint)  {
-        String insertStatement = "INSERT INTO sprints (workspace_id, title, description, status, startDate, dueDate, sprint_data) VALUES (?, ?, ?, ?, ?, ?, ?);";
+        String insertStatement = "INSERT INTO sprints (workspace_id, title, description, status, start_date, due_date, sprint_data) VALUES (?, ?, ?, ?, ?, ?, ?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
 
@@ -48,7 +47,7 @@ public class SprintRepository  implements ISprintRepository {
             ps.setObject(7, getSprintJsonbData(sprint));
             return ps;
         }, keyHolder);
-        sprint.setId(keyHolder.getKey().longValue());
+        sprint.setId(Math.toIntExact(keyHolder.getKey().longValue()));
         return sprint;
     }
 
@@ -74,7 +73,7 @@ public class SprintRepository  implements ISprintRepository {
                                 rs.getString("status"),
                                 rs.getDate("start_date"),
                                 rs.getDate("due_date"),
-                                null);
+                                parseJsonDataToMilestoneIds((PGobject) rs.getObject("projects_to_milestones")));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -90,8 +89,13 @@ public class SprintRepository  implements ISprintRepository {
             Map<Object, Object> dataMap = new HashMap<>();
             PGobject jsonObject = new PGobject();
             ObjectMapper objectMapper = new ObjectMapper();
+//
+//            Iterator iterator = sprint.getProjectIdToMilestoneIds().entrySet().iterator();
+//            while (iterator.hasNext()) {
+//                logger.info(((Map.Entry) iterator.next()).getKey().toString() + " : " + ((Map.Entry) iterator.next()).getValue().toString() );
+//            }
 
-            dataMap.put("milestone_ids", sprint.getProjectMilestoneIds());
+            dataMap.put("projects_to_milestones", sprint.getProjectIdToMilestoneIds());
             String Map_Json_String = objectMapper.writeValueAsString(dataMap);
             jsonObject.setType("jsonb");
             jsonObject.setValue(Map_Json_String);
@@ -102,8 +106,8 @@ public class SprintRepository  implements ISprintRepository {
         }
     }
 
-    private ArrayList<Map<String, Integer>> parseJsonDataToMilestoneIds(PGobject jsonData) throws IOException {
+    private Map<Integer, Integer> parseJsonDataToMilestoneIds(PGobject jsonData) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return (ArrayList<Map<String, Integer>>) mapper.readValue(jsonData.getValue(), Map.class).get("project_milestones");
+        return (Map<Integer, Integer>) mapper.readValue(jsonData.getValue(), Map.class).get("projects_to_milestones");
     }
 }

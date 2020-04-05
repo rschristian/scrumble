@@ -78,7 +78,6 @@ public class IssueService implements IIssueService {
         String uri;
 
         for(int projectId : projectIds) {
-            logger.info(String.format("On project id: %d", projectId));
             uri = String.format("%s/projects/%d/issues?%s&search=%s&access_token=%s",
                     gitLabApiUrl, projectId, getFilterQuery(filter), searchFor, accessToken);
 

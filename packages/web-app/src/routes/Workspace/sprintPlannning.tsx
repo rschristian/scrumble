@@ -6,10 +6,9 @@ import { SprintCard } from 'components/Cards/sprint';
 import { CreateOrEditSprint } from 'components/CreateOrEdit/sprint';
 import { SprintFilter } from 'components/Filter/sprint';
 import { Modal } from 'components/Modal';
-import { sprints } from 'data';
 import { Sprint, SprintStatus } from 'models/Sprint';
-import { createSprint } from 'services/api/sprints';
-import { errorColour, successColour } from 'services/notification/colours';
+import { createSprint, getSprints } from 'services/api/sprints';
+import { errorColour, infoColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 import Backlog from './Backlog';
@@ -22,9 +21,14 @@ const SprintPlanning: FunctionalComponent = () => {
 
     const [showNewSprintModal, setShowNewSprintModal] = useState(false);
     const [sprintFilter, setSprintFilter] = useState(SprintStatus.active.toString());
+    const [sprints, setSprints] = useState<Sprint[]>([]);
 
     useEffect(() => {
         userLocationStore.setActiveSideBarItem(0);
+        getSprints(userLocationStore.currentWorkspace.id).then((result) => {
+            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
+            else setSprints(result);
+        });
     }, [userLocationStore]);
 
     const handleSprintCreation = async (newSprint: Sprint): Promise<void> => {

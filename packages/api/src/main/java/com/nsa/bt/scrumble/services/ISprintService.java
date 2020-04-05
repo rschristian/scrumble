@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ISprintService {
 
-    Sprint createSprint(int workspaceId, Sprint sprint);
+    Sprint createSprint(int workspaceId, Sprint sprint, String accessToken);
 
     void deleteSprint(int sprintId);
 
