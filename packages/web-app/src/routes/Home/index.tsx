@@ -76,6 +76,7 @@ const Home: FunctionalComponent = () => {
                                 name={workspace.name}
                                 description={workspace.description}
                                 projectIds={workspace.projectIds}
+                                users={workspace.users}
                             />
                         );
                     })}

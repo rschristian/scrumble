@@ -96,7 +96,8 @@ public class WorkspaceRepository implements IWorkspaceRepository {
                                 new User(rs.getInt("created_by_user"), rs.getInt("service_id"), rs.getString("provider_id")),
                                 rs.getString("name"),
                                 rs.getString("description"),
-                                parseJsonDataToProjectIds(((PGobject) rs.getObject("workspace_data"))));
+                                parseJsonDataToProjectIds(((PGobject) rs.getObject("workspace_data"))),
+                                parseJsonDataToUserList(((PGobject) rs.getObject("workspace_data"))));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -109,6 +110,11 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     private ArrayList<Integer> parseJsonDataToProjectIds(PGobject jsonData) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return (ArrayList<Integer>) mapper.readValue(jsonData.getValue(), Map.class).get("project_ids");
+    }
+
+    private List<User> parseJsonDataToUserList(PGobject jsonData) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return (List<User>) mapper.readValue(jsonData.getValue(), Map.class).get("project_users");
     }
 
     @Override

@@ -67,7 +67,6 @@ public class WorkspaceService implements IWorkspaceService {
                 ResponseEntity<ArrayList<User>> projectUsersResponse = restTemplate.exchange(
                     uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
                 ArrayList<User> projectUsers = projectUsersResponse.getBody();
-                System.out.println(projectUsers.get(0).getName());
                 resultant.addAll(projectUsers);
             });
             workspace.setUsers(resultant.stream().distinct().collect(Collectors.toList()));

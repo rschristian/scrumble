@@ -35,6 +35,7 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
             name,
             description,
             projectIds: selectedProjects.map((project) => project.id),
+            users: props.workspace?.users || [],
         };
     };
 
