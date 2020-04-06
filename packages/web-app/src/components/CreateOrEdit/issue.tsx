@@ -1,10 +1,11 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 
 import { projects } from 'data';
 import { Issue } from 'models/Issue';
 import { User } from 'models/User';
 import { useStore } from 'stores';
+import { observer } from 'services/mobx';
 
 interface IProps {
     issue?: Issue;
@@ -12,8 +13,10 @@ interface IProps {
     close: () => void;
 }
 
-export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
+export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: IProps) => {
     const authStore = useStore().authStore;
+    const userLocationStore = useStore().userLocationStore;
+    const currentWorkspace = userLocationStore.currentWorkspace;
     const [title, setTitle] = useState(props.issue?.title || '');
     const [description, setDescription] = useState(props.issue?.description || '');
     const [storyPoint, setStoryPoint] = useState(props.issue?.storyPoint || 0);
@@ -36,6 +39,10 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
         };
     };
 
+    const handleChange = (event: any) => {
+        setAssignee(currentWorkspace.users[event.target.value]);
+    }
+console.log(projectId);
     return (
         <Fragment>
             <label class="form-label">Title</label>
@@ -61,6 +68,20 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
                 value={storyPoint}
                 onInput={(e): void => setStoryPoint(parseInt((e.target as HTMLSelectElement).value, 10))}
             />
+            <label class="form-label">Assignee</label>
+            <select
+                class="form-input"
+                placeholder="Unassigned"
+                onChange={handleChange}
+            >
+                {currentWorkspace.users.map((user, index) => {
+                    return (
+                        <option class="form-option" value={index}>
+                            {user.name}
+                        </option>
+                    );
+                })}
+            </select>
             <label class="form-label">Project to Attach To</label>
             <select
                 class="form-input"
@@ -87,4 +108,4 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
             </div>
         </Fragment>
     );
-};
+});

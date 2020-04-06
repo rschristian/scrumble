@@ -128,8 +128,9 @@ public class IssuesApi {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%1s/projects/%2s/issues/%3s?title=%4s&description=%5s&labels=%6s&access_token=%7s",
-                    gitLabBaseUrl, projectId, issue.getIid(), issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), accessTokenOptional.get());
+            String uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
+                    gitLabBaseUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getAssignee().get("id"),accessTokenOptional.get());
+            System.out.println(uri);
             restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
             linearRegression.setEstimate(gitLabBaseUrl, projectId, issue, accessTokenOptional);
             return ResponseEntity.ok().body("issue updated");

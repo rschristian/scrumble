@@ -1,5 +1,6 @@
 package com.nsa.bt.scrumble.dto;
 
+import com.nsa.bt.scrumble.dto.User;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -27,11 +28,11 @@ public class Issue implements Serializable {
     private Object author;
     @JsonAlias("created_at")
     private String createdAt;
-    private Object assignee;
+    private Map<String, Object> assignee;
 
     public Issue(){}
 
-    public Issue(int iid, Sprint sprint, int projectId, String projectName, String title, String description, int storyPoint, String state, ArrayList<String> labels, int timeSpent, String author, String createdAt, String assignee) {
+    public Issue(int iid, Sprint sprint, int projectId, String projectName, String title, String description, int storyPoint, String state, ArrayList<String> labels, int timeSpent, String author, String createdAt, Map<String, Object> assignee) {
         this.iid = iid;
         this.sprint = sprint;
         this.projectId = projectId;
@@ -157,7 +158,7 @@ public class Issue implements Serializable {
         this.createdAt = strDate;
     }
 
-    public Object getAssignee() {
+    public Map<String, Object> getAssignee() {
         return assignee;
     }
 
