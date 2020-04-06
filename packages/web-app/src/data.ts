@@ -5,29 +5,6 @@ import { Project } from 'models/Project';
 import { Sprint, SprintStatus } from 'models/Sprint';
 import { User } from 'models/User';
 
-export const projects: Project[] = [
-    {
-        id: 1,
-        name: 'Fix San',
-    },
-    {
-        id: 2,
-        name: 'Zamit',
-    },
-    {
-        id: 3,
-        name: 'Fixflex',
-    },
-    {
-        id: 4,
-        name: 'Asoka',
-    },
-    {
-        id: 5,
-        name: 'Domainer',
-    },
-];
-
 export const users: User[] = [
     {
         id: 1,
@@ -46,6 +23,54 @@ export const users: User[] = [
         name: 'Ryan Christian',
         username: 'ryanchristian',
         avatarUrl: 'www.com',
+    },
+];
+
+export const projects: Project[] = [
+    {
+        id: 1,
+        name: 'Fix San',
+        users: [
+            users[0],
+            users[1],
+            users[2]
+        ]
+    },
+    {
+        id: 2,
+        name: 'Zamit',
+        users: [
+            users[0],
+            users[1],
+            users[2]
+        ]
+    },
+    {
+        id: 3,
+        name: 'Fixflex',
+        users: [
+            users[0],
+            users[1],
+            users[2]
+        ]
+    },
+    {
+        id: 4,
+        name: 'Asoka',
+        users: [ 
+            users[0],
+            users[1],
+            users[2]
+        ]
+    },
+    {
+        id: 5,
+        name: 'Domainer',
+        users: [ 
+            users[0],
+            users[1],
+            users[2]
+        ]
     },
 ];
 

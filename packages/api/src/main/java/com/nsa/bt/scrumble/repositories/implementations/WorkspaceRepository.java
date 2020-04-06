@@ -73,6 +73,7 @@ public class WorkspaceRepository implements IWorkspaceRepository {
             ObjectMapper objectMapper = new ObjectMapper();
 
             dataMap.put("project_ids", workspace.getProjectIds());
+            dataMap.put("project_users", workspace.getUsers());
             String Map_Json_String = objectMapper.writeValueAsString(dataMap);
             jsonObject.setType("jsonb");
             jsonObject.setValue(Map_Json_String);

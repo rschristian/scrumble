@@ -4,6 +4,7 @@ public class User {
     private int id;
     private int serviceId;
     private String providerId;
+    private String name;
 
     public User() {
     }
@@ -40,5 +41,13 @@ public class User {
 
     public void setProviderId(String providerId) {
         this.providerId = providerId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }
