@@ -62,10 +62,12 @@ public class SprintRepository  implements ISprintRepository {
     @Override
     public List<Sprint> getAllSprintsForWorkspace(int workspaceId) {
         List<Sprint> sprints = new ArrayList<>();
-        String selectStatement = "SELECT * FROM sprints where workspace_id = 25";
+        String selectStatement = "SELECT * FROM sprints where workspace_id = ?";
         Object[] params = new Object[]{ workspaceId };
         int[] types = new int[]{Types.INTEGER};
         jdbcTemplate.query(selectStatement,
+                params,
+                types,
                 (rs, row) -> {
                     try {
                         return new Sprint(
@@ -83,6 +85,47 @@ public class SprintRepository  implements ISprintRepository {
                 })
                 .forEach(entry -> sprints.add(entry));
         return sprints;
+    }
+
+    @Override
+    public Sprint editSprint(int workspaceId, Sprint sprint) {
+        String deleteWorkspace = "UPDATE sprints SET title = ?, description = ?, status = ?, start_date = ?, due_date = ?, sprint_data = ? WHERE id = ?";
+        Object[] params = new Object[]
+                {
+                        sprint.getTitle(),
+                        sprint.getDescription(),
+                        sprint.getStatus(),
+                        sprint.getStartDate(),
+                        sprint.getDueDate(),
+                        getSprintJsonbData(sprint),
+                        sprint.getId()
+                };
+        int[] types = new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.DATE, Types.OTHER, Types.INTEGER} ;
+        jdbcTemplate.update(deleteWorkspace, params, types);
+        return sprint;
+    }
+
+    @Override
+    public Sprint getSprintById(int sprintId) {
+        return null;
+    }
+
+    @Override
+    public Map<String, Integer> getProjectIdsToMileStoneIds(int sprintId) {
+        String selectStatement = "SELECT sprint_data FROM sprints where id = ?";
+        Object[] params = new Object[]{sprintId};
+        int[] types = new int[]{Types.INTEGER};
+        return jdbcTemplate.queryForObject(selectStatement,
+                params,
+                types,
+                (rs, row) -> {
+                    try {
+                        return parseJsonDataToMilestoneIds(((PGobject) rs.getObject("sprint_data")));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                });
     }
 
     private PGobject getSprintJsonbData(Sprint sprint) {

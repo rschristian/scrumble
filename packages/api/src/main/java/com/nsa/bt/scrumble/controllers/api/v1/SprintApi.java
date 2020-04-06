@@ -50,6 +50,19 @@ public class SprintApi {
         return ResponseEntity.ok().body(authErrorMsg);
     }
 
+    @PutMapping("/workspace/{workspaceId}/sprint")
+    public ResponseEntity<Object> editSprint(
+            Authentication auth,
+            @PathVariable(value="workspaceId") int workspaceId,
+            @RequestBody Sprint sprint) {
+        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        if(accessTokenOptional.isPresent()) {
+            return ResponseEntity.ok().body(sprintService.editSprint(workspaceId, sprint, accessTokenOptional.get()));
+        }
+        return ResponseEntity.ok().body(authErrorMsg);
+    }
+
     @GetMapping("/workspace/{workspaceId}/sprints")
     public ResponseEntity<Object> getWorkspaceSprints(
             Authentication auth,

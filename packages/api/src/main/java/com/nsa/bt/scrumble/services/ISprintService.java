@@ -11,4 +11,6 @@ public interface ISprintService {
     void deleteSprint(int sprintId);
 
     List<Sprint> getAllSprintsForWorkspace(int workspaceId);
+
+    Sprint editSprint(int workspaceId, Sprint sprint, String accessToken);
 }

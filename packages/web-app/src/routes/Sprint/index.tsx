@@ -77,7 +77,7 @@ const SprintContainer: FunctionalComponent<IProps> = (props: IProps) => {
                         workspaceName={userLocationStore.currentWorkspace.name}
                         currentPage={subPageTitle}
                         sprintId={props.sprintId}
-                        sprintName={sprintName}
+                        sprintName={userLocationStore.currentSprint.title}
                     />
                     {subPageContent}
                 </div>

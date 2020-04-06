@@ -4,10 +4,9 @@ import { notify } from 'react-notify-toast';
 import { Multiselect } from 'multiselect-react-dropdown';
 
 import { getProjects } from 'services/api/projects';
-import { errorColour, infoColour } from 'services/notification/colours';
+import { errorColour } from 'services/notification/colours';
 import { Project } from 'models/Project';
 import { Workspace } from 'models/Workspace';
-import { Sprint, SprintStatus } from 'models/Sprint';
 
 interface IProps {
     workspace?: Workspace;
@@ -24,7 +23,6 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
     useEffect(() => {
         getProjects().then((result) => {
             if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
-            else if (result.length === 0) notify.show('You do not have any projects!', 'custom', 5000, infoColour);
             else setProjects(result);
         });
     }, []);
