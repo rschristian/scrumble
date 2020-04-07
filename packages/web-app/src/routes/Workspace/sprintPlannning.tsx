@@ -34,9 +34,9 @@ const SprintPlanning: FunctionalComponent = () => {
         });
     }, [userLocationStore]);
 
-    const handleSprintCreation = async (newSprint: Sprint): Promise<void> => {
-        return await createSprint(userLocationStore.currentWorkspace.id, newSprint).then((result) => {
-            if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
+    const handleSprintCreation = (newSprint: Sprint): void => {
+        createSprint(userLocationStore.currentWorkspace.id, newSprint).then((result) => {
+            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
             else {
                 setSprints([...sprints, result]);
                 setShowNewSprintModal(false);

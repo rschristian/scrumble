@@ -17,4 +17,6 @@ public interface ISprintRepository {
     Sprint getSprintById(int sprintId);
 
     Map<String, Integer> getProjectIdsToMileStoneIds(int sprintId);
+
+    List<Sprint> getPageOfSprints(int workspaceId, int pageNumber, int pageSize);
 }

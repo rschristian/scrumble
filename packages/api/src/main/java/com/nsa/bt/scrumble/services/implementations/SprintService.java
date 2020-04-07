@@ -74,6 +74,11 @@ public class SprintService implements ISprintService {
         return sprintRepository.editSprint(workspaceId, sprint);
     }
 
+    @Override
+    public List<Sprint> getPageOfSprints(int workspaceId, int pageNumber, int pageSize) {
+        return sprintRepository.getPageOfSprints(workspaceId, pageNumber, pageSize);
+    }
+
     private void editGitLabMilestone(int projectId, int milestoneId, Sprint sprint, String accessToken) {
         String uri = String.format("%s/projects/%d/milestones/%d?title=%s&description=%s&start_date=%tF&due_date=%tF&access_token=%s",
                 gitLabApiUrl, projectId, milestoneId, sprint.getTitle(), sprint.getDescription(), sprint.getStartDate(), sprint.getDueDate(), accessToken);

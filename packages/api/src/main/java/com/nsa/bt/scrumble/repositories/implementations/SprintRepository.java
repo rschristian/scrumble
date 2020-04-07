@@ -61,30 +61,10 @@ public class SprintRepository  implements ISprintRepository {
 
     @Override
     public List<Sprint> getAllSprintsForWorkspace(int workspaceId) {
-        List<Sprint> sprints = new ArrayList<>();
         String selectStatement = "SELECT * FROM sprints where workspace_id = ?";
         Object[] params = new Object[]{ workspaceId };
         int[] types = new int[]{Types.INTEGER};
-        jdbcTemplate.query(selectStatement,
-                params,
-                types,
-                (rs, row) -> {
-                    try {
-                        return new Sprint(
-                                rs.getInt("id"),
-                                rs.getString("title"),
-                                rs.getString("description"),
-                                rs.getString("status"),
-                                rs.getDate("start_date"),
-                                rs.getDate("due_date"),
-                                parseJsonDataToMilestoneIds(((PGobject) rs.getObject("sprint_data"))));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                })
-                .forEach(entry -> sprints.add(entry));
-        return sprints;
+        return mapRowsToSprintList(selectStatement, params, types);
     }
 
     @Override
@@ -126,6 +106,35 @@ public class SprintRepository  implements ISprintRepository {
                     }
                     return null;
                 });
+    }
+
+    @Override
+    public List<Sprint> getPageOfSprints(int workspaceId, int pageNumber, int pageSize) {
+        String selectStatement = "SELECT * FROM sprints where workspace_id = ? LIMIT ? OFFSET ?";
+        Object[] params = new Object[]{ workspaceId , pageSize, pageNumber };
+        int[] types = new int[]{ Types.INTEGER, Types.INTEGER, Types.INTEGER };
+        return mapRowsToSprintList(selectStatement, params, types);
+    }
+
+    private List<Sprint> mapRowsToSprintList(String sqlSelect, Object[] params , int[] types) {
+        return new ArrayList<>(jdbcTemplate.query(sqlSelect,
+                params,
+                types,
+                (rs, row) -> {
+                    try {
+                        return new Sprint(
+                                rs.getInt("id"),
+                                rs.getString("title"),
+                                rs.getString("description"),
+                                rs.getString("status"),
+                                rs.getDate("start_date"),
+                                rs.getDate("due_date"),
+                                parseJsonDataToMilestoneIds(((PGobject) rs.getObject("sprint_data"))));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }));
     }
 
     private PGobject getSprintJsonbData(Sprint sprint) {

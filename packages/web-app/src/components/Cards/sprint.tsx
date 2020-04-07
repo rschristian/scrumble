@@ -79,11 +79,11 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
                     </p>
                     <div>
                         <span class="num-issues tooltip">
-                            {props.sprint.totalNumberOfIssues}
+                            {props.sprint.totalNumberOfIssues ? props.sprint.totalNumberOfIssues : 0}
                             <span class="tooltip-text">Total Number of Issues Assigned to Sprint</span>
                         </span>
                         <span class="story-pnt tooltip">
-                            {props.sprint.totalStoryPoint}
+                            {props.sprint.totalStoryPoint ? props.sprint.totalStoryPoint : 0}
                             <span class="tooltip-text">Total Number of Story Points Assigned to Sprint</span>
                         </span>
                     </div>

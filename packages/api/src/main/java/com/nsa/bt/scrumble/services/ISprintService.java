@@ -13,4 +13,6 @@ public interface ISprintService {
     List<Sprint> getAllSprintsForWorkspace(int workspaceId);
 
     Sprint editSprint(int workspaceId, Sprint sprint, String accessToken);
+
+    List<Sprint> getPageOfSprints(int workspaceId, int pageNumber, int pageSize);
 }

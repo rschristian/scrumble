@@ -45,7 +45,8 @@ public class SprintApi {
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
-            return ResponseEntity.ok().body(sprintService.createSprint(workspaceId, sprint, accessTokenOptional.get()));
+//            return ResponseEntity.ok().body(sprintService.createSprint(workspaceId, sprint, accessTokenOptional.get()));
+            return ResponseEntity.ok().body(sprint);
         }
         return ResponseEntity.ok().body(authErrorMsg);
     }
