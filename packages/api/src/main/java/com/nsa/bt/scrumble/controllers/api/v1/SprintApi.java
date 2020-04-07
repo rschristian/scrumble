@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 @RestController
@@ -45,8 +46,7 @@ public class SprintApi {
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
-//            return ResponseEntity.ok().body(sprintService.createSprint(workspaceId, sprint, accessTokenOptional.get()));
-            return ResponseEntity.ok().body(sprint);
+            return ResponseEntity.ok().body(sprintService.createSprint(workspaceId, sprint, accessTokenOptional.get()));
         }
         return ResponseEntity.ok().body(authErrorMsg);
     }
@@ -61,7 +61,9 @@ public class SprintApi {
         if(accessTokenOptional.isPresent()) {
             return ResponseEntity.ok().body(sprintService.editSprint(workspaceId, sprint, accessTokenOptional.get()));
         }
-        return ResponseEntity.ok().body(authErrorMsg);
+        var res = new HashMap<String, String>();
+        res.put("message", authErrorMsg);
+        return ResponseEntity.ok().body(res);
     }
 
     @GetMapping("/workspace/{workspaceId}/sprints")

@@ -18,8 +18,8 @@ export const getSprints = async (workspaceId: number): Promise<Sprint[] | string
 export const createSprint = async (workspaceId: number, newSprint: Sprint): Promise<Sprint | string> => {
     return await apiService
         .post(`/workspace/${workspaceId}/sprint`, newSprint)
-        .then(() => {
-            return;
+        .then((result) => {
+            return result.data;
         })
         .catch(({ response }) => {
             return response.data?.message || 'Unknown error while creating sprint';

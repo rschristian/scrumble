@@ -27,20 +27,17 @@ const SprintPlanning: FunctionalComponent = () => {
         userLocationStore.setActiveSideBarItem(0);
         getSprints(userLocationStore.currentWorkspace.id).then((result) => {
             if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-            else {
-                console.log(result[0]);
-                setSprints(result);
-            }
+            else setSprints(result);
         });
     }, [userLocationStore]);
 
-    const handleSprintCreation = (newSprint: Sprint): void => {
-        createSprint(userLocationStore.currentWorkspace.id, newSprint).then((result) => {
+    const handleSprintCreation = async (newSprint: Sprint): Promise<void> => {
+        return await createSprint(userLocationStore.currentWorkspace.id, newSprint).then((result) => {
             if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
             else {
-                setSprints([...sprints, result]);
-                setShowNewSprintModal(false);
                 notify.show('New sprint created!', 'success', 5000, successColour);
+                setShowNewSprintModal(false);
+                setSprints([...sprints, result]);
             }
         });
     };
