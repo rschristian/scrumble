@@ -8,7 +8,6 @@ import metrics from 'assets/icons/metrics.png';
 import edit from 'assets/icons/edit.png';
 import { BreadCrumbs } from 'components/BreadCrumbs';
 import { SideBar, SideBarLink } from 'components/Core/SideBar';
-import { sprints } from 'data';
 
 import DailyStandUp from './dailyStandUp';
 import IssuesBoard from './issuesBoard';
@@ -16,6 +15,9 @@ import SprintShowAndTell from './showAndTell';
 import SprintMetrics from './metrics';
 import SprintEdit from './edit';
 import { useStore } from 'stores';
+import { getSprints } from 'services/api/sprints';
+import { notify } from 'react-notify-toast';
+import { errorColour } from 'services/notification/colours';
 
 interface IProps {
     workspaceId: number;
@@ -39,9 +41,14 @@ const SprintContainer: FunctionalComponent<IProps> = (props: IProps) => {
     const [subPageContent, setSubPageContent] = useState<ComponentChild>(null);
 
     useEffect(() => {
-        for (const sprint of sprints) {
-            if (sprint.id == props.sprintId) setSprintName(sprint.title);
-        }
+        getSprints(userLocationStore.currentWorkspace.id).then((result) => {
+            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
+            else {
+                for (const sprint of result) {
+                    if (sprint.id == props.sprintId) setSprintName(sprint.title);
+                }
+            }
+        });
 
         switch (props.subPage) {
             case SubPage.issuesBoard:
