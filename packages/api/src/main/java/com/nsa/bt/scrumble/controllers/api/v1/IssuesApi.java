@@ -104,9 +104,10 @@ public class IssuesApi {
                     gitLabBaseUrl, accessTokenOptional.get());
             ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(projectUri, Project[].class);
             Project[] projects = userProjectsResponse.getBody();
-            String issueUri = String.format("%1s/projects/%2s/issues?title=%3s&description=%4s&labels=%5s&access_token=%6s",
-                    gitLabBaseUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), accessTokenOptional.get());
+            String issueUri = String.format("%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
+                    gitLabBaseUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getAssignee().get("id"), accessTokenOptional.get());
             Issue newIssue = restTemplate.postForObject(issueUri, null , Issue.class);
+            System.out.println(issueUri);
             issueService.setStoryPoint(newIssue);
             issueService.setProjectName(newIssue, projects);
             linearRegression.setEstimate(gitLabBaseUrl, projectId, newIssue, accessTokenOptional);

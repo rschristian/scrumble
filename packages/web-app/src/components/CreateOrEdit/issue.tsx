@@ -13,6 +13,13 @@ interface IProps {
     close: () => void;
 }
 
+const unassign: User = {
+    id: 0,
+    name: 'Unassigned',
+    username: 'unassigned',
+    avatarUrl: null,
+}
+
 export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: IProps) => {
     const authStore = useStore().authStore;
     const userLocationStore = useStore().userLocationStore;
@@ -22,7 +29,7 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
     const [storyPoint, setStoryPoint] = useState(props.issue?.storyPoint || 0);
     const [projectId, setProjectId] = useState(props.issue?.projectId || 0);
     const [projectName, setProjectName] = useState(props.issue?.projectName || '');
-    const [assignee, setAssignee] = useState<User>(props.issue?.assignee || null);
+    const [assignee, setAssignee] = useState<User>(props.issue?.assignee || unassign);
 
     const createIssue = (): Issue => {
         return {
@@ -40,9 +47,12 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
     };
 
     const handleChange = (event: any) => {
-        setAssignee(currentWorkspace.users[event.target.value]);
+        if(event.target.value === "-1") {
+            setAssignee(unassign);
+        } else {
+            setAssignee(currentWorkspace.users[event.target.value]);
+        }
     }
-console.log(projectId);
     return (
         <Fragment>
             <label class="form-label">Title</label>
@@ -71,13 +81,13 @@ console.log(projectId);
             <label class="form-label">Assignee</label>
             <select
                 class="form-input"
-                placeholder="Unassigned"
-                onChange={handleChange}
+                onInput={handleChange}
             >
-                {currentWorkspace.users.map((user, index) => {
+                <option value={-1} class="form-option" selected>Unassign</option>
+                {currentWorkspace.users.map((assignee, index) => {
                     return (
                         <option class="form-option" value={index}>
-                            {user.name}
+                            {assignee.name}
                         </option>
                     );
                 })}
