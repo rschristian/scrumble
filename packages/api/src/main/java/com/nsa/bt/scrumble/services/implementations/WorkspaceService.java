@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class WorkspaceService implements IWorkspaceService {
@@ -60,16 +62,22 @@ public class WorkspaceService implements IWorkspaceService {
 
     @Override
     public void setWorkspaceUsers(Workspace workspace, Optional<String> accessToken) {
-        List<User> resultant = new ArrayList();
+        List<User> allUsers = new ArrayList<User>();
             workspace.getProjectIds().forEach((projectId) -> {
                 String uri = String.format("%1s/projects/%2s/users?access_token=%3s",
                 gitLabApiUrl, projectId, accessToken.get());
                 ResponseEntity<ArrayList<User>> projectUsersResponse = restTemplate.exchange(
                     uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
                 ArrayList<User> projectUsers = projectUsersResponse.getBody();
-                resultant.addAll(projectUsers);
+                allUsers.addAll(projectUsers);
             });
-            workspace.setUsers(resultant.stream().distinct().collect(Collectors.toList()));
+            Set<User> uniqueUsers = new HashSet<User>();
+            // getting all unique users
+            uniqueUsers.addAll(allUsers);
+            List<User> resultant = new ArrayList<User>();
+            // adding unique users to list instead of set
+            resultant.addAll(uniqueUsers);
+            workspace.setUsers(resultant);
     }
 
     private HttpEntity<String> getApplicationJsonHeaders() {
