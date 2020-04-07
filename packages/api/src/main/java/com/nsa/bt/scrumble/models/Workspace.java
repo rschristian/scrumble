@@ -3,13 +3,13 @@ package com.nsa.bt.scrumble.models;
 import java.util.ArrayList;
 
 public class Workspace {
-    private long id;
+    private int id;
     private User createdBy;
     private String name;
     private String description;
     private ArrayList<Integer> projectIds;
 
-    public Workspace(long id, User createdBy, String name, String description, ArrayList<Integer> projectIds) {
+    public Workspace(int id, User createdBy, String name, String description, ArrayList<Integer> projectIds) {
         this.id = id;
         this.createdBy = createdBy;
         this.name = name;
@@ -28,11 +28,11 @@ public class Workspace {
         this.projectIds = projectIds;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

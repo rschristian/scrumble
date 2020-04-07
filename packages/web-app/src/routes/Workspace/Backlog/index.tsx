@@ -23,8 +23,8 @@ const Backlog: FunctionalComponent = () => {
     const projectId = useRef(0);
     const pageNumber = useRef(0);
 
-    const handleIssueCreation = async (newIssue: Issue, projectId: number): Promise<void> => {
-        return await createIssue(currentWorkspace.id, projectId, newIssue).then((result) => {
+    const handleIssueCreation = async (newIssue: Issue): Promise<void> => {
+        return await createIssue(currentWorkspace.id, newIssue).then((result) => {
             if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
             else {
                 notify.show('New issue created!', 'success', 5000, successColour);

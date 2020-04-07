@@ -2,6 +2,7 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 
 import { Sprint, SprintStatus } from 'models/Sprint';
+import { notify } from 'react-notify-toast';
 
 interface IProps {
     sprint?: Sprint;
@@ -28,11 +29,22 @@ export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) =
             title,
             description,
             status: props.sprint?.status || SprintStatus.active,
-            startDate,
-            dueDate,
+            startDate: startDate ? startDate.toISOString() : '',
+            dueDate: dueDate ? dueDate.toISOString() : '',
             totalStoryPoint: props.sprint?.totalStoryPoint || 0,
             totalNumberOfIssues: props.sprint?.totalNumberOfIssues || 0,
         };
+    };
+
+    const validateAndSubmit = (): void => {
+        if (title == '') notify.show('Please give this sprint a title', 'warning', 5000);
+        else props.submit(createSprint());
+    };
+
+    const generateDate = (dateValue: string): Date => {
+        const date = new Date(dateValue);
+        date.setDate(date.getDate() + 1);
+        return date;
     };
 
     return (
@@ -66,7 +78,7 @@ export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) =
                     value={`${startDate.getFullYear().toString()}-${zeroPad(startDate.getMonth() + 1)}-${zeroPad(
                         startDate.getDate(),
                     )}`}
-                    onInput={(e): void => setStartDate(new Date((e.target as HTMLInputElement).value))}
+                    onInput={(e): void => setStartDate(generateDate((e.target as HTMLInputElement).value))}
                 />
             </div>
             <div class="m-4">
@@ -77,7 +89,7 @@ export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) =
                     value={`${dueDate.getFullYear().toString()}-${zeroPad(dueDate.getMonth() + 1)}-${zeroPad(
                         dueDate.getDate(),
                     )}`}
-                    onInput={(e): void => setDueDate(new Date((e.target as HTMLInputElement).value))}
+                    onInput={(e): void => setDueDate(generateDate((e.target as HTMLInputElement).value))}
                 />
             </div>
             {!props.sprint ? (
@@ -90,7 +102,7 @@ export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) =
                     </button>
                 </div>
             ) : (
-                <button class="btn-create mx-auto mb-4 ml-4" onClick={(): void => props.submit(createSprint())}>
+                <button class="btn-create mx-auto mb-4 ml-4" onClick={(): void => validateAndSubmit()}>
                     Save Changes
                 </button>
             )}

@@ -62,7 +62,7 @@ public class WorkspaceRepository implements IWorkspaceRepository {
             ps.setObject(4, getWorkspaceJsonbData(workspace));
             return ps;
         }, keyHolder);
-        workspace.setId(keyHolder.getKey().longValue());
+        workspace.setId(Math.toIntExact(keyHolder.getKey().longValue()));
         return workspace;
     }
 

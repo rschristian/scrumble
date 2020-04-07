@@ -85,8 +85,14 @@ export const TopBar: FunctionalComponent = observer(() => {
                     }`}
                 >
                     <div class="flex items-center border-b border-gray-300 py-2">
-                        <img class="ml-3 avatar" src={avatar} alt="Your avatar" />
-                        <span class="ml-3 font-semibold text-deep-space-sparkle">Greg</span>
+                        <img
+                            alt="Your avatar"
+                            className={`avatar ${showAccountDropdown ? 'border-2 border-deep-space-sparkle' : ''}`}
+                            src={authStore.currentUser?.avatarUrl}
+                        />
+                        <span class="ml-3 font-semibold text-deep-space-sparkle">
+                            {authStore.currentUser?.username}
+                        </span>
                     </div>
                     <div class="my-4 ml-3 is-clickable" onClick={logout}>
                         <span class="top-nav-dropdown-link">Sign out</span>

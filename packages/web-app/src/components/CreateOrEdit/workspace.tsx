@@ -4,10 +4,9 @@ import { notify } from 'react-notify-toast';
 import { Multiselect } from 'multiselect-react-dropdown';
 
 import { getProjects } from 'services/api/projects';
-import { errorColour, infoColour } from 'services/notification/colours';
+import { errorColour } from 'services/notification/colours';
 import { Project } from 'models/Project';
 import { Workspace } from 'models/Workspace';
-import { Sprint, SprintStatus } from 'models/Sprint';
 
 interface IProps {
     workspace?: Workspace;
@@ -18,83 +17,75 @@ interface IProps {
 export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
     const [name, setName] = useState(props.workspace?.name || '');
     const [description, setDescription] = useState(props.workspace?.description || '');
-    const [projects, setProjects] = useState<Project[]>([]);
-    const [selectedProjects, setSelectedProjects] = useState<Project[]>([]);
+    const [usersProjects, setUsersProjects] = useState<Project[]>([]);
+    const [selectedProjectIds, setSelectedProjectIds] = useState<number[]>(props.workspace?.projectIds || []);
+    const selected = usersProjects.filter((project) => selectedProjectIds.includes(project.id));
 
     useEffect(() => {
         getProjects().then((result) => {
             if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
-            else if (result.length === 0) notify.show('You do not have any projects!', 'custom', 5000, infoColour);
-            else setProjects(result);
+            else setUsersProjects(result);
         });
     }, []);
 
-    const createWorkspace = (): Workspace => {
-        return {
-            id: props.workspace?.id || 0,
-            name,
-            description,
-            projectIds: selectedProjects.map((project) => project.id),
-        };
+    const onSelect = (selectedProjects: Project[], selectedProject: Project): void => {
+        setSelectedProjectIds([...selectedProjectIds, selectedProject.id]);
+    };
+
+    const onRemove = (selectedProjects: Project[], removedProject: Project): void => {
+        setSelectedProjectIds(selectedProjectIds.filter((id) => id != removedProject.id));
     };
 
     return (
         <Fragment>
-            <div class="m-4">
-                <div class="m-4">
-                    <label class="form-label">Workspace Name</label>
+            <div className="m-4">
+                <div className="m-4">
+                    <label className="form-label">Workspace Name</label>
                     <input
-                        class="form-input"
+                        className="form-input"
                         type="text"
                         placeholder="Workspace Name"
                         value={name}
                         onInput={(e): void => setName((e.target as HTMLInputElement).value)}
                     />
                 </div>
-                <div class="m-4">
-                    <label class="form-label">Workspace Description</label>
+                <div className="m-4">
+                    <label className="form-label">Workspace Description</label>
                     <input
-                        class="form-input"
+                        className="form-input"
                         type="text"
                         placeholder="Workspace Description"
                         value={description}
                         onInput={(e): void => setDescription((e.target as HTMLInputElement).value)}
                     />
                 </div>
-                <div class="m-4">
-                    <label class="form-label">Projects in this workspace</label>
+                <div className="m-4">
+                    <label className="form-label">Projects in this workspace</label>
                     <Multiselect
                         class="z-50"
                         style={{ position: 'relative' }}
                         closeOnSelect={false}
                         avoidHighlightFirstOption={true}
-                        options={projects}
-                        selectedValues={selectedProjects}
+                        options={usersProjects}
+                        selectedValues={selected}
                         displayValue="name"
-                        onSelect={(doNotUseMe: Project[], selectedProject: Project): void => {
-                            setSelectedProjects((oldValues) => Array.from(new Set([...oldValues, selectedProject])));
-                        }}
-                        onRemove={(doNotUseMe: Project[], selectedProject: Project): void => {
-                            setSelectedProjects((oldValues) =>
-                                oldValues.filter((project) => project.id != selectedProject.id),
-                            );
-                        }}
+                        onSelect={onSelect}
+                        onRemove={onRemove}
                     />
                 </div>
-                {!props.workspace ? (
-                    <div class="flex justify-between pt-2">
-                        <button class="btn-create mb-4 ml-4" onClick={(): void => props.submit(createWorkspace())}>
-                            Confirm
-                        </button>
-                        <button class="btn-close bg-transparent mb-4 mr-4" onClick={props.close}>
-                            Cancel
-                        </button>
-                    </div>
-                ) : (
-                    <button class="btn-create mx-auto mb-4 ml-4" onClick={(): void => props.submit(createWorkspace())}>
-                        Save Changes
-                    </button>
-                )}
+                <button
+                    class="btn-create mx-auto mb-4 ml-4"
+                    onClick={(): void =>
+                        props.submit({
+                            id: props.workspace?.id || 0,
+                            name,
+                            description,
+                            projectIds: selectedProjectIds,
+                        })
+                    }
+                >
+                    Submit
+                </button>
             </div>
         </Fragment>
     );
