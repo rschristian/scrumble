@@ -13,7 +13,7 @@ interface IProps {
     close: () => void;
 }
 
-const unassign: User = {
+const unassigned: User = {
     id: 0,
     name: 'Unassigned',
     username: 'unassigned',
@@ -29,7 +29,7 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
     const [storyPoint, setStoryPoint] = useState(props.issue?.storyPoint || 0);
     const [projectId, setProjectId] = useState(props.issue?.projectId || 0);
     const [projectName, setProjectName] = useState(props.issue?.projectName || '');
-    const [assignee, setAssignee] = useState<User>(props.issue?.assignee || unassign);
+    const [assignee, setAssignee] = useState<User>(props.issue?.assignee || unassigned);
 
     const createIssue = (): Issue => {
         return {
@@ -47,10 +47,10 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
     };
 
     const handleChange = (event: any) => {
-        if(event.target.value === "-1") {
-            setAssignee(unassign);
+        if(event.target.options.selectedIndex -1 < 0) {
+            setAssignee(unassigned);
         } else {
-            setAssignee(currentWorkspace.users[event.target.value]);
+            setAssignee(currentWorkspace.users[event.target.options.selectedIndex - 1]);
         }
     }
     return (
@@ -82,11 +82,12 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
             <select
                 class="form-input"
                 onInput={handleChange}
+                value={assignee.name}
             >
-                <option value={-1} class="form-option" selected>Unassign</option>
-                {currentWorkspace.users.map((assignee, index) => {
+                <option value="Unassigned" class="form-option">Unassigned</option>
+                {currentWorkspace.users.map((assignee) => {
                     return (
-                        <option class="form-option" value={index}>
+                        <option class="form-option" value={assignee.name}>
                             {assignee.name}
                         </option>
                     );
