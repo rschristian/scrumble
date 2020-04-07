@@ -52,6 +52,7 @@ public class WorkspaceApi {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
+            workspaceService.setWorkspaceUsers(workspace, accessTokenOptional);
             workspaceService.editWorkspace(workspace);
             return ResponseEntity.ok().body(workspace);
         }

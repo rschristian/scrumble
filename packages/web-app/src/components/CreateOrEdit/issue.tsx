@@ -47,7 +47,7 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
     };
 
     const handleChange = (event: any) => {
-        if(event.target.options.selectedIndex -1 < 0) {
+        if(event.target.value === "Unassigned") {
             setAssignee(unassigned);
         } else {
             setAssignee(currentWorkspace.users[event.target.options.selectedIndex - 1]);

@@ -107,7 +107,6 @@ public class IssuesApi {
             String issueUri = String.format("%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
                     gitLabBaseUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getAssignee().get("id"), accessTokenOptional.get());
             Issue newIssue = restTemplate.postForObject(issueUri, null , Issue.class);
-            System.out.println(issueUri);
             issueService.setStoryPoint(newIssue);
             issueService.setProjectName(newIssue, projects);
             linearRegression.setEstimate(gitLabBaseUrl, projectId, newIssue, accessTokenOptional);
@@ -131,7 +130,6 @@ public class IssuesApi {
         if(accessTokenOptional.isPresent()) {
             String uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
                     gitLabBaseUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getAssignee().get("id"),accessTokenOptional.get());
-            System.out.println(uri);
             restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
             linearRegression.setEstimate(gitLabBaseUrl, projectId, issue, accessTokenOptional);
             return ResponseEntity.ok().body("issue updated");

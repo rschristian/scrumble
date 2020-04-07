@@ -1,6 +1,5 @@
 package com.nsa.bt.scrumble.dto;
 
-import com.nsa.bt.scrumble.dto.User;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
