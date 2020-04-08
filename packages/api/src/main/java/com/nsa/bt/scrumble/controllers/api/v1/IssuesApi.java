@@ -104,7 +104,7 @@ public class IssuesApi {
             ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(projectUri, Project[].class);
             Project[] projects = userProjectsResponse.getBody();
             String issueUri = String.format("%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
-                    gitLabBaseUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getAssignee().get("id"), accessTokenOptional.get());
+                    gitLabBaseUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getAssignee().getId(), accessTokenOptional.get());
             Issue newIssue = restTemplate.postForObject(issueUri, null , Issue.class);
             issueService.setStoryPoint(newIssue);
             issueService.setProjectName(newIssue, projects);
@@ -128,7 +128,7 @@ public class IssuesApi {
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
             String uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
-                    gitLabBaseUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getAssignee().get("id"),accessTokenOptional.get());
+                    gitLabBaseUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getAssignee().getId(),accessTokenOptional.get());
             restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
             linearRegression.setEstimate(gitLabBaseUrl, projectId, issue, accessTokenOptional);
             return ResponseEntity.ok().body("issue updated");

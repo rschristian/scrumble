@@ -8,6 +8,7 @@ import { Project } from 'models/Project';
 import { getProjects } from 'services/api/projects';
 import { notify } from 'react-notify-toast';
 import { errorColour } from 'services/notification/colours';
+import { observer } from 'services/mobx';
 
 interface IProps {
     issue?: Issue;
