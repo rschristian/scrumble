@@ -6,9 +6,8 @@ import { SprintCard } from 'components/Cards/sprint';
 import { CreateOrEditSprint } from 'components/CreateOrEdit/sprint';
 import { SprintFilter } from 'components/Filter/sprint';
 import { Modal } from 'components/Modal';
-import { sprints } from 'data';
 import { Sprint, SprintStatus } from 'models/Sprint';
-import { createSprint } from 'services/api/sprints';
+import { createSprint, getSprints } from 'services/api/sprints';
 import { errorColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
@@ -22,18 +21,23 @@ const SprintPlanning: FunctionalComponent = () => {
 
     const [showNewSprintModal, setShowNewSprintModal] = useState(false);
     const [sprintFilter, setSprintFilter] = useState(SprintStatus.active.toString());
+    const [sprints, setSprints] = useState<Sprint[]>([]);
 
     useEffect(() => {
         userLocationStore.setActiveSideBarItem(0);
+        getSprints(userLocationStore.currentWorkspace.id).then((result) => {
+            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
+            else setSprints(result);
+        });
     }, [userLocationStore]);
 
     const handleSprintCreation = async (newSprint: Sprint): Promise<void> => {
-        return await createSprint(userLocationStore.currentWorkspace.id, newSprint).then((error) => {
-            if (error) notify.show(error, 'error', 5000, errorColour);
+        return await createSprint(userLocationStore.currentWorkspace.id, newSprint).then((result) => {
+            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
             else {
                 notify.show('New sprint created!', 'success', 5000, successColour);
-                // TODO Need to do something with this eventually
-                // getSprints(userLocationStore.currentWorkspace.id);
+                setShowNewSprintModal(false);
+                setSprints([...sprints, result]);
             }
         });
     };

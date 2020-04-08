@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Workspace {
-    private long id;
+    private int id;
     private User createdBy;
     private String name;
     private String description;
@@ -31,11 +31,11 @@ public class Workspace {
         this.projectIds = projectIds;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

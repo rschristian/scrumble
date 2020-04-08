@@ -74,7 +74,6 @@ public class IssuesApi {
         @RequestParam(value="filter") String filter,
         @RequestParam(value="searchFor") String searchTerm
     ) {
-
         Optional<String> accessTokenOptional = userService.getToken(((UserPrincipal) auth.getPrincipal()).getId());
         if(accessTokenOptional.isEmpty()) {
             var res = new HashMap<String, String>();
@@ -100,7 +99,7 @@ public class IssuesApi {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
-            String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true", 
+            String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
                     gitLabBaseUrl, accessTokenOptional.get());
             ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(projectUri, Project[].class);
             Project[] projects = userProjectsResponse.getBody();

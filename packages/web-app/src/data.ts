@@ -2,7 +2,6 @@
 
 import { Issue, IssueStatus } from 'models/Issue';
 import { Project } from 'models/Project';
-import { Sprint, SprintStatus } from 'models/Sprint';
 import { User } from 'models/User';
 
 export const projects: Project[] = [
@@ -46,39 +45,6 @@ export const users: User[] = [
         name: 'Ryan Christian',
         username: 'ryanchristian',
         avatarUrl: 'www.com',
-    },
-];
-
-export const sprints: Sprint[] = [
-    {
-        id: 133,
-        title: 'Sprint 1',
-        description: 'Insert insightful and creative description of a sprint here',
-        status: SprintStatus.closed,
-        startDate: new Date(2020, 2, 11),
-        dueDate: new Date(2020, 2, 20),
-        totalStoryPoint: 35,
-        totalNumberOfIssues: 15,
-    },
-    {
-        id: 134,
-        title: 'Sprint 2',
-        description: 'Insert insightful and creative description of a sprint here',
-        status: SprintStatus.closed,
-        startDate: new Date(2020, 2, 20),
-        dueDate: new Date(2020, 2, 5),
-        totalStoryPoint: 40,
-        totalNumberOfIssues: 20,
-    },
-    {
-        id: 140,
-        title: 'Sprint 3',
-        description: 'Insert insightful and creative description of a sprint here',
-        status: SprintStatus.active,
-        startDate: new Date(2020, 2, 5),
-        dueDate: new Date(2020, 2, 19),
-        totalStoryPoint: 45,
-        totalNumberOfIssues: 17,
     },
 ];
 

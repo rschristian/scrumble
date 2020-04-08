@@ -31,6 +31,14 @@ public class Issue implements Serializable {
 
     public Issue(){}
 
+    public Issue(int projectId, String title, String description, int storyPoint, String status) {
+        this.projectId = projectId;
+        this.title = title;
+        this.description = description;
+        this.storyPoint = storyPoint;
+        this.status = status;
+    }
+
     public Issue(int iid, Sprint sprint, int projectId, String projectName, String title, String description, int storyPoint, String state, ArrayList<String> labels, int timeSpent, String author, String createdAt, Map<String, Object> assignee) {
         this.iid = iid;
         this.sprint = sprint;
