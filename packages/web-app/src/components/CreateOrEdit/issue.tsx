@@ -8,6 +8,7 @@ import { Project } from 'models/Project';
 import { getWorkspaceProjects } from 'services/api/projects';
 import { notify } from 'react-notify-toast';
 import { errorColour } from 'services/notification/colours';
+import { observer } from 'services/mobx';
 
 interface IProps {
     issue?: Issue;
@@ -15,15 +16,24 @@ interface IProps {
     close: () => void;
 }
 
-export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
+const unassigned: User = {
+    id: 0,
+    name: 'Unassigned',
+    username: 'unassigned',
+    avatarUrl: null,
+    projectIds: [],
+}
+
+export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: IProps) => {
     const authStore = useStore().authStore;
     const userLocationStore = useStore().userLocationStore;
+    const currentWorkspace = userLocationStore.currentWorkspace;
     const [title, setTitle] = useState(props.issue?.title || '');
     const [description, setDescription] = useState(props.issue?.description || '');
     const [storyPoint, setStoryPoint] = useState(props.issue?.storyPoint || 0);
     const [projectId, setProjectId] = useState(props.issue?.projectId || 0);
     const [projectName, setProjectName] = useState(props.issue?.projectName || '');
-    const [assignee, setAssignee] = useState<User>(props.issue?.assignee || null);
+    const [assignee, setAssignee] = useState<User>(props.issue?.assignee || unassigned);
     const [projects, setProjects] = useState<Project[]>([]);
 
     const createIssue = (): Issue => {
@@ -41,6 +51,13 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
         };
     };
 
+    const handleChange = (event: any) => {
+        if(event.target.value === "Unassigned") {
+            setAssignee(unassigned);
+        } else {
+            setAssignee(currentWorkspace.users[event.target.options.selectedIndex - 1]);
+        }
+    }
     const validateAndSubmit = (): void => {
         if (title == '') notify.show('Please give this issue a title', 'warning', 5000);
         else if (projectId == 0) notify.show('Please attach this issue to a project', 'warning', 5000);
@@ -54,6 +71,9 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
         });
     }, []);
 
+    useEffect(() => {
+        unassigned.projectIds = [projectId];
+    },[projectId]);
     return (
         <Fragment>
             <label class="form-label">Title</label>
@@ -79,6 +99,21 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
                 value={storyPoint}
                 onInput={(e): void => setStoryPoint(parseInt((e.target as HTMLSelectElement).value, 10))}
             />
+            <label class="form-label">Assignee</label>
+            <select
+                class="form-input"
+                onInput={handleChange}
+                value={assignee.name}
+            >
+                <option value="Unassigned" class="form-option">Unassigned</option>
+                {currentWorkspace.users.map((assignee) => {
+                    return (
+                        <option class="form-option" value={assignee.name}>
+                            {assignee.name}
+                        </option>
+                    );
+                })}
+            </select>
             <div className={`${props.issue ? 'hidden' : 'block'}`}>
                 <label class="form-label">Project to Attach To</label>
                 <select
@@ -107,4 +142,4 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
             </div>
         </Fragment>
     );
-};
+});

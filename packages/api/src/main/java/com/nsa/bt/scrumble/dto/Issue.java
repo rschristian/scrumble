@@ -27,7 +27,7 @@ public class Issue implements Serializable {
     private Object author;
     @JsonAlias("created_at")
     private String createdAt;
-    private Object assignee;
+    private User assignee;
 
     public Issue(){}
 
@@ -39,9 +39,7 @@ public class Issue implements Serializable {
         this.status = status;
     }
 
-    public Issue(
-            int iid, Sprint sprint, int projectId, String projectName, String title, String description, int storyPoint,
-            String status, ArrayList<String> labels, int timeSpent, String author, String createdAt, String assignee) {
+    public Issue(int iid, Sprint sprint, int projectId, String projectName, String title, String description, int storyPoint, String state, ArrayList<String> labels, int timeSpent, String author, String createdAt, User assignee) {
         this.iid = iid;
         this.sprint = sprint;
         this.projectId = projectId;
@@ -167,12 +165,11 @@ public class Issue implements Serializable {
         this.createdAt = strDate;
     }
 
-    public Object getAssignee() {
+    public User getAssignee() {
         return assignee;
     }
 
-    @JsonProperty("assignee")
-    public void setAssignee(Map<String, Object> assignedTo) {
+    public void setAssignee(User assignedTo) {
         if (assignedTo != null) {
             this.assignee = assignedTo;
         }

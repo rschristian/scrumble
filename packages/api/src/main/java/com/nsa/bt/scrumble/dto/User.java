@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.ArrayList;
 
 public class User implements Serializable {
     private int id;
@@ -24,11 +25,12 @@ public class User implements Serializable {
     @JsonAlias("website_url")
     private String websiteUrl;
     private String organization;
+    private ArrayList<Integer> projectIds;
 
     public User (int id, String name, String username, String state, String avatarUrl,
                 Date createdAt, String bio, String location, String publicEmail,
                 String skype, String linkedin, String twitter, String websiteUrl,
-                String organization) {
+                String organization, ArrayList<Integer> projectIds) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -43,6 +45,7 @@ public class User implements Serializable {
         this.twitter = twitter;
         this.websiteUrl = websiteUrl;
         this.organization = organization;
+        this.projectIds = projectIds;
     }
 
 
@@ -101,4 +104,13 @@ public class User implements Serializable {
     public String getOrganization() {
         return this.organization;
     }
+
+    public void setProjectIds(ArrayList<Integer> projectIds) {
+        this.projectIds = projectIds;
+    }
+
+    public ArrayList<Integer> getProjectIds() {
+        return projectIds;
+    }
+    
 }

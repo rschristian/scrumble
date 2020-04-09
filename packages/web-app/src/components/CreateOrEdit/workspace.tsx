@@ -81,6 +81,7 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
                             name,
                             description,
                             projectIds: selectedProjectIds,
+                            users: props.workspace?.users || [],
                         })
                     }
                 >

@@ -6,6 +6,7 @@ import com.nsa.bt.scrumble.models.Workspace;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public interface IWorkspaceService {
 
@@ -20,4 +21,6 @@ public interface IWorkspaceService {
     void editWorkspace(Workspace updatedWorkspace);
 
     List<Project> getWorkspaceProjects(int workspaceId, String accessToken);
+
+    void setWorkspaceUsers(Workspace workspace, Optional<String> accessToken);
 }

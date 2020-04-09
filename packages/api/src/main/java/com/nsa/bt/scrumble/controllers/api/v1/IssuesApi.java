@@ -98,13 +98,19 @@ public class IssuesApi {
             @RequestBody Issue issue) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        if(!issue.getAssignee().getProjectIds().contains(projectId)) {
+            logger.error("User does not exist on this project");
+            var res = new HashMap<String, String>();
+            res.put("message", "User does not exist on this project");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
+        }
         if(accessTokenOptional.isPresent()) {
             String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
                     gitLabBaseUrl, accessTokenOptional.get());
             ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(projectUri, Project[].class);
             Project[] projects = userProjectsResponse.getBody();
-            String issueUri = String.format("%1s/projects/%2s/issues?title=%3s&description=%4s&labels=%5s&access_token=%6s",
-                    gitLabBaseUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), accessTokenOptional.get());
+            String issueUri = String.format("%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
+                    gitLabBaseUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getAssignee().getId(), accessTokenOptional.get());
             Issue newIssue = restTemplate.postForObject(issueUri, null , Issue.class);
             issueService.setStoryPoint(newIssue);
             issueService.setProjectName(newIssue, projects);
@@ -126,9 +132,15 @@ public class IssuesApi {
             @RequestBody Issue issue) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        if(!issue.getAssignee().getProjectIds().contains(projectId)) {
+            logger.error("User does not exist on this project");
+            var res = new HashMap<String, String>();
+            res.put("message", "User does not exist on this project");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
+        }
         if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%1s/projects/%2s/issues/%3s?title=%4s&description=%5s&labels=%6s&access_token=%7s",
-                    gitLabBaseUrl, projectId, issue.getIid(), issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), accessTokenOptional.get());
+            String uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
+                    gitLabBaseUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getAssignee().getId(),accessTokenOptional.get());
             restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
             linearRegression.setEstimate(gitLabBaseUrl, projectId, issue, accessTokenOptional);
             return ResponseEntity.ok().body("issue updated");
