@@ -1,5 +1,6 @@
 package com.nsa.bt.scrumble.services;
 
+import com.nsa.bt.scrumble.dto.Project;
 import com.nsa.bt.scrumble.models.User;
 import com.nsa.bt.scrumble.models.Workspace;
 
@@ -18,6 +19,8 @@ public interface IWorkspaceService {
     void deleteWorkspace(int workspaceId);
 
     void editWorkspace(Workspace updatedWorkspace);
+
+    List<Project> getWorkspaceProjects(int workspaceId, String accessToken);
 
     void setWorkspaceUsers(Workspace workspace, Optional<String> accessToken);
 }
