@@ -1,10 +1,13 @@
 package com.nsa.bt.scrumble.models;
 
+import java.util.ArrayList;
+
 public class User {
     private int id;
     private int serviceId;
     private String providerId;
     private String name;
+    private ArrayList<Integer> projectIds;
 
     public User() {
     }
@@ -48,7 +51,15 @@ public class User {
     }
 
     public String getName() {
-        return this.name;
+        return name;
+    }
+
+    public void setProjectIds(ArrayList<Integer> projectIds) {
+        this.projectIds = projectIds;
+    }
+
+    public ArrayList<Integer> getProjectIds() {
+        return projectIds;
     }
 
     @Override

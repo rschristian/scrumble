@@ -21,6 +21,7 @@ const unassigned: User = {
     name: 'Unassigned',
     username: 'unassigned',
     avatarUrl: null,
+    projectIds: [],
 }
 
 export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: IProps) => {
@@ -70,6 +71,9 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
         });
     }, []);
 
+    useEffect(() => {
+        unassigned.projectIds = [projectId];
+    },[projectId]);
     return (
         <Fragment>
             <label class="form-label">Title</label>

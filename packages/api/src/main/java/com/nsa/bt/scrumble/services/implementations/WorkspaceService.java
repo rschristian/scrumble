@@ -63,12 +63,17 @@ public class WorkspaceService implements IWorkspaceService {
     @Override
     public void setWorkspaceUsers(Workspace workspace, Optional<String> accessToken) {
         List<User> allUsers = new ArrayList<User>();
+        ArrayList<Integer> projectIds = new ArrayList<Integer>();
             workspace.getProjectIds().forEach((projectId) -> {
                 String uri = String.format("%1s/projects/%2s/users?access_token=%3s",
                 gitLabApiUrl, projectId, accessToken.get());
                 ResponseEntity<ArrayList<User>> projectUsersResponse = restTemplate.exchange(
                     uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
                 ArrayList<User> projectUsers = projectUsersResponse.getBody();
+                projectIds.add(projectId); 
+                projectUsers.forEach((user) -> {
+                    user.setProjectIds(projectIds);
+                });
                 allUsers.addAll(projectUsers);
             });
             Set<User> uniqueUsers = new HashSet<User>();

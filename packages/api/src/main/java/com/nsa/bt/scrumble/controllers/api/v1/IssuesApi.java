@@ -98,6 +98,12 @@ public class IssuesApi {
             @RequestBody Issue issue) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        if(!issue.getAssignee().getProjectIds().contains(projectId)) {
+            logger.error("User does not exist on this project");
+            var res = new HashMap<String, String>();
+            res.put("message", "User does not exist on this project");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
+        }
         if(accessTokenOptional.isPresent()) {
             String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
                     gitLabBaseUrl, accessTokenOptional.get());
@@ -126,6 +132,12 @@ public class IssuesApi {
             @RequestBody Issue issue) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        if(!issue.getAssignee().getProjectIds().contains(projectId)) {
+            logger.error("User does not exist on this project");
+            var res = new HashMap<String, String>();
+            res.put("message", "User does not exist on this project");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
+        }
         if(accessTokenOptional.isPresent()) {
             String uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
                     gitLabBaseUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getAssignee().getId(),accessTokenOptional.get());
