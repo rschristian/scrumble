@@ -62,8 +62,8 @@ public class SprintService implements ISprintService {
     }
 
     @Override
-    public List<Sprint> getAllSprintsForWorkspace(int workspaceId) {
-        return sprintRepository.getAllSprintsForWorkspace(workspaceId);
+    public List<Sprint> getSprintsForWorkspace(int workspaceId, String filter) {
+        return sprintRepository.getAllSprintsForWorkspace(workspaceId, filter);
     }
 
     @Override
@@ -80,8 +80,14 @@ public class SprintService implements ISprintService {
     }
 
     private void editGitLabMilestone(int projectId, int milestoneId, Sprint sprint, String accessToken) {
-        String uri = String.format("%s/projects/%d/milestones/%d?title=%s&description=%s&start_date=%tF&due_date=%tF&access_token=%s",
-                gitLabApiUrl, projectId, milestoneId, sprint.getTitle(), sprint.getDescription(), sprint.getStartDate(), sprint.getDueDate(), accessToken);
+        String stateEvent;
+        if(sprint.getStatus().equalsIgnoreCase("active")) {
+            stateEvent = "activate";
+        } else {
+            stateEvent = "close";
+        }
+        String uri = String.format("%s/projects/%d/milestones/%d?title=%s&description=%s&start_date=%tF&due_date=%tF&state_event=%s&access_token=%s",
+                gitLabApiUrl, projectId, milestoneId, sprint.getTitle(), sprint.getDescription(), sprint.getStartDate(), sprint.getDueDate(), stateEvent, accessToken);
         ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.PUT, null, String.class);
         logger.info(String.format("Response code: %d", response.getStatusCodeValue()));
     }

@@ -60,10 +60,20 @@ public class SprintRepository  implements ISprintRepository {
     }
 
     @Override
-    public List<Sprint> getAllSprintsForWorkspace(int workspaceId) {
-        String selectStatement = "SELECT * FROM sprints where workspace_id = ?";
-        Object[] params = new Object[]{ workspaceId };
-        int[] types = new int[]{Types.INTEGER};
+    public List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter) {
+        String selectStatement;
+        Object[] params;
+        int[] types;
+        if(filter.equalsIgnoreCase("none")) {
+            selectStatement = "SELECT * FROM sprints where workspace_id = ?";
+            params = new Object[]{ workspaceId };
+            types = new int[]{Types.INTEGER};
+        } else {
+            logger.info("Going for filter");
+            selectStatement = "SELECT * FROM sprints where workspace_id = ? AND status = ?";
+            params = new Object[]{ workspaceId, filter };
+            types = new int[]{Types.INTEGER, Types.VARCHAR};
+        }
         return mapRowsToSprintList(selectStatement, params, types);
     }
 
