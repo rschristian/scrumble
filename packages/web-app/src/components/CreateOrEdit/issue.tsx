@@ -79,22 +79,24 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
                 value={storyPoint}
                 onInput={(e): void => setStoryPoint(parseInt((e.target as HTMLSelectElement).value, 10))}
             />
-            <label class="form-label">Project to Attach To</label>
-            <select
-                class="form-input"
-                type="number"
-                placeholder="Project to Attach To"
-                value={projectId}
-                onInput={(e): void => setProjectId(parseInt((e.target as HTMLSelectElement).value, 10))}
-            >
-                {projects.map((project) => {
-                    return (
-                        <option class="form-option" value={project.id}>
-                            {project.name}
-                        </option>
-                    );
-                })}
-            </select>
+            <div className={`${props.issue ? 'hidden' : 'block'}`}>
+                <label class="form-label">Project to Attach To</label>
+                <select
+                    class="form-input"
+                    type="number"
+                    placeholder="Project to Attach To"
+                    value={projectId}
+                    onInput={(e): void => setProjectId(parseInt((e.target as HTMLSelectElement).value, 10))}
+                >
+                    {projects.map((project) => {
+                        return (
+                            <option className="form-option" value={project.id}>
+                                {project.name}
+                            </option>
+                        );
+                    })}
+                </select>
+            </div>
             <div className="flex justify-between pt-2">
                 <button className="btn-create mb-4 ml-4" onClick={(): void => validateAndSubmit()}>
                     Confirm

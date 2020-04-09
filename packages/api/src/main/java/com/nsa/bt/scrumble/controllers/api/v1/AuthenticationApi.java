@@ -74,7 +74,6 @@ public class AuthenticationApi {
 
     @DeleteMapping("/token")
     public ResponseEntity<Object> deleteToken(Authentication authentication) {
-        logger.info("In /token/revoke");
         var deleteTokenResponse = new HashMap<>();
 
         try {
