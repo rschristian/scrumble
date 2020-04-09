@@ -5,7 +5,7 @@ import { Issue } from 'models/Issue';
 import { User } from 'models/User';
 import { useStore } from 'stores';
 import { Project } from 'models/Project';
-import { getProjects } from 'services/api/projects';
+import { getWorkspaceProjects } from 'services/api/projects';
 import { notify } from 'react-notify-toast';
 import { errorColour } from 'services/notification/colours';
 
@@ -17,6 +17,7 @@ interface IProps {
 
 export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
     const authStore = useStore().authStore;
+    const userLocationStore = useStore().userLocationStore;
     const [title, setTitle] = useState(props.issue?.title || '');
     const [description, setDescription] = useState(props.issue?.description || '');
     const [storyPoint, setStoryPoint] = useState(props.issue?.storyPoint || 0);
@@ -47,7 +48,7 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
     };
 
     useEffect(() => {
-        getProjects().then((result) => {
+        getWorkspaceProjects(userLocationStore.currentWorkspace.id).then((result) => {
             if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
             else setProjects(result);
         });
