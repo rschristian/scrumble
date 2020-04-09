@@ -22,11 +22,11 @@ export const getIssues = async (
 };
 
 // GitLab API: POST /projects/:id/issues
-export const createIssue = async (workspaceId: number, projectId: number, issue: Issue): Promise<void | string> => {
+export const createIssue = async (workspaceId: number, issue: Issue): Promise<Issue | string> => {
     return await apiService
-        .post(`/workspace/${workspaceId}/project/${projectId}/issue`, issue)
-        .then(() => {
-            return;
+        .post(`/workspace/${workspaceId}/project/${issue.projectId}/issue`, issue)
+        .then((response) => {
+            return response.data;
         })
         .catch(({ response }) => {
             return response.data?.message || 'Unknown error while creating issue';

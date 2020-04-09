@@ -1,6 +1,7 @@
 package com.nsa.bt.scrumble.services.implementations;
 
 import com.nsa.bt.scrumble.dto.Issue;
+import com.nsa.bt.scrumble.dto.Project;
 import com.nsa.bt.scrumble.services.IIssueService;
 
 import org.slf4j.Logger;
@@ -16,7 +17,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.OptionalInt;
-
 
 @Service
 public class IssueService implements IIssueService {
@@ -74,16 +74,16 @@ public class IssueService implements IIssueService {
     @Override
     public  ArrayList<Issue> searchForIssue(int workspaceId, String searchFor, String filter, String accessToken) {
         var issues = new ArrayList<Issue>();
-        int[] projectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
+        ArrayList<Integer> projectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
         String uri;
 
         for(int projectId : projectIds) {
-            logger.info(String.format("On project id: %d", projectId));
             uri = String.format("%s/projects/%d/issues?%s&search=%s&access_token=%s",
                     gitLabApiUrl, projectId, getFilterQuery(filter), searchFor, accessToken);
 
             ResponseEntity<ArrayList<Issue>> issuesResponse =  restTemplate.exchange(uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
             var matchingIssues = issuesResponse.getBody();
+            filterAndSetStoryPoint(issues);
             if(!matchingIssues.isEmpty()) {
                 issues.addAll(matchingIssues);
             }
@@ -113,5 +113,15 @@ public class IssueService implements IIssueService {
         var headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         return new HttpEntity(headers);
+    }
+
+    @Override
+    public void setProjectName(Issue issue, Project[] projects) {
+        for(int i = 0; i< projects.length; i++) {
+            if(issue.getProjectId() == projects[i].getId()) {
+                issue.setProjectName(projects[i].getName());
+                return;
+            }
+        }
     }
 }

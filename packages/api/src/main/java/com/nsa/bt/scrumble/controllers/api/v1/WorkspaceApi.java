@@ -13,16 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
 public class WorkspaceApi {
-
-    private static final Logger logger = LoggerFactory.getLogger(WorkspaceApi.class);
 
     @Autowired
     IWorkspaceService workspaceService;
@@ -57,7 +52,7 @@ public class WorkspaceApi {
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
             workspaceService.editWorkspace(workspace);
-            return ResponseEntity.ok().body(null);
+            return ResponseEntity.ok().body(workspace);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(authErrorMsg);
     }

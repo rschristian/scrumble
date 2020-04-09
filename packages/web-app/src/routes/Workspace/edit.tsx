@@ -1,71 +1,28 @@
-import { Fragment, FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
+import { FunctionalComponent, h } from 'preact';
+import { notify } from 'react-notify-toast';
 
+import { CreateOrEditWorkspace } from 'components/CreateOrEdit/workspace';
 import { GenericEdit } from 'components/CommonRoutes/Edit';
 import { editWorkspace } from 'services/api/workspaces';
+import { Workspace } from 'models/Workspace';
+import { errorColour, infoColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
 const WorkspaceEdit: FunctionalComponent = () => {
-    const currentWorkspace = useStore().userLocationStore.currentWorkspace;
+    const userLocationStore = useStore().userLocationStore;
+    const currentWorkspace = userLocationStore.currentWorkspace;
 
-    const [name, setName] = useState(currentWorkspace.name);
-    const [description, setDescription] = useState(currentWorkspace.description);
-    const [projectsInWorkspace, setProjectsInWorkspace] = useState<string[]>([]); // TODO: Figure this out
-
-    const [errorMessage, setErrorMessage] = useState('');
-
-    const onSubmit = (): void => {
-        editWorkspace(currentWorkspace.id, {
-            id: currentWorkspace.id,
-            name,
-            description,
-        }).then((error) => {
-            if (error) setErrorMessage(error);
-            else console.log('Success');
+    const onSubmit = (workspace: Workspace): void => {
+        editWorkspace(currentWorkspace.id, workspace).then((result) => {
+            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
+            else {
+                userLocationStore.setWorkspace(result);
+                notify.show('Changes saved!', 'custom', 5000, infoColour);
+            }
         });
     };
 
-    return (
-        <GenericEdit
-            editForm={
-                <Fragment>
-                    <div class="m-4">
-                        <label class="form-label">Workspace Name</label>
-                        <input
-                            class="form-input"
-                            type="text"
-                            placeholder="Workspace Name"
-                            value={name}
-                            onInput={(e): void => setName((e.target as HTMLInputElement).value)}
-                        />
-                    </div>
-                    <div class="m-4">
-                        <label class="form-label">Workspace Description</label>
-                        <input
-                            class="form-input"
-                            type="text"
-                            placeholder="Workspace Description"
-                            value={description}
-                            onInput={(e): void => setDescription((e.target as HTMLInputElement).value)}
-                        />
-                    </div>
-                    <div class="m-4">
-                        <label class="form-label">Projects in this Workspace</label>
-                        <textarea
-                            class="form-input"
-                            rows={5}
-                            type="text"
-                            placeholder="Phoenix, Narwhal, Unicorn"
-                            value={projectsInWorkspace}
-                            // TODO this will need to be an array of projects, maybe through a drop down? Definitely not a cowboy'd string array.
-                            // onInput={(e): void => setWorkspaceName((e.target as HTMLInputElement).value)}
-                        />
-                    </div>
-                    <div class="error">{errorMessage}</div>
-                </Fragment>
-            }
-        />
-    );
+    return <GenericEdit editForm={<CreateOrEditWorkspace workspace={currentWorkspace} submit={onSubmit} />} />;
 };
 
 export default WorkspaceEdit;

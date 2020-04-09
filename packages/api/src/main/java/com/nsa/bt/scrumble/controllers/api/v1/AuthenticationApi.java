@@ -10,6 +10,7 @@ import com.nsa.bt.scrumble.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.util.StringUtils;
@@ -54,9 +55,8 @@ public class AuthenticationApi {
         String jwt = tokenUtils.getJwtFromRequest(request);
         String longLifeToken = null;
 
-        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+        if (StringUtils.hasText(jwt)) {
             Long userId = tokenProvider.getUserIdFromToken(jwt);
-
             Optional<User> userOptional = userService.findUserById(userId.intValue());
 
             if (userOptional.isPresent()){
@@ -77,10 +77,14 @@ public class AuthenticationApi {
         logger.info("In /token/revoke");
         var deleteTokenResponse = new HashMap<>();
 
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        userService.removeToken(userPrincipal.getId());
-        deleteTokenResponse.put("success", true);
+        try {
+            UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+            userService.removeToken(userPrincipal.getId());
+            deleteTokenResponse.put("success", true);
 
-        return ResponseEntity.ok().body(deleteTokenResponse);
+            return ResponseEntity.ok().body(deleteTokenResponse);
+        } catch (InternalAuthenticationServiceException exception) {
+            return ResponseEntity.ok().body(deleteTokenResponse);
+        }
     }
 }

@@ -1,8 +1,13 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 
-import { projects } from 'data';
 import { Issue } from 'models/Issue';
+import { User } from 'models/User';
+import { useStore } from 'stores';
+import { Project } from 'models/Project';
+import { getProjects } from 'services/api/projects';
+import { notify } from 'react-notify-toast';
+import { errorColour } from 'services/notification/colours';
 
 interface IProps {
     issue?: Issue;
@@ -11,10 +16,14 @@ interface IProps {
 }
 
 export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
+    const authStore = useStore().authStore;
     const [title, setTitle] = useState(props.issue?.title || '');
     const [description, setDescription] = useState(props.issue?.description || '');
     const [storyPoint, setStoryPoint] = useState(props.issue?.storyPoint || 0);
     const [projectId, setProjectId] = useState(props.issue?.projectId || 0);
+    const [projectName, setProjectName] = useState(props.issue?.projectName || '');
+    const [assignee, setAssignee] = useState<User>(props.issue?.assignee || null);
+    const [projects, setProjects] = useState<Project[]>([]);
 
     const createIssue = (): Issue => {
         return {
@@ -24,8 +33,25 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
             description,
             storyPoint,
             projectId,
+            projectName,
+            author: props.issue?.author || authStore.currentUser,
+            createdAt: new Date(),
+            assignee,
         };
     };
+
+    const validateAndSubmit = (): void => {
+        if (title == '') notify.show('Please give this issue a title', 'warning', 5000);
+        else if (projectId == 0) notify.show('Please attach this issue to a project', 'warning', 5000);
+        else props.submit(createIssue());
+    };
+
+    useEffect(() => {
+        getProjects().then((result) => {
+            if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
+            else setProjects(result);
+        });
+    }, []);
 
     return (
         <Fragment>
@@ -68,17 +94,11 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
                     );
                 })}
             </select>
-            <div class="flex justify-end pt-2">
-                <button
-                    class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
-                    onClick={(): void => props.submit(createIssue(), projectId)}
-                >
+            <div className="flex justify-between pt-2">
+                <button className="btn-create mb-4 ml-4" onClick={(): void => validateAndSubmit()}>
                     Confirm
                 </button>
-                <button
-                    class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
-                    onClick={props.close}
-                >
+                <button className="btn-close bg-transparent mb-4 mr-4" onClick={props.close}>
                     Cancel
                 </button>
             </div>

@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  postgres:
+    container_name: 'postgres'
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "scrumble"
+
+  scrumble:
+    container_name: 'scrumble'
+    build: .
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"

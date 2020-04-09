@@ -23,6 +23,9 @@ const IssuesBoard: FunctionalComponent = () => {
                         description={issue.description}
                         storyPoint={issue.storyPoint}
                         projectId={issue.projectId}
+                        projectName={issue.projectName}
+                        createdAt={issue.createdAt}
+                        author={issue.author}
                     />,
                 ]);
             } else if (index < 26) {
@@ -36,6 +39,9 @@ const IssuesBoard: FunctionalComponent = () => {
                         description={issue.description}
                         storyPoint={issue.storyPoint}
                         projectId={issue.projectId}
+                        projectName={issue.projectName}
+                        createdAt={issue.createdAt}
+                        author={issue.author}
                     />,
                 ]);
             } else {
@@ -49,6 +55,9 @@ const IssuesBoard: FunctionalComponent = () => {
                         description={issue.description}
                         storyPoint={issue.storyPoint}
                         projectId={issue.projectId}
+                        projectName={issue.projectName}
+                        createdAt={issue.createdAt}
+                        author={issue.author}
                     />,
                 ]);
             }

@@ -1,19 +1,31 @@
 package com.nsa.bt.scrumble.models;
 
+import java.util.ArrayList;
+
 public class Workspace {
     private int id;
     private User createdBy;
     private String name;
     private String description;
+    private ArrayList<Integer> projectIds;
 
-    public Workspace(int id, User createdBy, String name, String description) {
+    public Workspace(int id, User createdBy, String name, String description, ArrayList<Integer> projectIds) {
         this.id = id;
         this.createdBy = createdBy;
         this.name = name;
         this.description = description;
+        this.projectIds = projectIds;
     }
 
     public Workspace() {
+    }
+
+    public ArrayList<Integer> getProjectIds() {
+        return projectIds;
+    }
+
+    public void setProjectIds(ArrayList<Integer> projectIds) {
+        this.projectIds = projectIds;
     }
 
     public int getId() {

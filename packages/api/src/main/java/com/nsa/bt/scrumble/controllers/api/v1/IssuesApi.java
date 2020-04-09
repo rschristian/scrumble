@@ -1,6 +1,7 @@
 package com.nsa.bt.scrumble.controllers.api.v1;
 
 import com.nsa.bt.scrumble.dto.Issue;
+import com.nsa.bt.scrumble.dto.Project;
 import com.nsa.bt.scrumble.regression.LinearRegression;
 import com.nsa.bt.scrumble.regression.DataGrabber;
 import com.nsa.bt.scrumble.dto.IssuePageResult;
@@ -8,8 +9,8 @@ import com.nsa.bt.scrumble.services.IIssuePagingService;
 import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.services.IIssueService;
 import com.nsa.bt.scrumble.services.IUserService;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
+import com.nsa.bt.scrumble.services.IWorkspaceService;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,14 +21,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.core.ParameterizedTypeReference;
 
-import java.util.Arrays;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -60,6 +60,9 @@ public class IssuesApi {
     IIssueService issueService;
 
     @Autowired
+    IWorkspaceService workspaceService;
+
+    @Autowired
     DataGrabber dataGrabber;
 
     @GetMapping("/workspace/{id}/issues")
@@ -71,12 +74,15 @@ public class IssuesApi {
         @RequestParam(value="filter") String filter,
         @RequestParam(value="searchFor") String searchTerm
     ) {
-
         Optional<String> accessTokenOptional = userService.getToken(((UserPrincipal) auth.getPrincipal()).getId());
         if(accessTokenOptional.isEmpty()) {
             var res = new HashMap<String, String>();
             res.put("message", authErrorMsg);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
+        }
+
+        if (workspaceService.getProjectIdsForWorkspace(workspaceId).isEmpty()) {
+            return ResponseEntity.ok().body("You haven't added any projects to your workspace!");
         }
 
         String accessToken = accessTokenOptional.get();
@@ -89,13 +95,19 @@ public class IssuesApi {
     public ResponseEntity<Object> createIssue(
             Authentication authentication, @PathVariable(value="workspaceId") int workspaceId,
             @PathVariable(value="projectId") int projectId,
-            @RequestBody Issue issue){
+            @RequestBody Issue issue) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%1s/projects/%2s/issues?title=%3s&description=%4s&labels=%5s&access_token=%6s",
-                    gitLabBaseUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(),accessTokenOptional.get());
-            Issue newIssue = restTemplate.postForObject(uri, null , Issue.class);
+            String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
+                    gitLabBaseUrl, accessTokenOptional.get());
+            ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(projectUri, Project[].class);
+            Project[] projects = userProjectsResponse.getBody();
+            String issueUri = String.format("%1s/projects/%2s/issues?title=%3s&description=%4s&labels=%5s&access_token=%6s",
+                    gitLabBaseUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), accessTokenOptional.get());
+            Issue newIssue = restTemplate.postForObject(issueUri, null , Issue.class);
+            issueService.setStoryPoint(newIssue);
+            issueService.setProjectName(newIssue, projects);
             linearRegression.setEstimate(gitLabBaseUrl, projectId, newIssue, accessTokenOptional);
             return ResponseEntity.ok().body(newIssue);
         }
