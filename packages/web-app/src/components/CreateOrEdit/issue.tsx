@@ -5,7 +5,7 @@ import { Issue } from 'models/Issue';
 import { User } from 'models/User';
 import { useStore } from 'stores';
 import { Project } from 'models/Project';
-import { getProjects } from 'services/api/projects';
+import { getWorkspaceProjects } from 'services/api/projects';
 import { notify } from 'react-notify-toast';
 import { errorColour } from 'services/notification/colours';
 
@@ -17,6 +17,7 @@ interface IProps {
 
 export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
     const authStore = useStore().authStore;
+    const userLocationStore = useStore().userLocationStore;
     const [title, setTitle] = useState(props.issue?.title || '');
     const [description, setDescription] = useState(props.issue?.description || '');
     const [storyPoint, setStoryPoint] = useState(props.issue?.storyPoint || 0);
@@ -47,7 +48,7 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
     };
 
     useEffect(() => {
-        getProjects().then((result) => {
+        getWorkspaceProjects(userLocationStore.currentWorkspace.id).then((result) => {
             if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
             else setProjects(result);
         });
@@ -78,22 +79,24 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
                 value={storyPoint}
                 onInput={(e): void => setStoryPoint(parseInt((e.target as HTMLSelectElement).value, 10))}
             />
-            <label class="form-label">Project to Attach To</label>
-            <select
-                class="form-input"
-                type="number"
-                placeholder="Project to Attach To"
-                value={projectId}
-                onInput={(e): void => setProjectId(parseInt((e.target as HTMLSelectElement).value, 10))}
-            >
-                {projects.map((project) => {
-                    return (
-                        <option class="form-option" value={project.id}>
-                            {project.name}
-                        </option>
-                    );
-                })}
-            </select>
+            <div className={`${props.issue ? 'hidden' : 'block'}`}>
+                <label class="form-label">Project to Attach To</label>
+                <select
+                    class="form-input"
+                    type="number"
+                    placeholder="Project to Attach To"
+                    value={projectId}
+                    onInput={(e): void => setProjectId(parseInt((e.target as HTMLSelectElement).value, 10))}
+                >
+                    {projects.map((project) => {
+                        return (
+                            <option className="form-option" value={project.id}>
+                                {project.name}
+                            </option>
+                        );
+                    })}
+                </select>
+            </div>
             <div className="flex justify-between pt-2">
                 <button className="btn-create mb-4 ml-4" onClick={(): void => validateAndSubmit()}>
                     Confirm
