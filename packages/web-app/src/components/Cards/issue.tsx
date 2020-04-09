@@ -38,12 +38,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
     const [showIssueCardInformation, setShowIssueCardInformation] = useState(false);
 
     const handleIssueEdit = async (issue: Issue): Promise<void> => {
-        return await editIssue(
-            userLocationStore.currentWorkspace.id,
-            props.issue.projectId,
-            props.issue.iid,
-            issue,
-        ).then((error) => {
+        return await editIssue(userLocationStore.currentWorkspace.id, issue).then((error) => {
             if (error) notify.show(error, 'error', 5000, errorColour);
             else {
                 notify.show('Issue successfully updated!', 'success', 5000, successColour);
@@ -165,7 +160,6 @@ export const IssueInformation: FunctionalComponent<InformationProps> = (props: I
                 <span class="info-label"> Description: </span>
                 <div class="table-row normal-case">
                     <span class="text-gray-700">
-                        {' '}
                         {props.issue.description.trim() != '' ? (
                             props.issue.description
                         ) : (

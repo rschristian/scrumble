@@ -26,6 +26,9 @@ public class IssuePagingService implements IIssuePagingService {
     @Autowired
     RestTemplate restTemplate;
 
+    @Value("${app.issues.provider.gitlab.baseUrl.api}")
+    private String gitLabApiUrl;
+
     @Autowired
     IWorkspaceService workspaceService;
 
@@ -33,9 +36,6 @@ public class IssuePagingService implements IIssuePagingService {
     IIssueService issueService;
 
     private static final int ISSUE_PAGE_SIZE = 20;
-
-    @Value("${app.issues.provider.gitlab.baseUrl.api}")
-    private String gitLabApiUrl;
 
     @Override
     public int getNextProjectId(int workspaceId, int prevProjectId) {
