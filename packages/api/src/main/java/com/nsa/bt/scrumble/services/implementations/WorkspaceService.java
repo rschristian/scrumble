@@ -38,12 +38,6 @@ public class WorkspaceService implements IWorkspaceService {
     @Autowired
     IWorkspaceRepository workspaceRepository;
 
-    @Autowired
-    RestTemplate restTemplate;
-
-    @Value("${app.issues.provider.gitlab.baseUrl.api}")
-    private String gitLabApiUrl;
-
     @Override
     public ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId) {
         return workspaceRepository.projectIdsForWorkspace(workspaceId);
@@ -116,7 +110,6 @@ public class WorkspaceService implements IWorkspaceService {
                     user.setProjectIds(usersProjectIds.get(user));
                 }
             });
-            System.out.println( usersProjectIds );
             workspace.setUsers(resultant);
     }
 
