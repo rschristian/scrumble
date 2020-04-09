@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Hashtable;
 
 @Service
 public class WorkspaceService implements IWorkspaceService {
@@ -63,25 +64,39 @@ public class WorkspaceService implements IWorkspaceService {
     @Override
     public void setWorkspaceUsers(Workspace workspace, Optional<String> accessToken) {
         List<User> allUsers = new ArrayList<User>();
-        ArrayList<Integer> projectIds = new ArrayList<Integer>();
+        Hashtable<User, ArrayList<Integer>> usersProjectIds = new Hashtable<User, ArrayList<Integer>>();
             workspace.getProjectIds().forEach((projectId) -> {
                 String uri = String.format("%1s/projects/%2s/users?access_token=%3s",
                 gitLabApiUrl, projectId, accessToken.get());
                 ResponseEntity<ArrayList<User>> projectUsersResponse = restTemplate.exchange(
                     uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
                 ArrayList<User> projectUsers = projectUsersResponse.getBody();
-                projectIds.add(projectId); 
                 projectUsers.forEach((user) -> {
-                    user.setProjectIds(projectIds);
+                    if(usersProjectIds.containsKey(user)) {
+                        ArrayList<Integer> projectIdArray = usersProjectIds.get(user);
+                        List<Integer> listWithoutDuplicates = projectIdArray.stream().distinct().collect(Collectors.toList()); // removes any duplicates
+                        ArrayList<Integer> uniqueProjectIdArray = new ArrayList<Integer>();
+                        uniqueProjectIdArray.addAll(listWithoutDuplicates);
+                        uniqueProjectIdArray.add(projectId);
+                        usersProjectIds.put(user, uniqueProjectIdArray);
+                    } else {
+                        ArrayList<Integer> newProjectIdArray = new ArrayList<Integer>();
+                        newProjectIdArray.add(projectId);
+                        usersProjectIds.put(user, newProjectIdArray);
+                    }
                 });
                 allUsers.addAll(projectUsers);
             });
             Set<User> uniqueUsers = new HashSet<User>();
-            // getting all unique users
-            uniqueUsers.addAll(allUsers);
+            uniqueUsers.addAll(allUsers); // getting all unique users
             List<User> resultant = new ArrayList<User>();
-            // adding unique users to list instead of set
-            resultant.addAll(uniqueUsers);
+            resultant.addAll(uniqueUsers); // adding unique users to list instead of set
+            resultant.forEach((user) -> {
+                if(usersProjectIds.containsKey(user)) {
+                    user.setProjectIds(usersProjectIds.get(user));
+                }
+            });
+            System.out.println( usersProjectIds );
             workspace.setUsers(resultant);
     }
 
