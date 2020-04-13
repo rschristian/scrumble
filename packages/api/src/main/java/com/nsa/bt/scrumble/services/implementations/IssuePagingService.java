@@ -11,6 +11,8 @@ import com.nsa.bt.scrumble.services.IWorkspaceService;
 import com.nsa.bt.scrumble.util.GitLabLinkParser;
 import com.nsa.bt.scrumble.util.GitLabLinks;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -23,6 +25,8 @@ import java.util.Arrays;
 
 @Service
 public class IssuePagingService implements IIssuePagingService {
+
+    private static final Logger logger = LoggerFactory.getLogger(IssuePagingService.class);
 
     @Autowired
     RestTemplate restTemplate;
@@ -163,7 +167,7 @@ public class IssuePagingService implements IIssuePagingService {
         while(true) {
             ResponseEntity<ArrayList<Issue>> issuesResponse = restTemplate.exchange(
                     queryUri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
-            var openSprints = sprintService.getSprintsForWorkspace(workspaceId, "open");
+            var openSprints = sprintService.getSprintsForWorkspace(workspaceId, "active");
 
             issues = issuesResponse.getBody();
             issues.forEach((issue)-> {

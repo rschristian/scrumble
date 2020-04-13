@@ -83,12 +83,15 @@ public class SprintService implements ISprintService {
 
     @Override
     public Issue setSprintForIssue(int workspaceId, Issue issue, List<Sprint> sprints) {
+        // Initial assigning of sprint will be milestone data from api. If present, milestone values
+        // must be swapped with Scrumble sprint values for future operations. Most importantly, id needs to be changed
         if (issue.getSprint() == null) {
             return issue;
         }
         for (Sprint sprint : sprints) {
             for (Map.Entry<String, Integer> pair : sprint.getProjectIdToMilestoneIds().entrySet()) {
-                if (Integer.toString(issue.getProjectId()).equals(pair.getKey())) {
+                // Look for a Scrumble sprint that includes the issue's milestone
+                if (issue.getSprint().getId() == pair.getValue()) {
                     issue.setSprint(sprint);
                     return issue;
                 }
