@@ -8,9 +8,24 @@ import { Issue, IssueStatus } from 'models/Issue';
 const IssuesBoard: FunctionalComponent = () => {
     // TODO This is horrendous, but an easy way to split up test data. Delete all once real data is set up
     const [open, setOpen] = useState<ComponentChild[]>([]);
-    const [inProgress, setInProgress] = useState<ComponentChild[]>([]);
+    const [doing, setDoing] = useState<ComponentChild[]>([]);
+    const [todo, setTodo] = useState<ComponentChild[]>([]);
     const [closed, setClosed] = useState<ComponentChild[]>([]);
     const [issuesArray, setIssuesArray] = useState<Issue[]>(issues);
+
+    const updateIssueBoard = (updatedIssue: Issue): void => {
+        const arrayCopy = [...issuesArray];
+        setOpen([]);
+        setTodo([]);
+        setDoing([]);
+        setClosed([]);
+        issuesArray.forEach((issue: Issue, index) => {
+            if(issue.iid === updatedIssue.iid) {
+                arrayCopy[index] = updatedIssue;
+                setIssuesArray(arrayCopy);
+            }
+        })
+    }
 
     useEffect(() => {
         issuesArray.map((issue, index) => {
@@ -20,14 +35,25 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         issue={issue}
+                        updateIssueBoard= {updateIssueBoard}
                     />,
                 ]);
-            } else if (issue.status === IssueStatus.inProgress) {
-                setInProgress((oldValues) => [
+            } else if (issue.status === IssueStatus.todo) {
+                    setTodo((oldValues) => [
+                        ...oldValues,
+                        <IssueBoardCard
+                            key={index}
+                            issue={issue}
+                            updateIssueBoard = {updateIssueBoard}
+                        />,
+                    ])
+            } else if (issue.status === IssueStatus.doing) {
+                setDoing((oldValues) => [
                     ...oldValues,
                     <IssueBoardCard
                         key={index}
                         issue={issue}
+                        updateIssueBoard = {updateIssueBoard}
                     />,
                 ])
             } else {
@@ -36,11 +62,12 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         issue={issue}
+                        updateIssueBoard = {updateIssueBoard}
                     />,
                 ]);
             }
         });
-    }, []);
+    }, [issuesArray]);
 
     return (
         <Fragment>
@@ -56,9 +83,15 @@ const IssuesBoard: FunctionalComponent = () => {
                 </div>
                 <div class="issue-list border-l border-deep-space-sparkle">
                     <div class="issue-list-title-holder bg-orange-300">
-                        <h2 class="issue-list-title">In Progress</h2>
+                        <h2 class="issue-list-title">To Do</h2>
                     </div>
-                    {inProgress}
+                    {todo}
+                </div>
+                <div class="issue-list border-l border-deep-space-sparkle">
+                    <div class="issue-list-title-holder bg-green-300">
+                        <h2 class="issue-list-title">Doing</h2>
+                    </div>
+                    {doing}
                 </div>
                 <div class="issue-list border-l border-deep-space-sparkle">
                     <div class="issue-list-title-holder bg-green-300">

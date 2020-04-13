@@ -12,9 +12,26 @@ import { useStore } from 'stores';
 
 interface IssuesBoardProps {
     issue: Issue;
+    updateIssueBoard: (issue: Issue) => void;
 }
 export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: IssuesBoardProps) => {
     const [issueStatus, setIssueStatus] = useState(props.issue.status);
+
+    const handleUpdate = (issueStatus: string): Issue => {
+        return {
+            iid: props.issue?.iid || 0,
+            status: issueStatus,
+            title: props.issue.title,
+            description: props.issue.description,
+            storyPoint: props.issue.storyPoint,
+            projectId: props.issue.projectId,
+            projectName: props.issue.projectName,
+            author: props.issue?.author,
+            createdAt: new Date(),
+            assignee: props.issue.assignee,
+        }
+    }
+    console.log(issueStatus);
     return (
         <div class="bg-white relative rounded-md shadow-lg m-2 min-h-48 m-4">
             <div class="px-4 py-2 h-40">
@@ -22,8 +39,9 @@ export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: Iss
                 <select
                     class="form-input"
                     value={issueStatus}
-                    onClick={(e): void => {
-                        setIssueStatus((e.target as HTMLSelectElement).value)
+                    onInput={(e): void => {
+                        setIssueStatus((e.target as HTMLSelectElement).value);
+                        props.updateIssueBoard(handleUpdate((e.target as HTMLSelectElement).value));
                     }}
                 >
                    {Object.values(IssueStatus).map((issueStatus) => {
