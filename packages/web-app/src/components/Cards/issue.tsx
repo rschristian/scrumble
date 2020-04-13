@@ -31,13 +31,13 @@ export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: Iss
             assignee: props.issue.assignee,
         }
     }
-    console.log(issueStatus);
+    
     return (
         <div class="bg-white relative rounded-md shadow-lg m-2 min-h-48 m-4">
             <div class="px-4 py-2 h-40">
                 <p class="">{props.issue.title}</p>
                 <select
-                    class="form-input"
+                    class="form-input capitalize"
                     value={issueStatus}
                     onInput={(e): void => {
                         setIssueStatus((e.target as HTMLSelectElement).value);
@@ -46,7 +46,7 @@ export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: Iss
                 >
                    {Object.values(IssueStatus).map((issueStatus) => {
                        return(
-                           <option class="form-option" value={issueStatus}>
+                           <option class="form-option capitalize" value={issueStatus}>
                                {issueStatus}
                            </option>
                        )

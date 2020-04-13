@@ -2,10 +2,10 @@ import { Sprint } from './Sprint';
 import { User } from './User';
 
 export enum IssueStatus {
-    open = 'Opened',
+    open = 'opened',
     todo = 'To Do', // default label for GitLab issue board
     doing = 'Doing', // default label for GitLab issue board
-    closed = 'Closed',
+    closed = 'closed',
 }
 
 export interface Issue {
