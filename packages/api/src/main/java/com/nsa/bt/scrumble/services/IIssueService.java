@@ -18,4 +18,8 @@ public interface IIssueService {
     ArrayList<Issue> searchForIssue(int workspaceId, String searchFor, String filter, String accessToken);
 
     String getFilterQuery(String filter);
+
+    Issue createIssue(int workspaceId, int projectId, Issue issue, String accessToken);
+
+    Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken);
 }

@@ -44,8 +44,6 @@ public class IssuesApi {
     @Autowired
     OAuth2AuthorizedClientService auth2AuthorizedClientService;
 
-    @Autowired
-    LinearRegression linearRegression;
 
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabBaseUrl;
@@ -105,17 +103,7 @@ public class IssuesApi {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
         }
         if(accessTokenOptional.isPresent()) {
-            String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
-                    gitLabBaseUrl, accessTokenOptional.get());
-            ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(projectUri, Project[].class);
-            Project[] projects = userProjectsResponse.getBody();
-            String issueUri = String.format("%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
-                    gitLabBaseUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getAssignee().getId(), accessTokenOptional.get());
-            Issue newIssue = restTemplate.postForObject(issueUri, null , Issue.class);
-            issueService.setStoryPoint(newIssue);
-            issueService.setProjectName(newIssue, projects);
-            linearRegression.setEstimate(gitLabBaseUrl, projectId, newIssue, accessTokenOptional);
-            return ResponseEntity.ok().body(newIssue);
+            return ResponseEntity.ok().body(issueService.createIssue(workspaceId, projectId, issue, accessTokenOptional.get()));
         }
         logger.error("Unable to authenticate with authentication provider");
         var res = new HashMap<String, String>();
@@ -139,11 +127,7 @@ public class IssuesApi {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
         }
         if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&access_token=%s",
-                    gitLabBaseUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(), issue.getStoryPoint(),issue.getStatus(), issue.getAssignee().getId(),accessTokenOptional.get());
-            restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
-            linearRegression.setEstimate(gitLabBaseUrl, projectId, issue, accessTokenOptional);
-            return ResponseEntity.ok().body("issue updated");
+            return ResponseEntity.ok().body(issueService.editIssue(workspaceId, projectId, issue, accessTokenOptional.get()));
         }
         logger.error("Unable to authenticate with authentication provider");
         var res = new HashMap<String, String>();

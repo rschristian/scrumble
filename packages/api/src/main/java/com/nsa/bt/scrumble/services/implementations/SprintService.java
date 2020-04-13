@@ -1,5 +1,6 @@
 package com.nsa.bt.scrumble.services.implementations;
 
+import com.nsa.bt.scrumble.dto.Issue;
 import com.nsa.bt.scrumble.errorhandlers.MilestoneRestTemplateResponseErrorHandler;
 import com.nsa.bt.scrumble.models.Sprint;
 import com.nsa.bt.scrumble.repositories.ISprintRepository;
@@ -50,7 +51,7 @@ public class SprintService implements ISprintService {
             uri = String.format("%s/projects/%d/milestones?title=%s&description=%s&start_date=%tF&due_date=%tF&access_token=%s",
                     gitLabApiUrl, projectId, sprint.getTitle(), sprint.getDescription(), sprint.getStartDate(), sprint.getDueDate(), accessToken);
             Sprint milestone = restTemplate.postForObject(uri, null , Sprint.class);
-            projectMilestoneIds.put(Integer.toString(projectId), Math.toIntExact(milestone.getId()));
+            projectMilestoneIds.put(Integer.toString(projectId), milestone.getId());
         }
         sprint.setProjectIdToMilestoneIds(projectMilestoneIds);
         return sprintRepository.createSprint(workspaceId, sprint);
@@ -62,8 +63,8 @@ public class SprintService implements ISprintService {
     }
 
     @Override
-    public List<Sprint> getAllSprintsForWorkspace(int workspaceId) {
-        return sprintRepository.getAllSprintsForWorkspace(workspaceId);
+    public List<Sprint> getSprintsForWorkspace(int workspaceId, String filter) {
+        return sprintRepository.getAllSprintsForWorkspace(workspaceId, filter);
     }
 
     @Override
@@ -79,10 +80,49 @@ public class SprintService implements ISprintService {
         return sprintRepository.getPageOfSprints(workspaceId, pageNumber, pageSize);
     }
 
+
+    @Override
+    public Issue setSprintForIssue(int workspaceId, Issue issue, List<Sprint> sprints) {
+        if (issue.getSprint() == null) {
+            return issue;
+        }
+        for (Sprint sprint : sprints) {
+            for (Map.Entry<String, Integer> pair : sprint.getProjectIdToMilestoneIds().entrySet()) {
+                if (Integer.toString(issue.getProjectId()).equals(pair.getKey())) {
+                    issue.setSprint(sprint);
+                    return issue;
+                }
+            }
+        }
+
+        return issue;
+    }
+
+    @Override
+    public int getMilestoneId(int workspaceId, int projectId, int sprintId) {
+        if (sprintId == 0) {
+            return sprintId;
+        }
+        Sprint sprint = sprintRepository.getSprintById(sprintId);
+
+        try {
+            return sprint.getProjectIdToMilestoneIds().get(Integer.toString(projectId));
+        } catch (NullPointerException e) {
+
+            logger.error(String.format("Project with id %d does not have a corresponding milestone for sprint with id %d", projectId, sprintId));
+        }
+        return 0;
+    }
+
     private void editGitLabMilestone(int projectId, int milestoneId, Sprint sprint, String accessToken) {
-        String uri = String.format("%s/projects/%d/milestones/%d?title=%s&description=%s&start_date=%tF&due_date=%tF&access_token=%s",
-                gitLabApiUrl, projectId, milestoneId, sprint.getTitle(), sprint.getDescription(), sprint.getStartDate(), sprint.getDueDate(), accessToken);
+        String stateEvent;
+        if(sprint.getStatus().equalsIgnoreCase("active")) {
+            stateEvent = "activate";
+        } else {
+            stateEvent = "close";
+        }
+        String uri = String.format("%s/projects/%d/milestones/%d?title=%s&description=%s&start_date=%tF&due_date=%tF&state_event=%s&access_token=%s",
+                gitLabApiUrl, projectId, milestoneId, sprint.getTitle(), sprint.getDescription(), sprint.getStartDate(), sprint.getDueDate(), stateEvent, accessToken);
         ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.PUT, null, String.class);
-        logger.info(String.format("Response code: %d", response.getStatusCodeValue()));
     }
 }

@@ -1,5 +1,6 @@
 package com.nsa.bt.scrumble.regression;
 import com.nsa.bt.scrumble.dto.Issue;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,9 @@ import java.util.Optional;
 @Service
 public class LinearRegression {
     private double c, m;
+
+    @Value("${app.issues.provider.gitlab.baseUrl.api}")
+    private String gitLabApiUrl;
 
     @Autowired
     RestTemplate restTemplate;
@@ -80,13 +84,13 @@ public class LinearRegression {
         return timeString;
     }
 
-    public void setEstimate(String gitLabBaseUrl, int projectId, Issue issue, Optional<String> accessTokenOptional) {
-        Issue[] closedIssues = dataGrabber.getClosedIssues(gitLabBaseUrl, projectId, accessTokenOptional);
+    public void setEstimate(int projectId, Issue issue, String accessToken) {
+        Issue[] closedIssues = dataGrabber.getClosedIssues(gitLabApiUrl, projectId, accessToken);
         dataGrabber.setDataPoints(closedIssues);
         int[][] dataPoints = dataGrabber.getDataPoints();
         this.trainModel(dataPoints);
         String estimate = this.timeConversion(this.predict(issue.getStoryPoint()));
-        String uri = String.format("%1s/projects/%2s/issues/%3s/time_estimate?duration=%4s&access_token=%5s", gitLabBaseUrl, projectId, issue.getIid(), estimate, accessTokenOptional.get());
+        String uri = String.format("%1s/projects/%2s/issues/%3s/time_estimate?duration=%4s&access_token=%5s", gitLabApiUrl, projectId, issue.getIid(), estimate, accessToken);
         restTemplate.postForObject(uri, null, String.class);
     }
 }
