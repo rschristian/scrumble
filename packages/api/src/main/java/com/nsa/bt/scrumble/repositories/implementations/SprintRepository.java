@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -69,7 +68,6 @@ public class SprintRepository  implements ISprintRepository {
             params = new Object[]{ workspaceId };
             types = new int[]{Types.INTEGER};
         } else {
-            logger.info("Going for filter");
             selectStatement = "SELECT * FROM sprints where workspace_id = ? AND status = ?";
             params = new Object[]{ workspaceId, filter };
             types = new int[]{Types.INTEGER, Types.VARCHAR};
@@ -97,7 +95,27 @@ public class SprintRepository  implements ISprintRepository {
 
     @Override
     public Sprint getSprintById(int sprintId) {
-        return null;
+        String selectStatement = "SELECT * FROM sprints where id = ?";
+        Object[] params = new Object[]{sprintId};
+        int[] types = new int[]{Types.INTEGER};
+        return jdbcTemplate.queryForObject(selectStatement,
+                params,
+                types,
+                (rs, row) -> {
+                    try {
+                        return new Sprint(
+                                rs.getInt("id"),
+                                rs.getString("title"),
+                                rs.getString("description"),
+                                rs.getString("status"),
+                                rs.getDate("start_date"),
+                                rs.getDate("due_date"),
+                                parseJsonDataToMilestoneIds(((PGobject) rs.getObject("sprint_data"))));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                });
     }
 
     @Override

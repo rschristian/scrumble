@@ -145,6 +145,7 @@ public class IssuePagingService implements IIssuePagingService {
         page = getPageNumber(page);
         projectId = getProjectId(workspaceId, projectId);
 
+
         String uri = String.format("%s/projects?access_token=%s&simple=true&membership=true", gitLabApiUrl, accessToken);
             ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(uri, Project[].class);
             Project[] projects = userProjectsResponse.getBody();

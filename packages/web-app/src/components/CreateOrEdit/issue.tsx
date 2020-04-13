@@ -10,7 +10,7 @@ import { notify } from 'react-notify-toast';
 import { errorColour } from 'services/notification/colours';
 import { observer } from 'services/mobx';
 import { getSprints } from 'services/api/sprints';
-import { Sprint } from 'models/Sprint';
+import { Sprint, SprintStatus } from 'models/Sprint';
 
 interface IProps {
     issue?: Issue;
@@ -26,6 +26,21 @@ const unassigned: User = {
     projectIds: [],
 };
 
+const emptySprint = (): Sprint => {
+    return {
+        id: 0,
+        title: 'No sprint',
+        status: SprintStatus.active,
+    };
+};
+
+const emptyProject = (): Project => {
+    return {
+        id: 0,
+        name: 'Unassigned',
+    };
+};
+
 export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: IProps) => {
     const authStore = useStore().authStore;
     const userLocationStore = useStore().userLocationStore;
@@ -34,8 +49,9 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
     const [description, setDescription] = useState(props.issue?.description || '');
     const [storyPoint, setStoryPoint] = useState(props.issue?.storyPoint || 0);
     const [projectId, setProjectId] = useState(props.issue?.projectId || 0);
-    const [projectName, setProjectName] = useState(props.issue?.projectName || '');
+    const [projectName, setProjectName] = useState(props.issue?.projectName || emptyProject().name);
     const [assignee, setAssignee] = useState<User>(props.issue?.assignee || unassigned);
+    const [sprint, setSprint] = useState<Sprint>(props.issue?.sprint || emptySprint);
     const [projects, setProjects] = useState<Project[]>([]);
     const [sprints, setSprints] = useState<Sprint[]>([]);
 
@@ -48,21 +64,33 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
             storyPoint,
             projectId,
             projectName,
+            sprint,
             author: props.issue?.author || authStore.currentUser,
             createdAt: new Date(),
             assignee,
         };
     };
 
-    const handleChange = (event: any) => {
+    const handleAssigneeChange = (event: any): void => {
         if (event.target.value === 'Unassigned') {
             setAssignee(unassigned);
         } else {
             setAssignee(currentWorkspace.users[event.target.options.selectedIndex - 1]);
         }
     };
+
+    const handleProjectChange = (projectName: string): void => {
+        const project = projects.find((p) => p.name === projectName);
+        setProjectId(project.id);
+        setProjectName(project.name);
+    };
+
+    const handleSprintChange = (sprintTitle: string): void => {
+        setSprint(sprints.find((sprint) => sprint.title === sprintTitle));
+    };
+
     const validateAndSubmit = (): void => {
-        if (title == '') notify.show('Please give this issue a title', 'warning', 5000);
+        if (title == emptySprint().title) notify.show('Please give this issue a title', 'warning', 5000);
         else if (projectId == 0) notify.show('Please attach this issue to a project', 'warning', 5000);
         else props.submit(createIssue());
     };
@@ -74,13 +102,17 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
         });
         getSprints(userLocationStore.currentWorkspace.id, 'active').then((result) => {
             if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
-            else setSprints(result);
+            else {
+                result.unshift(emptySprint());
+                setSprints(result);
+            }
         });
     }, []);
 
     useEffect(() => {
         unassigned.projectIds = [projectId];
     }, [projectId]);
+
     return (
         <Fragment>
             <label class="form-label">Title</label>
@@ -107,7 +139,7 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
                 onInput={(e): void => setStoryPoint(parseInt((e.target as HTMLSelectElement).value, 10))}
             />
             <label class="form-label">Assignee</label>
-            <select class="form-input" onInput={handleChange} value={assignee.name}>
+            <select class="form-input" onInput={handleAssigneeChange} value={assignee.name}>
                 <option value="Unassigned" class="form-option">
                     Unassigned
                 </option>
@@ -123,14 +155,13 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
                 <label className="form-label">Project to Attach To</label>
                 <select
                     className="form-input"
-                    type="number"
                     placeholder="Project to Attach To"
-                    value={projectId}
-                    onInput={(e): void => setProjectId(parseInt((e.target as HTMLSelectElement).value, 10))}
+                    value={projectName}
+                    onInput={(e): void => handleProjectChange((e.target as HTMLSelectElement).value)}
                 >
                     {projects.map((project) => {
                         return (
-                            <option className="form-option" value={project.id}>
+                            <option className="form-option" value={project.name}>
                                 {project.name}
                             </option>
                         );
@@ -140,14 +171,13 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
             <label className="form-label">Sprint to Attach To</label>
             <select
                 className="form-input"
-                type="number"
                 placeholder="Project to Attach To"
-                value={projectId}
-                onInput={(e): void => setProjectId(parseInt((e.target as HTMLSelectElement).value, 10))}
+                value={sprint.title}
+                onInput={(e): void => handleSprintChange((e.target as HTMLSelectElement).value)}
             >
                 {sprints.map((sprint) => {
                     return (
-                        <option className="form-option" value={sprint.id}>
+                        <option className="form-option" value={sprint.title}>
                             {sprint.title}
                         </option>
                     );
