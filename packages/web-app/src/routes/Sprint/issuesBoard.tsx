@@ -3,61 +3,39 @@ import { useEffect, useState } from 'preact/hooks';
 
 import { IssueBoardCard } from 'components/Cards/issue';
 import { issues } from 'data';
+import { Issue, IssueStatus } from 'models/Issue';
 
 const IssuesBoard: FunctionalComponent = () => {
     // TODO This is horrendous, but an easy way to split up test data. Delete all once real data is set up
     const [open, setOpen] = useState<ComponentChild[]>([]);
     const [inProgress, setInProgress] = useState<ComponentChild[]>([]);
     const [closed, setClosed] = useState<ComponentChild[]>([]);
+    const [issuesArray, setIssuesArray] = useState<Issue[]>(issues);
 
     useEffect(() => {
-        issues.map((issue, index) => {
-            if (index < 13) {
+        issuesArray.map((issue, index) => {
+            if (issue.status === IssueStatus.open) {
                 setOpen((oldValues) => [
                     ...oldValues,
                     <IssueBoardCard
                         key={index}
-                        iid={issue.iid}
-                        status={issue.status}
-                        title={issue.title}
-                        description={issue.description}
-                        storyPoint={issue.storyPoint}
-                        projectId={issue.projectId}
-                        projectName={issue.projectName}
-                        createdAt={issue.createdAt}
-                        author={issue.author}
+                        issue={issue}
                     />,
                 ]);
-            } else if (index < 26) {
+            } else if (issue.status === IssueStatus.inProgress) {
                 setInProgress((oldValues) => [
                     ...oldValues,
                     <IssueBoardCard
                         key={index}
-                        iid={issue.iid}
-                        status={issue.status}
-                        title={issue.title}
-                        description={issue.description}
-                        storyPoint={issue.storyPoint}
-                        projectId={issue.projectId}
-                        projectName={issue.projectName}
-                        createdAt={issue.createdAt}
-                        author={issue.author}
+                        issue={issue}
                     />,
-                ]);
+                ])
             } else {
                 setClosed((oldValues) => [
                     ...oldValues,
                     <IssueBoardCard
                         key={index}
-                        iid={issue.iid}
-                        status={issue.status}
-                        title={issue.title}
-                        description={issue.description}
-                        storyPoint={issue.storyPoint}
-                        projectId={issue.projectId}
-                        projectName={issue.projectName}
-                        createdAt={issue.createdAt}
-                        author={issue.author}
+                        issue={issue}
                     />,
                 ]);
             }

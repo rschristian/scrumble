@@ -10,16 +10,35 @@ import { observer } from 'services/mobx';
 import { errorColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
 
-export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
+interface IssuesBoardProps {
+    issue: Issue;
+}
+export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: IssuesBoardProps) => {
+    const [issueStatus, setIssueStatus] = useState(props.issue.status);
     return (
         <div class="bg-white relative rounded-md shadow-lg m-2 min-h-48 m-4">
             <div class="px-4 py-2 h-40">
-                <p class="">{props.title}</p>
+                <p class="">{props.issue.title}</p>
+                <select
+                    class="form-input"
+                    value={issueStatus}
+                    onClick={(e): void => {
+                        setIssueStatus((e.target as HTMLSelectElement).value)
+                    }}
+                >
+                   {Object.values(IssueStatus).map((issueStatus) => {
+                       return(
+                           <option class="form-option" value={issueStatus}>
+                               {issueStatus}
+                           </option>
+                       )
+                   })}
+                </select>
             </div>
             <div class="absolute bottom-0 left-0 px-4 py-2">
                 <div class="flex">
-                    <span class="story-pnt">{props.storyPoint}</span>
-                    <p class="font-hairline text-gray-700">{props.projectId}</p>
+                    <span class="story-pnt">{props.issue.storyPoint}</span>
+                    <p class="font-hairline text-gray-700">{props.issue.projectName}</p>
                 </div>
             </div>
         </div>
@@ -47,7 +66,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
             }
         });
     };
-
+console.log(props.issue);
     return (
         <div class="cursor-default capitalize">
             {showEditIssueModal ? (
