@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -60,10 +59,19 @@ public class SprintRepository  implements ISprintRepository {
     }
 
     @Override
-    public List<Sprint> getAllSprintsForWorkspace(int workspaceId) {
-        String selectStatement = "SELECT * FROM sprints where workspace_id = ?";
-        Object[] params = new Object[]{ workspaceId };
-        int[] types = new int[]{Types.INTEGER};
+    public List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter) {
+        String selectStatement;
+        Object[] params;
+        int[] types;
+        if(filter.equalsIgnoreCase("none")) {
+            selectStatement = "SELECT * FROM sprints where workspace_id = ?";
+            params = new Object[]{ workspaceId };
+            types = new int[]{Types.INTEGER};
+        } else {
+            selectStatement = "SELECT * FROM sprints where workspace_id = ? AND status = ?";
+            params = new Object[]{ workspaceId, filter };
+            types = new int[]{Types.INTEGER, Types.VARCHAR};
+        }
         return mapRowsToSprintList(selectStatement, params, types);
     }
 
@@ -87,7 +95,27 @@ public class SprintRepository  implements ISprintRepository {
 
     @Override
     public Sprint getSprintById(int sprintId) {
-        return null;
+        String selectStatement = "SELECT * FROM sprints where id = ?";
+        Object[] params = new Object[]{sprintId};
+        int[] types = new int[]{Types.INTEGER};
+        return jdbcTemplate.queryForObject(selectStatement,
+                params,
+                types,
+                (rs, row) -> {
+                    try {
+                        return new Sprint(
+                                rs.getInt("id"),
+                                rs.getString("title"),
+                                rs.getString("description"),
+                                rs.getString("status"),
+                                rs.getDate("start_date"),
+                                rs.getDate("due_date"),
+                                parseJsonDataToMilestoneIds(((PGobject) rs.getObject("sprint_data"))));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                });
     }
 
     @Override

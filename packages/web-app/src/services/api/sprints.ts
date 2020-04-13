@@ -2,10 +2,10 @@ import { apiService } from 'ts-api-toolkit';
 
 import { Sprint } from 'models/Sprint';
 
-// GitLab API: PUT /projects/:id/milestones
-export const getSprints = async (workspaceId: number): Promise<Sprint[] | string> => {
+export const getSprints = async (workspaceId: number, filter: string): Promise<Sprint[] | string> => {
+    const args = { filter };
     return await apiService
-        .get(`/workspace/${workspaceId}/sprints`)
+        .query(`/workspace/${workspaceId}/sprints`, { params: args })
         .then((response) => {
             return response.data;
         })
@@ -35,17 +35,5 @@ export const editSprint = async (workspaceId: number, updatedSprint: Sprint): Pr
         })
         .catch(({ response }) => {
             return response.data?.message || 'Unknown error while updating sprint details';
-        });
-};
-
-// GitLab API: PUT /projects/:id/milestones/:milestone_id
-export const toggleSprintStatus = async (workspaceId: number, sprintId: number): Promise<void | string> => {
-    return await apiService
-        .put(`/workspace/${workspaceId}/sprint/${sprintId}/status/toggle`, {})
-        .then(() => {
-            return;
-        })
-        .catch(({ response }) => {
-            return response.data?.message || 'Unknown error while updating sprint status';
         });
 };

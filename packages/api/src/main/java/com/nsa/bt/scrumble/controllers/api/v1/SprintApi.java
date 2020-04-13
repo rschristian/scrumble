@@ -69,11 +69,12 @@ public class SprintApi {
     @GetMapping("/workspace/{workspaceId}/sprints")
     public ResponseEntity<Object> getWorkspaceSprints(
             Authentication auth,
-            @PathVariable(value="workspaceId") int workspaceId) {
+            @PathVariable(value="workspaceId") int workspaceId,
+            @RequestParam(value="filter") String filter) {
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {
-            return ResponseEntity.ok().body(sprintService.getAllSprintsForWorkspace(workspaceId));
+            return ResponseEntity.ok().body(sprintService.getSprintsForWorkspace(workspaceId, filter));
         }
         return ResponseEntity.ok().body(authErrorMsg);
     }

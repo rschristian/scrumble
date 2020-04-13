@@ -10,7 +10,7 @@ public interface ISprintRepository {
 
     void deleteSprint(int sprintId);
 
-    List<Sprint> getAllSprintsForWorkspace(int workspaceId);
+    List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter);
 
     Sprint editSprint(int workspaceId, Sprint sprint);
 
@@ -19,4 +19,5 @@ public interface ISprintRepository {
     Map<String, Integer> getProjectIdsToMileStoneIds(int sprintId);
 
     List<Sprint> getPageOfSprints(int workspaceId, int pageNumber, int pageSize);
+
 }

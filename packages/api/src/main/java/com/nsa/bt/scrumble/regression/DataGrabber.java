@@ -5,8 +5,6 @@ import com.nsa.bt.scrumble.dto.Issue;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Optional;
-
 @Service
 public class DataGrabber {
     private int[][] dataPoints = new int[][]{};
@@ -26,8 +24,8 @@ public class DataGrabber {
         }
     }
 
-    public Issue[] getClosedIssues(String gitLabBaseUrl, int projectId, Optional<String> accessTokenOptional) {
-        String closedIssuesUri = String.format("%1s/projects/%2s/issues?state=closed&access_token=%3s", gitLabBaseUrl, projectId, accessTokenOptional.get());
+    public Issue[] getClosedIssues(String gitLabBaseUrl, int projectId, String accessToken) {
+        String closedIssuesUri = String.format("%1s/projects/%2s/issues?state=closed&access_token=%3s", gitLabBaseUrl, projectId, accessToken);
         ResponseEntity<Issue[]> closeIssuesResponse = restTemplate.getForEntity(closedIssuesUri, Issue[].class);
         Issue[] closedIssues = closeIssuesResponse.getBody();
         return closedIssues;

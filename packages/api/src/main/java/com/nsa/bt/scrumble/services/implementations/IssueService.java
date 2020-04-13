@@ -2,8 +2,10 @@ package com.nsa.bt.scrumble.services.implementations;
 
 import com.nsa.bt.scrumble.dto.Issue;
 import com.nsa.bt.scrumble.dto.Project;
+import com.nsa.bt.scrumble.regression.LinearRegression;
 import com.nsa.bt.scrumble.services.IIssueService;
 
+import com.nsa.bt.scrumble.services.ISprintService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,9 +16,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.OptionalInt;
+import java.util.*;
 
 @Service
 public class IssueService implements IIssueService {
@@ -35,6 +35,12 @@ public class IssueService implements IIssueService {
 
     @Autowired
     WorkspaceService workspaceService;
+
+    @Autowired
+    ISprintService sprintService;
+
+    @Autowired
+    LinearRegression linearRegression;
 
     @Override
     public void setStoryPoint(Issue issue) {
@@ -88,10 +94,6 @@ public class IssueService implements IIssueService {
                 issues.addAll(matchingIssues);
             }
         }
-
-        for(Issue issue: issues) {
-            logger.info(issue.getTitle());
-        }
         return issues;
     }
 
@@ -122,6 +124,49 @@ public class IssueService implements IIssueService {
                 issue.setProjectName(projects[i].getName());
                 return;
             }
+        }
+    }
+
+    @Override
+    public Issue createIssue(int workspaceId, int projectId,  Issue issue, String accessToken) {
+        String issueUri = getIssueUri(workspaceId, projectId, issue, accessToken);
+        String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
+                gitLabApiUrl, accessToken);
+        ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(projectUri, Project[].class);
+        Project[] projects = userProjectsResponse.getBody();
+        Issue newIssue = restTemplate.postForObject(issueUri, null , Issue.class);
+        setStoryPoint(newIssue);
+        setProjectName(newIssue, projects);
+        linearRegression.setEstimate(projectId, newIssue, accessToken);
+        return newIssue;
+    }
+
+    @Override
+    public Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken) {
+        String uri;
+
+        if(issue.getSprint() != null ) {
+            int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
+            uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
+                    gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getAssignee().getId(), milestoneId, accessToken);
+        } else {
+            uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
+                    gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getAssignee().getId(), accessToken);
+        }
+
+        restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
+        linearRegression.setEstimate(projectId, issue, accessToken);
+        return issue;
+    }
+
+    private String getIssueUri(int workspaceId, int projectId, Issue issue, String accessToken) {
+        if (issue.getSprint()!= null) {
+            int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
+            return String.format("%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
+                    gitLabApiUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getAssignee().getId(), milestoneId, accessToken);
+        } else {
+            return String.format("%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
+                    gitLabApiUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getAssignee().getId(), accessToken);
         }
     }
 }
