@@ -119,8 +119,8 @@ console.log(props.issue);
                     </div>
                 </div>
                 <div class="px-4 py-2 z-1">
-                    <span class={props.issue.status === IssueStatus.open ? 'open' : 'closed'}>
-                        {props.issue.status}
+                    <span class={props.issue.status === IssueStatus.closed ? 'closed' : 'open'}>
+                        {props.issue.status === IssueStatus.closed ? 'Closed': 'Opened'}
                     </span>
                     {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
                     <span class="text-gray-700"> Project Name: {props.issue.projectName}</span>
