@@ -120,12 +120,12 @@ public class IssuesApi {
             @RequestBody Issue issue) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-//        if(!issue.getAssignee().getProjectIds().contains(projectId)) {
-//            logger.error("User does not exist on this project");
-//            var res = new HashMap<String, String>();
-//            res.put("message", "User does not exist on this project");
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
-//        }
+        if(!issue.getAssignee().getProjectIds().contains(projectId)) {
+            logger.error("User does not exist on this project");
+            var res = new HashMap<String, String>();
+            res.put("message", "User does not exist on this project");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
+        }
         if(accessTokenOptional.isPresent()) {
             return ResponseEntity.ok().body(issueService.editIssue(workspaceId, projectId, issue, accessTokenOptional.get()));
         }

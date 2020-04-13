@@ -87,9 +87,7 @@ public class SprintService implements ISprintService {
             return issue;
         }
         for (Sprint sprint : sprints) {
-            var iterator = sprint.getProjectIdToMilestoneIds().entrySet().iterator();
-            while (iterator.hasNext()) {
-                var pair = (Map.Entry)iterator.next();
+            for (Map.Entry<String, Integer> pair : sprint.getProjectIdToMilestoneIds().entrySet()) {
                 if (Integer.toString(issue.getProjectId()).equals(pair.getKey())) {
                     issue.setSprint(sprint);
                     return issue;
@@ -110,6 +108,7 @@ public class SprintService implements ISprintService {
         try {
             return sprint.getProjectIdToMilestoneIds().get(Integer.toString(projectId));
         } catch (NullPointerException e) {
+
             logger.error(String.format("Project with id %d does not have a corresponding milestone for sprint with id %d", projectId, sprintId));
         }
         return 0;
