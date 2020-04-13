@@ -76,26 +76,26 @@ const IssuesBoard: FunctionalComponent = () => {
             </div>
             <div class="issue-board">
                 <div class="issue-list">
-                    <div class="issue-list-title-holder bg-red-300">
+                    <div class="issue-list-title-holder bg-green-300">
                         <h2 class="issue-list-title">Open</h2>
                     </div>
                     {open}
                 </div>
-                <div class="issue-list border-l border-deep-space-sparkle">
-                    <div class="issue-list-title-holder bg-orange-300">
-                        <h2 class="issue-list-title">To Do</h2>
+                <div class="issue-list ">
+                    <div class="issue-list-title-holder bg-yellow-300">
+                        <h2 class="issue-list-title border-l border-deep-space-sparkle">To Do</h2>
                     </div>
                     {todo}
                 </div>
-                <div class="issue-list border-l border-deep-space-sparkle">
-                    <div class="issue-list-title-holder bg-green-300">
-                        <h2 class="issue-list-title">Doing</h2>
+                <div class="issue-list">
+                    <div class="issue-list-title-holder bg-orange-300">
+                        <h2 class="issue-list-title border-l border-deep-space-sparkle">Doing</h2>
                     </div>
                     {doing}
                 </div>
-                <div class="issue-list border-l border-deep-space-sparkle">
-                    <div class="issue-list-title-holder bg-green-300">
-                        <h2 class="issue-list-title">Closed</h2>
+                <div class="issue-list">
+                    <div class="issue-list-title-holder bg-red-300">
+                        <h2 class="issue-list-title border-l border-deep-space-sparkle">Closed</h2>
                     </div>
                     {closed}
                 </div>
