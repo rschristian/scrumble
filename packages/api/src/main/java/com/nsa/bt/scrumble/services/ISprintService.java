@@ -18,11 +18,7 @@ public interface ISprintService {
 
     List<Sprint> getPageOfSprints(int workspaceId, int pageNumber, int pageSize);
 
-    void assignSprintToIssues(ArrayList<Issue> issues, int workspaceId);
-
     Issue setSprintForIssue(int workspaceId, Issue issue, List<Sprint> sprints);
 
     int getMilestoneId(int workspaceId, int projectId, int sprintId);
-
-    void changeIssueSprint(int workspaceId, int previousSprintId, int newSprintId, String accessToken);
 }

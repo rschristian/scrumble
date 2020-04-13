@@ -6,6 +6,7 @@ import com.nsa.bt.scrumble.dto.IssuePageResult;
 import com.nsa.bt.scrumble.dto.NextResource;
 import com.nsa.bt.scrumble.services.IIssuePagingService;
 import com.nsa.bt.scrumble.services.IIssueService;
+import com.nsa.bt.scrumble.services.ISprintService;
 import com.nsa.bt.scrumble.services.IWorkspaceService;
 import com.nsa.bt.scrumble.util.GitLabLinkParser;
 import com.nsa.bt.scrumble.util.GitLabLinks;
@@ -34,6 +35,9 @@ public class IssuePagingService implements IIssuePagingService {
 
     @Autowired
     IIssueService issueService;
+
+    @Autowired
+    ISprintService sprintService;
 
     private static final int ISSUE_PAGE_SIZE = 20;
 
@@ -159,11 +163,13 @@ public class IssuePagingService implements IIssuePagingService {
         while(true) {
             ResponseEntity<ArrayList<Issue>> issuesResponse = restTemplate.exchange(
                     queryUri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
+            var openSprints = sprintService.getSprintsForWorkspace(workspaceId, "open");
 
             issues = issuesResponse.getBody();
             issues.forEach((issue)-> {
                 issueService.setStoryPoint(issue);
                 issueService.setProjectName(issue, projects);
+                sprintService.setSprintForIssue(workspaceId, issue, openSprints);
             });
             issuePageResult.setIssues(issues);
 

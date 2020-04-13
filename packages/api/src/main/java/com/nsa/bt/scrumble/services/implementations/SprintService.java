@@ -80,13 +80,6 @@ public class SprintService implements ISprintService {
         return sprintRepository.getPageOfSprints(workspaceId, pageNumber, pageSize);
     }
 
-    @Override
-    public void assignSprintToIssues(ArrayList<Issue> issues, int workspaceId) {
-        var openSprints = sprintRepository.getAllSprintsForWorkspace(workspaceId, "open");
-        for (Issue issue : issues) {
-            setSprintForIssue(workspaceId, issue, openSprints);
-        }
-    }
 
     @Override
     public Issue setSprintForIssue(int workspaceId, Issue issue, List<Sprint> sprints) {
@@ -104,7 +97,7 @@ public class SprintService implements ISprintService {
             }
         }
 
-        return null;
+        return issue;
     }
 
     @Override
@@ -120,11 +113,6 @@ public class SprintService implements ISprintService {
             logger.error(String.format("Project with id %d does not have a corresponding milestone for sprint with id %d", projectId, sprintId));
         }
         return 0;
-    }
-
-    @Override
-    public void changeIssueSprint(int workspaceId, int previousSprintId, int newSprintId, String accessToken) {
-
     }
 
     private void editGitLabMilestone(int projectId, int milestoneId, Sprint sprint, String accessToken) {
