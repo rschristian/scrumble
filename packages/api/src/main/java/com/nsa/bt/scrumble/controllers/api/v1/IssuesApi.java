@@ -139,8 +139,8 @@ public class IssuesApi {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
         }
         if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
-                    gitLabBaseUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getAssignee().getId(),accessTokenOptional.get());
+            String uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&access_token=%s",
+                    gitLabBaseUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getAssignee().getId(), issue.getStoryPoint(), issue.getLabels(), issue.get,accessTokenOptional.get());
             restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
             linearRegression.setEstimate(gitLabBaseUrl, projectId, issue, accessTokenOptional);
             return ResponseEntity.ok().body("issue updated");
