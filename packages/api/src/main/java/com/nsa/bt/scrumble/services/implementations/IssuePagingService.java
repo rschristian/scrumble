@@ -172,6 +172,7 @@ public class IssuePagingService implements IIssuePagingService {
             issues = issuesResponse.getBody();
             issues.forEach((issue)-> {
                 issueService.setStoryPoint(issue);
+                issueService.setStatus(issue);
                 issueService.setProjectName(issue, projects);
                 sprintService.setSprintForIssue(workspaceId, issue, openSprints);
             });

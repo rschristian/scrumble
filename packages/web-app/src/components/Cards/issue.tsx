@@ -9,11 +9,20 @@ import { editIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
 import { errorColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
+import { User } from 'models/User';
 
 interface IssuesBoardProps {
     issue: Issue;
     updateIssueBoard: (issue: Issue) => void;
 }
+
+const unassigned: User = {
+    id: 0,
+    name: 'Unassigned',
+    username: 'unassigned',
+    avatarUrl: null,
+    projectIds: [],
+};
 export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: IssuesBoardProps) => {
     const [issueStatus, setIssueStatus] = useState(props.issue.status);
 
@@ -28,14 +37,14 @@ export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: Iss
             projectName: props.issue.projectName,
             author: props.issue?.author,
             createdAt: new Date(),
-            assignee: props.issue.assignee,
+            assignee: props.issue?.assignee || unassigned,
         }
     }
     
     return (
         <div class="bg-white relative rounded-md shadow-lg m-2 min-h-48 m-4">
             <div class="px-4 py-2 h-40">
-                <p class="">{props.issue.title}</p>
+                <p class="capitalize">{props.issue.title}</p>
                 <select
                     class="form-input capitalize"
                     value={issueStatus}
@@ -84,7 +93,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
             }
         });
     };
-console.log(props.issue);
+
     return (
         <div class="cursor-default capitalize">
             {showEditIssueModal ? (
@@ -182,8 +191,8 @@ export const IssueInformation: FunctionalComponent<InformationProps> = (props: I
                         </div>
                         <div class="table-cell py-2">
                             <span class="info-label"> State: </span>
-                            <span class={props.issue.status === IssueStatus.open ? 'open' : 'closed'}>
-                                {props.issue.status}
+                            <span class={props.issue.status === IssueStatus.closed ? 'closed' : 'open'}>
+                                {props.issue.status === IssueStatus.closed ? 'Closed': 'Opened'}
                             </span>
                         </div>
                     </div>
