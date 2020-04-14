@@ -64,7 +64,7 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         issue={issue}
-                        updateIssueBoard= {updateIssueBoard}
+                        updateIssueBoard= {updateIssue}
                     />,
                 ]);
             } else if (issue.status === IssueStatus.todo) {
@@ -73,7 +73,7 @@ const IssuesBoard: FunctionalComponent = () => {
                         <IssueBoardCard
                             key={index}
                             issue={issue}
-                            updateIssueBoard = {updateIssueBoard}
+                            updateIssueBoard = {updateIssue}
                         />,
                     ])
             } else if (issue.status === IssueStatus.doing) {
@@ -82,7 +82,7 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         issue={issue}
-                        updateIssueBoard = {updateIssueBoard}
+                        updateIssueBoard = {updateIssue}
                     />,
                 ])
             } else {
@@ -91,7 +91,7 @@ const IssuesBoard: FunctionalComponent = () => {
                     <IssueBoardCard
                         key={index}
                         issue={issue}
-                        updateIssueBoard = {updateIssueBoard}
+                        updateIssueBoard = {updateIssue}
                     />,
                 ]);
             }

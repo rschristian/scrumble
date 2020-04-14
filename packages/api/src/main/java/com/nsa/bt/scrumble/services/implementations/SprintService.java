@@ -15,6 +15,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import com.nsa.bt.scrumble.services.IIssueService;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -34,6 +35,9 @@ public class SprintService implements ISprintService {
 
     @Autowired
     IWorkspaceRepository workspaceRepository;
+
+    @Autowired
+    IIssueService issueService;
 
     private final RestTemplate restTemplate;
 
@@ -146,13 +150,12 @@ public class SprintService implements ISprintService {
                 ResponseEntity<ArrayList<Issue>> issueResponse = restTemplate.exchange(
                     uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
                 ArrayList<Issue> issues = issueResponse.getBody();
+                issues.forEach((issue)-> {
+                    issueService.setStoryPoint(issue);
+                    issueService.setStatus(issue);
+                });
                 allIssues.addAll(issues);
         }
-        // String uri = String.format("%s/projects/%d/milestones/%d/issues?access_token=%s",
-        //         gitLabApiUrl, projectId, milestoneId, accessToken);
-        // ResponseEntity<ArrayList<Issue>> issueResponse = restTemplate.exchange(
-        //             uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
-        // ArrayList<Issue> issues = issueResponse.getBody();
         return allIssues;
     }
 
