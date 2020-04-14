@@ -166,16 +166,19 @@ public class IssueService implements IIssueService {
     @Override
     public Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken) {
         String uri;
-
         if(issue.getSprint() != null ) {
             int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
             uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
                     gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getStatus(),issue.getAssignee().getId(), milestoneId, accessToken);
         } else {
-            uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&access_token=%s",
+            if(issue.getStatus().equals("closed")){
+                uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&state_event=close&access_token=%s",
                     gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getStatus(),issue.getAssignee().getId(), accessToken);
+            } else {
+                uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&state_event=reopen&access_token=%s",
+                    gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getStatus(),issue.getAssignee().getId(), accessToken);
+            }
         }
-
         restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
         linearRegression.setEstimate(projectId, issue, accessToken);
         return issue;

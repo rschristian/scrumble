@@ -83,7 +83,6 @@ public class SprintApi {
     public ResponseEntity<Object> getSprintIssues(
             Authentication auth,
             @RequestBody Sprint sprint) {
-                System.out.println(sprint.getProjectIdToMilestoneIds());
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(accessTokenOptional.isPresent()) {

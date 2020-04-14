@@ -139,12 +139,9 @@ public class SprintService implements ISprintService {
     @Override
     public ArrayList<Issue> getSprintIssues(Sprint sprint, String accessToken) {
         ArrayList<Issue> allIssues = new ArrayList();
-        System.out.println("hit");
         for(Map.Entry<String, Integer> entry : sprint.getProjectIdToMilestoneIds().entrySet()) {
             String projectId = entry.getKey();
             Integer milestoneId = entry.getValue();
-            System.out.println(projectId);
-            System.out.println(milestoneId);
             String uri = String.format("%s/projects/%s/milestones/%s/issues?access_token=%s",
                 gitLabApiUrl, projectId, milestoneId, accessToken);
                 ResponseEntity<ArrayList<Issue>> issueResponse = restTemplate.exchange(
