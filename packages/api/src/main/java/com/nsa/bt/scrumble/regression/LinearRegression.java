@@ -85,6 +85,7 @@ public class LinearRegression {
     }
 
     public void setEstimate(int projectId, Issue issue, String accessToken) {
+        if(issue.getStoryPoint() > 0) {
         Issue[] closedIssues = dataGrabber.getClosedIssues(gitLabApiUrl, projectId, accessToken);
         dataGrabber.setDataPoints(closedIssues);
         int[][] dataPoints = dataGrabber.getDataPoints();
@@ -92,5 +93,6 @@ public class LinearRegression {
         String estimate = this.timeConversion(this.predict(issue.getStoryPoint()));
         String uri = String.format("%1s/projects/%2s/issues/%3s/time_estimate?duration=%4s&access_token=%5s", gitLabApiUrl, projectId, issue.getIid(), estimate, accessToken);
         restTemplate.postForObject(uri, null, String.class);
+        }
     }
 }
