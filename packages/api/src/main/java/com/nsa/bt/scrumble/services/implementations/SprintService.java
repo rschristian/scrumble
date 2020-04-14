@@ -1,6 +1,7 @@
 package com.nsa.bt.scrumble.services.implementations;
 
 import com.nsa.bt.scrumble.dto.Issue;
+import com.nsa.bt.scrumble.dto.Project;
 import com.nsa.bt.scrumble.errorhandlers.MilestoneRestTemplateResponseErrorHandler;
 import com.nsa.bt.scrumble.models.Sprint;
 import com.nsa.bt.scrumble.models.Workspace;
@@ -139,6 +140,11 @@ public class SprintService implements ISprintService {
     @Override
     public ArrayList<Issue> getSprintIssues(Sprint sprint, String accessToken) {
         ArrayList<Issue> allIssues = new ArrayList();
+
+        String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true", gitLabApiUrl, accessToken);
+            ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(projectUri, Project[].class);
+            Project[] projects = userProjectsResponse.getBody();
+        
         for(Map.Entry<String, Integer> entry : sprint.getProjectIdToMilestoneIds().entrySet()) {
             String projectId = entry.getKey();
             Integer milestoneId = entry.getValue();
@@ -150,6 +156,7 @@ public class SprintService implements ISprintService {
                 issues.forEach((issue)-> {
                     issueService.setStoryPoint(issue);
                     issueService.setStatus(issue);
+                    issueService.setProjectName(issue, projects);
                 });
                 allIssues.addAll(issues);
         }

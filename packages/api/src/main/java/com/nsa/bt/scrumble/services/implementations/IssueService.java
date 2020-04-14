@@ -129,24 +129,17 @@ public class IssueService implements IIssueService {
 
     @Override
     public void setStatus(Issue issue) {
-        issue.getLabels().forEach((label)-> {
-            switch(label) {
-                case "opened":
-                    issue.setStatus("opened");
-                    break;
-                case "To Do":
-                    issue.setStatus("To Do");
-                    break;
-                case "Doing":
-                    issue.setStatus("Doing");
-                    break;
-                case "closed":
-                    issue.setStatus("closed");
-                    break;
-                default:
-                    issue.setStatus("opened");
-            }
-        });
+        if(issue.getLabels().contains("opened")) {
+            issue.setStatus("opened");
+        } else if (issue.getLabels().contains("To Do")){
+            issue.setStatus("To Do");
+        } else if (issue.getLabels().contains("Doing")){
+            issue.setStatus("Doing");
+        } else if(issue.getLabels().contains("closed")) {
+            issue.setStatus("closed");
+        } else {
+            issue.setStatus("opened");
+        }
     }
 
     @Override
