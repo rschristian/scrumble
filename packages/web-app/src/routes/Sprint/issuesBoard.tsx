@@ -7,7 +7,8 @@ import { Issue, IssueStatus } from 'models/Issue';
 import { editIssue } from 'services/api/issues';
 import { useStore } from 'stores';
 import { notify } from 'react-notify-toast';
-import { errorColour, successColour } from 'services/notification/colours';
+import { errorColour } from 'services/notification/colours';
+import { getSprintIssues } from 'services/api/sprints';
 
 const IssuesBoard: FunctionalComponent = () => {
 
@@ -16,7 +17,7 @@ const IssuesBoard: FunctionalComponent = () => {
     const [doing, setDoing] = useState<ComponentChild[]>([]);
     const [todo, setTodo] = useState<ComponentChild[]>([]);
     const [closed, setClosed] = useState<ComponentChild[]>([]);
-    const [issuesArray, setIssuesArray] = useState<Issue[]>(issues);
+    const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
 
     const updateIssueBoard = (updatedIssue: Issue): void => {
         const arrayCopy = [...issuesArray];
@@ -40,6 +41,20 @@ const IssuesBoard: FunctionalComponent = () => {
             }
         })
     }
+
+    const fetchIssues = async (): Promise<void> => {
+        getSprintIssues(userLocationStore.currentSprint).then((result) => {
+            if (typeof result == 'string'){
+                notify.show(result, 'error', 5000, errorColour);
+            } else {
+                setIssuesArray(result as Issue[]);
+            }
+        })
+    }
+
+    useEffect(() => {
+        fetchIssues();
+    }, []);
 
     useEffect(() => {
         issuesArray.map((issue, index) => {
