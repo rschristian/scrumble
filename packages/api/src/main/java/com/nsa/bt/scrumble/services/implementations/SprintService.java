@@ -3,6 +3,7 @@ package com.nsa.bt.scrumble.services.implementations;
 import com.nsa.bt.scrumble.dto.Issue;
 import com.nsa.bt.scrumble.errorhandlers.MilestoneRestTemplateResponseErrorHandler;
 import com.nsa.bt.scrumble.models.Sprint;
+import com.nsa.bt.scrumble.models.Workspace;
 import com.nsa.bt.scrumble.repositories.ISprintRepository;
 import com.nsa.bt.scrumble.repositories.IWorkspaceRepository;
 import com.nsa.bt.scrumble.services.ISprintService;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 
 import java.util.*;
 
@@ -124,8 +127,38 @@ public class SprintService implements ISprintService {
         } else {
             stateEvent = "close";
         }
-        String uri = String.format("%s/projects/%d/milestones/%d?title=%s&description=%s&start_date=%tF&due_date=%tF&state_event=%s&access_token=%s",
+        String uri = String.format("%s/projects/%s/milestones/%s?title=%s&description=%s&start_date=%tF&due_date=%tF&state_event=%s&access_token=%s",
                 gitLabApiUrl, projectId, milestoneId, sprint.getTitle(), sprint.getDescription(), sprint.getStartDate(), sprint.getDueDate(), stateEvent, accessToken);
         ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.PUT, null, String.class);
+    }
+
+    @Override
+    public ArrayList<Issue> getSprintIssues(Sprint sprint, String accessToken) {
+        ArrayList<Issue> allIssues = new ArrayList();
+        System.out.println("hit");
+        for(Map.Entry<String, Integer> entry : sprint.getProjectIdToMilestoneIds().entrySet()) {
+            String projectId = entry.getKey();
+            Integer milestoneId = entry.getValue();
+            System.out.println(projectId);
+            System.out.println(milestoneId);
+            String uri = String.format("%s/projects/%s/milestones/%s/issues?access_token=%s",
+                gitLabApiUrl, projectId, milestoneId, accessToken);
+                ResponseEntity<ArrayList<Issue>> issueResponse = restTemplate.exchange(
+                    uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
+                ArrayList<Issue> issues = issueResponse.getBody();
+                allIssues.addAll(issues);
+        }
+        // String uri = String.format("%s/projects/%d/milestones/%d/issues?access_token=%s",
+        //         gitLabApiUrl, projectId, milestoneId, accessToken);
+        // ResponseEntity<ArrayList<Issue>> issueResponse = restTemplate.exchange(
+        //             uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
+        // ArrayList<Issue> issues = issueResponse.getBody();
+        return allIssues;
+    }
+
+    private HttpEntity<String> getApplicationJsonHeaders() {
+        var headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        return new HttpEntity(headers);
     }
 }

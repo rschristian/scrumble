@@ -1,6 +1,7 @@
 import { apiService } from 'ts-api-toolkit';
 
 import { Sprint } from 'models/Sprint';
+import { Issue } from 'models/Issue';
 
 export const getSprints = async (workspaceId: number, filter: string): Promise<Sprint[] | string> => {
     const args = { filter };
@@ -35,5 +36,16 @@ export const editSprint = async (workspaceId: number, updatedSprint: Sprint): Pr
         })
         .catch(({ response }) => {
             return response.data?.message || 'Unknown error while updating sprint details';
+        });
+};
+
+export const getSprintIssues = async (sprint: Sprint): Promise<Issue[] | String> => {
+    return await apiService
+        .post(`/workspace/issues`, sprint)
+        .then((result) => {
+            return result.data;
+        })
+        .catch(({response}) => {
+            return response.data?.message || 'Unknown error while getting issues ';
         });
 };

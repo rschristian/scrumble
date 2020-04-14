@@ -78,4 +78,17 @@ public class SprintApi {
         }
         return ResponseEntity.ok().body(authErrorMsg);
     }
+
+    @PostMapping("/workspace/issues")
+    public ResponseEntity<Object> getSprintIssues(
+            Authentication auth,
+            @RequestBody Sprint sprint) {
+                System.out.println(sprint.getProjectIdToMilestoneIds());
+        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        if(accessTokenOptional.isPresent()) {
+            return ResponseEntity.ok().body(sprintService.getSprintIssues(sprint, accessTokenOptional.get()));
+        }
+        return ResponseEntity.ok().body(authErrorMsg);
+    }
 }
