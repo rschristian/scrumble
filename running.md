@@ -75,6 +75,25 @@ To run a local server, you can use `npm run serve:prod` for a production-like se
 
 As the API consumes data from a GitLab source, a GitLab instance (with a valid user account) is necessary.
 
-To aid in this, a GitLab instance has been set up at [gitlab.ryanchristian.dev](https://gitlab.ryanchristian.dev). The Client ID and Secret for OAuth used to configure this instance can be found in [application.properties](packages/api/src/main/resources/application.properties).
+For demonstration purposes, a GitLab instance has been set up at [gitlab.ryanchristian.dev](https://gitlab.ryanchristian.dev). The Client ID and Secret for OAuth used to configure this instance can be found in [application.properties](packages/api/src/main/resources/application.properties).
 
 Navigate to the instance in your browser and register for a new account using your own name, email, and password of your choice. You will need it in order to use this application.
+
+If you would like to configure this application to use your own GitLab instance, you will need to register Scrumble as an OAuth application in the administration settings of your target GitLab instance. Instructions on this can be found [here](https://docs.gitlab.com/ee/integration/oauth_provider.html#oauth-applications-in-the-admin-area).
+
+In this configuration, provide a callback URL of <your_base_api_url>/api/login/oauth2/code. If you would like a different URL, you must change the value of the base URI for the redirection endpoint in [SecurityConfig.java](packages/api/src/main/java/com/nsa/bt/scrumble/config.SecurityConfig.java) accordingly. More info on this value can be found [here](https://docs.spring.io/spring-security/site/docs/5.0.7.RELEASE/reference/html/oauth2login-advanced.html#oauth2login-advanced-redirection-endpoint).
+
+You will need to alter values in application.properties. Please note, all properties listed here depend on the fact that spring.security.oauth2.client.registration.gitlab.client-name has been set to 'gitlab'.
+
+After registering Scrumble as an OAuth application, GitLab will give you an application ID and a secret. These values must be given to the following properties:
+```
+spring.security.oauth2.client.registration.gitlab.client-id=<your_application_id>
+spring.security.oauth2.client.registration.gitlab.client-secret=<your_secret>
+```
+
+In [application.properties](packages/api/src/main/resources/application.properties) you will need to set your own values for the following properties.
+```
+spring.security.oauth2.client.provider.gitlab.token-uri=<your_gitlab_url>/oauth/token
+spring.security.oauth2.client.provider.gitlab.authorization-uri=<your_gitlab_url>/oauth/authorize
+spring.security.oauth2.client.provider.gitlab.user-info-uri=<your_gitlab_url>/oauth/userinfo
+```
