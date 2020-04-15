@@ -15,6 +15,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.nsa.bt.scrumble.repositories.IIssueRepository;
 
 import java.util.*;
 
@@ -41,6 +42,9 @@ public class IssueService implements IIssueService {
 
     @Autowired
     LinearRegression linearRegression;
+
+    @Autowired
+    IIssueRepository issueRepository;
 
     @Override
     public void setStoryPoint(Issue issue) {
@@ -160,14 +164,22 @@ public class IssueService implements IIssueService {
     public Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken) {
         String uri;
         if(issue.getSprint() != null ) {
+            // TODO: add issue start time to database
+            issueRepository.updateStartDate(issue.getIid());
             int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
             uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
                     gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getStatus(),issue.getAssignee().getId(), milestoneId, accessToken);
         } else {
             if(issue.getStatus().equals("closed")){
+                //TODO: add issue due time to database
+                issueRepository.updateDueDate(issue.getIid());
+                int timeSpent = issueRepository.calculateTime(issue.getIid());
+                System.out.println(timeSpent);
                 uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&state_event=close&access_token=%s",
                     gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getStatus(),issue.getAssignee().getId(), accessToken);
             } else {
+                //TODO: remove due date from database
+                issueRepository.removeDueDate(issue.getIid());
                 uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&state_event=reopen&access_token=%s",
                     gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getStatus(),issue.getAssignee().getId(), accessToken);
             }
