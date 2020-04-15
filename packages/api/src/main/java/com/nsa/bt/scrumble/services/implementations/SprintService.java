@@ -20,6 +20,7 @@ import com.nsa.bt.scrumble.services.IIssueService;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import com.nsa.bt.scrumble.services.IUserService;
 
 import java.util.*;
 
@@ -39,6 +40,9 @@ public class SprintService implements ISprintService {
 
     @Autowired
     IIssueService issueService;
+
+    @Autowired
+    IUserService userService;
 
     private final RestTemplate restTemplate;
 
@@ -138,7 +142,7 @@ public class SprintService implements ISprintService {
     }
 
     @Override
-    public ArrayList<Issue> getSprintIssues(Sprint sprint, String accessToken) {
+    public ArrayList<Issue> getSprintIssues(int workspaceId, Sprint sprint, String accessToken) {
         ArrayList<Issue> allIssues = new ArrayList();
 
         String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true", gitLabApiUrl, accessToken);
@@ -157,6 +161,9 @@ public class SprintService implements ISprintService {
                     issueService.setStoryPoint(issue);
                     issueService.setStatus(issue);
                     issueService.setProjectName(issue, projects);
+                    if(issue.getAssignee() != null) {
+                        userService.setProjectId(workspaceId, issue);
+                    }
                 });
                 allIssues.addAll(issues);
         }

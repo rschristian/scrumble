@@ -40,7 +40,6 @@ export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: Iss
             assignee: props.issue?.assignee || unassigned,
         }
     }
-    console.log(props.issue);
     return (
         <div class="bg-white relative rounded-md shadow-lg m-2 min-h-48 m-4">
             <div class="px-4 py-2 h-40">

@@ -7,6 +7,7 @@ import com.nsa.bt.scrumble.dto.NextResource;
 import com.nsa.bt.scrumble.services.IIssuePagingService;
 import com.nsa.bt.scrumble.services.IIssueService;
 import com.nsa.bt.scrumble.services.ISprintService;
+import com.nsa.bt.scrumble.services.IUserService;
 import com.nsa.bt.scrumble.services.IWorkspaceService;
 import com.nsa.bt.scrumble.util.GitLabLinkParser;
 import com.nsa.bt.scrumble.util.GitLabLinks;
@@ -42,6 +43,9 @@ public class IssuePagingService implements IIssuePagingService {
 
     @Autowired
     ISprintService sprintService;
+
+    @Autowired
+    IUserService userService;
 
     private static final int ISSUE_PAGE_SIZE = 20;
 
@@ -175,6 +179,10 @@ public class IssuePagingService implements IIssuePagingService {
                 issueService.setStatus(issue);
                 issueService.setProjectName(issue, projects);
                 sprintService.setSprintForIssue(workspaceId, issue, openSprints);
+                if(issue.getAssignee() != null) {
+                    userService.setProjectId(workspaceId, issue);
+                }
+
             });
             issuePageResult.setIssues(issues);
 

@@ -32,7 +32,6 @@ const IssuesBoard: FunctionalComponent = () => {
             }
         })
     }
-
     const updateIssue = async (issue: Issue): Promise<void> => {
         return await editIssue(userLocationStore.currentWorkspace.id, issue).then((error) => {
             if (error) notify.show(error, 'error', 5000, errorColour);
@@ -43,7 +42,7 @@ const IssuesBoard: FunctionalComponent = () => {
     }
 
     const fetchIssues = async (): Promise<void> => {
-        getSprintIssues(userLocationStore.currentSprint).then((result) => {
+        getSprintIssues(userLocationStore.currentWorkspace.id,userLocationStore.currentSprint).then((result) => {
             if (typeof result == 'string'){
                 notify.show(result, 'error', 5000, errorColour);
             } else {

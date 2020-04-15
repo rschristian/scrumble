@@ -39,9 +39,9 @@ export const editSprint = async (workspaceId: number, updatedSprint: Sprint): Pr
         });
 };
 
-export const getSprintIssues = async (sprint: Sprint): Promise<Issue[] | String> => {
+export const getSprintIssues = async (workspaceId: number, sprint: Sprint): Promise<Issue[] | String> => {
     return await apiService
-        .post(`/workspace/issues`, sprint)
+        .post(`/workspace/${workspaceId}/sprint/issues`, sprint)
         .then((result) => {
             return result.data;
         })

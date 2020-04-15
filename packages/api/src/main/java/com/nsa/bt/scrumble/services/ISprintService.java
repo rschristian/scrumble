@@ -22,5 +22,5 @@ public interface ISprintService {
 
     int getMilestoneId(int workspaceId, int projectId, int sprintId);
 
-    ArrayList<Issue> getSprintIssues(Sprint sprint, String accessToken);
+    ArrayList<Issue> getSprintIssues(int workspaceId, Sprint sprint, String accessToken);
 }
