@@ -3,6 +3,7 @@ package com.nsa.bt.scrumble.services;
 import com.nsa.bt.scrumble.dto.Project;
 import com.nsa.bt.scrumble.models.User;
 import com.nsa.bt.scrumble.models.Workspace;
+import io.opentracing.Span;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ public interface IWorkspaceService {
 
     Workspace createWorkspace(Workspace workspace, User user);
 
-    List<Workspace> getAllWorkspaces();
+    List<Workspace> getAllWorkspaces(Span span);
 
     void deleteWorkspace(int workspaceId);
 

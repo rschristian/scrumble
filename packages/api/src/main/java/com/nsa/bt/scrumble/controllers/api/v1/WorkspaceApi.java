@@ -6,6 +6,7 @@ import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.services.IUserService;
 import com.nsa.bt.scrumble.services.IWorkspaceService;
 
+import io.opentracing.Span;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,10 @@ public class WorkspaceApi {
 
     @GetMapping("/workspaces")
     public ResponseEntity<Object> getAllWorkspaces(){
-        return ResponseEntity.ok().body(workspaceService.getAllWorkspaces());
+        Span span = ApiTracer.getTracer().buildSpan("HTTP GET /workspaces").start();
+        var workspaces = workspaceService.getAllWorkspaces(span);
+        span.finish();
+        return ResponseEntity.ok().body(workspaces);
     }
 
     @PostMapping("/workspace")

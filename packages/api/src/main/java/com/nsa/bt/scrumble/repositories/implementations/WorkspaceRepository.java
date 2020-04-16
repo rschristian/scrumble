@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nsa.bt.scrumble.models.User;
 import com.nsa.bt.scrumble.models.Workspace;
 import com.nsa.bt.scrumble.repositories.IWorkspaceRepository;
+import io.opentracing.Span;
 import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,7 +86,8 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     }
 
     @Override
-    public List<Workspace> getAllWorkspaces() {
+    public List<Workspace> getAllWorkspaces(Span span) {
+        Span newSpan = RepositoryTracer.getTracer().buildSpan("SQL Select All Workspaces").asChildOf(span).start();
         List<Workspace> workspaces = new ArrayList<>();
         String selectStatement = "SELECT * FROM workspaces as workspaces INNER JOIN users AS users ON workspaces.created_by_user = users.id";
         jdbcTemplate.query(selectStatement,
@@ -104,6 +106,7 @@ public class WorkspaceRepository implements IWorkspaceRepository {
                     return null;
                 })
                 .forEach(entry -> workspaces.add(entry));
+        newSpan.finish();
         return workspaces;
     }
 

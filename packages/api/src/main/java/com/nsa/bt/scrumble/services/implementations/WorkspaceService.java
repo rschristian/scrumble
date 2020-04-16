@@ -1,10 +1,12 @@
 package com.nsa.bt.scrumble.services.implementations;
 
+import com.nsa.bt.scrumble.services.implementations.ServiceTracer;
 import com.nsa.bt.scrumble.dto.Project;
 import com.nsa.bt.scrumble.models.User;
 import com.nsa.bt.scrumble.models.Workspace;
 import com.nsa.bt.scrumble.repositories.IWorkspaceRepository;
 import com.nsa.bt.scrumble.services.IWorkspaceService;
+import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +51,11 @@ public class WorkspaceService implements IWorkspaceService {
     }
 
     @Override
-    public List<Workspace> getAllWorkspaces() {
-        return workspaceRepository.getAllWorkspaces();
+    public List<Workspace> getAllWorkspaces(Span span) {
+        Span newSpan = ServiceTracer.getTracer().buildSpan("Return all workspaces").asChildOf(span).start();
+        var allWorkspaces = workspaceRepository.getAllWorkspaces(newSpan);
+        newSpan.finish();
+        return allWorkspaces;
     }
 
     @Override
