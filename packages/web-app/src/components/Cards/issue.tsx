@@ -24,7 +24,11 @@ const unassigned: User = {
     projectIds: [],
 };
 export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: IssuesBoardProps) => {
+    const userLocationStore = useStore().userLocationStore;
+    const currentWorkspace = userLocationStore.currentWorkspace;
     const [issueStatus, setIssueStatus] = useState(props.issue.status);
+
+    unassigned.projectIds = currentWorkspace.projectIds;
 
     const handleUpdate = (issueStatus: string): Issue => {
         return {
@@ -64,7 +68,7 @@ export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: Iss
             <div class="absolute bottom-0 left-0 px-4 py-2">
                 <div class="flex">
                 {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
-                    <p class="text-gray-700">{props.issue.projectName}</p>
+                    <p class="text-gray-700">{props.issue.projectName} (#{props.issue.iid})</p>
                 </div>
             </div>
         </div>

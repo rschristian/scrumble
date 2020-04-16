@@ -163,29 +163,34 @@ public class IssueService implements IIssueService {
     @Override
     public Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken) {
         String uri;
-        if(issue.getSprint() != null ) {
-            // TODO: add issue start time to database
-            issueRepository.updateStartDate(issue.getIid());
+        if(issue.getSprint() != null) {
             int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
+            if(issue.getSprint().getId() == 0) { //No Sprint selected
+                issueRepository.removeIssue(issue.getIid());
+            } else { // adds start time 
+                issueRepository.updateStartDate(issue.getIid());
+            }
             uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
                     gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getStatus(),issue.getAssignee().getId(), milestoneId, accessToken);
         } else {
             if(issue.getStatus().equals("closed")){
-                //TODO: add issue due time to database
                 issueRepository.updateDueDate(issue.getIid());
                 int timeSpent = issueRepository.calculateTime(issue.getIid());
-                System.out.println(timeSpent);
+                issue.setTimeSpent(timeSpent);
                 uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&state_event=close&access_token=%s",
                     gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getStatus(),issue.getAssignee().getId(), accessToken);
             } else {
-                //TODO: remove due date from database
                 issueRepository.removeDueDate(issue.getIid());
                 uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&state_event=reopen&access_token=%s",
                     gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getStatus(),issue.getAssignee().getId(), accessToken);
             }
         }
         restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
-        linearRegression.setEstimate(projectId, issue, accessToken);
+        if(issue.getStatus().equals("closed")){
+            linearRegression.setTimeSpent(projectId, issue, accessToken);
+        } else {
+            linearRegression.setEstimate(projectId, issue, accessToken);
+        }
         return issue;
     }
 
