@@ -7,6 +7,7 @@ import com.nsa.bt.scrumble.security.TokenUtils;
 import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.services.IUserService;
 
+import io.opentracing.Span;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +26,14 @@ import java.util.HashMap;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1")
 public class AuthenticationApi {
 
     public AuthenticationApi (AppProperties appProperties) {
         this.appProperties = appProperties;
     }
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsApi.class);
-    private AppProperties appProperties;
+    private final AppProperties appProperties;
 
     @Autowired
     OAuth2AuthorizedClientService auth2AuthorizedClientService;
@@ -49,8 +50,9 @@ public class AuthenticationApi {
     @Autowired
     TokenUtils tokenUtils;
 
-    @GetMapping("/token")
+    @GetMapping("/auth/token")
     public ResponseEntity<Object> exchangeShortLifeToken(HttpServletRequest request) {
+        Span span = ApiTracer.getTracer().buildSpan("HTTP GET /auth/token").start();
         var tokenResponse = new HashMap<>();
         String jwt = tokenUtils.getJwtFromRequest(request);
         String longLifeToken = null;
@@ -65,15 +67,17 @@ public class AuthenticationApi {
             } else {
                 logger.error("User not found");
                 tokenResponse.put("error", "User not found");
+                span.finish();
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(tokenResponse);
             }
         }
-
+        span.finish();
         return ResponseEntity.ok().body(tokenResponse);
     }
 
-    @DeleteMapping("/token")
+    @DeleteMapping("/auth/token")
     public ResponseEntity<Object> deleteToken(Authentication authentication) {
+        Span span = ApiTracer.getTracer().buildSpan("HTTP DELETE /auth/token").start();
         var deleteTokenResponse = new HashMap<>();
 
         try {
@@ -81,8 +85,10 @@ public class AuthenticationApi {
             userService.removeToken(userPrincipal.getId());
             deleteTokenResponse.put("success", true);
 
+            span.finish();
             return ResponseEntity.ok().body(deleteTokenResponse);
         } catch (InternalAuthenticationServiceException exception) {
+            span.finish();
             return ResponseEntity.ok().body(deleteTokenResponse);
         }
     }

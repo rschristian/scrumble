@@ -4,6 +4,7 @@ import com.nsa.bt.scrumble.dto.Project;
 import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.services.IUserService;
 
+import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 @RestController
@@ -34,12 +36,11 @@ public class ProjectApi {
     @Value("${app.msg.error.auth}")
     private String authErrorMsg;
 
-    private static final Logger logger = LoggerFactory.getLogger(ProjectApi.class);
-
     @GetMapping("/projects")
     public ResponseEntity<Object> getIssues(Authentication auth) {
+        Span span = ApiTracer.getTracer().buildSpan("HTTP GET /projects").start();
         var headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         var jsonHeaders = new HttpEntity(headers);
 
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
@@ -49,8 +50,10 @@ public class ProjectApi {
                     gitLabBaseUrl, accessTokenOptional.get());
             ResponseEntity<ArrayList<Project>> userProjectsResponse =
                     restTemplate.exchange(uri, HttpMethod.GET, jsonHeaders, new ParameterizedTypeReference<>() {});
+            span.finish();
             return ResponseEntity.ok().body(userProjectsResponse.getBody());
         }
+        span.finish();
         return ResponseEntity.ok().body(authErrorMsg);
     }
 }

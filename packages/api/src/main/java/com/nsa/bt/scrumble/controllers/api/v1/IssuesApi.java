@@ -10,6 +10,7 @@ import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.services.IIssueService;
 import com.nsa.bt.scrumble.services.IUserService;
 import com.nsa.bt.scrumble.services.IWorkspaceService;
+import io.opentracing.Span;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -72,42 +73,52 @@ public class IssuesApi {
         @RequestParam(value="filter") String filter,
         @RequestParam(value="searchFor") String searchTerm
     ) {
+        Span span = ApiTracer.getTracer().buildSpan("HTTP GET /workspace/" + workspaceId + "/issues").start();
         Optional<String> accessTokenOptional = userService.getToken(((UserPrincipal) auth.getPrincipal()).getId());
         if(accessTokenOptional.isEmpty()) {
             var res = new HashMap<String, String>();
             res.put("message", authErrorMsg);
+            span.finish();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
         }
 
         if (workspaceService.getProjectIdsForWorkspace(workspaceId).isEmpty()) {
+            span.finish();
             return ResponseEntity.ok().body("You haven't added any projects to your workspace!");
         }
 
         String accessToken = accessTokenOptional.get();
         IssuePageResult issuePageResult = issuePagingService.getPageOfIssues(workspaceId, projectId, page, filter, searchTerm, accessToken);
 
+        span.finish();
         return ResponseEntity.ok().body(issuePageResult);
     }
 
     @PostMapping("/workspace/{workspaceId}/project/{projectId}/issue")
     public ResponseEntity<Object> createIssue(
-            Authentication authentication, @PathVariable(value="workspaceId") int workspaceId,
+            Authentication authentication,
+            @PathVariable(value="workspaceId") int workspaceId,
             @PathVariable(value="projectId") int projectId,
             @RequestBody Issue issue) {
+        Span span = ApiTracer.getTracer().buildSpan("HTTP POST /workspace/" + workspaceId + "/projects/" + projectId + "/issues").start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(!issue.getAssignee().getProjectIds().contains(projectId)) {
             logger.error("User does not exist on this project");
             var res = new HashMap<String, String>();
             res.put("message", "User does not exist on this project");
+            span.finish();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
         }
         if(accessTokenOptional.isPresent()) {
+            span.finish();
             return ResponseEntity.ok().body(issueService.createIssue(workspaceId, projectId, issue, accessTokenOptional.get()));
         }
         logger.error("Unable to authenticate with authentication provider");
         var res = new HashMap<String, String>();
         res.put("message", authErrorMsg);
+
+        span.finish();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
     }
 
@@ -118,20 +129,25 @@ public class IssuesApi {
             @PathVariable(value="projectId") int projectId,
             @PathVariable(value="issueId") int issueId,
             @RequestBody Issue issue) {
+        Span span = ApiTracer.getTracer().buildSpan("HTTP PUT /workspace/" + workspaceId + "/projects/" + projectId + "/issue/" + issueId).start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if(!issue.getAssignee().getProjectIds().contains(projectId)) {
             logger.error("User does not exist on this project");
             var res = new HashMap<String, String>();
             res.put("message", "User does not exist on this project");
+            span.finish();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
         }
         if(accessTokenOptional.isPresent()) {
+            span.finish();
             return ResponseEntity.ok().body(issueService.editIssue(workspaceId, projectId, issue, accessTokenOptional.get()));
         }
         logger.error("Unable to authenticate with authentication provider");
         var res = new HashMap<String, String>();
         res.put("message", authErrorMsg);
+
+        span.finish();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
     }
 }
