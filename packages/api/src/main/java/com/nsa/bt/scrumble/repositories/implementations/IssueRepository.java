@@ -3,23 +3,15 @@ package com.nsa.bt.scrumble.repositories.implementations;
 import com.nsa.bt.scrumble.models.Issue;
 import com.nsa.bt.scrumble.repositories.IIssueRepository;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
-import java.io.IOException;
 import java.util.Date;
 import java.sql.Timestamp;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Optional;
 
@@ -32,7 +24,7 @@ public class IssueRepository implements IIssueRepository {
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public void updateStartDate(int issueId, int projectId) {
+    public void updateStartTime(int issueId, int projectId) {
         Date currentDate = new Date();
         Optional<Issue> issue = findIssueById(issueId, projectId);
         if(!issue.isPresent()){
@@ -44,7 +36,7 @@ public class IssueRepository implements IIssueRepository {
     }
 
     @Override
-    public void updateDueDate(int issueId, int projectId) {
+    public void updateEndTime(int issueId, int projectId) {
         Date currentDate = new Date();
         String updateStatement = "UPDATE issues SET end_time = ? WHERE id = ? AND project_id = ?;";
         Object[] params = new Object[]{ new Timestamp(currentDate.getTime()), issueId, projectId};
@@ -61,7 +53,7 @@ public class IssueRepository implements IIssueRepository {
     }
 
     @Override
-    public void removeDueDate(int issueId, int projectId) {
+    public void removeEndTime(int issueId, int projectId) {
         String updateStatement = "UPDATE issues SET end_time = NULL WHERE id = ? AND project_id= ?;";
         Object[] params = new Object[]{ issueId, projectId};
         int[] types = new int[]{ Types.INTEGER, Types.INTEGER };

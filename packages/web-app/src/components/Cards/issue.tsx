@@ -39,14 +39,14 @@ export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: Iss
             storyPoint: props.issue.storyPoint,
             projectId: props.issue.projectId,
             projectName: props.issue.projectName,
-            author: props.issue?.author,
+            author: props.issue.author,
             createdAt: new Date(),
             assignee: props.issue?.assignee || unassigned,
         }
     }
     return (
         <div class="bg-white relative rounded-md shadow-lg m-2 min-h-48 m-4">
-            <div class="px-4 py-2 h-40">
+            <div class="px-4 py-2 h-40 text-gray-700">
                 <p class="capitalize">{props.issue.title}</p>
                 <select
                     class="form-input capitalize"
@@ -64,6 +64,8 @@ export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: Iss
                        )
                    })}
                 </select>
+                <p><span class="font-semibold">Author:</span> {props.issue.author.name}</p>
+                <p><span class="font-semibold">Assignee:</span> {props.issue.assignee !== null ? props.issue.assignee.name : 'Unassigned'}</p>
             </div>
             <div class="absolute bottom-0 left-0 px-4 py-2">
                 <div class="flex">

@@ -168,19 +168,19 @@ public class IssueService implements IIssueService {
             if(issue.getSprint().getId() == 0) { //No Sprint selected
                 issueRepository.removeIssue(issue.getIid(), projectId);
             } else { // adds start time 
-                issueRepository.updateStartDate(issue.getIid(), projectId);
+                issueRepository.updateStartTime(issue.getIid(), projectId);
             }
             uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
                     gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getStatus(),issue.getAssignee().getId(), milestoneId, accessToken);
         } else {
             if(issue.getStatus().equals("closed")){
-                issueRepository.updateDueDate(issue.getIid(), projectId);
+                issueRepository.updateEndTime(issue.getIid(), projectId);
                 int timeSpent = issueRepository.calculateTime(issue.getIid(), projectId);
                 issue.setTimeSpent(timeSpent);
                 uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&state_event=close&access_token=%s",
                     gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getStatus(),issue.getAssignee().getId(), accessToken);
             } else {
-                issueRepository.removeDueDate(issue.getIid(), projectId);
+                issueRepository.removeEndTime(issue.getIid(), projectId);
                 uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&state_event=reopen&access_token=%s",
                     gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getStatus(),issue.getAssignee().getId(), accessToken);
             }

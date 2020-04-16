@@ -89,22 +89,27 @@ public class LinearRegression {
     }
 
     public void setEstimate(int projectId, Issue issue, String accessToken) {
+        resetTime(projectId, issue, accessToken);
         if(issue.getStoryPoint() > 0) {
-        Issue[] closedIssues = dataGrabber.getClosedIssues(gitLabApiUrl, projectId, accessToken);
-        dataGrabber.setDataPoints(closedIssues);
-        int[][] dataPoints = dataGrabber.getDataPoints();
-        this.trainModel(dataPoints);
-        String estimate = this.timeConversion(this.predict(issue.getStoryPoint()));
-        String uri = String.format("%1s/projects/%2s/issues/%3s/time_estimate?duration=%4s&access_token=%5s", gitLabApiUrl, projectId, issue.getIid(), estimate, accessToken);
-        restTemplate.postForObject(uri, null, String.class);
+            Issue[] closedIssues = dataGrabber.getClosedIssues(gitLabApiUrl, projectId, accessToken);
+            dataGrabber.setDataPoints(closedIssues);
+            int[][] dataPoints = dataGrabber.getDataPoints();
+            this.trainModel(dataPoints);
+            String estimate = this.timeConversion(this.predict(issue.getStoryPoint()));
+            String uri = String.format("%1s/projects/%2s/issues/%3s/time_estimate?duration=%4s&access_token=%5s", gitLabApiUrl, projectId, issue.getIid(), estimate, accessToken);
+            restTemplate.postForObject(uri, null, String.class);
         }
     }
 
     public void setTimeSpent(int projectId, Issue issue, String accessToken) {
-        String restTimeSpent = String.format("%1s/projects/%2s/issues/%3s/reset_spent_time?&access_token=%5s", gitLabApiUrl, projectId, issue.getIid(), accessToken);
-        restTemplate.postForObject(restTimeSpent, null, String.class); // resets as time spent is cumulative 
+        resetTime(projectId, issue, accessToken);
         String timeSpent = this.timeConversion((double) issue.getTimeSpent());
         String uri = String.format("%1s/projects/%2s/issues/%3s/add_spent_time?duration=%4s&access_token=%5s", gitLabApiUrl, projectId, issue.getIid(), timeSpent, accessToken);
         restTemplate.postForObject(uri, null, String.class);
+    }
+
+    private void resetTime(int projectId, Issue issue, String accessToken) {
+        String restTimeSpent = String.format("%1s/projects/%2s/issues/%3s/reset_spent_time?&access_token=%5s", gitLabApiUrl, projectId, issue.getIid(), accessToken);
+        restTemplate.postForObject(restTimeSpent, null, String.class); // resets as time spent is cumulative 
     }
 }

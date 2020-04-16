@@ -24,5 +24,4 @@ public interface IIssueService {
     Issue createIssue(int workspaceId, int projectId, Issue issue, String accessToken);
 
     Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken);
-
 }
