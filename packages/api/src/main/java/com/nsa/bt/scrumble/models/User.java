@@ -74,10 +74,7 @@ public class User {
             return false;
         }
         User other = (User) obj;
-        if (id != other.id) {
-            return false;
-        }
-        return true;
+        return id == other.id;
     }
 
     @Override

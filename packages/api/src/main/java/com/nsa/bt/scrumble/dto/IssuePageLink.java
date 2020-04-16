@@ -21,9 +21,9 @@ public class IssuePageLink {
     }
 
     public String toString() {
-        String glLinks = "";
+        StringBuilder glLinks = new StringBuilder();
         for(String link: gitlabPageLinks) {
-            glLinks += gitlabPageLinks + ", ";
+            glLinks.append(link).append(", ");
         }
         return String.format("Scrumble page number: %d\nGitLab links: %s", scrumblePageNumber, glLinks);
     }
