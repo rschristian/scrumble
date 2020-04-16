@@ -67,10 +67,7 @@ public class WorkspaceApi {
     public ResponseEntity<Object> getWorkspaceProjects(Authentication authentication, @PathVariable(value="id") int workspaceId){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-        if(accessTokenOptional.isPresent()) {
-            return ResponseEntity.ok().body(workspaceService.getWorkspaceProjects(workspaceId, accessTokenOptional.get()));
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(authErrorMsg);
+        return accessTokenOptional.<ResponseEntity<Object>>map(s -> ResponseEntity.ok().body(workspaceService.getWorkspaceProjects(workspaceId, s))).orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body(authErrorMsg));
     }
 
 }

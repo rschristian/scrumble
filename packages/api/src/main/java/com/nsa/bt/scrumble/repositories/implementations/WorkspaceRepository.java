@@ -19,10 +19,7 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class WorkspaceRepository implements IWorkspaceRepository {
@@ -63,7 +60,7 @@ public class WorkspaceRepository implements IWorkspaceRepository {
             ps.setObject(4, getWorkspaceJsonbData(workspace));
             return ps;
         }, keyHolder);
-        workspace.setId(Math.toIntExact(keyHolder.getKey().longValue()));
+        workspace.setId(Math.toIntExact(Objects.requireNonNull(keyHolder.getKey()).longValue()));
         return workspace;
     }
 
@@ -88,9 +85,8 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     @Override
     public List<Workspace> getAllWorkspaces(Span span) {
         Span newSpan = RepositoryTracer.getTracer().buildSpan("SQL Select All Workspaces").asChildOf(span).start();
-        List<Workspace> workspaces = new ArrayList<>();
         String selectStatement = "SELECT * FROM workspaces as workspaces INNER JOIN users AS users ON workspaces.created_by_user = users.id";
-        jdbcTemplate.query(selectStatement,
+        List<Workspace> workspaces = new ArrayList<>(jdbcTemplate.query(selectStatement,
                 (rs, row) -> {
                     try {
                         return new Workspace(
@@ -104,8 +100,7 @@ public class WorkspaceRepository implements IWorkspaceRepository {
                         e.printStackTrace();
                     }
                     return null;
-                })
-                .forEach(entry -> workspaces.add(entry));
+                }));
         newSpan.finish();
         return workspaces;
     }

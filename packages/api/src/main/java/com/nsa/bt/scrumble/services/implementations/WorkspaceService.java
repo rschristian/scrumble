@@ -1,6 +1,5 @@
 package com.nsa.bt.scrumble.services.implementations;
 
-import com.nsa.bt.scrumble.services.implementations.ServiceTracer;
 import com.nsa.bt.scrumble.dto.Project;
 import com.nsa.bt.scrumble.models.User;
 import com.nsa.bt.scrumble.models.Workspace;
@@ -15,16 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.beans.factory.annotation.Value;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Hashtable;
 
 @Service
 public class WorkspaceService implements IWorkspaceService {
@@ -90,12 +82,11 @@ public class WorkspaceService implements IWorkspaceService {
                 ResponseEntity<ArrayList<User>> projectUsersResponse = restTemplate.exchange(
                     uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
                 ArrayList<User> projectUsers = projectUsersResponse.getBody();
+                assert projectUsers != null;
                 projectUsers.forEach((user) -> {
                     if(usersProjectIds.containsKey(user)) {
                         ArrayList<Integer> projectIdArray = usersProjectIds.get(user);
-                        List<Integer> listWithoutDuplicates = projectIdArray.stream().distinct().collect(Collectors.toList()); // removes any duplicates
-                        ArrayList<Integer> uniqueProjectIdArray = new ArrayList<Integer>();
-                        uniqueProjectIdArray.addAll(listWithoutDuplicates);
+                        ArrayList<Integer> uniqueProjectIdArray = projectIdArray.stream().distinct().collect(Collectors.toCollection(ArrayList::new)); // removes any duplicates
                         uniqueProjectIdArray.add(projectId);
                         usersProjectIds.put(user, uniqueProjectIdArray);
                     } else {
@@ -106,10 +97,8 @@ public class WorkspaceService implements IWorkspaceService {
                 });
                 allUsers.addAll(projectUsers);
             });
-            Set<User> uniqueUsers = new HashSet<User>();
-            uniqueUsers.addAll(allUsers); // getting all unique users
-            List<User> resultant = new ArrayList<User>();
-            resultant.addAll(uniqueUsers); // adding unique users to list instead of set
+            Set<User> uniqueUsers = new HashSet<User>(allUsers); // getting all unique users
+            List<User> resultant = new ArrayList<User>(uniqueUsers); // adding unique users to list instead of set
             resultant.forEach((user) -> {
                 if(usersProjectIds.containsKey(user)) {
                     user.setProjectIds(usersProjectIds.get(user));
@@ -120,7 +109,7 @@ public class WorkspaceService implements IWorkspaceService {
 
     private HttpEntity<String> getApplicationJsonHeaders() {
         var headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         return new HttpEntity(headers);
     }
 }
