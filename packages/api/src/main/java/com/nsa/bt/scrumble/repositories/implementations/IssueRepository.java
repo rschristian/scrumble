@@ -32,48 +32,48 @@ public class IssueRepository implements IIssueRepository {
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public void updateStartDate(int issueId) {
+    public void updateStartDate(int issueId, int projectId) {
         Date currentDate = new Date();
-        Optional<Issue> issue = findIssueById(issueId);
+        Optional<Issue> issue = findIssueById(issueId, projectId);
         if(!issue.isPresent()){
-            String insertStatement = "INSERT INTO issues (id, start_date) VALUES (?,?);";
-            Object[] params = new Object[]{ issueId, new Timestamp(currentDate.getTime())};
-            int[] types = new int[]{ Types.INTEGER, Types.TIMESTAMP };
+            String insertStatement = "INSERT INTO issues (id, project_id, start_time) VALUES (?,?,?);";
+            Object[] params = new Object[]{ issueId, projectId, new Timestamp(currentDate.getTime())};
+            int[] types = new int[]{ Types.INTEGER, Types.INTEGER, Types.TIMESTAMP };
             jdbcTemplate.update(insertStatement, params, types);
         }
     }
 
     @Override
-    public void updateDueDate(int issueId) {
+    public void updateDueDate(int issueId, int projectId) {
         Date currentDate = new Date();
-        String updateStatement = "UPDATE issues SET due_date = ? WHERE id = ?;";
-        Object[] params = new Object[]{ new Timestamp(currentDate.getTime()), issueId};
-        int[] types = new int[]{ Types.TIMESTAMP, Types.INTEGER };
+        String updateStatement = "UPDATE issues SET end_time = ? WHERE id = ? AND project_id = ?;";
+        Object[] params = new Object[]{ new Timestamp(currentDate.getTime()), issueId, projectId};
+        int[] types = new int[]{ Types.TIMESTAMP, Types.INTEGER, Types.INTEGER };
         jdbcTemplate.update(updateStatement, params, types);
     }
 
     @Override
-    public void removeIssue(int issueId) {
-        String deleteStatement = "DELETE FROM issues WHERE id = ?;";
-        Object[] params = new Object[]{issueId};
-        int[] types = new int[]{ Types.INTEGER };
+    public void removeIssue(int issueId, int projectId) {
+        String deleteStatement = "DELETE FROM issues WHERE id = ? AND project_id = ?;";
+        Object[] params = new Object[]{issueId, projectId};
+        int[] types = new int[]{ Types.INTEGER, Types.INTEGER };
         jdbcTemplate.update(deleteStatement, params, types);
     }
 
     @Override
-    public void removeDueDate(int issueId) {
-        String updateStatement = "UPDATE issues SET due_date = NULL WHERE id = ?;";
-        Object[] params = new Object[]{ issueId};
-        int[] types = new int[]{ Types.INTEGER };
+    public void removeDueDate(int issueId, int projectId) {
+        String updateStatement = "UPDATE issues SET end_time = NULL WHERE id = ? AND project_id= ?;";
+        Object[] params = new Object[]{ issueId, projectId};
+        int[] types = new int[]{ Types.INTEGER, Types.INTEGER };
         jdbcTemplate.update(updateStatement, params, types);
     }
 
     @Override
-    public Integer calculateTime(int issueId) {
+    public Integer calculateTime(int issueId, int projectId) {
         try {
             return jdbcTemplate.queryForObject(
-                "SELECT EXTRACT(EPOCH FROM (due_date - start_date)) FROM issues WHERE id = ?;",
-                new Object[]{issueId},
+                "SELECT EXTRACT(EPOCH FROM (end_time - start_time)) FROM issues WHERE id = ? AND project_id = ?;",
+                new Object[]{issueId, projectId},
                 Integer.class
             );
         } catch (IncorrectResultSizeDataAccessException e){
@@ -81,16 +81,16 @@ public class IssueRepository implements IIssueRepository {
         }
     }
 
-    private Optional<Issue> findIssueById(int issueId) {
+    private Optional<Issue> findIssueById(int issueId, int projectId) {
         try{
             return jdbcTemplate.queryForObject(
-                "SELECT * FROM issues WHERE id = ?;",
-                new Object[]{issueId},
+                "SELECT * FROM issues WHERE id = ? AND project_id = ?;",
+                new Object[]{issueId, projectId},
                 (rs, rowNum) ->
                     Optional.of(new Issue(
                         rs.getInt("Id"),
-                        rs.getDate("start_date"),
-                        rs.getDate("due_date")
+                        rs.getDate("start_time"),
+                        rs.getDate("end_time")
                     ))
             );
         } catch (IncorrectResultSizeDataAccessException e){

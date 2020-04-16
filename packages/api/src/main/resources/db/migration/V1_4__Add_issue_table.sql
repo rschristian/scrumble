@@ -1,6 +1,7 @@
  CREATE TABLE issues (
-    id SERIAL PRIMARY KEY,
-    workspace_id INTEGER REFERENCES workspaces (id),
-    start_date TIMESTAMP,
-    due_date TIMESTAMP
+    id SERIAL,
+    project_id INTEGER,
+    start_time TIMESTAMP,
+    end_time TIMESTAMP,
+    PRIMARY KEY (id, project_id)
 );

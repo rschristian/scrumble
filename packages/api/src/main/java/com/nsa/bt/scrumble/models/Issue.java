@@ -4,13 +4,13 @@ import java.sql.Date;
 
 public class Issue {
     private int id;
-    private Date startDate;
-    private Date dueDate;
+    private Date startTime;
+    private Date endTime;
 
-    public Issue(int id, Date startDate, Date dueDate) {
+    public Issue(int id, Date startTime, Date endTime) {
         this.id = id;
-        this.startDate = startDate;
-        this.dueDate = dueDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public int getId() {
@@ -21,19 +21,19 @@ public class Issue {
         this.id = id;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
-    public Date getDueDate() {
-        return dueDate;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }
