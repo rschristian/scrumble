@@ -163,8 +163,7 @@ public class Issue implements Serializable {
 
     public void setCreatedAt(Date createdAt) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        String strDate= formatter.format(createdAt);
-        this.createdAt = strDate;
+        this.createdAt = formatter.format(createdAt);
     }
 
     public User getAssignee() {

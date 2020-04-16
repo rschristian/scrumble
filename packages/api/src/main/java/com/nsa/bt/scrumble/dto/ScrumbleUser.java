@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import java.io.Serializable;
 
 public class ScrumbleUser implements Serializable {
-    private int id;
-    private String name;
-    private String username;
+    private final int id;
+    private final String name;
+    private final String username;
     @JsonAlias("avatar_url")
-    private String avatarUrl;
+    private final String avatarUrl;
 
     public ScrumbleUser (int id, String name, String username,  String avatarUrl) {
         this.id = id;
@@ -17,7 +17,6 @@ public class ScrumbleUser implements Serializable {
         this.username = username;
         this.avatarUrl = avatarUrl;
     }
-
 
     public int getId() {
         return this.id;
