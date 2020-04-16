@@ -83,15 +83,17 @@ If you would like to configure this application to use your own GitLab instance,
 
 In this configuration, provide a callback URL of <your_base_api_url>/api/login/oauth2/code. If you would like a different URL, you must change the value of the base URI for the redirection endpoint in [SecurityConfig.java](packages/api/src/main/java/com/nsa/bt/scrumble/config.SecurityConfig.java) accordingly. More info on this value can be found [here](https://docs.spring.io/spring-security/site/docs/5.0.7.RELEASE/reference/html/oauth2login-advanced.html#oauth2login-advanced-redirection-endpoint).
 
-You will need to alter values in application.properties. Please note, all properties listed here depend on the fact that spring.security.oauth2.client.registration.gitlab.client-name has been set to 'gitlab'.
+You will need to alter values in [application.properties](packages/api/src/main/resources/application.properties), or your property file of choice for the profile you'll be running.
+Please note, all properties listed here depend on the fact that spring.security.oauth2.client.registration.gitlab.client-name has been set to 'gitlab'.
 
-After registering Scrumble as an OAuth application, GitLab will give you an application ID and a secret. These values must be given to the following properties:
+After registering Scrumble as an OAuth application, GitLab will give you an application ID and a secret. These values, along with the full callback URL you provided must be given to the following properties:
 ```
 spring.security.oauth2.client.registration.gitlab.client-id=<your_application_id>
 spring.security.oauth2.client.registration.gitlab.client-secret=<your_secret>
+spring.security.oauth2.client.registration.gitlab.redirect-uri=<your_callback_url>
 ```
 
-In [application.properties](packages/api/src/main/resources/application.properties) you will need to set your own values for the following properties.
+In an application properties file you will also need to set your own values for the following:
 ```
 spring.security.oauth2.client.provider.gitlab.token-uri=<your_gitlab_url>/oauth/token
 spring.security.oauth2.client.provider.gitlab.authorization-uri=<your_gitlab_url>/oauth/authorize
