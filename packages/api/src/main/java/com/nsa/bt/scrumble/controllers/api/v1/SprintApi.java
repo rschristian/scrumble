@@ -89,6 +89,6 @@ public class SprintApi {
         if(accessTokenOptional.isPresent()) {
             return ResponseEntity.ok().body(sprintService.getSprintIssues(workspaceId, sprint, accessTokenOptional.get()));
         }
-        return ResponseEntity.ok().body(authErrorMsg);
+        return ResponseEntity.status(400).body(authErrorMsg);
     }
 }
