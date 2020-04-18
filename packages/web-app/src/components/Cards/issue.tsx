@@ -67,7 +67,7 @@ export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: Iss
                 <p><span class="font-semibold">Author:</span> {props.issue.author.name}</p>
                 <p><span class="font-semibold">Assignee:</span> {props.issue.assignee !== null ? props.issue.assignee.name : 'Unassigned'}</p>
             </div>
-            <div class="absolute bottom-0 left-0 px-4 py-2">
+            <div class="bottom-0 left-0 px-4 py-2">
                 <div class="flex">
                 {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
                     <p class="text-gray-700">{props.issue.projectName} (#{props.issue.iid})</p>
