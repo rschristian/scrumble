@@ -47,7 +47,7 @@ public class Issue implements Serializable {
         this.title = title;
         this.description = description;
         this.storyPoint = storyPoint;
-        this.status = status;
+        this.status = state;
         this.labels = labels;
         this.timeSpent = timeSpent;
         this.author = author;
