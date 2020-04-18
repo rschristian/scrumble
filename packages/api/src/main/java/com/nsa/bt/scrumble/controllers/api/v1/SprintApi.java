@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -41,7 +42,8 @@ public class SprintApi {
     public ResponseEntity<Object> getWorkspaceSprints(
             Authentication auth,
             @PathVariable(value="workspaceId") int workspaceId,
-            @RequestParam(value="filter") String filter) {
+            @RequestParam(value="filter") String filter
+    ) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /workspace/" + workspaceId + "/sprints").start();
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
@@ -58,12 +60,13 @@ public class SprintApi {
     public ResponseEntity<Object> createSprint(
             Authentication auth,
             @PathVariable(value="workspaceId") int workspaceId,
-            @RequestBody Sprint sprint) {
+            @RequestBody Sprint sprint
+    ) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP POST /workspace/" + workspaceId + "/sprint").start();
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
         var response = accessTokenOptional.<ResponseEntity<Object>>map(s ->
-                ResponseEntity.ok().body(sprintService.createSprint(workspaceId, sprint, s))).orElseGet(() ->
+                ResponseEntity.ok().body(sprintService.createSprint(workspaceId, sprint, s, span))).orElseGet(() ->
                 ResponseEntity.status(HttpStatus.FORBIDDEN).body(authErrorMsg)
         );
         span.finish();
@@ -74,19 +77,17 @@ public class SprintApi {
     public ResponseEntity<Object> editSprint(
             Authentication auth,
             @PathVariable(value="workspaceId") int workspaceId,
-            @RequestBody Sprint sprint) {
+            @RequestBody Sprint sprint
+    ) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP PUT /workspace/" + workspaceId + "/sprint").start();
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
         if(accessTokenOptional.isPresent()) {
-            sprint = sprintService.editSprint(workspaceId, sprint, accessTokenOptional.get());
+            sprint = sprintService.editSprint(workspaceId, sprint, accessTokenOptional.get(), span);
             span.finish();
             return ResponseEntity.ok().body(sprint);
         }
-        var res = new HashMap<String, String>();
-        res.put("message", authErrorMsg);
-
         span.finish();
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", authErrorMsg));
     }
 }

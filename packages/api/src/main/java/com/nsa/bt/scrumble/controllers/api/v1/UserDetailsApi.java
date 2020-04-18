@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -52,19 +53,16 @@ public class UserDetailsApi {
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /user/info").start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
-        int serviceId = userPrincipal.getServiceId();
+
         if(accessTokenOptional.isPresent()) {
-            String uri = String.format("%1s/users/%2s?access_token=%3s", gitLabBaseUrlApi, serviceId, accessTokenOptional.get());
+            String uri = String.format("%1s/users/%2s?access_token=%3s", gitLabBaseUrlApi, userPrincipal.getServiceId(), accessTokenOptional.get());
             User currentUser = restTemplate.getForObject(uri, User.class);
-            ScrumbleUser currentScrumbleUser = new ScrumbleUser(currentUser.getId(), currentUser.getName(), currentUser.getUsername(), currentUser.getAvatarUrl());
             span.finish();
-            return ResponseEntity.ok().body(currentScrumbleUser);
+            return ResponseEntity.ok().body(new ScrumbleUser(currentUser.getId(), currentUser.getName(), currentUser.getUsername(), currentUser.getAvatarUrl()));
         }
         logger.error("Unable to authenticate with authentication provider");
-        var res = new HashMap<String, String>();
-        res.put("message", authErrorMsg);
 
         span.finish();
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", authErrorMsg));
     }
 }

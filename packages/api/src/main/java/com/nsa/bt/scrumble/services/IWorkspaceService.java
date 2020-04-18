@@ -11,15 +11,15 @@ import java.util.Optional;
 
 public interface IWorkspaceService {
 
-    ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId, Span span);
-
-    Workspace createWorkspace(Workspace workspace, User user);
-
     List<Workspace> getAllWorkspaces(Span span);
 
-    void editWorkspace(Workspace updatedWorkspace);
+    ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId, Span span);
 
-    List<Project> getWorkspaceProjects(int workspaceId, String accessToken);
+    Workspace createWorkspace(Workspace workspace, User user, Span span);
 
-    void setWorkspaceUsers(Workspace workspace, Optional<String> accessToken);
+    void editWorkspace(Workspace updatedWorkspace, Span span);
+
+    List<Project> getWorkspaceProjects(int workspaceId, String accessToken, Span span);
+
+    void setWorkspaceUsers(Workspace workspace, Optional<String> accessToken, Span span);
 }

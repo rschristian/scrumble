@@ -30,8 +30,32 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public ArrayList<Integer> projectIdsForWorkspace(int workspaceId) {
-        return jdbcTemplate.queryForObject(
+    public List<Workspace> getAllWorkspaces(Span span) {
+        span = RepositoryTracer.getTracer().buildSpan("SQL Select All Workspaces").asChildOf(span).start();
+        var workspaces = new ArrayList<>(jdbcTemplate.query(
+                "SELECT * FROM workspaces as workspaces INNER JOIN users AS users ON workspaces.created_by_user = users.id",
+                (rs, row) -> {
+                    try {
+                        return new Workspace(
+                                rs.getInt("id"),
+                                new User(rs.getInt("created_by_user"), rs.getInt("service_id"), rs.getString("provider_id")),
+                                rs.getString("name"),
+                                rs.getString("description"),
+                                parseJsonDataToProjectIds(((PGobject) rs.getObject("workspace_data"))),
+                                parseJsonDataToUserList(((PGobject) rs.getObject("workspace_data"))));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }));
+        span.finish();
+        return workspaces;
+    }
+
+    @Override
+    public ArrayList<Integer> projectIdsForWorkspace(int workspaceId, Span span) {
+        span = RepositoryTracer.getTracer().buildSpan("SQL Select Project IDs from Workspace Data").asChildOf(span).start();
+        ArrayList<Integer> projectIds = jdbcTemplate.queryForObject(
                 "SELECT workspace_data FROM workspaces WHERE id = ?;",
                 new Object[]{workspaceId},
                 (rs, rowNum) ->
@@ -44,6 +68,8 @@ public class WorkspaceRepository implements IWorkspaceRepository {
                     return new ArrayList<>();
                 }
         );
+        span.finish();
+        return projectIds;
     }
 
     @Override
@@ -64,6 +90,20 @@ public class WorkspaceRepository implements IWorkspaceRepository {
         return workspace;
     }
 
+    @Override
+    public void editWorkspace(Workspace updatedWorkspace) {
+        String deleteWorkspace = "UPDATE workspaces SET name = ?, description = ?, workspace_data = ? WHERE id = ?";
+        Object[] params = new Object[]
+                {
+                        updatedWorkspace.getName(),
+                        updatedWorkspace.getDescription(),
+                        getWorkspaceJsonbData(updatedWorkspace),
+                        updatedWorkspace.getId()
+                };
+        int[] types = new int[]{Types.VARCHAR, Types.VARCHAR, Types.OTHER, Types.INTEGER} ;
+        jdbcTemplate.update(deleteWorkspace, params, types);
+    }
+
     private PGobject getWorkspaceJsonbData(Workspace workspace) {
         try {
             Map<Object, Object> dataMap = new HashMap<>();
@@ -82,29 +122,6 @@ public class WorkspaceRepository implements IWorkspaceRepository {
         }
     }
 
-    @Override
-    public List<Workspace> getAllWorkspaces(Span span) {
-        Span newSpan = RepositoryTracer.getTracer().buildSpan("SQL Select All Workspaces").asChildOf(span).start();
-        String selectStatement = "SELECT * FROM workspaces as workspaces INNER JOIN users AS users ON workspaces.created_by_user = users.id";
-        List<Workspace> workspaces = new ArrayList<>(jdbcTemplate.query(selectStatement,
-                (rs, row) -> {
-                    try {
-                        return new Workspace(
-                                rs.getInt("id"),
-                                new User(rs.getInt("created_by_user"), rs.getInt("service_id"), rs.getString("provider_id")),
-                                rs.getString("name"),
-                                rs.getString("description"),
-                                parseJsonDataToProjectIds(((PGobject) rs.getObject("workspace_data"))),
-                                parseJsonDataToUserList(((PGobject) rs.getObject("workspace_data"))));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }));
-        newSpan.finish();
-        return workspaces;
-    }
-
     private ArrayList<Integer> parseJsonDataToProjectIds(PGobject jsonData) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return (ArrayList<Integer>) mapper.readValue(jsonData.getValue(), Map.class).get("project_ids");
@@ -113,27 +130,5 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     private List<User> parseJsonDataToUserList(PGobject jsonData) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return (List<User>) mapper.readValue(jsonData.getValue(), Map.class).get("project_users");
-    }
-
-    @Override
-    public void deleteWorkspace(int workspaceId) {
-        String deleteWorkspace = "DELETE FROM workspaces WHERE id = ?";
-        Object[] params = new Object[]{ workspaceId };
-        int[] types = new int[]{Types.INTEGER};
-        jdbcTemplate.update(deleteWorkspace, params, types);
-    }
-
-    @Override
-    public void editWorkspace(Workspace updatedWorkspace) {
-        String deleteWorkspace = "UPDATE workspaces SET name = ?, description = ?, workspace_data = ? WHERE id = ?";
-        Object[] params = new Object[]
-                {
-                    updatedWorkspace.getName(),
-                    updatedWorkspace.getDescription(),
-                    getWorkspaceJsonbData(updatedWorkspace),
-                    updatedWorkspace.getId()
-                };
-        int[] types = new int[]{Types.VARCHAR, Types.VARCHAR, Types.OTHER, Types.INTEGER} ;
-        jdbcTemplate.update(deleteWorkspace, params, types);
     }
 }

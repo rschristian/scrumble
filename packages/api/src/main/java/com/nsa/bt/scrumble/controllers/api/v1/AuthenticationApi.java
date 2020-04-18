@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -53,8 +54,8 @@ public class AuthenticationApi {
     @GetMapping("/auth/token")
     public ResponseEntity<Object> exchangeShortLifeToken(HttpServletRequest request) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /auth/token").start();
-        var tokenResponse = new HashMap<>();
         String jwt = tokenUtils.getJwtFromRequest(request, span);
+        String token = "";
 
         if (StringUtils.hasText(jwt)) {
             Long userId = tokenProvider.getUserIdFromToken(jwt, span);
@@ -62,20 +63,13 @@ public class AuthenticationApi {
 
             if (userOptional.isEmpty()) {
                 logger.error("User not found");
-                tokenResponse.put("error", "User not found");
                 span.finish();
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(tokenResponse);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
             }
-            tokenResponse.put("jwt",
-                    tokenProvider.createToken(
-                            userId.intValue(),
-                            appProperties.getAuth().getLongLifeTokenExpirationMsec(),
-                            span
-                    )
-            );
+            token = tokenProvider.createToken(userId.intValue(), appProperties.getAuth().getLongLifeTokenExpirationMsec(), span);
         }
         span.finish();
-        return ResponseEntity.ok().body(tokenResponse);
+        return ResponseEntity.ok().body(Map.of("jwt", token));
     }
 
     @DeleteMapping("/auth/token")

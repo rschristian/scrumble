@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -43,8 +44,8 @@ public class WorkspaceApi {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
         var projects = accessTokenOptional.<ResponseEntity<Object>>map(s ->
-                ResponseEntity.ok().body(workspaceService.getWorkspaceProjects(workspaceId, s))).orElseGet(() ->
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(authErrorMsg)
+                ResponseEntity.ok().body(workspaceService.getWorkspaceProjects(workspaceId, s, span))).orElseGet(() ->
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", authErrorMsg))
         );
         span.finish();
         return projects;
@@ -56,15 +57,17 @@ public class WorkspaceApi {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
         if(accessTokenOptional.isPresent()) {
-            workspaceService.setWorkspaceUsers(workspace, accessTokenOptional);
-            span.finish();
-            return ResponseEntity.status(HttpStatus.CREATED).body(workspaceService.createWorkspace(
+            workspaceService.setWorkspaceUsers(workspace, accessTokenOptional, span);
+            workspace = workspaceService.createWorkspace(
                     workspace,
-                    new User(userPrincipal.getId(), userPrincipal.getServiceId(), userPrincipal.getProviderId())
-            ));
+                    new User(userPrincipal.getId(), userPrincipal.getServiceId(), userPrincipal.getProviderId()),
+                    span
+            );
+            span.finish();
+            return ResponseEntity.status(HttpStatus.CREATED).body(workspace);
         }
         span.finish();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(authErrorMsg);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", authErrorMsg));
     }
 
     @PutMapping("/workspace/{id}")
@@ -73,12 +76,12 @@ public class WorkspaceApi {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
         if(accessTokenOptional.isPresent()) {
-            workspaceService.setWorkspaceUsers(workspace, accessTokenOptional);
-            workspaceService.editWorkspace(workspace);
+            workspaceService.setWorkspaceUsers(workspace, accessTokenOptional, span);
+            workspaceService.editWorkspace(workspace, span);
             span.finish();
             return ResponseEntity.ok().body(workspace);
         }
         span.finish();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(authErrorMsg);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", authErrorMsg));
     }
 }

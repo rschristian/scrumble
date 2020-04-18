@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,15 +37,16 @@ public class SprintService implements ISprintService {
     @Autowired
     public SprintService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder
-                .errorHandler(new MilestoneRestTemplateResponseErrorHandler())
-                .build();
+            .errorHandler(new MilestoneRestTemplateResponseErrorHandler())
+            .build();
     }
 
     @Override
-    public Sprint createSprint(int workspaceId, Sprint sprint, String accessToken) {
+    public Sprint createSprint(int workspaceId, Sprint sprint, String accessToken, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Creat Sprint").asChildOf(span).start();
         String uri;
         var projectMilestoneIds = new HashMap<String, Integer>();
-        ArrayList<Integer> projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId);
+        ArrayList<Integer> projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId, span);
 
         for (int projectId: projectIds) {
             uri = String.format("%s/projects/%d/milestones?title=%s&description=%s&start_date=%tF&due_date=%tF&access_token=%s",
@@ -55,7 +55,20 @@ public class SprintService implements ISprintService {
             projectMilestoneIds.put(Integer.toString(projectId), milestone.getId());
         }
         sprint.setProjectIdToMilestoneIds(projectMilestoneIds);
-        return sprintRepository.createSprint(workspaceId, sprint);
+        sprint = sprintRepository.createSprint(workspaceId, sprint, span);
+        span.finish();
+        return sprint;
+    }
+
+    @Override
+    public Sprint editSprint(int workspaceId, Sprint sprint, String accessToken, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Edit Sprint").asChildOf(span).start();
+        for (Map.Entry<String, Integer> pair : sprintRepository.getProjectIdsToMilestoneIds(sprint.getId(), span).entrySet()) {
+            editGitLabMilestone(Integer.parseInt(pair.getKey()), pair.getValue(), sprint, accessToken, span);
+        }
+        sprint = sprintRepository.editSprint(workspaceId, sprint, span);
+        span.finish();
+        return sprint;
     }
 
     @Override
@@ -64,14 +77,6 @@ public class SprintService implements ISprintService {
         var sprints = sprintRepository.getAllSprintsForWorkspace(workspaceId, filter);
         span.finish();
         return sprints;
-    }
-
-    @Override
-    public Sprint editSprint(int workspaceId, Sprint sprint, String accessToken) {
-        for (Map.Entry<String, Integer> pair : sprintRepository.getProjectIdsToMileStoneIds(sprint.getId()).entrySet()) {
-            editGitLabMilestone(Integer.parseInt(pair.getKey()), pair.getValue(), sprint, accessToken);
-        }
-        return sprintRepository.editSprint(workspaceId, sprint);
     }
 
     @Override
@@ -112,15 +117,12 @@ public class SprintService implements ISprintService {
         return 0;
     }
 
-    private void editGitLabMilestone(int projectId, int milestoneId, Sprint sprint, String accessToken) {
-        String stateEvent;
-        if(sprint.getStatus().equalsIgnoreCase("active")) {
-            stateEvent = "activate";
-        } else {
-            stateEvent = "close";
-        }
+    private void editGitLabMilestone(int projectId, int milestoneId, Sprint sprint, String accessToken, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Edit GitLab Milestone").asChildOf(span).start();
+        String stateEvent = (sprint.getStatus().equalsIgnoreCase("active")) ? "activate" : "close";
         String uri = String.format("%s/projects/%d/milestones/%d?title=%s&description=%s&start_date=%tF&due_date=%tF&state_event=%s&access_token=%s",
                 gitLabApiUrl, projectId, milestoneId, sprint.getTitle(), sprint.getDescription(), sprint.getStartDate(), sprint.getDueDate(), stateEvent, accessToken);
         restTemplate.exchange(uri, HttpMethod.PUT, null, String.class);
+        span.finish();
     }
 }

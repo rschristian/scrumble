@@ -9,13 +9,11 @@ import java.util.List;
 
 public interface IWorkspaceRepository {
 
-    ArrayList<Integer> projectIdsForWorkspace(int workspaceId);
-
-    Workspace createWorkspace(Workspace workspace, User user);
-
     List<Workspace> getAllWorkspaces(Span span);
 
-    void deleteWorkspace(int workspaceId);
+    ArrayList<Integer> projectIdsForWorkspace(int workspaceId, Span span);
+
+    Workspace createWorkspace(Workspace workspace, User user);
 
     void editWorkspace(Workspace updatedWorkspace);
 }
