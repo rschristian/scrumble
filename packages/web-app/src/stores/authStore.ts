@@ -19,7 +19,7 @@ class AuthStore {
             name: user.name,
             username: user.username,
             avatarUrl,
-            projectIds: user.projectIds
+            projectIds: user.projectIds,
         };
     }
 

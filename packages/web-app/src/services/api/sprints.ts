@@ -39,13 +39,13 @@ export const editSprint = async (workspaceId: number, updatedSprint: Sprint): Pr
         });
 };
 
-export const getSprintIssues = async (workspaceId: number, sprint: Sprint): Promise<Issue[] | String> => {
+export const getSprintIssues = async (workspaceId: number, sprint: Sprint): Promise<Issue[] | string> => {
     return await apiService
         .post(`/workspace/${workspaceId}/sprint/issues`, sprint)
         .then((result) => {
             return result.data;
         })
-        .catch(({response}) => {
+        .catch(({ response }) => {
             return response.data?.message || 'Unknown error while getting issues ';
         });
 };

@@ -2,7 +2,6 @@ import { ComponentChild, Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
 import { IssueBoardCard } from 'components/Cards/issue';
-import { issues } from 'data';
 import { Issue, IssueStatus } from 'models/Issue';
 import { editIssue } from 'services/api/issues';
 import { useStore } from 'stores';
@@ -11,7 +10,6 @@ import { errorColour } from 'services/notification/colours';
 import { getSprintIssues } from 'services/api/sprints';
 
 const IssuesBoard: FunctionalComponent = () => {
-
     const userLocationStore = useStore().userLocationStore;
     const [open, setOpen] = useState<ComponentChild[]>([]);
     const [doing, setDoing] = useState<ComponentChild[]>([]);
@@ -26,30 +24,30 @@ const IssuesBoard: FunctionalComponent = () => {
         setDoing([]);
         setClosed([]);
         issuesArray.forEach((issue: Issue, index) => {
-            if(issue.iid === updatedIssue.iid) {
+            if (issue.iid === updatedIssue.iid) {
                 arrayCopy[index] = updatedIssue;
                 setIssuesArray(arrayCopy);
             }
-        })
-    }
+        });
+    };
     const updateIssue = async (issue: Issue): Promise<void> => {
         return await editIssue(userLocationStore.currentWorkspace.id, issue).then((error) => {
             if (error) notify.show(error, 'error', 5000, errorColour);
             else {
                 updateIssueBoard(issue);
             }
-        })
-    }
+        });
+    };
 
     const fetchIssues = async (): Promise<void> => {
-        getSprintIssues(userLocationStore.currentWorkspace.id,userLocationStore.currentSprint).then((result) => {
-            if (typeof result == 'string'){
+        getSprintIssues(userLocationStore.currentWorkspace.id, userLocationStore.currentSprint).then((result) => {
+            if (typeof result == 'string') {
                 notify.show(result, 'error', 5000, errorColour);
             } else {
                 setIssuesArray(result as Issue[]);
             }
-        })
-    }
+        });
+    };
 
     useEffect(() => {
         fetchIssues();
@@ -60,38 +58,22 @@ const IssuesBoard: FunctionalComponent = () => {
             if (issue.status === IssueStatus.open) {
                 setOpen((oldValues) => [
                     ...oldValues,
-                    <IssueBoardCard
-                        key={index}
-                        issue={issue}
-                        updateIssueBoard= {updateIssue}
-                    />,
+                    <IssueBoardCard key={index} issue={issue} updateIssueBoard={updateIssue} />,
                 ]);
             } else if (issue.status === IssueStatus.todo) {
-                    setTodo((oldValues) => [
-                        ...oldValues,
-                        <IssueBoardCard
-                            key={index}
-                            issue={issue}
-                            updateIssueBoard = {updateIssue}
-                        />,
-                    ])
+                setTodo((oldValues) => [
+                    ...oldValues,
+                    <IssueBoardCard key={index} issue={issue} updateIssueBoard={updateIssue} />,
+                ]);
             } else if (issue.status === IssueStatus.doing) {
                 setDoing((oldValues) => [
                     ...oldValues,
-                    <IssueBoardCard
-                        key={index}
-                        issue={issue}
-                        updateIssueBoard = {updateIssue}
-                    />,
-                ])
+                    <IssueBoardCard key={index} issue={issue} updateIssueBoard={updateIssue} />,
+                ]);
             } else {
                 setClosed((oldValues) => [
                     ...oldValues,
-                    <IssueBoardCard
-                        key={index}
-                        issue={issue}
-                        updateIssueBoard = {updateIssue}
-                    />,
+                    <IssueBoardCard key={index} issue={issue} updateIssueBoard={updateIssue} />,
                 ]);
             }
         });

@@ -42,8 +42,8 @@ export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: Iss
             author: props.issue.author,
             createdAt: new Date(),
             assignee: props.issue?.assignee || unassigned,
-        }
-    }
+        };
+    };
     return (
         <div class="bg-white relative rounded-md shadow-lg m-2 min-h-48 m-4">
             <div class="px-4 py-2 h-40 text-gray-700">
@@ -56,21 +56,28 @@ export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: Iss
                         props.updateIssueBoard(handleUpdate((e.target as HTMLSelectElement).value));
                     }}
                 >
-                   {Object.values(IssueStatus).map((issueStatus) => {
-                       return(
-                           <option class="form-option capitalize" value={issueStatus}>
-                               {issueStatus}
-                           </option>
-                       )
-                   })}
+                    {Object.values(IssueStatus).map((issueStatus) => {
+                        return (
+                            <option class="form-option capitalize" value={issueStatus}>
+                                {issueStatus}
+                            </option>
+                        );
+                    })}
                 </select>
-                <p><span class="font-semibold">Author:</span> {props.issue.author.name}</p>
-                <p><span class="font-semibold">Assignee:</span> {props.issue.assignee !== null ? props.issue.assignee.name : 'Unassigned'}</p>
+                <p>
+                    <span class="font-semibold">Author:</span> {props.issue.author.name}
+                </p>
+                <p>
+                    <span class="font-semibold">Assignee:</span>{' '}
+                    {props.issue.assignee !== null ? props.issue.assignee.name : 'Unassigned'}
+                </p>
             </div>
             <div class="bottom-0 left-0 px-4 py-2">
                 <div class="flex">
-                {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
-                    <p class="text-gray-700">{props.issue.projectName} (#{props.issue.iid})</p>
+                    {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
+                    <p class="text-gray-700">
+                        {props.issue.projectName} (#{props.issue.iid})
+                    </p>
                 </div>
             </div>
         </div>
@@ -134,7 +141,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                 </div>
                 <div class="px-4 py-2 z-1">
                     <span class={props.issue.status === IssueStatus.closed ? 'closed' : 'open'}>
-                        {props.issue.status === IssueStatus.closed ? 'Closed': 'Opened'}
+                        {props.issue.status === IssueStatus.closed ? 'Closed' : 'Opened'}
                     </span>
                     {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
                     <span class="text-gray-700"> Project Name: {props.issue.projectName}</span>
@@ -197,7 +204,7 @@ export const IssueInformation: FunctionalComponent<InformationProps> = (props: I
                         <div class="table-cell py-2">
                             <span class="info-label"> State: </span>
                             <span class={props.issue.status === IssueStatus.closed ? 'closed' : 'open'}>
-                                {props.issue.status === IssueStatus.closed ? 'Closed': 'Opened'}
+                                {props.issue.status === IssueStatus.closed ? 'Closed' : 'Opened'}
                             </span>
                         </div>
                     </div>
