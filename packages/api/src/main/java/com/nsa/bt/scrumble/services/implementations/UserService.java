@@ -17,17 +17,17 @@ public class UserService implements IUserService {
     private IUserRepository userRepository;
 
     @Override
-    public User createUser(User user) {
+    public User createUser(final User user) {
         return userRepository.createUser(user);
     }
 
     @Override
-    public Optional<User> findUserByServiceId(int serviceId) {
+    public Optional<User> findUserByServiceId(final int serviceId) {
         return userRepository.findUserByServiceId(serviceId);
     }
 
     @Override
-    public Optional<User> findUserById(int id, Span span) {
+    public Optional<User> findUserById(final int id, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Find User by ID").asChildOf(span).start();
         var user = userRepository.findUserById(id);
         span.finish();
@@ -35,7 +35,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<String> getToken(int userId, Span span) {
+    public Optional<String> getToken(final int userId, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Retrieve User's Token").asChildOf(span).start();
         var token = userRepository.getToken(userId);
         span.finish();
@@ -43,12 +43,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void addToken(int userId, String token) {
+    public void addToken(final int userId, final String token) {
         userRepository.addToken(userId, token);
     }
 
     @Override
-    public void removeToken(int userId, Span span) {
+    public void removeToken(final int userId, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Remove User's Token").asChildOf(span).start();
         userRepository.removeToken(userId);
         span.finish();

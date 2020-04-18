@@ -11,7 +11,9 @@ public class Workspace {
     private ArrayList<Integer> projectIds;
     private List<User> users;
 
-    public Workspace(int id, User createdBy, String name, String description, ArrayList<Integer> projectIds, List<User> users) {
+    public Workspace(final int id, final User createdBy, final String name,
+                     final String description, final ArrayList<Integer> projectIds,
+                     final List<User> users) {
         this.id = id;
         this.createdBy = createdBy;
         this.name = name;
@@ -27,7 +29,7 @@ public class Workspace {
         return projectIds;
     }
 
-    public void setProjectIds(ArrayList<Integer> projectIds) {
+    public void setProjectIds(final ArrayList<Integer> projectIds) {
         this.projectIds = projectIds;
     }
 
@@ -35,7 +37,7 @@ public class Workspace {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -43,7 +45,7 @@ public class Workspace {
         return createdBy;
     }
 
-    public void setCreatedBy(User createdBy) {
+    public void setCreatedBy(final User createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -51,7 +53,7 @@ public class Workspace {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -59,7 +61,7 @@ public class Workspace {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -67,7 +69,7 @@ public class Workspace {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(final List<User> users) {
         this.users = users;
     }
 }

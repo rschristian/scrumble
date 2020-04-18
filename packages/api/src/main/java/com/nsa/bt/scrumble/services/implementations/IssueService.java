@@ -27,51 +27,46 @@ public class IssueService implements IIssueService {
     private String gitLabApiUrl;
 
     @Autowired
-    RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     @Autowired
-    WorkspaceService workspaceService;
+    private ISprintService sprintService;
 
     @Autowired
-    ISprintService sprintService;
-
-    @Autowired
-    LinearRegression linearRegression;
+    private LinearRegression linearRegression;
 
     @Override
-    public void setStoryPoint(Issue issue, Span span) {
+    public void setStoryPoint(final Issue issue, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Set Story Point").asChildOf(span).start();
-        OptionalInt storyPoint =issue.getLabels()
+        OptionalInt storyPoint = issue.getLabels()
                 .stream()
                 .filter(IssueService::isInteger)
                 .mapToInt(Integer::parseInt)
                 .findFirst();
 
-        if(storyPoint.isPresent()) {
-            issue.setStoryPoint(storyPoint.getAsInt());
-        }
+        if (storyPoint.isPresent()) issue.setStoryPoint(storyPoint.getAsInt());
         span.finish();
     }
 
     // Ref: https://stackoverflow.com/a/5439547/11679751
-    public static boolean isInteger(String s) {
-        return isInteger(s,10);
+    public static boolean isInteger(final String s) {
+        return isInteger(s, 10);
     }
 
-    public static boolean isInteger(String s, int radix) {
-        if(s.isEmpty()) return false;
-        for(int i = 0; i < s.length(); i++) {
-            if(i == 0 && s.charAt(i) == '-') {
-                if(s.length() == 1) return false;
+    public static boolean isInteger(final String s, final int radix) {
+        if (s.isEmpty()) return false;
+        for (int i = 0; i < s.length(); i++) {
+            if (i == 0 && s.charAt(i) == '-') {
+                if (s.length() == 1) return false;
                 else continue;
             }
-            if(Character.digit(s.charAt(i),radix) < 0) return false;
+            if (Character.digit(s.charAt(i), radix) < 0) return false;
         }
         return true;
     }
 
     @Override
-    public String getFilterQuery(String filter, Span span) {
+    public String getFilterQuery(final String filter, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Get Filter Query").asChildOf(span).start();
         switch (filter) {
             case UNPLANNED:
@@ -90,7 +85,7 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public void setProjectName(Issue issue, Project[] projects, Span span) {
+    public void setProjectName(final Issue issue, final Project[] projects, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Set Project Name").asChildOf(span).start();
         for (Project project : projects) {
             if (issue.getProjectId() == project.getId()) {
@@ -102,14 +97,15 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public Issue createIssue(int workspaceId, int projectId,  Issue issue, String accessToken, Span span) {
+    public Issue createIssue(final int workspaceId, final int projectId, final Issue issue, final String accessToken,
+                             Span span) {
         span = ServiceTracer.getTracer().buildSpan("Create Issue").asChildOf(span).start();
         String issueUri = getIssueUri(workspaceId, projectId, issue, accessToken);
         String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
                 gitLabApiUrl, accessToken);
         ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(projectUri, Project[].class);
         Project[] projects = userProjectsResponse.getBody();
-        Issue newIssue = restTemplate.postForObject(issueUri, null , Issue.class);
+        Issue newIssue = restTemplate.postForObject(issueUri, null, Issue.class);
         setStoryPoint(newIssue, span);
         setProjectName(newIssue, projects, span);
         linearRegression.setEstimate(projectId, newIssue, accessToken);
@@ -118,17 +114,20 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken, Span span) {
+    public Issue editIssue(final int workspaceId, final int projectId, final Issue issue, final String accessToken,
+                           Span span) {
         span = ServiceTracer.getTracer().buildSpan("Edit Issue").asChildOf(span).start();
         String uri;
 
-        if(issue.getSprint() != null ) {
+        if (issue.getSprint() != null) {
             int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
             uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
-                    gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getAssignee().getId(), milestoneId, accessToken);
+                    gitLabApiUrl, projectId, issue.getIid(), issue.getTitle(), issue.getDescription(),
+                    issue.getStoryPoint(), issue.getAssignee().getId(), milestoneId, accessToken);
         } else {
             uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
-                    gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getAssignee().getId(), accessToken);
+                    gitLabApiUrl, projectId, issue.getIid(), issue.getTitle(), issue.getDescription(),
+                    issue.getStoryPoint(), issue.getAssignee().getId(), accessToken);
         }
 
         restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
@@ -137,8 +136,8 @@ public class IssueService implements IIssueService {
         return issue;
     }
 
-    private String getIssueUri(int workspaceId, int projectId, Issue issue, String accessToken) {
-        if (issue.getSprint()!= null) {
+    private String getIssueUri(final int workspaceId, final int projectId, final Issue issue, final String accessToken) {
+        if (issue.getSprint() != null) {
             int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
             return String.format("%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
                     gitLabApiUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getAssignee().getId(), milestoneId, accessToken);

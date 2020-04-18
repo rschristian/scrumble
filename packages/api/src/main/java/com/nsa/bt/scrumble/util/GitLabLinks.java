@@ -6,20 +6,20 @@ public class GitLabLinks {
     private String next;
     private String prev;
 
-    public GitLabLinks(String first, String last, String next, String prev) {
+    public GitLabLinks(final String first, final String last, final String next, final String prev) {
         this.first = first;
         this.last = last;
         this.next = next;
         this.prev = prev;
     }
 
-    public GitLabLinks() {}
+    public GitLabLinks() { }
 
     public String getFirst() {
         return first;
     }
 
-    public void setFirst(String first) {
+    public void setFirst(final String first) {
         this.first = first;
     }
 
@@ -27,7 +27,7 @@ public class GitLabLinks {
         return last;
     }
 
-    public void setLast(String last) {
+    public void setLast(final String last) {
         this.last = last;
     }
 
@@ -35,7 +35,7 @@ public class GitLabLinks {
         return next;
     }
 
-    public void setNext(String next) {
+    public void setNext(final String next) {
         this.next = next;
     }
 
@@ -43,7 +43,7 @@ public class GitLabLinks {
         return prev;
     }
 
-    public void setPrev(String prev) {
+    public void setPrev(final String prev) {
         this.prev = prev;
     }
 }

@@ -9,10 +9,9 @@ public class User {
     private String name;
     private ArrayList<Integer> projectIds;
 
-    public User() {
-    }
+    public User() { }
 
-    public User(int id, int serviceId, String providerId) {
+    public User(final int id, final int serviceId, final String providerId) {
         // A users Scrumble id
         this.id = id;
         // The id of that user from the authentication server e.g. a users GitLab id
@@ -22,7 +21,7 @@ public class User {
         this.providerId = providerId;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -34,7 +33,7 @@ public class User {
         return serviceId;
     }
 
-    public void setServiceId(int serviceId) {
+    public void setServiceId(final int serviceId) {
         this.serviceId = serviceId;
     }
 
@@ -42,11 +41,11 @@ public class User {
         return providerId;
     }
 
-    public void setProviderId(String providerId) {
+    public void setProviderId(final String providerId) {
         this.providerId = providerId;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -54,7 +53,7 @@ public class User {
         return name;
     }
 
-    public void setProjectIds(ArrayList<Integer> projectIds) {
+    public void setProjectIds(final ArrayList<Integer> projectIds) {
         this.projectIds = projectIds;
     }
 
@@ -63,14 +62,10 @@ public class User {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(this == obj){
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        } 
-        if(obj == null) {
-            return false;
-        }
-        if(getClass() != obj.getClass()) {
+        } else if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
         User other = (User) obj;

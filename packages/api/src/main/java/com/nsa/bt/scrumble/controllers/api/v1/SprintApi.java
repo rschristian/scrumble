@@ -6,16 +6,12 @@ import com.nsa.bt.scrumble.services.ISprintService;
 import com.nsa.bt.scrumble.services.IUserService;
 
 import io.opentracing.Span;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,30 +20,24 @@ import java.util.Optional;
 public class SprintApi {
 
     @Autowired
-    RestTemplate restTemplate;
+    private IUserService userService;
 
     @Autowired
-    IUserService userService;
-
-    @Autowired
-    ISprintService sprintService;
-
-    @Value("${app.issues.provider.gitlab.baseUrl.api}")
-    private String gitLabBaseUrl;
+    private ISprintService sprintService;
 
     @Value("${app.msg.error.auth}")
     private String authErrorMsg;
 
     @GetMapping("/workspace/{workspaceId}/sprints")
     public ResponseEntity<Object> getWorkspaceSprints(
-            Authentication auth,
-            @PathVariable(value="workspaceId") int workspaceId,
-            @RequestParam(value="filter") String filter
+            final Authentication auth,
+            final @PathVariable(value = "workspaceId") int workspaceId,
+            final @RequestParam(value = "filter") String filter
     ) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /workspace/" + workspaceId + "/sprints").start();
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
-        if(accessTokenOptional.isPresent()) {
+        if (accessTokenOptional.isPresent()) {
             var sprints = sprintService.getSprintsForWorkspace(workspaceId, filter, span);
             span.finish();
             return ResponseEntity.ok().body(sprints);
@@ -58,9 +48,9 @@ public class SprintApi {
 
     @PostMapping("/workspace/{workspaceId}/sprint")
     public ResponseEntity<Object> createSprint(
-            Authentication auth,
-            @PathVariable(value="workspaceId") int workspaceId,
-            @RequestBody Sprint sprint
+            final Authentication auth,
+            final @PathVariable(value = "workspaceId") int workspaceId,
+            final @RequestBody Sprint sprint
     ) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP POST /workspace/" + workspaceId + "/sprint").start();
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
@@ -75,14 +65,14 @@ public class SprintApi {
 
     @PutMapping("/workspace/{workspaceId}/sprint")
     public ResponseEntity<Object> editSprint(
-            Authentication auth,
-            @PathVariable(value="workspaceId") int workspaceId,
+            final Authentication auth,
+            final @PathVariable(value = "workspaceId") int workspaceId,
             @RequestBody Sprint sprint
     ) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP PUT /workspace/" + workspaceId + "/sprint").start();
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
-        if(accessTokenOptional.isPresent()) {
+        if (accessTokenOptional.isPresent()) {
             sprint = sprintService.editSprint(workspaceId, sprint, accessTokenOptional.get(), span);
             span.finish();
             return ResponseEntity.ok().body(sprint);

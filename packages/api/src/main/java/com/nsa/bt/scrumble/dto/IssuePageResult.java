@@ -6,19 +6,18 @@ public class IssuePageResult {
     private ArrayList<Issue> issues;
     private NextResource nextResource;
 
-    public IssuePageResult(ArrayList<Issue> issues, NextResource nextResource) {
+    public IssuePageResult(final ArrayList<Issue> issues, final NextResource nextResource) {
         this.issues = issues;
         this.nextResource = nextResource;
     }
 
-    public IssuePageResult() {
-    }
+    public IssuePageResult() { }
 
     public ArrayList<Issue> getIssues() {
         return issues;
     }
 
-    public void setIssues(ArrayList<Issue> issues) {
+    public void setIssues(final ArrayList<Issue> issues) {
         this.issues = issues;
     }
 
@@ -26,7 +25,7 @@ public class IssuePageResult {
         return nextResource;
     }
 
-    public void setNextResource(NextResource nextResource) {
+    public void setNextResource(final NextResource nextResource) {
         this.nextResource = nextResource;
     }
 }

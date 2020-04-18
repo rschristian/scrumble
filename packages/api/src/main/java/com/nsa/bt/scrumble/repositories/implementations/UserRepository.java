@@ -14,19 +14,19 @@ import java.util.Optional;
 public class UserRepository implements IUserRepository {
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Override
-    public User createUser(User user) {
+    public User createUser(final User user) {
         String insertStatement = "INSERT INTO users (service_id, provider_id) VALUES (?, ?);";
-        Object[] params = new Object[]{ user.getServiceId(), user.getProviderId() };
-        int[] types = new int[]{ Types.INTEGER, Types.VARCHAR };
+        Object[] params = new Object[]{user.getServiceId(), user.getProviderId()};
+        int[] types = new int[]{Types.INTEGER, Types.VARCHAR};
         jdbcTemplate.update(insertStatement, params, types);
         return user;
     }
 
     @Override
-    public Optional<User> findUserByServiceId(int serviceId) {
+    public Optional<User> findUserByServiceId(final int serviceId) {
         try {
             return jdbcTemplate.queryForObject(
                     "SELECT * FROM users WHERE service_id = ?;",
@@ -44,7 +44,7 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public Optional<User> findUserById(int id) {
+    public Optional<User> findUserById(final int id) {
         try {
             return jdbcTemplate.queryForObject(
                     "SELECT * FROM users WHERE id = ?;",
@@ -62,23 +62,23 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public void addToken(int userId, String token) {
+    public void addToken(final int userId, final String token) {
         String insertStatement = "UPDATE users SET access_token = ? WHERE id = ?";
-        Object[] params = new Object[]{ token, userId };
-        int[] types = new int[]{ Types.VARCHAR, Types.INTEGER };
+        Object[] params = new Object[]{token, userId};
+        int[] types = new int[]{Types.VARCHAR, Types.INTEGER};
         jdbcTemplate.update(insertStatement, params, types);
     }
 
     @Override
-    public void removeToken(int userId) {
+    public void removeToken(final int userId) {
         String insertStatement = "UPDATE users SET access_token = null WHERE id = ?";
-        Object[] params = new Object[]{ userId };
-        int[] types = new int[]{ Types.INTEGER };
+        Object[] params = new Object[]{userId};
+        int[] types = new int[]{Types.INTEGER};
         jdbcTemplate.update(insertStatement, params, types);
     }
 
     @Override
-    public Optional<String> getToken(int userId) {
+    public Optional<String> getToken(final int userId) {
         try {
             return jdbcTemplate.queryForObject(
                     "SELECT * FROM users WHERE id = ?;",

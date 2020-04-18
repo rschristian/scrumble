@@ -11,7 +11,7 @@ public class ScrumbleUser implements Serializable {
     @JsonAlias("avatar_url")
     private final String avatarUrl;
 
-    public ScrumbleUser (int id, String name, String username,  String avatarUrl) {
+    public ScrumbleUser(final int id, final String name, final String username, final String avatarUrl) {
         this.id = id;
         this.name = name;
         this.username = username;

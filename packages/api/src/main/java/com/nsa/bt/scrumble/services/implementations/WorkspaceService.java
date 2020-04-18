@@ -6,8 +6,6 @@ import com.nsa.bt.scrumble.models.Workspace;
 import com.nsa.bt.scrumble.repositories.IWorkspaceRepository;
 import com.nsa.bt.scrumble.services.IWorkspaceService;
 import io.opentracing.Span;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,17 +18,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class WorkspaceService implements IWorkspaceService {
-
-    private static final Logger logger = LoggerFactory.getLogger(WorkspaceService.class);
-
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabApiUrl;
 
     @Autowired
-    RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     @Autowired
-    IWorkspaceRepository workspaceRepository;
+    private IWorkspaceRepository workspaceRepository;
 
     @Override
     public List<Workspace> getAllWorkspaces(Span span) {
@@ -41,7 +36,7 @@ public class WorkspaceService implements IWorkspaceService {
     }
 
     @Override
-    public ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId, Span span) {
+    public ArrayList<Integer> getProjectIdsForWorkspace(final int workspaceId, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Get Project IDs for a Given Workspace").asChildOf(span).start();
         var projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId, span);
         span.finish();
@@ -49,7 +44,7 @@ public class WorkspaceService implements IWorkspaceService {
     }
 
     @Override
-    public Workspace createWorkspace(Workspace workspace, User user, Span span) {
+    public Workspace createWorkspace(Workspace workspace, final User user, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Create Workspace").asChildOf(span).start();
         workspace = workspaceRepository.createWorkspace(workspace, user);
         span.finish();
@@ -57,18 +52,18 @@ public class WorkspaceService implements IWorkspaceService {
     }
 
     @Override
-    public void editWorkspace(Workspace updatedWorkspace, Span span) {
+    public void editWorkspace(final Workspace updatedWorkspace, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Edit Workspace").asChildOf(span).start();
         workspaceRepository.editWorkspace(updatedWorkspace);
         span.finish();
     }
 
     @Override
-    public List<Project> getWorkspaceProjects(int workspaceId, String accessToken, Span span) {
+    public List<Project> getWorkspaceProjects(final int workspaceId, final String accessToken, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Get all Workspace Projects").asChildOf(span).start();
         ArrayList<Integer> projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId, span);
         List<Project> result = new ArrayList<>();
-        for(int projectId : projectIds) {
+        for (int projectId : projectIds) {
             String uri = String.format("%s/projects/%d?simple=true&access_token=%3s",
                     gitLabApiUrl, projectId, accessToken);
             result.add(restTemplate.getForObject(uri, Project.class));
@@ -78,7 +73,7 @@ public class WorkspaceService implements IWorkspaceService {
     }
 
     @Override
-    public void setWorkspaceUsers(Workspace workspace, Optional<String> accessToken, Span span) {
+    public void setWorkspaceUsers(final Workspace workspace, final Optional<String> accessToken, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Set Workspace Users").asChildOf(span).start();
         List<User> allUsers = new ArrayList<User>();
         Hashtable<User, ArrayList<Integer>> usersProjectIds = new Hashtable<User, ArrayList<Integer>>();
@@ -86,10 +81,10 @@ public class WorkspaceService implements IWorkspaceService {
                 String uri = String.format("%1s/projects/%2s/users?access_token=%3s",
                 gitLabApiUrl, projectId, accessToken.get());
                 ResponseEntity<ArrayList<User>> projectUsersResponse = restTemplate.exchange(
-                    uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
+                    uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() { });
                 ArrayList<User> projectUsers = projectUsersResponse.getBody();
                 projectUsers.forEach((user) -> {
-                    if(usersProjectIds.containsKey(user)) {
+                    if (usersProjectIds.containsKey(user)) {
                         ArrayList<Integer> projectIdArray = usersProjectIds.get(user);
                         ArrayList<Integer> uniqueProjectIdArray = projectIdArray.stream().distinct().collect(Collectors.toCollection(ArrayList::new)); // removes any duplicates
                         uniqueProjectIdArray.add(projectId);
@@ -105,7 +100,7 @@ public class WorkspaceService implements IWorkspaceService {
             Set<User> uniqueUsers = new HashSet<User>(allUsers); // getting all unique users
             List<User> resultant = new ArrayList<User>(uniqueUsers); // adding unique users to list instead of set
             resultant.forEach((user) -> {
-                if(usersProjectIds.containsKey(user)) {
+                if (usersProjectIds.containsKey(user)) {
                     user.setProjectIds(usersProjectIds.get(user));
                 }
             });

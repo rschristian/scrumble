@@ -22,16 +22,16 @@ import java.util.Optional;
 public class WorkspaceApi {
 
     @Autowired
-    IWorkspaceService workspaceService;
+    private IWorkspaceService workspaceService;
 
     @Autowired
-    IUserService userService;
+    private IUserService userService;
 
     @Value("${app.msg.error.auth}")
     private String authErrorMsg;
 
     @GetMapping("/workspaces")
-    public ResponseEntity<Object> getAllWorkspaces(){
+    public ResponseEntity<Object> getAllWorkspaces() {
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /workspaces").start();
         var workspaces = workspaceService.getAllWorkspaces(span);
         span.finish();
@@ -39,7 +39,8 @@ public class WorkspaceApi {
     }
 
     @GetMapping("/workspace/{id}/projects")
-    public ResponseEntity<Object> getWorkspaceProjects(Authentication authentication, @PathVariable(value="id") int workspaceId){
+    public ResponseEntity<Object> getWorkspaceProjects(final Authentication authentication,
+                                                       final @PathVariable(value = "id") int workspaceId) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /workspace/" + workspaceId + "/projects").start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
@@ -52,11 +53,11 @@ public class WorkspaceApi {
     }
 
     @PostMapping("/workspace")
-    public ResponseEntity<Object> createWorkspace(Authentication authentication, @RequestBody Workspace workspace){
+    public ResponseEntity<Object> createWorkspace(final Authentication authentication, @RequestBody Workspace workspace) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP POST /workspace").start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
-        if(accessTokenOptional.isPresent()) {
+        if (accessTokenOptional.isPresent()) {
             workspaceService.setWorkspaceUsers(workspace, accessTokenOptional, span);
             workspace = workspaceService.createWorkspace(
                     workspace,
@@ -71,11 +72,11 @@ public class WorkspaceApi {
     }
 
     @PutMapping("/workspace/{id}")
-    public ResponseEntity<Object> editWorkspace(Authentication authentication, @RequestBody Workspace workspace){
+    public ResponseEntity<Object> editWorkspace(final Authentication authentication, final @RequestBody Workspace workspace) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP PUT /workspace/" + workspace.getId()).start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
-        if(accessTokenOptional.isPresent()) {
+        if (accessTokenOptional.isPresent()) {
             workspaceService.setWorkspaceUsers(workspace, accessTokenOptional, span);
             workspaceService.editWorkspace(workspace, span);
             span.finish();

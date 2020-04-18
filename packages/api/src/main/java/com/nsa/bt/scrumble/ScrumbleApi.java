@@ -17,12 +17,12 @@ import org.springframework.web.client.RestTemplate;
 @EnableConfigurationProperties(AppProperties.class)
 public class ScrumbleApi extends SpringBootServletInitializer {
 
-        public static void main(String[] args) throws Exception  {
+        public static void main(final String[] args) throws Exception  {
                 SpringApplication.run(ScrumbleApi.class, args);
         }
 
         @Bean
-        public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        public RestTemplate restTemplate(final RestTemplateBuilder builder) {
             return builder.build();
         }
 }

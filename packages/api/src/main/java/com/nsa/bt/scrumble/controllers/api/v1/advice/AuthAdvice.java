@@ -8,20 +8,18 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static org.springframework.http.HttpStatus.*;
-
 @ControllerAdvice
 public class AuthAdvice {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthAdvice.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthAdvice.class);
 
     @ExceptionHandler({AccessDeniedException.class})
-    public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException e) {
-        return error(FORBIDDEN, e);
+    public ResponseEntity<String> handleAccessDeniedException(final AccessDeniedException e) {
+        return error(e);
     }
 
-    private ResponseEntity<String> error(HttpStatus status, Exception e) {
-        logger.error(e.getMessage());
-        return ResponseEntity.status(status).body(e.getMessage());
+    private ResponseEntity<String> error(final Exception e) {
+        LOGGER.error(e.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
     }
 }

@@ -21,28 +21,28 @@ import java.util.*;
 @Service
 public class SprintService implements ISprintService {
 
-    private static final Logger logger = LoggerFactory.getLogger(SprintService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SprintService.class);
 
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabApiUrl;
 
     @Autowired
-    ISprintRepository sprintRepository;
+    private ISprintRepository sprintRepository;
 
     @Autowired
-    IWorkspaceRepository workspaceRepository;
+    private IWorkspaceRepository workspaceRepository;
 
     private final RestTemplate restTemplate;
 
     @Autowired
-    public SprintService(RestTemplateBuilder restTemplateBuilder) {
+    public SprintService(final RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder
             .errorHandler(new MilestoneRestTemplateResponseErrorHandler())
             .build();
     }
 
     @Override
-    public Sprint createSprint(int workspaceId, Sprint sprint, String accessToken, Span span) {
+    public Sprint createSprint(final int workspaceId, Sprint sprint, final String accessToken, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Creat Sprint").asChildOf(span).start();
         String uri;
         var projectMilestoneIds = new HashMap<String, Integer>();
@@ -51,7 +51,7 @@ public class SprintService implements ISprintService {
         for (int projectId: projectIds) {
             uri = String.format("%s/projects/%d/milestones?title=%s&description=%s&start_date=%tF&due_date=%tF&access_token=%s",
                     gitLabApiUrl, projectId, sprint.getTitle(), sprint.getDescription(), sprint.getStartDate(), sprint.getDueDate(), accessToken);
-            Sprint milestone = restTemplate.postForObject(uri, null , Sprint.class);
+            Sprint milestone = restTemplate.postForObject(uri, null, Sprint.class);
             projectMilestoneIds.put(Integer.toString(projectId), milestone.getId());
         }
         sprint.setProjectIdToMilestoneIds(projectMilestoneIds);
@@ -61,7 +61,7 @@ public class SprintService implements ISprintService {
     }
 
     @Override
-    public Sprint editSprint(int workspaceId, Sprint sprint, String accessToken, Span span) {
+    public Sprint editSprint(final int workspaceId, Sprint sprint, final String accessToken, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Edit Sprint").asChildOf(span).start();
         for (Map.Entry<String, Integer> pair : sprintRepository.getProjectIdsToMilestoneIds(sprint.getId(), span).entrySet()) {
             editGitLabMilestone(Integer.parseInt(pair.getKey()), pair.getValue(), sprint, accessToken, span);
@@ -72,7 +72,7 @@ public class SprintService implements ISprintService {
     }
 
     @Override
-    public List<Sprint> getSprintsForWorkspace(int workspaceId, String filter, Span span) {
+    public List<Sprint> getSprintsForWorkspace(final int workspaceId, final String filter, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Get Sprints for Workspace").asChildOf(span).start();
         var sprints = sprintRepository.getAllSprintsForWorkspace(workspaceId, filter);
         span.finish();
@@ -80,7 +80,7 @@ public class SprintService implements ISprintService {
     }
 
     @Override
-    public Issue setSprintForIssue(int workspaceId, Issue issue, List<Sprint> sprints, Span span) {
+    public Issue setSprintForIssue(final int workspaceId, final Issue issue, final List<Sprint> sprints, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Set Sprint for Issue").asChildOf(span).start();
         // Initial assigning of sprint will be milestone data from api. If present, milestone values
         // must be swapped with Scrumble sprint values for future operations. Most importantly, id needs to be changed
@@ -102,7 +102,7 @@ public class SprintService implements ISprintService {
     }
 
     @Override
-    public int getMilestoneId(int workspaceId, int projectId, int sprintId) {
+    public int getMilestoneId(final int workspaceId, final int projectId, final int sprintId) {
         if (sprintId == 0) {
             return sprintId;
         }
@@ -112,12 +112,13 @@ public class SprintService implements ISprintService {
             return sprint.getProjectIdToMilestoneIds().get(Integer.toString(projectId));
         } catch (NullPointerException e) {
 
-            logger.error(String.format("Project with id %d does not have a corresponding milestone for sprint with id %d", projectId, sprintId));
+            LOGGER.error(String.format("Project with id %d does not have a corresponding milestone for sprint with id %d", projectId, sprintId));
         }
         return 0;
     }
 
-    private void editGitLabMilestone(int projectId, int milestoneId, Sprint sprint, String accessToken, Span span) {
+    private void editGitLabMilestone(final int projectId, final int milestoneId, final Sprint sprint,
+                                     final String accessToken, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Edit GitLab Milestone").asChildOf(span).start();
         String stateEvent = (sprint.getStatus().equalsIgnoreCase("active")) ? "activate" : "close";
         String uri = String.format("%s/projects/%d/milestones/%d?title=%s&description=%s&start_date=%tF&due_date=%tF&state_event=%s&access_token=%s",

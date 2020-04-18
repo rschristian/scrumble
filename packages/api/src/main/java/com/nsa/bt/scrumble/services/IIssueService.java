@@ -5,11 +5,8 @@ import com.nsa.bt.scrumble.dto.Project;
 import io.opentracing.Span;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-
 @Service
 public interface IIssueService {
-
     void setStoryPoint(Issue issue, Span span);
 
     void setProjectName(Issue issue, Project[] projects, Span span);

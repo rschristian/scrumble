@@ -5,7 +5,6 @@ import com.nsa.bt.scrumble.dto.NextResource;
 import io.opentracing.Span;
 
 public interface IIssuePagingService {
-
     NextResource findNextProjectWithQueryResults(NextResource nextResource, int workspaceId,  int projectId, String uri, Span span);
 
     String getNextProjectIssuesUri(String uri, int nextProjectId, Span span);

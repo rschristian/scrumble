@@ -18,24 +18,24 @@ import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
 @Component
 public class MilestoneRestTemplateResponseErrorHandler implements ResponseErrorHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(MilestoneRestTemplateResponseErrorHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MilestoneRestTemplateResponseErrorHandler.class);
 
     @Override
-    public boolean hasError(ClientHttpResponse httpResponse) throws IOException {
-        return (httpResponse.getStatusCode().series() == CLIENT_ERROR ||
-                httpResponse.getStatusCode().series() == SERVER_ERROR);
+    public boolean hasError(final ClientHttpResponse httpResponse) throws IOException {
+        return (httpResponse.getStatusCode().series() == CLIENT_ERROR
+                || httpResponse.getStatusCode().series() == SERVER_ERROR);
     }
 
     @Override
-    public void handleError(ClientHttpResponse httpResponse)
+    public void handleError(final ClientHttpResponse httpResponse)
             throws IOException {
         String milestoneNameInUseError = "already being used for another group or project milestone";
         BufferedReader reader = new BufferedReader(new InputStreamReader(httpResponse.getBody()));
         String httpBodyResponse = reader.lines().collect(Collectors.joining(""));
-        if(httpBodyResponse.contains(milestoneNameInUseError) && httpBodyResponse.contains("title")) {
+        if (httpBodyResponse.contains(milestoneNameInUseError) && httpBodyResponse.contains("title")) {
             throw new RestTemplateException("Sprint name in use");
         } else {
-            logger.error(httpBodyResponse);
+            LOGGER.error(httpBodyResponse);
             throw new RestTemplateException(httpBodyResponse);
         }
     }

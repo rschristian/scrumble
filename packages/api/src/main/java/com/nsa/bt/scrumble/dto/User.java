@@ -3,7 +3,6 @@ package com.nsa.bt.scrumble.dto;
 import com.fasterxml.jackson.annotation.JsonAlias;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.ArrayList;
 
 public class User implements Serializable {
@@ -14,7 +13,8 @@ public class User implements Serializable {
     private final String avatarUrl;
     private final ArrayList<Integer> projectIds;
 
-    public User (int id, String name, String username, String avatarUrl, ArrayList<Integer> projectIds) {
+    public User(final int id, final String name, final String username,
+                 final String avatarUrl, final ArrayList<Integer> projectIds) {
         this.id = id;
         this.name = name;
         this.username = username;

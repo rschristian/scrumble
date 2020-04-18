@@ -13,16 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,29 +27,23 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class AuthenticationApi {
 
-    public AuthenticationApi (AppProperties appProperties) {
+    public AuthenticationApi(final AppProperties appProperties) {
         this.appProperties = appProperties;
     }
-    private static final Logger logger = LoggerFactory.getLogger(UserDetailsApi.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsApi.class);
     private final AppProperties appProperties;
 
     @Autowired
-    OAuth2AuthorizedClientService auth2AuthorizedClientService;
+    private TokenProvider tokenProvider;
 
     @Autowired
-    RestTemplate restTemplate;
+    private IUserService userService;
 
     @Autowired
-    TokenProvider tokenProvider;
-
-    @Autowired
-    IUserService userService;
-
-    @Autowired
-    TokenUtils tokenUtils;
+    private TokenUtils tokenUtils;
 
     @GetMapping("/auth/token")
-    public ResponseEntity<Object> exchangeShortLifeToken(HttpServletRequest request) {
+    public ResponseEntity<Object> exchangeShortLifeToken(final HttpServletRequest request) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /auth/token").start();
         String jwt = tokenUtils.getJwtFromRequest(request, span);
         String token = "";
@@ -62,7 +53,7 @@ public class AuthenticationApi {
             Optional<User> userOptional = userService.findUserById(userId.intValue(), span);
 
             if (userOptional.isEmpty()) {
-                logger.error("User not found");
+                LOGGER.error("User not found");
                 span.finish();
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
             }
@@ -73,7 +64,7 @@ public class AuthenticationApi {
     }
 
     @DeleteMapping("/auth/token")
-    public ResponseEntity<Object> deleteToken(Authentication authentication) {
+    public ResponseEntity<Object> deleteToken(final Authentication authentication) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP DELETE /auth/token").start();
 
         try {
