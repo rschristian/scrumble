@@ -51,7 +51,7 @@ public class UserDetailsApi {
     public ResponseEntity<Object> getUserInfo(Authentication authentication){
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /user/info").start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
         int serviceId = userPrincipal.getServiceId();
         if(accessTokenOptional.isPresent()) {
             String uri = String.format("%1s/users/%2s?access_token=%3s", gitLabBaseUrlApi, serviceId, accessTokenOptional.get());

@@ -11,13 +11,11 @@ import java.util.Optional;
 
 public interface IWorkspaceService {
 
-    ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId);
+    ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId, Span span);
 
     Workspace createWorkspace(Workspace workspace, User user);
 
     List<Workspace> getAllWorkspaces(Span span);
-
-    void deleteWorkspace(int workspaceId);
 
     void editWorkspace(Workspace updatedWorkspace);
 

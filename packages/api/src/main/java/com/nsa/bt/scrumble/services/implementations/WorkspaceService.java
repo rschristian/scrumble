@@ -33,8 +33,11 @@ public class WorkspaceService implements IWorkspaceService {
     IWorkspaceRepository workspaceRepository;
 
     @Override
-    public ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId) {
-        return workspaceRepository.projectIdsForWorkspace(workspaceId);
+    public ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Get Project IDs for a Given Workspace").asChildOf(span).start();
+        var projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId);
+        span.finish();
+        return projectIds;
     }
 
     @Override
@@ -44,15 +47,10 @@ public class WorkspaceService implements IWorkspaceService {
 
     @Override
     public List<Workspace> getAllWorkspaces(Span span) {
-        Span newSpan = ServiceTracer.getTracer().buildSpan("Return all workspaces").asChildOf(span).start();
-        var allWorkspaces = workspaceRepository.getAllWorkspaces(newSpan);
-        newSpan.finish();
+        span = ServiceTracer.getTracer().buildSpan("Return all workspaces").asChildOf(span).start();
+        var allWorkspaces = workspaceRepository.getAllWorkspaces(span);
+        span.finish();
         return allWorkspaces;
-    }
-
-    @Override
-    public void deleteWorkspace(int workspaceId) {
-        workspaceRepository.deleteWorkspace(workspaceId);
     }
 
     @Override

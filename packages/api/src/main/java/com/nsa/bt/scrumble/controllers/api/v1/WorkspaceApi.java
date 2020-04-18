@@ -41,7 +41,7 @@ public class WorkspaceApi {
     public ResponseEntity<Object> getWorkspaceProjects(Authentication authentication, @PathVariable(value="id") int workspaceId){
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /workspace/" + workspaceId + "/projects").start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
         var projects = accessTokenOptional.<ResponseEntity<Object>>map(s ->
                 ResponseEntity.ok().body(workspaceService.getWorkspaceProjects(workspaceId, s))).orElseGet(() ->
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(authErrorMsg)
@@ -54,7 +54,7 @@ public class WorkspaceApi {
     public ResponseEntity<Object> createWorkspace(Authentication authentication, @RequestBody Workspace workspace){
         Span span = ApiTracer.getTracer().buildSpan("HTTP POST /workspace").start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
         if(accessTokenOptional.isPresent()) {
             workspaceService.setWorkspaceUsers(workspace, accessTokenOptional);
             span.finish();
@@ -71,7 +71,7 @@ public class WorkspaceApi {
     public ResponseEntity<Object> editWorkspace(Authentication authentication, @RequestBody Workspace workspace){
         Span span = ApiTracer.getTracer().buildSpan("HTTP PUT /workspace/" + workspace.getId()).start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
         if(accessTokenOptional.isPresent()) {
             workspaceService.setWorkspaceUsers(workspace, accessTokenOptional);
             workspaceService.editWorkspace(workspace);

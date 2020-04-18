@@ -6,6 +6,7 @@ import com.nsa.bt.scrumble.models.Sprint;
 import com.nsa.bt.scrumble.repositories.ISprintRepository;
 import com.nsa.bt.scrumble.repositories.IWorkspaceRepository;
 import com.nsa.bt.scrumble.services.ISprintService;
+import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,13 +59,11 @@ public class SprintService implements ISprintService {
     }
 
     @Override
-    public void deleteSprint(int sprintId) {
-        sprintRepository.deleteSprint(sprintId);
-    }
-
-    @Override
-    public List<Sprint> getSprintsForWorkspace(int workspaceId, String filter) {
-        return sprintRepository.getAllSprintsForWorkspace(workspaceId, filter);
+    public List<Sprint> getSprintsForWorkspace(int workspaceId, String filter, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Get Sprints for Workspace").asChildOf(span).start();
+        var sprints = sprintRepository.getAllSprintsForWorkspace(workspaceId, filter);
+        span.finish();
+        return sprints;
     }
 
     @Override
@@ -76,16 +75,12 @@ public class SprintService implements ISprintService {
     }
 
     @Override
-    public List<Sprint> getPageOfSprints(int workspaceId, int pageNumber, int pageSize) {
-        return sprintRepository.getPageOfSprints(workspaceId, pageNumber, pageSize);
-    }
-
-
-    @Override
-    public Issue setSprintForIssue(int workspaceId, Issue issue, List<Sprint> sprints) {
+    public Issue setSprintForIssue(int workspaceId, Issue issue, List<Sprint> sprints, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Set Sprint for Issue").asChildOf(span).start();
         // Initial assigning of sprint will be milestone data from api. If present, milestone values
         // must be swapped with Scrumble sprint values for future operations. Most importantly, id needs to be changed
         if (issue.getSprint() == null) {
+            span.finish();
             return issue;
         }
         for (Sprint sprint : sprints) {
@@ -97,7 +92,7 @@ public class SprintService implements ISprintService {
                 }
             }
         }
-
+        span.finish();
         return issue;
     }
 
@@ -126,6 +121,6 @@ public class SprintService implements ISprintService {
         }
         String uri = String.format("%s/projects/%d/milestones/%d?title=%s&description=%s&start_date=%tF&due_date=%tF&state_event=%s&access_token=%s",
                 gitLabApiUrl, projectId, milestoneId, sprint.getTitle(), sprint.getDescription(), sprint.getStartDate(), sprint.getDueDate(), stateEvent, accessToken);
-        ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.PUT, null, String.class);
+        restTemplate.exchange(uri, HttpMethod.PUT, null, String.class);
     }
 }

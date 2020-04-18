@@ -6,12 +6,10 @@ import com.nsa.bt.scrumble.regression.LinearRegression;
 import com.nsa.bt.scrumble.services.IIssueService;
 
 import com.nsa.bt.scrumble.services.ISprintService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.opentracing.Span;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -20,8 +18,6 @@ import java.util.*;
 
 @Service
 public class IssueService implements IIssueService {
-
-    private static final Logger logger = LoggerFactory.getLogger(IssueService.class);
 
     private static final String UNPLANNED = "unplanned";
     private static final String OPENED = "opened";
@@ -43,7 +39,8 @@ public class IssueService implements IIssueService {
     LinearRegression linearRegression;
 
     @Override
-    public void setStoryPoint(Issue issue) {
+    public void setStoryPoint(Issue issue, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Set Story Point").asChildOf(span).start();
         OptionalInt storyPoint =issue.getLabels()
                 .stream()
                 .filter(IssueService::isInteger)
@@ -53,11 +50,7 @@ public class IssueService implements IIssueService {
         if(storyPoint.isPresent()) {
             issue.setStoryPoint(storyPoint.getAsInt());
         }
-    }
-
-    @Override
-    public void filterAndSetStoryPoint(ArrayList<Issue> issues) {
-        issues.forEach(this::setStoryPoint);
+        span.finish();
     }
 
     // Ref: https://stackoverflow.com/a/5439547/11679751
@@ -78,71 +71,55 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public  ArrayList<Issue> searchForIssue(int workspaceId, String searchFor, String filter, String accessToken) {
-        var issues = new ArrayList<Issue>();
-        ArrayList<Integer> projectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
-        String uri;
-
-        for(int projectId : projectIds) {
-            uri = String.format("%s/projects/%d/issues?%s&search=%s&access_token=%s",
-                    gitLabApiUrl, projectId, getFilterQuery(filter), searchFor, accessToken);
-
-            ResponseEntity<ArrayList<Issue>> issuesResponse =  restTemplate.exchange(uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
-            var matchingIssues = issuesResponse.getBody();
-            filterAndSetStoryPoint(issues);
-            if(!matchingIssues.isEmpty()) {
-                issues.addAll(matchingIssues);
-            }
-        }
-        return issues;
-    }
-
-    @Override
-    public String getFilterQuery(String filter) {
+    public String getFilterQuery(String filter, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Get Filter Query").asChildOf(span).start();
         switch (filter) {
             case UNPLANNED:
+                span.finish();
                 return "labels=unplanned";
             case OPENED:
+                span.finish();
                 return "state=opened";
             case CLOSED:
+                span.finish();
                 return "state=closed";
             default:
+                span.finish();
                 return "scope=all";
         }
     }
 
-    private HttpEntity<String> getApplicationJsonHeaders() {
-        var headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        return new HttpEntity(headers);
-    }
-
     @Override
-    public void setProjectName(Issue issue, Project[] projects) {
-        for(int i = 0; i< projects.length; i++) {
-            if(issue.getProjectId() == projects[i].getId()) {
-                issue.setProjectName(projects[i].getName());
+    public void setProjectName(Issue issue, Project[] projects, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Set Project Name").asChildOf(span).start();
+        for (Project project : projects) {
+            if (issue.getProjectId() == project.getId()) {
+                issue.setProjectName(project.getName());
                 return;
             }
         }
+        span.finish();
     }
 
     @Override
-    public Issue createIssue(int workspaceId, int projectId,  Issue issue, String accessToken) {
+    public Issue createIssue(int workspaceId, int projectId,  Issue issue, String accessToken, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Create Issue").asChildOf(span).start();
         String issueUri = getIssueUri(workspaceId, projectId, issue, accessToken);
         String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
                 gitLabApiUrl, accessToken);
         ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(projectUri, Project[].class);
         Project[] projects = userProjectsResponse.getBody();
         Issue newIssue = restTemplate.postForObject(issueUri, null , Issue.class);
-        setStoryPoint(newIssue);
-        setProjectName(newIssue, projects);
+        setStoryPoint(newIssue, span);
+        setProjectName(newIssue, projects, span);
         linearRegression.setEstimate(projectId, newIssue, accessToken);
+        span.finish();
         return newIssue;
     }
 
     @Override
-    public Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken) {
+    public Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Edit Issue").asChildOf(span).start();
         String uri;
 
         if(issue.getSprint() != null ) {
@@ -156,6 +133,7 @@ public class IssueService implements IIssueService {
 
         restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
         linearRegression.setEstimate(projectId, issue, accessToken);
+        span.finish();
         return issue;
     }
 

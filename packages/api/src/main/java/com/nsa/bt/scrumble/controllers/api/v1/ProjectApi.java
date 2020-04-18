@@ -44,7 +44,7 @@ public class ProjectApi {
         var jsonHeaders = new HttpEntity(headers);
 
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
         if(accessTokenOptional.isPresent()) {
             String uri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
                     gitLabBaseUrl, accessTokenOptional.get());

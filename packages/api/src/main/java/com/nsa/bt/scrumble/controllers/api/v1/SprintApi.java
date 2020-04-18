@@ -44,9 +44,9 @@ public class SprintApi {
             @RequestParam(value="filter") String filter) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /workspace/" + workspaceId + "/sprints").start();
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
         if(accessTokenOptional.isPresent()) {
-            var sprints = sprintService.getSprintsForWorkspace(workspaceId, filter);
+            var sprints = sprintService.getSprintsForWorkspace(workspaceId, filter, span);
             span.finish();
             return ResponseEntity.ok().body(sprints);
         }
@@ -61,7 +61,7 @@ public class SprintApi {
             @RequestBody Sprint sprint) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP POST /workspace/" + workspaceId + "/sprint").start();
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
         var response = accessTokenOptional.<ResponseEntity<Object>>map(s ->
                 ResponseEntity.ok().body(sprintService.createSprint(workspaceId, sprint, s))).orElseGet(() ->
                 ResponseEntity.status(HttpStatus.FORBIDDEN).body(authErrorMsg)
@@ -77,7 +77,7 @@ public class SprintApi {
             @RequestBody Sprint sprint) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP PUT /workspace/" + workspaceId + "/sprint").start();
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
         if(accessTokenOptional.isPresent()) {
             sprint = sprintService.editSprint(workspaceId, sprint, accessTokenOptional.get());
             span.finish();

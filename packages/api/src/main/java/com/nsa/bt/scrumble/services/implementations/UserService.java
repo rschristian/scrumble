@@ -4,6 +4,7 @@ import com.nsa.bt.scrumble.models.User;
 import com.nsa.bt.scrumble.repositories.IUserRepository;
 import com.nsa.bt.scrumble.services.IUserService;
 
+import io.opentracing.Span;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +27,19 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<User> findUserById(int id) {
-        return userRepository.findUserById(id);
+    public Optional<User> findUserById(int id, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Find User by ID").asChildOf(span).start();
+        var user = userRepository.findUserById(id);
+        span.finish();
+        return user;
+    }
+
+    @Override
+    public Optional<String> getToken(int userId, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Retrieve User's Token").asChildOf(span).start();
+        var token = userRepository.getToken(userId);
+        span.finish();
+        return token;
     }
 
     @Override
@@ -36,12 +48,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void removeToken(int userId) {
+    public void removeToken(int userId, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Remove User's Token").asChildOf(span).start();
         userRepository.removeToken(userId);
-    }
-
-    @Override
-    public Optional<String> getToken(int userId) {
-        return userRepository.getToken(userId);
+        span.finish();
     }
 }

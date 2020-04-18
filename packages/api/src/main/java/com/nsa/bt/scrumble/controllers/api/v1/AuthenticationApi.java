@@ -54,22 +54,25 @@ public class AuthenticationApi {
     public ResponseEntity<Object> exchangeShortLifeToken(HttpServletRequest request) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /auth/token").start();
         var tokenResponse = new HashMap<>();
-        String jwt = tokenUtils.getJwtFromRequest(request);
-        String longLifeToken = null;
+        String jwt = tokenUtils.getJwtFromRequest(request, span);
 
         if (StringUtils.hasText(jwt)) {
-            Long userId = tokenProvider.getUserIdFromToken(jwt);
-            Optional<User> userOptional = userService.findUserById(userId.intValue());
+            Long userId = tokenProvider.getUserIdFromToken(jwt, span);
+            Optional<User> userOptional = userService.findUserById(userId.intValue(), span);
 
-            if (userOptional.isPresent()){
-                longLifeToken =  tokenProvider.createToken(userId.intValue(), appProperties.getAuth().getLongLifeTokenExpirationMsec());
-                tokenResponse.put("jwt", longLifeToken);
-            } else {
+            if (userOptional.isEmpty()) {
                 logger.error("User not found");
                 tokenResponse.put("error", "User not found");
                 span.finish();
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(tokenResponse);
             }
+            tokenResponse.put("jwt",
+                    tokenProvider.createToken(
+                            userId.intValue(),
+                            appProperties.getAuth().getLongLifeTokenExpirationMsec(),
+                            span
+                    )
+            );
         }
         span.finish();
         return ResponseEntity.ok().body(tokenResponse);
@@ -78,18 +81,16 @@ public class AuthenticationApi {
     @DeleteMapping("/auth/token")
     public ResponseEntity<Object> deleteToken(Authentication authentication) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP DELETE /auth/token").start();
-        var deleteTokenResponse = new HashMap<>();
 
         try {
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-            userService.removeToken(userPrincipal.getId());
-            deleteTokenResponse.put("success", true);
-
+            userService.removeToken(userPrincipal.getId(), span);
             span.finish();
-            return ResponseEntity.ok().body(deleteTokenResponse);
+
+            return ResponseEntity.ok().body(null);
         } catch (InternalAuthenticationServiceException exception) {
             span.finish();
-            return ResponseEntity.ok().body(deleteTokenResponse);
+            return ResponseEntity.status(500).body(null);
         }
     }
 }

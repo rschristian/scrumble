@@ -2,7 +2,6 @@ package com.nsa.bt.scrumble.services.implementations;
 
 import io.jaegertracing.Configuration;
 import io.jaegertracing.internal.JaegerTracer;
-import io.opentracing.Tracer;
 
 public class ServiceTracer {
     public static JaegerTracer getTracer() {
