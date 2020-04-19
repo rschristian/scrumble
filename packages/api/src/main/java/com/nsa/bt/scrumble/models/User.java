@@ -1,9 +1,13 @@
 package com.nsa.bt.scrumble.models;
 
+import java.util.ArrayList;
+
 public class User {
     private int id;
     private int serviceId;
     private String providerId;
+    private String name;
+    private ArrayList<Integer> projectIds;
 
     public User() {
     }
@@ -18,12 +22,12 @@ public class User {
         this.providerId = providerId;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getServiceId() {
@@ -40,5 +44,40 @@ public class User {
 
     public void setProviderId(String providerId) {
         this.providerId = providerId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public ArrayList<Integer> getProjectIds() {
+        return projectIds;
+    }
+
+    public void setProjectIds(ArrayList<Integer> projectIds) {
+        this.projectIds = projectIds;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        } else if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        User other = (User) obj;
+        return id == other.id;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + id;
+        return result;
     }
 }

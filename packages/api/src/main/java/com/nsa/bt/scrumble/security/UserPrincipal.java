@@ -12,13 +12,14 @@ import java.util.List;
 import java.util.Map;
 
 public class UserPrincipal implements OAuth2User, UserDetails {
-    private int id;
-    private int serviceId;
-    private String providerId;
-    private Collection<? extends GrantedAuthority> authorities;
+    private final int id;
+    private final int serviceId;
+    private final String providerId;
+    private final Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
-    public UserPrincipal(int id, int serviceId, String providerId, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(int id, int serviceId, String providerId,
+                         Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.serviceId = serviceId;
         this.providerId = providerId;
@@ -42,7 +43,6 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         userPrincipal.setAttributes(attributes);
         return userPrincipal;
     }
-
 
     public int getId() {
         return id;

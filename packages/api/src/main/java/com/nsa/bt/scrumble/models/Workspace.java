@@ -1,6 +1,7 @@
 package com.nsa.bt.scrumble.models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Workspace {
     private int id;
@@ -8,13 +9,17 @@ public class Workspace {
     private String name;
     private String description;
     private ArrayList<Integer> projectIds;
+    private List<User> users;
 
-    public Workspace(int id, User createdBy, String name, String description, ArrayList<Integer> projectIds) {
+    public Workspace(int id, User createdBy, String name,
+                     String description, ArrayList<Integer> projectIds,
+                     List<User> users) {
         this.id = id;
         this.createdBy = createdBy;
         this.name = name;
         this.description = description;
         this.projectIds = projectIds;
+        this.users = users;
     }
 
     public Workspace() {
@@ -58,5 +63,13 @@ public class Workspace {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }

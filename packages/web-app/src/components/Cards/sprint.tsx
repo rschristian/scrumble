@@ -5,8 +5,8 @@ import { MoreVertical } from 'preact-feather';
 import { notify } from 'react-notify-toast';
 
 import { Modal } from 'components/Modal';
-import { Sprint } from 'models/Sprint';
-import { toggleSprintStatus } from 'services/api/sprints';
+import { Sprint, SprintStatus } from 'models/Sprint';
+import { editSprint } from 'services/api/sprints';
 import { observer } from 'services/mobx';
 import { errorColour } from 'services/notification/colours';
 import { useStore } from 'stores';
@@ -14,6 +14,7 @@ import { useStore } from 'stores';
 interface IProps {
     sprint: Sprint;
     closed: boolean;
+    updateSprint: (sprint: Sprint) => void;
 }
 
 export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) => {
@@ -30,12 +31,24 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
     const closureModalContent = <div>Are you sure you want to close this sprint?</div>;
     const openingModalContent = <div>Are you sure you want to open this sprint?</div>;
 
+    const sprintStatus = (): SprintStatus => {
+        if (props.sprint.status === SprintStatus.closed) {
+            return SprintStatus.active;
+        }
+        return SprintStatus.closed;
+    };
+
     const handleToggleSprintStatus = async (): Promise<void> => {
-        return await toggleSprintStatus(userLocationStore.currentWorkspace.id, props.sprint.id).then((error) => {
-            if (error) notify.show(error, 'error', 5000, errorColour);
+        return await editSprint(userLocationStore.currentWorkspace.id, {
+            ...props.sprint,
+            status: sprintStatus(),
+        }).then((result) => {
+            if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
             else {
+                props.updateSprint(result);
                 setShowClosureModal(false);
                 setShowOpeningModal(false);
+                notify.show('Status updated!', 'success', 5000);
             }
         });
     };

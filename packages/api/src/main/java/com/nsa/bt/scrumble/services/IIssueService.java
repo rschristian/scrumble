@@ -2,20 +2,20 @@ package com.nsa.bt.scrumble.services;
 
 import com.nsa.bt.scrumble.dto.Issue;
 import com.nsa.bt.scrumble.dto.Project;
+import io.opentracing.Span;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 @Service
 public interface IIssueService {
+    void setStoryPoint(Issue issue, Span span);
 
-    void setStoryPoint(Issue issue);
+    void setProjectName(Issue issue, Project[] projects, Span span);
 
-    void setProjectName(Issue issue, Project[] projects);
+    void setStatus(Issue issue);
 
-    void filterAndSetStoryPoint(ArrayList<Issue> issues);
+    String getFilterQuery(String filter, Span span);
 
-    ArrayList<Issue> searchForIssue(int workspaceId, String searchFor, String filter, String accessToken);
+    Issue createIssue(int workspaceId, int projectId, Issue issue, String accessToken, Span span);
 
-    String getFilterQuery(String filter);
+    Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken, Span span);
 }

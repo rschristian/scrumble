@@ -2,12 +2,14 @@ package com.nsa.bt.scrumble.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nsa.bt.scrumble.models.Sprint;
+import com.nsa.bt.scrumble.models.User;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
 
 public class Issue implements Serializable {
     private int iid;
@@ -27,11 +29,13 @@ public class Issue implements Serializable {
     private Object author;
     @JsonAlias("created_at")
     private String createdAt;
-    private Object assignee;
+    private User assignee;
 
-    public Issue(){}
+    public Issue() {
+    }
 
-    public Issue(int projectId, String title, String description, int storyPoint, String status) {
+    public Issue(int projectId, String title, String description,
+                 int storyPoint, String status) {
         this.projectId = projectId;
         this.title = title;
         this.description = description;
@@ -39,16 +43,18 @@ public class Issue implements Serializable {
         this.status = status;
     }
 
-    public Issue(
-            int iid, Sprint sprint, int projectId, String projectName, String title, String description, int storyPoint,
-            String status, ArrayList<String> labels, int timeSpent, String author, String createdAt, String assignee) {
+    public Issue(int iid, Sprint sprint, int projectId,
+                 String projectName, String title,
+                 String description, int storyPoint, String state,
+                 ArrayList<String> labels, int timeSpent, String author,
+                 String createdAt, User assignee) {
         this.iid = iid;
         this.sprint = sprint;
         this.projectId = projectId;
         this.title = title;
         this.description = description;
         this.storyPoint = storyPoint;
-        this.status = status;
+        this.status = state;
         this.labels = labels;
         this.timeSpent = timeSpent;
         this.author = author;
@@ -133,14 +139,10 @@ public class Issue implements Serializable {
         return timeSpent;
     }
 
+
     @JsonProperty("time_stats")
     public void setTimeSpent(Map<String, Object> timeSpent) {
-        if(timeSpent != null) {
-            this.timeSpent = (Integer)timeSpent.get("total_time_spent");
-        } else {
-            this.timeSpent = 0;
-        }
-        
+        this.timeSpent = (timeSpent != null) ? (Integer) timeSpent.get("total_time_spent") : 0;
     }
 
     @JsonAlias("timeSpent")
@@ -163,16 +165,14 @@ public class Issue implements Serializable {
 
     public void setCreatedAt(Date createdAt) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        String strDate= formatter.format(createdAt);
-        this.createdAt = strDate;
+        this.createdAt = formatter.format(createdAt);
     }
 
-    public Object getAssignee() {
+    public User getAssignee() {
         return assignee;
     }
 
-    @JsonProperty("assignee")
-    public void setAssignee(Map<String, Object> assignedTo) {
+    public void setAssignee(User assignedTo) {
         if (assignedTo != null) {
             this.assignee = assignedTo;
         }

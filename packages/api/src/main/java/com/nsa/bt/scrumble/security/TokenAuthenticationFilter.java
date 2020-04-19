@@ -23,11 +23,7 @@ import java.util.Optional;
 // Adapted from https://github.com/callicoder/spring-boot-react-oauth2-social-login-demo/blob/master/spring-social/src/main/java/com/example/springsocial/security/TokenAuthenticationFilter.java
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-    @Bean
-    public TokenUtils tokenUtils() {
-        return new TokenUtils();
-    }
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
     @Autowired
     private TokenUtils tokenUtils;
 
@@ -37,23 +33,28 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private IUserService userService;
 
-    private static final Logger logger = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
+    @Bean
+    public TokenUtils tokenUtils() {
+        return new TokenUtils();
+    }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+        var span = SecurityTracer.getTracer().buildSpan("Do Filter Internal").start();
         try {
-            String jwt = tokenUtils.getJwtFromRequest(request);
+            String jwt = tokenUtils.getJwtFromRequest(request, span);
 
-            if (!tokenProvider.isValidToken(jwt)) {
+            if (!tokenProvider.isValidToken(jwt, span)) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid authentication.");
             }
 
             if (StringUtils.hasText(jwt)) {
-                Long userId = tokenProvider.getUserIdFromToken(jwt);
+                Long userId = tokenProvider.getUserIdFromToken(jwt, span);
 
-                Optional<User> userOptional = userService.findUserById(userId.intValue());
+                Optional<User> userOptional = userService.findUserById(userId.intValue(), span);
 
-                if(userOptional.isPresent()){
+                if (userOptional.isPresent()) {
                     UserDetails userDetails = UserPrincipal.create(userOptional.get());
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -62,7 +63,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception ex) {
-            logger.error("Could not set user authentication in security context", ex);
+            LOGGER.error("Could not set user authentication in security context", ex);
         }
 
         filterChain.doFilter(request, response);

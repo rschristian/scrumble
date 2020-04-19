@@ -33,18 +33,21 @@ export const users: User[] = [
         name: 'James Buckland',
         username: 'jamesbuckland',
         avatarUrl: 'www.com',
+        projectIds: [],
     },
     {
         id: 2,
         name: 'Lauren Heymer',
         username: 'laurenhaymer',
         avatarUrl: 'www.com',
+        projectIds: [],
     },
     {
         id: 3,
         name: 'Ryan Christian',
         username: 'ryanchristian',
         avatarUrl: 'www.com',
+        projectIds: [],
     },
 ];
 

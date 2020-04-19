@@ -3,6 +3,8 @@ import { User } from './User';
 
 export enum IssueStatus {
     open = 'opened',
+    todo = 'To Do', // default label for GitLab issue board
+    doing = 'Doing', // default label for GitLab issue board
     closed = 'closed',
 }
 
@@ -11,7 +13,7 @@ export interface Issue {
     title: string;
     description?: string;
     storyPoint?: number;
-    status: IssueStatus;
+    status: IssueStatus | string;
     labels?: string[];
     projectId: number;
     projectName: string;

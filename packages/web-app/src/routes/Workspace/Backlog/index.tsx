@@ -98,7 +98,7 @@ const Backlog: FunctionalComponent = () => {
             ) : null}
 
             <div class="create-bar">
-                <h1 class="page-heading">Backlog Planning</h1>
+                <h1 class="page-heading">Backlog</h1>
                 <button class="btn-create my-auto" onClick={(): void => setShowNewIssueModal(true)}>
                     New Issue
                 </button>

@@ -6,84 +6,75 @@ import com.nsa.bt.scrumble.security.TokenProvider;
 import com.nsa.bt.scrumble.security.TokenUtils;
 import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.services.IUserService;
-
+import io.opentracing.Span;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1")
 public class AuthenticationApi {
 
-    public AuthenticationApi (AppProperties appProperties) {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsApi.class);
+    private final AppProperties appProperties;
+    @Autowired
+    private TokenProvider tokenProvider;
+    @Autowired
+    private IUserService userService;
+    @Autowired
+    private TokenUtils tokenUtils;
+
+    public AuthenticationApi(AppProperties appProperties) {
         this.appProperties = appProperties;
     }
-    private static final Logger logger = LoggerFactory.getLogger(UserDetailsApi.class);
-    private AppProperties appProperties;
 
-    @Autowired
-    OAuth2AuthorizedClientService auth2AuthorizedClientService;
-
-    @Autowired
-    RestTemplate restTemplate;
-
-    @Autowired
-    TokenProvider tokenProvider;
-
-    @Autowired
-    IUserService userService;
-
-    @Autowired
-    TokenUtils tokenUtils;
-
-    @GetMapping("/token")
+    @GetMapping("/auth/token")
     public ResponseEntity<Object> exchangeShortLifeToken(HttpServletRequest request) {
-        var tokenResponse = new HashMap<>();
-        String jwt = tokenUtils.getJwtFromRequest(request);
-        String longLifeToken = null;
+        Span span = ApiTracer.getTracer().buildSpan("HTTP GET /auth/token").start();
+        String jwt = tokenUtils.getJwtFromRequest(request, span);
+        String token = "";
 
         if (StringUtils.hasText(jwt)) {
-            Long userId = tokenProvider.getUserIdFromToken(jwt);
-            Optional<User> userOptional = userService.findUserById(userId.intValue());
+            Long userId = tokenProvider.getUserIdFromToken(jwt, span);
+            Optional<User> userOptional = userService.findUserById(userId.intValue(), span);
 
-            if (userOptional.isPresent()){
-                longLifeToken =  tokenProvider.createToken(userId.intValue(), appProperties.getAuth().getLongLifeTokenExpirationMsec());
-                tokenResponse.put("jwt", longLifeToken);
-            } else {
-                logger.error("User not found");
-                tokenResponse.put("error", "User not found");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(tokenResponse);
+            if (userOptional.isEmpty()) {
+                LOGGER.error("User not found");
+                span.finish();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
             }
+            token = tokenProvider.createToken(userId.intValue(), appProperties.getAuth().getLongLifeTokenExpirationMsec(), span);
         }
-
-        return ResponseEntity.ok().body(tokenResponse);
+        span.finish();
+        return ResponseEntity.ok().body(Map.of("jwt", token));
     }
 
-    @DeleteMapping("/token")
+    @DeleteMapping("/auth/token")
     public ResponseEntity<Object> deleteToken(Authentication authentication) {
-        var deleteTokenResponse = new HashMap<>();
+        Span span = ApiTracer.getTracer().buildSpan("HTTP DELETE /auth/token").start();
 
         try {
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-            userService.removeToken(userPrincipal.getId());
-            deleteTokenResponse.put("success", true);
+            userService.removeToken(userPrincipal.getId(), span);
+            span.finish();
 
-            return ResponseEntity.ok().body(deleteTokenResponse);
+            return ResponseEntity.ok().body(null);
         } catch (InternalAuthenticationServiceException exception) {
-            return ResponseEntity.ok().body(deleteTokenResponse);
+            span.finish();
+            return ResponseEntity.status(500).body(null);
         }
     }
 }

@@ -3,9 +3,9 @@ package com.nsa.bt.scrumble.security.oauth;
 import com.nsa.bt.scrumble.config.AppProperties;
 import com.nsa.bt.scrumble.exception.BadRequestException;
 import com.nsa.bt.scrumble.security.CookieUtils;
+import com.nsa.bt.scrumble.security.SecurityTracer;
 import com.nsa.bt.scrumble.security.TokenProvider;
 import com.nsa.bt.scrumble.security.UserPrincipal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -26,23 +26,24 @@ import static com.nsa.bt.scrumble.security.oauth.HttpCookieOAuth2AuthorizationRe
 @Component
 public class OAuth2AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
-    private AppProperties appProperties;
+    private final AppProperties appProperties;
 
-    private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     @Autowired
     OAuth2AuthSuccessHandler(TokenProvider tokenProvider, AppProperties appProperties,
-                                       HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
+                             HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
         this.tokenProvider = tokenProvider;
         this.appProperties = appProperties;
         this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
     }
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        String targetUrl = determineTargetUrl(request, response, authentication);
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                        Authentication authentication) throws IOException, ServletException {
+        String targetUrl = determineTargetUrl(request, authentication);
 
         if (response.isCommitted()) {
             logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
@@ -53,18 +54,19 @@ public class OAuth2AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    protected String determineTargetUrl(HttpServletRequest request, Authentication authentication) {
+        var span = SecurityTracer.getTracer().buildSpan("Determine Target URL").start();
         Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
 
-        if(redirectUri.isPresent()) {
+        if (redirectUri.isPresent()) {
             throw new BadRequestException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
         }
 
         String targetUrl = redirectUri.orElse(appProperties.getAuth().getRedirectUri());
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        String token = tokenProvider.createToken(userPrincipal.getId(), appProperties.getAuth().getShortLifeTokenExpirationMsec());
+        String token = tokenProvider.createToken(userPrincipal.getId(), appProperties.getAuth().getShortLifeTokenExpirationMsec(), span);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)

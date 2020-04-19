@@ -41,7 +41,7 @@ const SprintContainer: FunctionalComponent<IProps> = (props: IProps) => {
     const [subPageContent, setSubPageContent] = useState<ComponentChild>(null);
 
     useEffect(() => {
-        getSprints(userLocationStore.currentWorkspace.id).then((result) => {
+        getSprints(userLocationStore.currentWorkspace.id, 'none').then((result) => {
             if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
             else {
                 for (const sprint of result) {

@@ -1,19 +1,23 @@
 package com.nsa.bt.scrumble.services;
 
+import com.nsa.bt.scrumble.dto.Issue;
 import com.nsa.bt.scrumble.models.User;
+import io.opentracing.Span;
 
 import java.util.Optional;
 
 public interface IUserService {
-    User createUser(User user);
+    User createUser(User user, Span span);
 
-    Optional<User> findUserByServiceId(int serviceId);
+    Optional<User> findUserByServiceId(int serviceId, Span span);
 
-    Optional<User> findUserById(int id);
+    Optional<User> findUserById(int id, Span span);
 
-    void addToken(int userId, String token);
+    Optional<String> getToken(int userId, Span span);
 
-    void removeToken(int userId);
+    void addToken(int userId, String token, Span span);
 
-    Optional<String> getToken(int userId);
+    void removeToken(int userId, Span span);
+
+    void setProjectId(int workspaceId, Issue issue);
 }

@@ -25,7 +25,7 @@ const SprintPlanning: FunctionalComponent = () => {
 
     useEffect(() => {
         userLocationStore.setActiveSideBarItem(0);
-        getSprints(userLocationStore.currentWorkspace.id).then((result) => {
+        getSprints(userLocationStore.currentWorkspace.id, 'none').then((result) => {
             if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
             else setSprints(result);
         });
@@ -40,6 +40,19 @@ const SprintPlanning: FunctionalComponent = () => {
                 setSprints([...sprints, result]);
             }
         });
+    };
+
+    const updateSprint = (updatedSprint: Sprint): void => {
+        const arrayCopy = [...sprints];
+        const found = arrayCopy.some((sprint) => updatedSprint.id === sprint.id);
+        if (found) {
+            sprints.forEach((sprint: Sprint, index) => {
+                if (sprint.id === updatedSprint.id) {
+                    arrayCopy[index] = updatedSprint;
+                    setSprints(arrayCopy);
+                }
+            });
+        }
     };
 
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
@@ -89,6 +102,7 @@ const SprintPlanning: FunctionalComponent = () => {
                                         key={index}
                                         sprint={sprint}
                                         closed={sprint.status === SprintStatus.closed}
+                                        updateSprint={updateSprint}
                                     />
                                 );
                             }
