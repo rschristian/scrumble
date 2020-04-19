@@ -47,8 +47,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
     }
 
-    private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User, Span span) {
-        span = ServiceTracer.getTracer().buildSpan("Process OAuth2 User").asChildOf(span).start();
+    private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User, Span parentSpan) {
+        var span = ServiceTracer.getTracer().buildSpan("Process OAuth2 User").asChildOf(parentSpan).start();
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(
                 oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes()
         );
@@ -67,8 +67,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return UserPrincipal.create(userOptional.get(), oAuth2User.getAttributes());
     }
 
-    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo, Span span) {
-        span = ServiceTracer.getTracer().buildSpan("Register New User").asChildOf(span).start();
+    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo, Span parentSpan) {
+        var span = ServiceTracer.getTracer().buildSpan("Register New User").asChildOf(parentSpan).start();
         User user = new User();
 
         user.setServiceId(oAuth2UserInfo.getId());

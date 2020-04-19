@@ -16,40 +16,48 @@ public class UserService implements IUserService {
     private IUserRepository userRepository;
 
     @Override
-    public User createUser(User user, Span span) {
-        return userRepository.createUser(user);
-    }
-
-    @Override
-    public Optional<User> findUserByServiceId(int serviceId, Span span) {
-        return userRepository.findUserByServiceId(serviceId);
-    }
-
-    @Override
-    public Optional<User> findUserById(int id, Span span) {
-        span = ServiceTracer.getTracer().buildSpan("Find User by ID").asChildOf(span).start();
-        var user = userRepository.findUserById(id);
+    public User createUser(User user, Span parentSpan) {
+        var span = ServiceTracer.getTracer().buildSpan("Create User").asChildOf(parentSpan).start();
+        user = userRepository.createUser(user, span);
         span.finish();
         return user;
     }
 
     @Override
-    public Optional<String> getToken(int userId, Span span) {
-        span = ServiceTracer.getTracer().buildSpan("Retrieve User's Token").asChildOf(span).start();
-        var token = userRepository.getToken(userId);
+    public Optional<User> findUserByServiceId(int serviceId, Span parentSpan) {
+        var span = ServiceTracer.getTracer().buildSpan("Find User by Service ID").asChildOf(parentSpan).start();
+        var optionalUser = userRepository.findUserByServiceId(serviceId, span);
+        span.finish();
+        return optionalUser;
+    }
+
+    @Override
+    public Optional<User> findUserById(int id, Span parentSpan) {
+        var span = ServiceTracer.getTracer().buildSpan("Find User by ID").asChildOf(parentSpan).start();
+        var user = userRepository.findUserById(id, span);
+        span.finish();
+        return user;
+    }
+
+    @Override
+    public Optional<String> getToken(int userId, Span parentSpan) {
+        var span = ServiceTracer.getTracer().buildSpan("Retrieve User's Token").asChildOf(parentSpan).start();
+        var token = userRepository.getToken(userId, span);
         span.finish();
         return token;
     }
 
     @Override
-    public void addToken(int userId, String token, Span span) {
-        userRepository.addToken(userId, token);
+    public void addToken(int userId, String token, Span parentSpan) {
+        var span = ServiceTracer.getTracer().buildSpan("Add User Token").asChildOf(parentSpan).start();
+        userRepository.addToken(userId, token, span);
+        span.finish();
     }
 
     @Override
-    public void removeToken(int userId, Span span) {
-        span = ServiceTracer.getTracer().buildSpan("Remove User's Token").asChildOf(span).start();
-        userRepository.removeToken(userId);
+    public void removeToken(int userId, Span parentSpan) {
+        var span = ServiceTracer.getTracer().buildSpan("Remove User's Token").asChildOf(parentSpan).start();
+        userRepository.removeToken(userId, span);
         span.finish();
     }
 }

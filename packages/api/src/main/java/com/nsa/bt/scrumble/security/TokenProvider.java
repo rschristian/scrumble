@@ -22,8 +22,8 @@ public class TokenProvider {
         this.appProperties = appProperties;
     }
 
-    public String createToken(int userId, long validFor, Span span) {
-        span = SecurityTracer.getTracer().buildSpan("Create a new JWT").asChildOf(span).start();
+    public String createToken(int userId, long validFor, Span parentSpan) {
+        var span = SecurityTracer.getTracer().buildSpan("Create a new JWT").asChildOf(parentSpan).start();
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + validFor);
         var token = Jwts.builder()
@@ -36,8 +36,8 @@ public class TokenProvider {
         return token;
     }
 
-    public Long getUserIdFromToken(String token, Span span) {
-        span = SecurityTracer.getTracer().buildSpan("Return User ID from Token").asChildOf(span).start();
+    public Long getUserIdFromToken(String token, Span parentSpan) {
+        var span = SecurityTracer.getTracer().buildSpan("Return User ID from Token").asChildOf(parentSpan).start();
         Claims claims = Jwts.parser()
                 .setSigningKey(appProperties.getAuth().getTokenSecret())
                 .parseClaimsJws(token)
@@ -47,9 +47,11 @@ public class TokenProvider {
         return userId;
     }
 
-    public boolean isValidToken(String authToken) {
+    public boolean isValidToken(String authToken, Span parentSpan) {
+        var span = SecurityTracer.getTracer().buildSpan("Checking Token Validity").asChildOf(parentSpan).start();
         try {
             Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
+            span.finish();
             return true;
         } catch (SignatureException ex) {
             LOGGER.error("Invalid JWT signature");
@@ -62,6 +64,7 @@ public class TokenProvider {
         } catch (IllegalArgumentException ex) {
             LOGGER.error("JWT claims string is empty.");
         }
+        span.finish();
         return false;
     }
 }

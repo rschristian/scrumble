@@ -32,13 +32,11 @@ public class SprintRepository implements ISprintRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public Sprint getSprintById(int sprintId) {
-        String selectStatement = "SELECT * FROM sprints where id = ?";
-        Object[] params = new Object[]{sprintId};
-        int[] types = new int[]{Types.INTEGER};
-        return jdbcTemplate.queryForObject(selectStatement,
-                params,
-                types,
+    public Sprint getSprintById(int sprintId, Span parentSpan) {
+        var span = RepositoryTracer.getTracer().buildSpan("SQL Select Sprint by ID").asChildOf(parentSpan).start();
+        var sprint = jdbcTemplate.queryForObject("SELECT * FROM sprints where id = ?",
+                new Object[]{sprintId},
+                new int[]{Types.INTEGER},
                 (rs, row) -> {
                     try {
                         return new Sprint(
@@ -54,10 +52,13 @@ public class SprintRepository implements ISprintRepository {
                     }
                     return null;
                 });
+        span.finish();
+        return sprint;
     }
 
     @Override
-    public List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter) {
+    public List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter, Span parentSpan) {
+        var span = RepositoryTracer.getTracer().buildSpan("SQL Select all Sprints for Workspace").asChildOf(parentSpan).start();
         String selectStatement;
         Object[] params;
         int[] types;
@@ -70,12 +71,14 @@ public class SprintRepository implements ISprintRepository {
             params = new Object[]{workspaceId, filter};
             types = new int[]{Types.INTEGER, Types.VARCHAR};
         }
-        return mapRowsToSprintList(selectStatement, params, types);
+        var sprints = mapRowsToSprintList(selectStatement, params, types, span);
+        span.finish();
+        return sprints;
     }
 
     @Override
-    public Map<String, Integer> getProjectIdsToMilestoneIds(int sprintId, Span span) {
-        span = RepositoryTracer.getTracer().buildSpan("SQL Select All Sprint Data").asChildOf(span).start();
+    public Map<String, Integer> getProjectIdsToMilestoneIds(int sprintId, Span parentSpan) {
+        var span = RepositoryTracer.getTracer().buildSpan("SQL Select Project IDs to Milestone IDs").asChildOf(parentSpan).start();
         var projectIdsToMilestoneIds = jdbcTemplate.queryForObject("SELECT sprint_data FROM sprints where id = ?",
                 new Object[]{sprintId},
                 new int[]{Types.INTEGER},
@@ -92,8 +95,8 @@ public class SprintRepository implements ISprintRepository {
     }
 
     @Override
-    public Sprint createSprint(int workspaceId, Sprint sprint, Span span) {
-        span = RepositoryTracer.getTracer().buildSpan("SQL Insert New Sprint").asChildOf(span).start();
+    public Sprint createSprint(int workspaceId, Sprint sprint, Span parentSpan) {
+        var span = RepositoryTracer.getTracer().buildSpan("SQL Insert New Sprint").asChildOf(parentSpan).start();
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -108,7 +111,7 @@ public class SprintRepository implements ISprintRepository {
             ps.setString(4, sprint.getStatus());
             ps.setDate(5, sprint.getStartDate());
             ps.setDate(6, sprint.getDueDate());
-            ps.setObject(7, getSprintJsonbData(sprint));
+            ps.setObject(7, getSprintJsonbData(sprint, span));
             return ps;
         }, keyHolder);
         sprint.setId(Math.toIntExact(keyHolder.getKey().longValue()));
@@ -117,8 +120,8 @@ public class SprintRepository implements ISprintRepository {
     }
 
     @Override
-    public Sprint editSprint(int workspaceId, Sprint sprint, Span span) {
-        span = RepositoryTracer.getTracer().buildSpan("SQL Update Sprint").asChildOf(span).start();
+    public Sprint editSprint(int workspaceId, Sprint sprint, Span parentSpan) {
+        var span = RepositoryTracer.getTracer().buildSpan("SQL Update Sprint").asChildOf(parentSpan).start();
         jdbcTemplate.update(
                 "UPDATE sprints SET title = ?, description = ?, status = ?, start_date = ?, due_date = ?, sprint_data = ? WHERE id = ?",
                 new Object[]{
@@ -127,7 +130,7 @@ public class SprintRepository implements ISprintRepository {
                         sprint.getStatus(),
                         sprint.getStartDate(),
                         sprint.getDueDate(),
-                        getSprintJsonbData(sprint),
+                        getSprintJsonbData(sprint, span),
                         sprint.getId()
                 },
                 new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.DATE, Types.OTHER, Types.INTEGER}
@@ -136,8 +139,9 @@ public class SprintRepository implements ISprintRepository {
         return sprint;
     }
 
-    private List<Sprint> mapRowsToSprintList(String sqlSelect, Object[] params, int[] types) {
-        return new ArrayList<>(jdbcTemplate.query(sqlSelect,
+    private List<Sprint> mapRowsToSprintList(String sqlSelect, Object[] params, int[] types, Span parentSpan) {
+        var span = RepositoryTracer.getTracer().buildSpan("SQL Map Rows to Sprint List").asChildOf(parentSpan).start();
+        var sprintList = new ArrayList<>(jdbcTemplate.query(sqlSelect,
                 params,
                 types,
                 (rs, row) -> {
@@ -155,9 +159,12 @@ public class SprintRepository implements ISprintRepository {
                     }
                     return null;
                 }));
+        span.finish();
+        return sprintList;
     }
 
-    private PGobject getSprintJsonbData(Sprint sprint) {
+    private PGobject getSprintJsonbData(Sprint sprint, Span parentSpan) {
+        var span = RepositoryTracer.getTracer().buildSpan("Get Sprint JSONB Data").asChildOf(parentSpan).start();
         try {
             Map<Object, Object> dataMap = new HashMap<>();
             PGobject jsonObject = new PGobject();
@@ -166,9 +173,11 @@ public class SprintRepository implements ISprintRepository {
             dataMap.put("projects_to_milestones", sprint.getProjectIdToMilestoneIds());
             jsonObject.setType("jsonb");
             jsonObject.setValue(objectMapper.writeValueAsString(dataMap));
+            span.finish();
             return jsonObject;
         } catch (SQLException | JsonProcessingException exception) {
             LOGGER.error(exception.getMessage());
+            span.finish();
             return null;
         }
     }

@@ -52,8 +52,8 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public void setStoryPoint(Issue issue, Span span) {
-        span = ServiceTracer.getTracer().buildSpan("Set Story Point").asChildOf(span).start();
+    public void setStoryPoint(Issue issue, Span parentSpan) {
+        var span = ServiceTracer.getTracer().buildSpan("Set Story Point").asChildOf(parentSpan).start();
         OptionalInt storyPoint = issue.getLabels()
                 .stream()
                 .filter(IssueService::isInteger)
@@ -65,8 +65,8 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public String getFilterQuery(String filter, Span span) {
-        span = ServiceTracer.getTracer().buildSpan("Get Filter Query").asChildOf(span).start();
+    public String getFilterQuery(String filter, Span parentSpan) {
+        var span = ServiceTracer.getTracer().buildSpan("Get Filter Query").asChildOf(parentSpan).start();
         switch (filter) {
             case UNPLANNED:
                 span.finish();
@@ -84,8 +84,8 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public void setProjectName(Issue issue, Project[] projects, Span span) {
-        span = ServiceTracer.getTracer().buildSpan("Set Project Name").asChildOf(span).start();
+    public void setProjectName(Issue issue, Project[] projects, Span parentSpan) {
+        var span = ServiceTracer.getTracer().buildSpan("Set Project Name").asChildOf(parentSpan).start();
         for (Project project : projects) {
             if (issue.getProjectId() == project.getId()) {
                 issue.setProjectName(project.getName());
@@ -96,9 +96,8 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public Issue createIssue(int workspaceId, int projectId, Issue issue, String accessToken,
-                             Span span) {
-        span = ServiceTracer.getTracer().buildSpan("Create Issue").asChildOf(span).start();
+    public Issue createIssue(int workspaceId, int projectId, Issue issue, String accessToken, Span parentSpan) {
+        var span = ServiceTracer.getTracer().buildSpan("Create Issue").asChildOf(parentSpan).start();
         String issueUri = getIssueUri(workspaceId, projectId, issue, accessToken, span);
         String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
                 gitLabApiUrl, accessToken);
@@ -113,9 +112,8 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken,
-                           Span span) {
-        span = ServiceTracer.getTracer().buildSpan("Edit Issue").asChildOf(span).start();
+    public Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken, Span parentSpan) {
+        var span = ServiceTracer.getTracer().buildSpan("Edit Issue").asChildOf(parentSpan).start();
         String uri;
 
         if (issue.getSprint() != null) {
@@ -135,8 +133,8 @@ public class IssueService implements IIssueService {
         return issue;
     }
 
-    private String getIssueUri(int workspaceId, int projectId, Issue issue, String accessToken, Span span) {
-        span = ServiceTracer.getTracer().buildSpan("Get Issue URI").asChildOf(span).start();
+    private String getIssueUri(int workspaceId, int projectId, Issue issue, String accessToken, Span parentSpan) {
+        var span = ServiceTracer.getTracer().buildSpan("Get Issue URI").asChildOf(parentSpan).start();
         if (issue.getSprint() != null) {
             int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId(), span);
             span.finish();

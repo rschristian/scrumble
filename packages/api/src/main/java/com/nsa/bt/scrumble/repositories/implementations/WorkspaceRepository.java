@@ -30,8 +30,8 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<Workspace> getAllWorkspaces(Span span) {
-        span = RepositoryTracer.getTracer().buildSpan("SQL Select All Workspaces").asChildOf(span).start();
+    public List<Workspace> getAllWorkspaces(Span parentSpan) {
+        var span = RepositoryTracer.getTracer().buildSpan("SQL Select All Workspaces").asChildOf(parentSpan).start();
         var workspaces = new ArrayList<>(jdbcTemplate.query(
                 "SELECT * FROM workspaces as workspaces INNER JOIN users AS users ON workspaces.created_by_user = users.id",
                 (rs, row) -> {
@@ -53,8 +53,8 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     }
 
     @Override
-    public ArrayList<Integer> projectIdsForWorkspace(int workspaceId, Span span) {
-        span = RepositoryTracer.getTracer().buildSpan("SQL Select Project IDs from Workspace Data").asChildOf(span).start();
+    public ArrayList<Integer> projectIdsForWorkspace(int workspaceId, Span parentSpan) {
+        var span = RepositoryTracer.getTracer().buildSpan("SQL Select Project IDs from Workspace ID").asChildOf(parentSpan).start();
         ArrayList<Integer> projectIds = jdbcTemplate.queryForObject(
                 "SELECT workspace_data FROM workspaces WHERE id = ?;",
                 new Object[]{workspaceId},
@@ -72,7 +72,8 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     }
 
     @Override
-    public Workspace createWorkspace(Workspace workspace, User user) {
+    public Workspace createWorkspace(Workspace workspace, User user, Span parentSpan) {
+        var span = RepositoryTracer.getTracer().buildSpan("SQL Insert New Workspace").asChildOf(parentSpan).start();
         String insertStatement = "INSERT INTO workspaces (name, created_by_user, description, workspace_data) VALUES (?, ?, ?, ?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -82,40 +83,47 @@ public class WorkspaceRepository implements IWorkspaceRepository {
             ps.setString(1, workspace.getName());
             ps.setInt(2, user.getId());
             ps.setString(3, workspace.getDescription());
-            ps.setObject(4, getWorkspaceJsonbData(workspace));
+            ps.setObject(4, getWorkspaceJsonbData(workspace, span));
             return ps;
         }, keyHolder);
         workspace.setId(Math.toIntExact(Objects.requireNonNull(keyHolder.getKey()).longValue()));
+        span.finish();
         return workspace;
     }
 
     @Override
-    public void editWorkspace(Workspace updatedWorkspace) {
+    public void editWorkspace(Workspace updatedWorkspace, Span parentSpan) {
+        var span = RepositoryTracer.getTracer().buildSpan("SQL Update Workspace").asChildOf(parentSpan).start();
         String deleteWorkspace = "UPDATE workspaces SET name = ?, description = ?, workspace_data = ? WHERE id = ?";
         Object[] params = new Object[]
                 {
                         updatedWorkspace.getName(),
                         updatedWorkspace.getDescription(),
-                        getWorkspaceJsonbData(updatedWorkspace),
+                        getWorkspaceJsonbData(updatedWorkspace, span),
                         updatedWorkspace.getId()
                 };
         int[] types = new int[]{Types.VARCHAR, Types.VARCHAR, Types.OTHER, Types.INTEGER};
         jdbcTemplate.update(deleteWorkspace, params, types);
+        span.finish();
     }
 
-    private PGobject getWorkspaceJsonbData(Workspace workspace) {
+    private PGobject getWorkspaceJsonbData(Workspace workspace, Span parentSpan) {
+        var span = RepositoryTracer.getTracer().buildSpan("Get Workspace JSCNB Data").asChildOf(parentSpan).start();
         try {
-            Map<Object, Object> dataMap = new HashMap<>();
             PGobject jsonObject = new PGobject();
             ObjectMapper objectMapper = new ObjectMapper();
 
-            dataMap.put("project_ids", workspace.getProjectIds());
-            dataMap.put("project_users", workspace.getUsers());
             jsonObject.setType("jsonb");
-            jsonObject.setValue(objectMapper.writeValueAsString(dataMap));
+            jsonObject.setValue(objectMapper.writeValueAsString(
+                    Map.of("project_ids", workspace.getProjectIds(),
+                            "project_users", workspace.getUsers()
+                    )
+            ));
+            span.finish();
             return jsonObject;
         } catch (SQLException | JsonProcessingException exception) {
             LOGGER.error(exception.getMessage());
+            span.finish();
             return null;
         }
     }

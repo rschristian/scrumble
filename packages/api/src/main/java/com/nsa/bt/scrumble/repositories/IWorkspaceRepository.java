@@ -13,7 +13,7 @@ public interface IWorkspaceRepository {
 
     ArrayList<Integer> projectIdsForWorkspace(int workspaceId, Span span);
 
-    Workspace createWorkspace(Workspace workspace, User user);
+    Workspace createWorkspace(Workspace workspace, User user, Span span);
 
-    void editWorkspace(Workspace updatedWorkspace);
+    void editWorkspace(Workspace updatedWorkspace, Span span);
 }

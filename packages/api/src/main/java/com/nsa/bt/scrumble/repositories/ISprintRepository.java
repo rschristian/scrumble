@@ -8,9 +8,9 @@ import java.util.Map;
 
 public interface ISprintRepository {
 
-    Sprint getSprintById(int sprintId);
+    Sprint getSprintById(int sprintId, Span span);
 
-    List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter);
+    List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter, Span span);
 
     Map<String, Integer> getProjectIdsToMilestoneIds(int sprintId, Span span);
 
