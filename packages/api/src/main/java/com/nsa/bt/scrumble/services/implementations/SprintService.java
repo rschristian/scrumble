@@ -48,12 +48,11 @@ public class SprintService implements ISprintService {
     @Override
     public Sprint createSprint(int workspaceId, Sprint sprint, String accessToken, Span parentSpan) {
         var span = ServiceTracer.getTracer().buildSpan("Create Sprint").asChildOf(parentSpan).start();
-        String uri;
         var projectMilestoneIds = new HashMap<String, Integer>();
         ArrayList<Integer> projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId, span);
 
         for (int projectId : projectIds) {
-            uri = String.format("%s/projects/%d/milestones?title=%s&description=%s&start_date=%tF&due_date=%tF&access_token=%s",
+            String uri = String.format("%s/projects/%d/milestones?title=%s&description=%s&start_date=%tF&due_date=%tF&access_token=%s",
                     gitLabApiUrl, projectId, sprint.getTitle(), sprint.getDescription(), sprint.getStartDate(), sprint.getDueDate(), accessToken);
             Sprint milestone = restTemplate.postForObject(uri, null, Sprint.class);
             projectMilestoneIds.put(Integer.toString(projectId), milestone.getId());
@@ -170,7 +169,7 @@ public class SprintService implements ISprintService {
 
     private HttpEntity<String> getApplicationJsonHeaders() {
         var headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         return new HttpEntity(headers);
     }
 }
