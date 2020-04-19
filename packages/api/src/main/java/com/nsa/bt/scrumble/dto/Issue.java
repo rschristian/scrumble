@@ -3,6 +3,7 @@ package com.nsa.bt.scrumble.dto;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nsa.bt.scrumble.models.Sprint;
+import com.nsa.bt.scrumble.models.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,6 +1,7 @@
 package com.nsa.bt.scrumble.services;
 
 import com.nsa.bt.scrumble.models.User;
+import com.nsa.bt.scrumble.dto.Issue;
 
 import java.util.Optional;
 
@@ -16,4 +17,6 @@ public interface IUserService {
     void removeToken(int userId);
 
     Optional<String> getToken(int userId);
+
+    void setProjectId(int workspaceId, Issue issue);
 }

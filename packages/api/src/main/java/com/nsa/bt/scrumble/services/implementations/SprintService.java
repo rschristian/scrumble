@@ -1,8 +1,10 @@
 package com.nsa.bt.scrumble.services.implementations;
 
 import com.nsa.bt.scrumble.dto.Issue;
+import com.nsa.bt.scrumble.dto.Project;
 import com.nsa.bt.scrumble.errorhandlers.MilestoneRestTemplateResponseErrorHandler;
 import com.nsa.bt.scrumble.models.Sprint;
+import com.nsa.bt.scrumble.models.Workspace;
 import com.nsa.bt.scrumble.repositories.ISprintRepository;
 import com.nsa.bt.scrumble.repositories.IWorkspaceRepository;
 import com.nsa.bt.scrumble.services.ISprintService;
@@ -14,7 +16,11 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import com.nsa.bt.scrumble.services.IIssueService;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
+import com.nsa.bt.scrumble.services.IUserService;
 
 import java.util.*;
 
@@ -31,6 +37,12 @@ public class SprintService implements ISprintService {
 
     @Autowired
     IWorkspaceRepository workspaceRepository;
+
+    @Autowired
+    IIssueService issueService;
+
+    @Autowired
+    IUserService userService;
 
     private final RestTemplate restTemplate;
 
@@ -124,8 +136,43 @@ public class SprintService implements ISprintService {
         } else {
             stateEvent = "close";
         }
-        String uri = String.format("%s/projects/%d/milestones/%d?title=%s&description=%s&start_date=%tF&due_date=%tF&state_event=%s&access_token=%s",
+        String uri = String.format("%s/projects/%s/milestones/%s?title=%s&description=%s&start_date=%tF&due_date=%tF&state_event=%s&access_token=%s",
                 gitLabApiUrl, projectId, milestoneId, sprint.getTitle(), sprint.getDescription(), sprint.getStartDate(), sprint.getDueDate(), stateEvent, accessToken);
         ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.PUT, null, String.class);
+    }
+
+    @Override
+    public ArrayList<Issue> getSprintIssues(int workspaceId, Sprint sprint, String accessToken) {
+        ArrayList<Issue> allIssues = new ArrayList();
+
+        String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true", gitLabApiUrl, accessToken);
+            ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(projectUri, Project[].class);
+            Project[] projects = userProjectsResponse.getBody();
+        
+        for(Map.Entry<String, Integer> entry : sprint.getProjectIdToMilestoneIds().entrySet()) {
+            String projectId = entry.getKey();
+            Integer milestoneId = entry.getValue();
+            String uri = String.format("%s/projects/%s/milestones/%s/issues?access_token=%s",
+                gitLabApiUrl, projectId, milestoneId, accessToken);
+                ResponseEntity<ArrayList<Issue>> issueResponse = restTemplate.exchange(
+                    uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {});
+                ArrayList<Issue> issues = issueResponse.getBody();
+                issues.forEach((issue)-> {
+                    issueService.setStoryPoint(issue);
+                    issueService.setStatus(issue);
+                    issueService.setProjectName(issue, projects);
+                    if(issue.getAssignee() != null) {
+                        userService.setProjectId(workspaceId, issue);
+                    }
+                });
+                allIssues.addAll(issues);
+        }
+        return allIssues;
+    }
+
+    private HttpEntity<String> getApplicationJsonHeaders() {
+        var headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        return new HttpEntity(headers);
     }
 }

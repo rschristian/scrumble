@@ -1,5 +1,5 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
 import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
@@ -9,19 +9,105 @@ import { editIssue } from 'services/api/issues';
 import { observer } from 'services/mobx';
 import { errorColour, successColour } from 'services/notification/colours';
 import { useStore } from 'stores';
+import { User } from 'models/User';
 
-export const IssueBoardCard: FunctionalComponent<Issue> = (props: Issue) => {
+interface IssuesBoardProps {
+    issues: Issue[];
+    status: string;
+    headingColour: string;
+    updateIssueBoard: (issue: Issue) => void;
+}
+
+const unassigned: User = {
+    id: 0,
+    name: 'Unassigned',
+    username: 'unassigned',
+    avatarUrl: null,
+    projectIds: [],
+};
+export const IssueBoardCardList: FunctionalComponent<IssuesBoardProps> = (props: IssuesBoardProps) => {
+    const userLocationStore = useStore().userLocationStore;
+    const currentWorkspace = userLocationStore.currentWorkspace;
+    const [headingColour] = useState(`issue-list-title-holder bg-${props.headingColour}-300`);
+    const [issuesList, setIssueList] = useState<Issue[]>([]);
+
+    unassigned.projectIds = currentWorkspace.projectIds;
+
+    useEffect(() => {
+        props.issues.map((issue) => {
+            if (issue.status === props.status && !issuesList.includes(issue)) {
+                setIssueList((oldValues) => oldValues.concat(issue));
+            }
+        });
+    }, [props.issues]);
+
+    const handleUpdate = (updatedIssue: Issue): Issue => {
+        const arrayCopy: Issue[] = [...issuesList];
+        issuesList.forEach((issue: Issue, index) => {
+            if (issue.iid === updatedIssue.iid) {
+                arrayCopy.splice(index, 1);
+                setIssueList(arrayCopy);
+            }
+        });
+        return {
+            iid: updatedIssue.iid || 0,
+            status: updatedIssue.status,
+            title: updatedIssue.title,
+            description: updatedIssue.description,
+            storyPoint: updatedIssue.storyPoint,
+            projectId: updatedIssue.projectId,
+            projectName: updatedIssue.projectName,
+            author: updatedIssue.author,
+            createdAt: new Date(),
+            assignee: updatedIssue?.assignee || unassigned,
+        };
+    };
+
     return (
-        <div class="bg-white relative rounded-md shadow-lg m-2 min-h-48 m-4">
-            <div class="px-4 py-2 h-40">
-                <p class="">{props.title}</p>
+        <div class="issue-list">
+            <div class={headingColour}>
+                <h2 class="capitalize issue-list-title border-l border-deep-space-sparkle">{props.status}</h2>
             </div>
-            <div class="absolute bottom-0 left-0 px-4 py-2">
-                <div class="flex">
-                    <span class="story-pnt">{props.storyPoint}</span>
-                    <p class="font-hairline text-gray-700">{props.projectId}</p>
-                </div>
-            </div>
+            {issuesList.map((issue) => {
+                return (
+                    <div class="bg-white relative rounded-md shadow-lg m-2 m-4">
+                        <div class="px-4 py-2 text-gray-700">
+                            <p class="capitalize">{issue.title}</p>
+                            <select
+                                class="form-input capitalize"
+                                value={issue.status}
+                                onInput={(e): void => {
+                                    issue.status = (e.target as HTMLSelectElement).value;
+                                    props.updateIssueBoard(handleUpdate(issue));
+                                }}
+                            >
+                                {Object.values(IssueStatus).map((issueStatus) => {
+                                    return (
+                                        <option class="form-option capitalize" value={issueStatus}>
+                                            {issueStatus}
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                            <p>
+                                <span class="font-semibold">Author:</span> {issue.author.name}
+                            </p>
+                            <p>
+                                <span class="font-semibold">Assignee:</span>{' '}
+                                {issue.assignee !== null ? issue.assignee.name : 'Unassigned'}
+                            </p>
+                        </div>
+                        <div class="bottom-0 left-0 px-4 py-2">
+                            <div class="flex">
+                                {issue.storyPoint !== 0 && <span class="story-pnt">{issue.storyPoint}</span>}
+                                <p class="text-gray-700">
+                                    {issue.projectName} (#{issue.iid})
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })}
         </div>
     );
 };
@@ -82,8 +168,8 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
                     </div>
                 </div>
                 <div class="px-4 py-2 z-1">
-                    <span class={props.issue.status === IssueStatus.open ? 'open' : 'closed'}>
-                        {props.issue.status}
+                    <span class={props.issue.status === IssueStatus.closed ? 'closed' : 'open'}>
+                        {props.issue.status === IssueStatus.closed ? 'Closed' : 'Opened'}
                     </span>
                     {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
                     <span class="text-gray-700"> Project Name: {props.issue.projectName}</span>
@@ -145,8 +231,8 @@ export const IssueInformation: FunctionalComponent<InformationProps> = (props: I
                         </div>
                         <div class="table-cell py-2">
                             <span class="info-label"> State: </span>
-                            <span class={props.issue.status === IssueStatus.open ? 'open' : 'closed'}>
-                                {props.issue.status}
+                            <span class={props.issue.status === IssueStatus.closed ? 'closed' : 'open'}>
+                                {props.issue.status === IssueStatus.closed ? 'Closed' : 'Opened'}
                             </span>
                         </div>
                     </div>

@@ -13,6 +13,8 @@ public interface IIssueService {
 
     void setProjectName(Issue issue, Project[] projects);
 
+    void setStatus(Issue issue);
+    
     void filterAndSetStoryPoint(ArrayList<Issue> issues);
 
     ArrayList<Issue> searchForIssue(int workspaceId, String searchFor, String filter, String accessToken);

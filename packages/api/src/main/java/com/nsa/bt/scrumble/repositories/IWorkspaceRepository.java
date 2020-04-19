@@ -10,6 +10,8 @@ public interface IWorkspaceRepository {
 
     ArrayList<Integer> projectIdsForWorkspace(int workspaceId);
 
+    List<User> workspaceUserList(int workspaceId);
+
     Workspace createWorkspace(Workspace workspace, User user);
 
     List<Workspace> getAllWorkspaces();

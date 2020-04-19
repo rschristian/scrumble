@@ -15,6 +15,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.nsa.bt.scrumble.repositories.IIssueRepository;
 
 import java.util.*;
 
@@ -41,6 +42,9 @@ public class IssueService implements IIssueService {
 
     @Autowired
     LinearRegression linearRegression;
+
+    @Autowired
+    IIssueRepository issueRepository;
 
     @Override
     public void setStoryPoint(Issue issue) {
@@ -128,6 +132,21 @@ public class IssueService implements IIssueService {
     }
 
     @Override
+    public void setStatus(Issue issue) {
+        if(issue.getLabels().contains("opened")) {
+            issue.setStatus("opened");
+        } else if (issue.getLabels().contains("To Do")){
+            issue.setStatus("To Do");
+        } else if (issue.getLabels().contains("Doing")){
+            issue.setStatus("Doing");
+        } else if(issue.getLabels().contains("closed")) {
+            issue.setStatus("closed");
+        } else {
+            issue.setStatus("opened");
+        }
+    }
+
+    @Override
     public Issue createIssue(int workspaceId, int projectId,  Issue issue, String accessToken) {
         String issueUri = getIssueUri(workspaceId, projectId, issue, accessToken);
         String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
@@ -144,18 +163,34 @@ public class IssueService implements IIssueService {
     @Override
     public Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken) {
         String uri;
-
-        if(issue.getSprint() != null ) {
+        if(issue.getSprint() != null) {
             int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
-            uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
-                    gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getAssignee().getId(), milestoneId, accessToken);
+            if(issue.getSprint().getId() == 0) { //No Sprint selected
+                issueRepository.removeIssue(issue.getIid(), projectId);
+            } else { // adds start time 
+                issueRepository.updateStartTime(issue.getIid(), projectId);
+            }
+            uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
+                    gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getStatus(),issue.getAssignee().getId(), milestoneId, accessToken);
         } else {
-            uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
-                    gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getAssignee().getId(), accessToken);
+            if(issue.getStatus().equals("closed")){
+                issueRepository.updateEndTime(issue.getIid(), projectId);
+                int timeSpent = issueRepository.calculateTime(issue.getIid(), projectId);
+                issue.setTimeSpent(timeSpent);
+                uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&state_event=close&access_token=%s",
+                    gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getStatus(),issue.getAssignee().getId(), accessToken);
+            } else {
+                issueRepository.removeEndTime(issue.getIid(), projectId);
+                uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&state_event=reopen&access_token=%s",
+                    gitLabApiUrl,projectId,issue.getIid(),issue.getTitle(),issue.getDescription(),issue.getStoryPoint(),issue.getStatus(),issue.getAssignee().getId(), accessToken);
+            }
         }
-
         restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
-        linearRegression.setEstimate(projectId, issue, accessToken);
+        if(issue.getStatus().equals("closed")){
+            linearRegression.setTimeSpent(projectId, issue, accessToken);
+        } else {
+            linearRegression.setEstimate(projectId, issue, accessToken);
+        }
         return issue;
     }
 
