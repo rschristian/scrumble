@@ -1,5 +1,5 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
-import { useState } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 
 import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
@@ -12,7 +12,9 @@ import { useStore } from 'stores';
 import { User } from 'models/User';
 
 interface IssuesBoardProps {
-    issue: Issue;
+    issues: Issue[];
+    status: string;
+    headingColour: string;
     updateIssueBoard: (issue: Issue) => void;
 }
 
@@ -23,63 +25,89 @@ const unassigned: User = {
     avatarUrl: null,
     projectIds: [],
 };
-export const IssueBoardCard: FunctionalComponent<IssuesBoardProps> = (props: IssuesBoardProps) => {
+export const IssueBoardCardList: FunctionalComponent<IssuesBoardProps> = (props: IssuesBoardProps) => {
     const userLocationStore = useStore().userLocationStore;
     const currentWorkspace = userLocationStore.currentWorkspace;
-    const [issueStatus, setIssueStatus] = useState(props.issue.status);
+    const [headingColour] = useState(`issue-list-title-holder bg-${props.headingColour}-300`);
+    const [issuesList, setIssueList] = useState<Issue[]>([]);
 
     unassigned.projectIds = currentWorkspace.projectIds;
 
-    const handleUpdate = (issueStatus: string): Issue => {
+    useEffect(() => {
+        props.issues.map((issue) => {
+            if (issue.status === props.status && !issuesList.includes(issue)) {
+                setIssueList((oldValues) => oldValues.concat(issue));
+            }
+        });
+    }, [props.issues]);
+
+    const handleUpdate = (updatedIssue: Issue): Issue => {
+        const arrayCopy: Issue[] = [...issuesList];
+        issuesList.forEach((issue: Issue, index) => {
+            if (issue.iid === updatedIssue.iid) {
+                arrayCopy.splice(index, 1);
+                setIssueList(arrayCopy);
+            }
+        });
         return {
-            iid: props.issue?.iid || 0,
-            status: issueStatus,
-            title: props.issue.title,
-            description: props.issue.description,
-            storyPoint: props.issue.storyPoint,
-            projectId: props.issue.projectId,
-            projectName: props.issue.projectName,
-            author: props.issue.author,
+            iid: updatedIssue.iid || 0,
+            status: updatedIssue.status,
+            title: updatedIssue.title,
+            description: updatedIssue.description,
+            storyPoint: updatedIssue.storyPoint,
+            projectId: updatedIssue.projectId,
+            projectName: updatedIssue.projectName,
+            author: updatedIssue.author,
             createdAt: new Date(),
-            assignee: props.issue?.assignee || unassigned,
+            assignee: updatedIssue?.assignee || unassigned,
         };
     };
+
     return (
-        <div class="bg-white relative rounded-md shadow-lg m-2 min-h-48 m-4">
-            <div class="px-4 py-2 h-40 text-gray-700">
-                <p class="capitalize">{props.issue.title}</p>
-                <select
-                    class="form-input capitalize"
-                    value={issueStatus}
-                    onInput={(e): void => {
-                        setIssueStatus((e.target as HTMLSelectElement).value);
-                        props.updateIssueBoard(handleUpdate((e.target as HTMLSelectElement).value));
-                    }}
-                >
-                    {Object.values(IssueStatus).map((issueStatus) => {
-                        return (
-                            <option class="form-option capitalize" value={issueStatus}>
-                                {issueStatus}
-                            </option>
-                        );
-                    })}
-                </select>
-                <p>
-                    <span class="font-semibold">Author:</span> {props.issue.author.name}
-                </p>
-                <p>
-                    <span class="font-semibold">Assignee:</span>{' '}
-                    {props.issue.assignee !== null ? props.issue.assignee.name : 'Unassigned'}
-                </p>
+        <div class="issue-list">
+            <div class={headingColour}>
+                <h2 class="capitalize issue-list-title border-l border-deep-space-sparkle">{props.status}</h2>
             </div>
-            <div class="bottom-0 left-0 px-4 py-2">
-                <div class="flex">
-                    {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
-                    <p class="text-gray-700">
-                        {props.issue.projectName} (#{props.issue.iid})
-                    </p>
-                </div>
-            </div>
+            {issuesList.map((issue) => {
+                return (
+                    <div class="bg-white relative rounded-md shadow-lg m-2 m-4">
+                        <div class="px-4 py-2 text-gray-700">
+                            <p class="capitalize">{issue.title}</p>
+                            <select
+                                class="form-input capitalize"
+                                value={issue.status}
+                                onInput={(e): void => {
+                                    issue.status = (e.target as HTMLSelectElement).value;
+                                    props.updateIssueBoard(handleUpdate(issue));
+                                }}
+                            >
+                                {Object.values(IssueStatus).map((issueStatus) => {
+                                    return (
+                                        <option class="form-option capitalize" value={issueStatus}>
+                                            {issueStatus}
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                            <p>
+                                <span class="font-semibold">Author:</span> {issue.author.name}
+                            </p>
+                            <p>
+                                <span class="font-semibold">Assignee:</span>{' '}
+                                {issue.assignee !== null ? issue.assignee.name : 'Unassigned'}
+                            </p>
+                        </div>
+                        <div class="bottom-0 left-0 px-4 py-2">
+                            <div class="flex">
+                                {issue.storyPoint !== 0 && <span class="story-pnt">{issue.storyPoint}</span>}
+                                <p class="text-gray-700">
+                                    {issue.projectName} (#{issue.iid})
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })}
         </div>
     );
 };
