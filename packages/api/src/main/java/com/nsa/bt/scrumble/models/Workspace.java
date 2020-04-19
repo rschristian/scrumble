@@ -11,7 +11,9 @@ public class Workspace {
     private ArrayList<Integer> projectIds;
     private List<User> users;
 
-    public Workspace(int id, User createdBy, String name, String description, ArrayList<Integer> projectIds, List<User> users) {
+    public Workspace(int id, User createdBy, String name,
+                     String description, ArrayList<Integer> projectIds,
+                     List<User> users) {
         this.id = id;
         this.createdBy = createdBy;
         this.name = name;

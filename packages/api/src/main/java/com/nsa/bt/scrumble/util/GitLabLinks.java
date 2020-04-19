@@ -13,7 +13,8 @@ public class GitLabLinks {
         this.prev = prev;
     }
 
-    public GitLabLinks() {}
+    public GitLabLinks() {
+    }
 
     public String getFirst() {
         return first;

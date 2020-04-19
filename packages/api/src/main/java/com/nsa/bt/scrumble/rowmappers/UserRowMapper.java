@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Passed to JDBC query to map result set to model
+ * Passed to JDBC query to map result set to model.
  */
 public class UserRowMapper implements RowMapper<User> {
 

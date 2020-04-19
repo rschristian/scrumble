@@ -1,4 +1,5 @@
 package com.nsa.bt.scrumble.config;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.ArrayList;
@@ -8,6 +9,14 @@ import java.util.List;
 public class AppProperties {
     private final Auth auth = new Auth();
     private final OAuth2 oauth2 = new OAuth2();
+
+    public Auth getAuth() {
+        return auth;
+    }
+
+    public OAuth2 getOauth2() {
+        return oauth2;
+    }
 
     public static class Auth {
         private String tokenSecret;
@@ -27,6 +36,10 @@ public class AppProperties {
             return longLifeTokenExpirationMsec;
         }
 
+        public void setLongLifeTokenExpirationMsec(long tokenExpirationMsec) {
+            this.longLifeTokenExpirationMsec = tokenExpirationMsec;
+        }
+
         public String getRedirectUri() {
             return redirectUri;
         }
@@ -39,9 +52,6 @@ public class AppProperties {
             return shortLifeTokenExpirationMsec;
         }
 
-        public void setLongLifeTokenExpirationMsec(long tokenExpirationMsec) {
-            this.longLifeTokenExpirationMsec = tokenExpirationMsec;
-        }
         public void setShortLifeTokenExpirationMsec(long tokenExpirationMsec) {
             this.shortLifeTokenExpirationMsec = tokenExpirationMsec;
         }
@@ -58,13 +68,5 @@ public class AppProperties {
             this.authorizedRedirectUris = authorizedRedirectUris;
             return this;
         }
-    }
-
-    public Auth getAuth() {
-        return auth;
-    }
-
-    public OAuth2 getOauth2() {
-        return oauth2;
     }
 }

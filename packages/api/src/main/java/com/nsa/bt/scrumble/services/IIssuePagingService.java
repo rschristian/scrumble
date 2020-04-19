@@ -2,22 +2,16 @@ package com.nsa.bt.scrumble.services;
 
 import com.nsa.bt.scrumble.dto.IssuePageResult;
 import com.nsa.bt.scrumble.dto.NextResource;
+import io.opentracing.Span;
 
 public interface IIssuePagingService {
+    NextResource findNextProjectWithQueryResults(NextResource nextResource, int workspaceId, int projectId, String uri, Span span);
 
-    NextResource findNextProjectWithQueryResults(NextResource nextResource, int workspaceId,  int projectId, String uri);
+    String getNextProjectIssuesUri(String uri, int nextProjectId, Span span);
 
-    String getNextProjectIssuesUri(String uri, int nextProjectId);
+    int getNextProjectId(int workspaceId, int prevProjectId, Span span);
 
-    int getNextProjectId(int workspaceId, int prevProjectId);
+    boolean isLastProject(int workspaceId, int projectId, Span span);
 
-    int getPageNumber(int requestedPage);
-
-    int getProjectId(int workspaceId, int requestedPage);
-
-    NextResource getNextResource(String requestUri, String linkHeader, int workspaceId, int currentProjectId, int prevPage);
-
-    boolean isLastProject(int workspaceId, int projectId);
-
-    IssuePageResult getPageOfIssues(int workspaceId, int projectId, int page, String filter, String searchTerm, String accessToken);
+    IssuePageResult getPageOfIssues(int workspaceId, int projectId, int page, String filter, String searchTerm, String accessToken, Span span);
 }

@@ -1,23 +1,20 @@
 package com.nsa.bt.scrumble.repositories;
 
 import com.nsa.bt.scrumble.models.Sprint;
+import io.opentracing.Span;
 
 import java.util.List;
 import java.util.Map;
 
 public interface ISprintRepository {
-    Sprint createSprint(int workspaceId, Sprint sprint);
 
-    void deleteSprint(int sprintId);
+    Sprint getSprintById(int sprintId, Span span);
 
-    List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter);
+    List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter, Span span);
 
-    Sprint editSprint(int workspaceId, Sprint sprint);
+    Map<String, Integer> getProjectIdsToMilestoneIds(int sprintId, Span span);
 
-    Sprint getSprintById(int sprintId);
+    Sprint createSprint(int workspaceId, Sprint sprint, Span span);
 
-    Map<String, Integer> getProjectIdsToMileStoneIds(int sprintId);
-
-    List<Sprint> getPageOfSprints(int workspaceId, int pageNumber, int pageSize);
-
+    Sprint editSprint(int workspaceId, Sprint sprint, Span span);
 }

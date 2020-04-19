@@ -2,6 +2,7 @@ package com.nsa.bt.scrumble.security;
 
 import com.nsa.bt.scrumble.config.AppProperties;
 import io.jsonwebtoken.*;
+import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.web.authentication.www.NonceExpiredException;
@@ -13,52 +14,58 @@ import java.util.Date;
 @Service
 public class TokenProvider {
 
-    private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TokenProvider.class);
 
-    private AppProperties appProperties;
+    private final AppProperties appProperties;
 
     public TokenProvider(AppProperties appProperties) {
         this.appProperties = appProperties;
     }
 
-    public String createToken(int userId, long validFor) {
+    public String createToken(int userId, long validFor, Span parentSpan) {
+        var span = SecurityTracer.getTracer().buildSpan("Create a new JWT").asChildOf(parentSpan).start();
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + validFor);
-
-        return Jwts.builder()
+        var token = Jwts.builder()
                 .setSubject(Long.toString(userId))
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
                 .compact();
+        span.finish();
+        return token;
     }
 
-    public Long getUserIdFromToken(String token) {
+    public Long getUserIdFromToken(String token, Span parentSpan) {
+        var span = SecurityTracer.getTracer().buildSpan("Return User ID from Token").asChildOf(parentSpan).start();
         Claims claims = Jwts.parser()
                 .setSigningKey(appProperties.getAuth().getTokenSecret())
                 .parseClaimsJws(token)
                 .getBody();
-
-        return Long.parseLong(claims.getSubject());
+        var userId = Long.parseLong(claims.getSubject());
+        span.finish();
+        return userId;
     }
 
-    public boolean isValidToken(String authToken) {
+    public boolean isValidToken(String authToken, Span parentSpan) {
+        var span = SecurityTracer.getTracer().buildSpan("Checking Token Validity").asChildOf(parentSpan).start();
         try {
             Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
+            span.finish();
             return true;
         } catch (SignatureException ex) {
-            logger.error("Invalid JWT signature");
+            LOGGER.error("Invalid JWT signature");
         } catch (MalformedJwtException ex) {
-            logger.error("Invalid JWT token");
+            LOGGER.error("Invalid JWT token");
         } catch (NonceExpiredException ex) {
-            logger.error("Expired JWT token");
+            LOGGER.error("Expired JWT token");
         } catch (UnsupportedJwtException ex) {
-            logger.error("Unsupported JWT token");
+            LOGGER.error("Unsupported JWT token");
         } catch (IllegalArgumentException ex) {
-            logger.error("JWT claims string is empty.");
+            LOGGER.error("JWT claims string is empty.");
         }
+        span.finish();
         return false;
     }
-
 }
 
