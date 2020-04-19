@@ -5,12 +5,10 @@ import com.nsa.bt.scrumble.security.SecurityTracer;
 import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.security.oauth.users.OAuth2UserInfo;
 import com.nsa.bt.scrumble.services.IUserService;
-
 import com.nsa.bt.scrumble.services.implementations.ServiceTracer;
 import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -59,7 +57,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Optional<User> userOptional = userService.findUserByServiceId(oAuth2UserInfo.getId(), span);
 
         if (userOptional.isEmpty()) {
-           user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo, span);
+            user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo, span);
         } else {
             user = userOptional.get();
         }

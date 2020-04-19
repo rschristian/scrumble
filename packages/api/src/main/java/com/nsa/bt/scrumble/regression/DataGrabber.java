@@ -1,10 +1,10 @@
 package com.nsa.bt.scrumble.regression;
 
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.nsa.bt.scrumble.dto.Issue;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class DataGrabber {
@@ -12,6 +12,16 @@ public class DataGrabber {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    public Issue[] getClosedIssues(String gitLabBaseUrl, int projectId, String accessToken) {
+        String closedIssuesUri = String.format("%1s/projects/%2s/issues?state=closed&access_token=%3s", gitLabBaseUrl, projectId, accessToken);
+        ResponseEntity<Issue[]> closeIssuesResponse = restTemplate.getForEntity(closedIssuesUri, Issue[].class);
+        return closeIssuesResponse.getBody();
+    }
+
+    public int[][] getDataPoints() {
+        return dataPoints;
+    }
 
     public void setDataPoints(Issue[] issues) {
         if (issues.length == 0) {
@@ -23,15 +33,5 @@ public class DataGrabber {
                 this.dataPoints[i][1] = issues[i].getTimeSpent();
             }
         }
-    }
-
-    public Issue[] getClosedIssues(String gitLabBaseUrl, int projectId, String accessToken) {
-        String closedIssuesUri = String.format("%1s/projects/%2s/issues?state=closed&access_token=%3s", gitLabBaseUrl, projectId, accessToken);
-        ResponseEntity<Issue[]> closeIssuesResponse = restTemplate.getForEntity(closedIssuesUri, Issue[].class);
-        return closeIssuesResponse.getBody();
-    }
-
-    public int[][] getDataPoints() {
-        return dataPoints;
     }
 }

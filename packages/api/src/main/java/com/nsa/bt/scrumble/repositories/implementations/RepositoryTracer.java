@@ -4,7 +4,8 @@ import io.jaegertracing.Configuration;
 import io.jaegertracing.internal.JaegerTracer;
 
 public final class RepositoryTracer {
-    private RepositoryTracer() { }
+    private RepositoryTracer() {
+    }
 
     public static JaegerTracer getTracer() {
         Configuration.SamplerConfiguration samplerConfig = Configuration.SamplerConfiguration.fromEnv().withType("const").withParam(1);

@@ -6,18 +6,19 @@ import com.nsa.bt.scrumble.security.TokenProvider;
 import com.nsa.bt.scrumble.security.TokenUtils;
 import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.services.IUserService;
-
 import io.opentracing.Span;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -27,20 +28,18 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class AuthenticationApi {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsApi.class);
+    private final AppProperties appProperties;
+    @Autowired
+    private TokenProvider tokenProvider;
+    @Autowired
+    private IUserService userService;
+    @Autowired
+    private TokenUtils tokenUtils;
+
     public AuthenticationApi(AppProperties appProperties) {
         this.appProperties = appProperties;
     }
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsApi.class);
-    private final AppProperties appProperties;
-
-    @Autowired
-    private TokenProvider tokenProvider;
-
-    @Autowired
-    private IUserService userService;
-
-    @Autowired
-    private TokenUtils tokenUtils;
 
     @GetMapping("/auth/token")
     public ResponseEntity<Object> exchangeShortLifeToken(HttpServletRequest request) {

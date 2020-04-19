@@ -16,29 +16,28 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class SprintService implements ISprintService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SprintService.class);
-
+    private final RestTemplate restTemplate;
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabApiUrl;
-
     @Autowired
     private ISprintRepository sprintRepository;
-
     @Autowired
     private IWorkspaceRepository workspaceRepository;
-
-    private final RestTemplate restTemplate;
 
     @Autowired
     public SprintService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder
-            .errorHandler(new MilestoneRestTemplateResponseErrorHandler())
-            .build();
+                .errorHandler(new MilestoneRestTemplateResponseErrorHandler())
+                .build();
     }
 
     @Override
@@ -48,7 +47,7 @@ public class SprintService implements ISprintService {
         var projectMilestoneIds = new HashMap<String, Integer>();
         ArrayList<Integer> projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId, span);
 
-        for (int projectId: projectIds) {
+        for (int projectId : projectIds) {
             uri = String.format("%s/projects/%d/milestones?title=%s&description=%s&start_date=%tF&due_date=%tF&access_token=%s",
                     gitLabApiUrl, projectId, sprint.getTitle(), sprint.getDescription(), sprint.getStartDate(), sprint.getDueDate(), accessToken);
             Sprint milestone = restTemplate.postForObject(uri, null, Sprint.class);

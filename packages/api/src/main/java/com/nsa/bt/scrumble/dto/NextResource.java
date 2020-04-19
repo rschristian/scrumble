@@ -6,7 +6,8 @@ public class NextResource {
     private int pageSize;
     private int pageNumber;
 
-    public NextResource() { }
+    public NextResource() {
+    }
 
     public int getProjectId() {
         return projectId;

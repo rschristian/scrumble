@@ -1,17 +1,16 @@
 package com.nsa.bt.scrumble.security.oauth;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.nsa.bt.scrumble.security.CookieUtils;
-
 import org.apache.commons.lang3.StringUtils;
-
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 // Adapted from https://github.com/callicoder/spring-boot-react-oauth2-social-login-demo/blob/master/spring-social/src/main/java/com/example/springsocial/security/oauth2/HttpCookieOAuth2AuthorizationRequestRepository.java
+
 /**
  * Cookie based repository for storing Authorization requests.
  */

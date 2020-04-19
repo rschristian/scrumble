@@ -1,10 +1,10 @@
 package com.nsa.bt.scrumble.regression;
 
 import com.nsa.bt.scrumble.dto.Issue;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 
 // Based off of Least Square regression
 // Read more here https://www.mathsisfun.com/data/least-squares-regression.html
@@ -48,7 +48,7 @@ public class LinearRegression {
             xYBar += (dataPoint[0] - xBar) * (dataPoint[1] - yBar);
         }
         // calculating coefficient and y intercept for linear equation: y=mx+c
-        m  = xYBar / xXBar;
+        m = xYBar / xXBar;
         c = yBar - m * xBar;
     }
 
@@ -61,7 +61,7 @@ public class LinearRegression {
         double tmp = time;
         String timeString = "";
         if (tmp >= 576000) { // Equivalent to 1 month
-            int round =  (int) (tmp / 576000);
+            int round = (int) (tmp / 576000);
             timeString = timeString + round + "mo";
             tmp = tmp - round * 576000;
         }

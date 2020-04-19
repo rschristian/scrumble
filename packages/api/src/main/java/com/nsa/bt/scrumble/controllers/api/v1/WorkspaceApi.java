@@ -5,7 +5,6 @@ import com.nsa.bt.scrumble.models.Workspace;
 import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.services.IUserService;
 import com.nsa.bt.scrumble.services.IWorkspaceService;
-
 import io.opentracing.Span;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

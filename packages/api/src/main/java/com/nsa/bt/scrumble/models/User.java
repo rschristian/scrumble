@@ -9,7 +9,8 @@ public class User {
     private String name;
     private ArrayList<Integer> projectIds;
 
-    public User() { }
+    public User() {
+    }
 
     public User(int id, int serviceId, String providerId) {
         // A users Scrumble id
@@ -21,12 +22,12 @@ public class User {
         this.providerId = providerId;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getServiceId() {
@@ -45,20 +46,20 @@ public class User {
         this.providerId = providerId;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setProjectIds(ArrayList<Integer> projectIds) {
-        this.projectIds = projectIds;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public ArrayList<Integer> getProjectIds() {
         return projectIds;
+    }
+
+    public void setProjectIds(ArrayList<Integer> projectIds) {
+        this.projectIds = projectIds;
     }
 
     @Override
@@ -76,7 +77,7 @@ public class User {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result  + id;
+        result = prime * result + id;
         return result;
     }
 }

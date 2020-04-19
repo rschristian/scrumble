@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nsa.bt.scrumble.models.Sprint;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
 
 public class Issue implements Serializable {
     private int iid;
@@ -30,7 +30,8 @@ public class Issue implements Serializable {
     private String createdAt;
     private User assignee;
 
-    public Issue() { }
+    public Issue() {
+    }
 
     public Issue(int projectId, String title, String description,
                  int storyPoint, String status) {

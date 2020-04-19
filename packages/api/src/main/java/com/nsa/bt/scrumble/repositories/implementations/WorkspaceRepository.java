@@ -72,13 +72,13 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     }
 
     @Override
-    public Workspace createWorkspace(Workspace workspace,  User user) {
+    public Workspace createWorkspace(Workspace workspace, User user) {
         String insertStatement = "INSERT INTO workspaces (name, created_by_user, description, workspace_data) VALUES (?, ?, ?, ?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
-                    .prepareStatement(insertStatement, new String[] {"id"});
+                    .prepareStatement(insertStatement, new String[]{"id"});
             ps.setString(1, workspace.getName());
             ps.setInt(2, user.getId());
             ps.setString(3, workspace.getDescription());

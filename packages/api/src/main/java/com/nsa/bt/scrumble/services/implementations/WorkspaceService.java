@@ -8,10 +8,10 @@ import com.nsa.bt.scrumble.services.IWorkspaceService;
 import io.opentracing.Span;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.http.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -78,14 +78,15 @@ public class WorkspaceService implements IWorkspaceService {
         List<User> allUsers = new ArrayList<>();
         Hashtable<User, ArrayList<Integer>> usersProjectIds = new Hashtable<>();
 
-        for (var projectId: workspace.getProjectIds()) {
+        for (var projectId : workspace.getProjectIds()) {
             String uri = String.format("%1s/projects/%2s/users?access_token=%3s",
                     gitLabApiUrl, projectId, accessToken.get());
             ResponseEntity<ArrayList<User>> projectUsersResponse = restTemplate.exchange(
-                    uri, HttpMethod.GET, getApplicationJsonHeaders(span), new ParameterizedTypeReference<>() { });
+                    uri, HttpMethod.GET, getApplicationJsonHeaders(span), new ParameterizedTypeReference<>() {
+                    });
             ArrayList<User> projectUsers = projectUsersResponse.getBody();
 
-            for (var user: projectUsers) {
+            for (var user : projectUsers) {
                 if (usersProjectIds.containsKey(user)) {
                     ArrayList<Integer> projectIdArray = usersProjectIds.get(user);
                     ArrayList<Integer> uniqueProjectIdArray = projectIdArray.stream().distinct().collect(Collectors.toCollection(ArrayList::new)); // removes any duplicates

@@ -3,14 +3,15 @@ package com.nsa.bt.scrumble.controllers.api.v1;
 import com.nsa.bt.scrumble.dto.Project;
 import com.nsa.bt.scrumble.security.UserPrincipal;
 import com.nsa.bt.scrumble.services.IUserService;
-
 import io.opentracing.Span;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -45,7 +46,8 @@ public class ProjectApi {
             String uri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
                     gitLabBaseUrl, accessTokenOptional.get());
             ResponseEntity<ArrayList<Project>> userProjectsResponse =
-                    restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity(headers), new ParameterizedTypeReference<>() { });
+                    restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity(headers), new ParameterizedTypeReference<>() {
+                    });
             span.finish();
             return ResponseEntity.ok().body(userProjectsResponse.getBody());
         }

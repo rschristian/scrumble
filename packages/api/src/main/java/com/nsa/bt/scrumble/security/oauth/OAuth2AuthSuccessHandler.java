@@ -6,7 +6,6 @@ import com.nsa.bt.scrumble.security.CookieUtils;
 import com.nsa.bt.scrumble.security.SecurityTracer;
 import com.nsa.bt.scrumble.security.TokenProvider;
 import com.nsa.bt.scrumble.security.UserPrincipal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;

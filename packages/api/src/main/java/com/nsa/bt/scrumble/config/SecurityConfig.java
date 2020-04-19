@@ -5,7 +5,6 @@ import com.nsa.bt.scrumble.security.oauth.CustomOAuth2UserService;
 import com.nsa.bt.scrumble.security.oauth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.nsa.bt.scrumble.security.oauth.OAuth2AuthFailureHandler;
 import com.nsa.bt.scrumble.security.oauth.OAuth2AuthSuccessHandler;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

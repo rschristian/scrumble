@@ -4,17 +4,16 @@ import com.nsa.bt.scrumble.dto.Issue;
 import com.nsa.bt.scrumble.dto.Project;
 import com.nsa.bt.scrumble.regression.LinearRegression;
 import com.nsa.bt.scrumble.services.IIssueService;
-
 import com.nsa.bt.scrumble.services.ISprintService;
 import io.opentracing.Span;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.OptionalInt;
 
 @Service
 public class IssueService implements IIssueService {
@@ -35,6 +34,23 @@ public class IssueService implements IIssueService {
     @Autowired
     private LinearRegression linearRegression;
 
+    // Ref: https://stackoverflow.com/a/5439547/11679751
+    public static boolean isInteger(String s) {
+        return isInteger(s, 10);
+    }
+
+    public static boolean isInteger(String s, int radix) {
+        if (s.isEmpty()) return false;
+        for (int i = 0; i < s.length(); i++) {
+            if (i == 0 && s.charAt(i) == '-') {
+                if (s.length() == 1) return false;
+                else continue;
+            }
+            if (Character.digit(s.charAt(i), radix) < 0) return false;
+        }
+        return true;
+    }
+
     @Override
     public void setStoryPoint(Issue issue, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Set Story Point").asChildOf(span).start();
@@ -46,23 +62,6 @@ public class IssueService implements IIssueService {
 
         if (storyPoint.isPresent()) issue.setStoryPoint(storyPoint.getAsInt());
         span.finish();
-    }
-
-    // Ref: https://stackoverflow.com/a/5439547/11679751
-    public static boolean isInteger(String s) {
-        return isInteger(s, 10);
-    }
-
-    public static boolean isInteger(String s,  int radix) {
-        if (s.isEmpty()) return false;
-        for (int i = 0; i < s.length(); i++) {
-            if (i == 0 && s.charAt(i) == '-') {
-                if (s.length() == 1) return false;
-                else continue;
-            }
-            if (Character.digit(s.charAt(i), radix) < 0) return false;
-        }
-        return true;
     }
 
     @Override

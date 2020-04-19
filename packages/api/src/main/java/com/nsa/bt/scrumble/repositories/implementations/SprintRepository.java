@@ -1,10 +1,9 @@
 package com.nsa.bt.scrumble.repositories.implementations;
 
-import com.nsa.bt.scrumble.models.Sprint;
-import com.nsa.bt.scrumble.repositories.ISprintRepository;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nsa.bt.scrumble.models.Sprint;
+import com.nsa.bt.scrumble.repositories.ISprintRepository;
 import io.opentracing.Span;
 import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
@@ -19,10 +18,13 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
-public class SprintRepository  implements ISprintRepository {
+public class SprintRepository implements ISprintRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SprintRepository.class);
 
@@ -75,22 +77,22 @@ public class SprintRepository  implements ISprintRepository {
     public Map<String, Integer> getProjectIdsToMilestoneIds(int sprintId, Span span) {
         span = RepositoryTracer.getTracer().buildSpan("SQL Select All Sprint Data").asChildOf(span).start();
         var projectIdsToMilestoneIds = jdbcTemplate.queryForObject("SELECT sprint_data FROM sprints where id = ?",
-            new Object[]{sprintId},
-            new int[]{Types.INTEGER},
-            (rs, row) -> {
-                try {
-                    return parseJsonDataToMilestoneIds(((PGobject) rs.getObject("sprint_data")));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            });
+                new Object[]{sprintId},
+                new int[]{Types.INTEGER},
+                (rs, row) -> {
+                    try {
+                        return parseJsonDataToMilestoneIds(((PGobject) rs.getObject("sprint_data")));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                });
         span.finish();
         return projectIdsToMilestoneIds;
     }
 
     @Override
-    public Sprint createSprint(int workspaceId, Sprint sprint, Span span)  {
+    public Sprint createSprint(int workspaceId, Sprint sprint, Span span) {
         span = RepositoryTracer.getTracer().buildSpan("SQL Insert New Sprint").asChildOf(span).start();
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -99,7 +101,7 @@ public class SprintRepository  implements ISprintRepository {
                     .prepareStatement(
                             "INSERT INTO sprints (workspace_id, title, description, status, start_date, due_date, sprint_data) "
                                     + "VALUES (?, ?, ?, ?, ?, ?, ?);",
-                            new String[] {"id"});
+                            new String[]{"id"});
             ps.setInt(1, workspaceId);
             ps.setString(2, sprint.getTitle());
             ps.setString(3, sprint.getDescription());
@@ -118,17 +120,17 @@ public class SprintRepository  implements ISprintRepository {
     public Sprint editSprint(int workspaceId, Sprint sprint, Span span) {
         span = RepositoryTracer.getTracer().buildSpan("SQL Update Sprint").asChildOf(span).start();
         jdbcTemplate.update(
-            "UPDATE sprints SET title = ?, description = ?, status = ?, start_date = ?, due_date = ?, sprint_data = ? WHERE id = ?",
-            new Object[] {
-                    sprint.getTitle(),
-                    sprint.getDescription(),
-                    sprint.getStatus(),
-                    sprint.getStartDate(),
-                    sprint.getDueDate(),
-                    getSprintJsonbData(sprint),
-                    sprint.getId()
-            },
-            new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.DATE, Types.OTHER, Types.INTEGER}
+                "UPDATE sprints SET title = ?, description = ?, status = ?, start_date = ?, due_date = ?, sprint_data = ? WHERE id = ?",
+                new Object[]{
+                        sprint.getTitle(),
+                        sprint.getDescription(),
+                        sprint.getStatus(),
+                        sprint.getStartDate(),
+                        sprint.getDueDate(),
+                        getSprintJsonbData(sprint),
+                        sprint.getId()
+                },
+                new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.DATE, Types.OTHER, Types.INTEGER}
         );
         span.finish();
         return sprint;

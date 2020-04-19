@@ -11,7 +11,8 @@ public class IssuePageResult {
         this.nextResource = nextResource;
     }
 
-    public IssuePageResult() { }
+    public IssuePageResult() {
+    }
 
     public ArrayList<Issue> getIssues() {
         return issues;

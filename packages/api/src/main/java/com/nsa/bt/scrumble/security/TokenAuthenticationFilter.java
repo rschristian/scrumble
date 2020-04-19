@@ -23,11 +23,7 @@ import java.util.Optional;
 // Adapted from https://github.com/callicoder/spring-boot-react-oauth2-social-login-demo/blob/master/spring-social/src/main/java/com/example/springsocial/security/TokenAuthenticationFilter.java
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-    @Bean
-    public TokenUtils tokenUtils() {
-        return new TokenUtils();
-    }
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
     @Autowired
     private TokenUtils tokenUtils;
 
@@ -37,7 +33,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private IUserService userService;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
+    @Bean
+    public TokenUtils tokenUtils() {
+        return new TokenUtils();
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,

@@ -1,16 +1,15 @@
 package com.nsa.bt.scrumble.services.implementations;
 
 import com.nsa.bt.scrumble.dto.Issue;
-import com.nsa.bt.scrumble.dto.Project;
 import com.nsa.bt.scrumble.dto.IssuePageResult;
 import com.nsa.bt.scrumble.dto.NextResource;
+import com.nsa.bt.scrumble.dto.Project;
 import com.nsa.bt.scrumble.services.IIssuePagingService;
 import com.nsa.bt.scrumble.services.IIssueService;
 import com.nsa.bt.scrumble.services.ISprintService;
 import com.nsa.bt.scrumble.services.IWorkspaceService;
 import com.nsa.bt.scrumble.util.GitLabLinkParser;
 import com.nsa.bt.scrumble.util.GitLabLinks;
-
 import io.opentracing.Span;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,22 +24,17 @@ import java.util.Collections;
 @Service
 public class IssuePagingService implements IIssuePagingService {
 
+    private static final int ISSUE_PAGE_SIZE = 20;
     @Autowired
     private RestTemplate restTemplate;
-
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabApiUrl;
-
     @Autowired
     private IWorkspaceService workspaceService;
-
     @Autowired
     private IIssueService issueService;
-
     @Autowired
     private ISprintService sprintService;
-
-    private static final int ISSUE_PAGE_SIZE = 20;
 
     @Override
     public int getNextProjectId(int workspaceId, int prevProjectId, Span span) {
@@ -52,7 +46,7 @@ public class IssuePagingService implements IIssuePagingService {
     }
 
     public NextResource getNextResource(String requestUri, String linkHeader, int workspaceId,
-                                         int currentProjectId,  int prevPage, Span span) {
+                                        int currentProjectId, int prevPage, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Get Next Resource").asChildOf(span).start();
         NextResource nextResource = new NextResource();
         nextResource.setPageSize(ISSUE_PAGE_SIZE);
@@ -110,10 +104,11 @@ public class IssuePagingService implements IIssuePagingService {
             uri = getNextProjectIssuesUri(uri, projectId, span);
 
             ResponseEntity<ArrayList<Issue>> issuesResponse = restTemplate.exchange(
-                    uri, HttpMethod.GET, getApplicationJsonHeaders(span), new ParameterizedTypeReference<>() { });
+                    uri, HttpMethod.GET, getApplicationJsonHeaders(span), new ParameterizedTypeReference<>() {
+                    });
 
             issues = issuesResponse.getBody();
-            for (var issue: issues) {
+            for (var issue : issues) {
                 issueService.setStoryPoint(issue, span);
             }
             if (!issues.isEmpty()) {
@@ -167,11 +162,12 @@ public class IssuePagingService implements IIssuePagingService {
 
         while (true) {
             ResponseEntity<ArrayList<Issue>> issuesResponse = restTemplate.exchange(
-                    queryUri, HttpMethod.GET, getApplicationJsonHeaders(span), new ParameterizedTypeReference<>() { });
+                    queryUri, HttpMethod.GET, getApplicationJsonHeaders(span), new ParameterizedTypeReference<>() {
+                    });
             var openSprints = sprintService.getSprintsForWorkspace(workspaceId, "active", span);
 
             issues = issuesResponse.getBody();
-            for (var issue: issues) {
+            for (var issue : issues) {
                 issueService.setStoryPoint(issue, span);
                 issueService.setProjectName(issue, projects, span);
                 sprintService.setSprintForIssue(workspaceId, issue, openSprints, span);

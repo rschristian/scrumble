@@ -1,9 +1,5 @@
 package com.nsa.bt.scrumble.security.oauth.users;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-
-import java.util.List;
 import java.util.Map;
 
 public class GitLabOAuth2UserInfo extends OAuth2UserInfo {
