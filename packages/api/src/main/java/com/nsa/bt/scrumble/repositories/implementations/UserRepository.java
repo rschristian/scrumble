@@ -43,7 +43,8 @@ public class UserRepository implements IUserRepository {
                                     rs.getString("provider_id")
                             ))
             );
-        } catch (IncorrectResultSizeDataAccessException ignored) { }
+        } catch (IncorrectResultSizeDataAccessException ignored) {
+        }
         span.finish();
         return optionalUser;
     }
@@ -63,7 +64,8 @@ public class UserRepository implements IUserRepository {
                                     rs.getString("provider_id")
                             ))
             );
-        } catch (IncorrectResultSizeDataAccessException ignored) { }
+        } catch (IncorrectResultSizeDataAccessException ignored) {
+        }
         span.finish();
         return optionalUser;
     }
@@ -99,7 +101,8 @@ public class UserRepository implements IUserRepository {
                     (rs, rowNum) ->
                             Optional.of(rs.getString("access_token"))
             );
-        } catch (IncorrectResultSizeDataAccessException ignored) { }
+        } catch (IncorrectResultSizeDataAccessException ignored) {
+        }
         span.finish();
         return stringOptional;
     }
