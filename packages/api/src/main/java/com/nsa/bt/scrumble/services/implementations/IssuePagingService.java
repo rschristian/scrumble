@@ -4,10 +4,7 @@ import com.nsa.bt.scrumble.dto.Issue;
 import com.nsa.bt.scrumble.dto.IssuePageResult;
 import com.nsa.bt.scrumble.dto.NextResource;
 import com.nsa.bt.scrumble.dto.Project;
-import com.nsa.bt.scrumble.services.IIssuePagingService;
-import com.nsa.bt.scrumble.services.IIssueService;
-import com.nsa.bt.scrumble.services.ISprintService;
-import com.nsa.bt.scrumble.services.IWorkspaceService;
+import com.nsa.bt.scrumble.services.*;
 import com.nsa.bt.scrumble.util.GitLabLinkParser;
 import com.nsa.bt.scrumble.util.GitLabLinks;
 import io.opentracing.Span;
@@ -35,6 +32,8 @@ public class IssuePagingService implements IIssuePagingService {
     private IIssueService issueService;
     @Autowired
     private ISprintService sprintService;
+    @Autowired
+    private IUserService userService;
 
     @Override
     public int getNextProjectId(int workspaceId, int prevProjectId, Span parentSpan) {
@@ -169,8 +168,10 @@ public class IssuePagingService implements IIssuePagingService {
             issues = issuesResponse.getBody();
             for (var issue : issues) {
                 issueService.setStoryPoint(issue, span);
+                issueService.setStatus(issue);
                 issueService.setProjectName(issue, projects, span);
                 sprintService.setSprintForIssue(workspaceId, issue, openSprints, span);
+                if (issue.getAssignee() != null) userService.setProjectId(workspaceId, issue);
             }
             issuePageResult.setIssues(issues);
 

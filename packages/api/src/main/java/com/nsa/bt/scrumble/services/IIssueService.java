@@ -11,6 +11,8 @@ public interface IIssueService {
 
     void setProjectName(Issue issue, Project[] projects, Span span);
 
+    void setStatus(Issue issue);
+
     String getFilterQuery(String filter, Span span);
 
     Issue createIssue(int workspaceId, int projectId, Issue issue, String accessToken, Span span);

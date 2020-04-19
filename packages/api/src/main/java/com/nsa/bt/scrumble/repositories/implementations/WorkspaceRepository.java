@@ -75,6 +75,23 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     }
 
     @Override
+    public List<User> workspaceUserList(int workspaceId) {
+        return jdbcTemplate.queryForObject(
+                "SELECT workspace_data FROM workspaces WHERE id = ?;",
+                new Object[]{workspaceId},
+                (rs, rowNum) ->
+                {
+                    try {
+                        return parseJsonDataToUserList(((PGobject) rs.getObject("workspace_data")));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return new ArrayList<>();
+                }
+        );
+    }
+
+    @Override
     public Workspace createWorkspace(Workspace workspace, User user, Span parentSpan) {
         var span = RepositoryTracer.getTracer().buildSpan("SQL Insert New Workspace").asChildOf(parentSpan).start();
         String insertStatement = "INSERT INTO workspaces (name, created_by_user, description, workspace_data) VALUES (?, ?, ?, ?);";

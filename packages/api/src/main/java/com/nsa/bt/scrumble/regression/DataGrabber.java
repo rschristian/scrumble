@@ -26,11 +26,13 @@ public class DataGrabber {
     public void setDataPoints(Issue[] issues) {
         if (issues.length == 0) {
             this.dataPoints = new int[][]{};
-        }
-        for (int i = 0; i < issues.length; i++) {
-            if (issues[i].getTimeSpent() > 0) {
-                this.dataPoints[i][0] = issues[i].getStoryPoint();
-                this.dataPoints[i][1] = issues[i].getTimeSpent();
+        } else {
+            this.dataPoints = new int[issues.length][issues.length];
+            for (int i = 0; i < issues.length; i++) {
+                if (issues[i].getTimeSpent() > 0) {
+                    this.dataPoints[i][0] = issues[i].getStoryPoint();
+                    this.dataPoints[i][1] = issues[i].getTimeSpent();
+                }
             }
         }
     }

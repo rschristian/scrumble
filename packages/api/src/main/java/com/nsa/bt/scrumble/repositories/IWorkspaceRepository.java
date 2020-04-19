@@ -16,4 +16,6 @@ public interface IWorkspaceRepository {
     Workspace createWorkspace(Workspace workspace, User user, Span span);
 
     void editWorkspace(Workspace updatedWorkspace, Span span);
+
+    List<User> workspaceUserList(int workspaceId);
 }

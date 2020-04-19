@@ -1,5 +1,6 @@
 package com.nsa.bt.scrumble.services;
 
+import com.nsa.bt.scrumble.dto.Issue;
 import com.nsa.bt.scrumble.models.User;
 import io.opentracing.Span;
 
@@ -17,4 +18,6 @@ public interface IUserService {
     void addToken(int userId, String token, Span span);
 
     void removeToken(int userId, Span span);
+
+    void setProjectId(int workspaceId, Issue issue);
 }
