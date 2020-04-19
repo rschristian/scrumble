@@ -41,7 +41,7 @@ public class UserDetailsApi {
     private String authErrorMsg;
 
     @GetMapping("/user/info")
-    public ResponseEntity<Object> getUserInfo(final Authentication authentication) {
+    public ResponseEntity<Object> getUserInfo(Authentication authentication) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /user/info").start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);

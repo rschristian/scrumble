@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GitLabOAuth2UserInfo extends OAuth2UserInfo {
-    public GitLabOAuth2UserInfo(final Map<String, Object> attributes) {
+    public GitLabOAuth2UserInfo(Map<String, Object> attributes) {
         super(attributes);
     }
 

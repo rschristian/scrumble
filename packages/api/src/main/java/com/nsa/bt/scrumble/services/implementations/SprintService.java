@@ -35,15 +35,15 @@ public class SprintService implements ISprintService {
     private final RestTemplate restTemplate;
 
     @Autowired
-    public SprintService(final RestTemplateBuilder restTemplateBuilder) {
+    public SprintService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder
             .errorHandler(new MilestoneRestTemplateResponseErrorHandler())
             .build();
     }
 
     @Override
-    public Sprint createSprint(final int workspaceId, Sprint sprint, final String accessToken, Span span) {
-        span = ServiceTracer.getTracer().buildSpan("Creat Sprint").asChildOf(span).start();
+    public Sprint createSprint(int workspaceId, Sprint sprint, String accessToken, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Create Sprint").asChildOf(span).start();
         String uri;
         var projectMilestoneIds = new HashMap<String, Integer>();
         ArrayList<Integer> projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId, span);
@@ -61,7 +61,7 @@ public class SprintService implements ISprintService {
     }
 
     @Override
-    public Sprint editSprint(final int workspaceId, Sprint sprint, final String accessToken, Span span) {
+    public Sprint editSprint(int workspaceId, Sprint sprint, String accessToken, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Edit Sprint").asChildOf(span).start();
         for (Map.Entry<String, Integer> pair : sprintRepository.getProjectIdsToMilestoneIds(sprint.getId(), span).entrySet()) {
             editGitLabMilestone(Integer.parseInt(pair.getKey()), pair.getValue(), sprint, accessToken, span);
@@ -72,7 +72,7 @@ public class SprintService implements ISprintService {
     }
 
     @Override
-    public List<Sprint> getSprintsForWorkspace(final int workspaceId, final String filter, Span span) {
+    public List<Sprint> getSprintsForWorkspace(int workspaceId, String filter, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Get Sprints for Workspace").asChildOf(span).start();
         var sprints = sprintRepository.getAllSprintsForWorkspace(workspaceId, filter);
         span.finish();
@@ -80,7 +80,7 @@ public class SprintService implements ISprintService {
     }
 
     @Override
-    public Issue setSprintForIssue(final int workspaceId, final Issue issue, final List<Sprint> sprints, Span span) {
+    public Issue setSprintForIssue(int workspaceId, Issue issue, List<Sprint> sprints, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Set Sprint for Issue").asChildOf(span).start();
         // Initial assigning of sprint will be milestone data from api. If present, milestone values
         // must be swapped with Scrumble sprint values for future operations. Most importantly, id needs to be changed
@@ -88,11 +88,13 @@ public class SprintService implements ISprintService {
             span.finish();
             return issue;
         }
+
         for (Sprint sprint : sprints) {
             for (Map.Entry<String, Integer> pair : sprint.getProjectIdToMilestoneIds().entrySet()) {
                 // Look for a Scrumble sprint that includes the issue's milestone
                 if (issue.getSprint().getId() == pair.getValue()) {
                     issue.setSprint(sprint);
+                    span.finish();
                     return issue;
                 }
             }
@@ -102,23 +104,26 @@ public class SprintService implements ISprintService {
     }
 
     @Override
-    public int getMilestoneId(final int workspaceId, final int projectId, final int sprintId) {
+    public int getMilestoneId(int workspaceId, int projectId, int sprintId, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Get Milestone ID").asChildOf(span).start();
         if (sprintId == 0) {
+            span.finish();
             return sprintId;
         }
         Sprint sprint = sprintRepository.getSprintById(sprintId);
 
         try {
+            span.finish();
             return sprint.getProjectIdToMilestoneIds().get(Integer.toString(projectId));
         } catch (NullPointerException e) {
-
             LOGGER.error(String.format("Project with id %d does not have a corresponding milestone for sprint with id %d", projectId, sprintId));
         }
+        span.finish();
         return 0;
     }
 
-    private void editGitLabMilestone(final int projectId, final int milestoneId, final Sprint sprint,
-                                     final String accessToken, Span span) {
+    private void editGitLabMilestone(int projectId, int milestoneId, Sprint sprint,
+                                     String accessToken, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Edit GitLab Milestone").asChildOf(span).start();
         String stateEvent = (sprint.getStatus().equalsIgnoreCase("active")) ? "activate" : "close";
         String uri = String.format("%s/projects/%d/milestones/%d?title=%s&description=%s&start_date=%tF&due_date=%tF&state_event=%s&access_token=%s",

@@ -40,8 +40,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
 
     @Override
-    protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
-                                    final FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         var span = SecurityTracer.getTracer().buildSpan("Do Filter Internal").start();
         try {
             String jwt = tokenUtils.getJwtFromRequest(request, span);

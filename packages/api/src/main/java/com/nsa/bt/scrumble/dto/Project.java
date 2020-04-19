@@ -11,7 +11,7 @@ public class Project implements Serializable {
     @JsonAlias("avatar_url")
     private String avatarUrl;
 
-    public Project(final int id, final String name, final String description, final String avatarUrl) {
+    public Project(int id, String name, String description, String avatarUrl) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -22,7 +22,7 @@ public class Project implements Serializable {
         return id;
     }
 
-    public void setId(final int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -30,7 +30,7 @@ public class Project implements Serializable {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -38,7 +38,7 @@ public class Project implements Serializable {
         return description;
     }
 
-    public void setDescription(final String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -46,7 +46,7 @@ public class Project implements Serializable {
         return avatarUrl;
     }
 
-    public void setAvatarUrl(final String avatarUrl) {
+    public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
     }
 }

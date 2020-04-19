@@ -44,12 +44,12 @@ public class IssuesApi {
 
     @GetMapping("/workspace/{id}/issues")
     public ResponseEntity<Object> getIssues(
-        final Authentication auth,
-        final @PathVariable(value = "id") int workspaceId,
-        final @RequestParam(value = "projectId") int projectId,
-        final @RequestParam(value = "page") int page,
-        final @RequestParam(value = "filter") String filter,
-        final @RequestParam(value = "searchFor") String searchTerm
+            Authentication auth,
+            @PathVariable(value = "id") int workspaceId,
+            @RequestParam(value = "projectId") int projectId,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "filter") String filter,
+            @RequestParam(value = "searchFor") String searchTerm
     ) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /workspace/" + workspaceId + "/issues").start();
         Optional<String> accessTokenOptional = userService.getToken(((UserPrincipal) auth.getPrincipal()).getId(), span);
@@ -71,9 +71,9 @@ public class IssuesApi {
 
     @PostMapping("/workspace/{workspaceId}/project/{projectId}/issue")
     public ResponseEntity<Object> createIssue(
-            final Authentication authentication,
-            final @PathVariable(value = "workspaceId") int workspaceId,
-            final @PathVariable(value = "projectId") int projectId,
+            Authentication authentication,
+            @PathVariable(value = "workspaceId") int workspaceId,
+            @PathVariable(value = "projectId") int projectId,
             @RequestBody Issue issue
     ) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP POST /workspace/" + workspaceId + "/projects/" + projectId + "/issues").start();
@@ -99,10 +99,10 @@ public class IssuesApi {
 
     @PutMapping("/workspace/{workspaceId}/project/{projectId}/issue/{issueId}")
     public ResponseEntity<Object> editIssue(
-            final Authentication authentication,
-            final @PathVariable(value = "workspaceId") int workspaceId,
-            final @PathVariable(value = "projectId") int projectId,
-            final @PathVariable(value = "issueId") int issueId,
+            Authentication authentication,
+            @PathVariable(value = "workspaceId") int workspaceId,
+            @PathVariable(value = "projectId") int projectId,
+            @PathVariable(value = "issueId") int issueId,
             @RequestBody Issue issue
     ) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP PUT /workspace/" + workspaceId + "/projects/" + projectId + "/issue/" + issueId).start();

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class GitLabLinkParser {
     public GitLabLinkParser() { }
 
-    public GitLabLinks parseLink(final String linkHeader)  {
+    public GitLabLinks parseLink(String linkHeader)  {
         GitLabLinks gitLabLinks = new GitLabLinks();
         String[] links = linkHeader.split(",");
         for (String link : links) {

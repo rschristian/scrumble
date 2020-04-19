@@ -17,7 +17,7 @@ public class UserRepository implements IUserRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public User createUser(final User user) {
+    public User createUser(User user) {
         String insertStatement = "INSERT INTO users (service_id, provider_id) VALUES (?, ?);";
         Object[] params = new Object[]{user.getServiceId(), user.getProviderId()};
         int[] types = new int[]{Types.INTEGER, Types.VARCHAR};
@@ -26,7 +26,7 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public Optional<User> findUserByServiceId(final int serviceId) {
+    public Optional<User> findUserByServiceId(int serviceId) {
         try {
             return jdbcTemplate.queryForObject(
                     "SELECT * FROM users WHERE service_id = ?;",
@@ -44,7 +44,7 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public Optional<User> findUserById(final int id) {
+    public Optional<User> findUserById(int id) {
         try {
             return jdbcTemplate.queryForObject(
                     "SELECT * FROM users WHERE id = ?;",
@@ -62,7 +62,7 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public void addToken(final int userId, final String token) {
+    public void addToken(int userId, String token) {
         String insertStatement = "UPDATE users SET access_token = ? WHERE id = ?";
         Object[] params = new Object[]{token, userId};
         int[] types = new int[]{Types.VARCHAR, Types.INTEGER};
@@ -70,7 +70,7 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public void removeToken(final int userId) {
+    public void removeToken(int userId) {
         String insertStatement = "UPDATE users SET access_token = null WHERE id = ?";
         Object[] params = new Object[]{userId};
         int[] types = new int[]{Types.INTEGER};
@@ -78,7 +78,7 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public Optional<String> getToken(final int userId) {
+    public Optional<String> getToken(int userId) {
         try {
             return jdbcTemplate.queryForObject(
                     "SELECT * FROM users WHERE id = ?;",

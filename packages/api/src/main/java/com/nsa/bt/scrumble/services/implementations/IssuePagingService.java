@@ -43,7 +43,7 @@ public class IssuePagingService implements IIssuePagingService {
     private static final int ISSUE_PAGE_SIZE = 20;
 
     @Override
-    public int getNextProjectId(final int workspaceId, final int prevProjectId, Span span) {
+    public int getNextProjectId(int workspaceId, int prevProjectId, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Get Next Project ID").asChildOf(span).start();
         ArrayList<Integer> workspaceProjectIds = workspaceService.getProjectIdsForWorkspace(workspaceId, span);
         var nextProjectId = workspaceProjectIds.get(workspaceProjectIds.lastIndexOf(prevProjectId) + 1);
@@ -51,8 +51,8 @@ public class IssuePagingService implements IIssuePagingService {
         return nextProjectId;
     }
 
-    public NextResource getNextResource(final String requestUri, final String linkHeader, final int workspaceId,
-                                        final int currentProjectId, final int prevPage, Span span) {
+    public NextResource getNextResource(String requestUri, String linkHeader, int workspaceId,
+                                         int currentProjectId,  int prevPage, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Get Next Resource").asChildOf(span).start();
         NextResource nextResource = new NextResource();
         nextResource.setPageSize(ISSUE_PAGE_SIZE);
@@ -85,7 +85,7 @@ public class IssuePagingService implements IIssuePagingService {
     }
 
     @Override
-    public String getNextProjectIssuesUri(String uri, final int nextProjectId, Span span) {
+    public String getNextProjectIssuesUri(String uri, int nextProjectId, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Get Next Resource").asChildOf(span).start();
         // Alter query uri to just query a different project and set the page to 1
         uri = uri.replaceAll("(?<=projects/)(.*)(?=/issues)", Integer.toString(nextProjectId));
@@ -95,7 +95,7 @@ public class IssuePagingService implements IIssuePagingService {
     }
 
     @Override
-    public NextResource findNextProjectWithQueryResults(final NextResource nextResource, final int workspaceId,
+    public NextResource findNextProjectWithQueryResults(NextResource nextResource, int workspaceId,
                                                         int projectId, String uri, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Find Next Project with Query Results").asChildOf(span).start();
         ArrayList<Issue> issues;
@@ -110,11 +110,12 @@ public class IssuePagingService implements IIssuePagingService {
             uri = getNextProjectIssuesUri(uri, projectId, span);
 
             ResponseEntity<ArrayList<Issue>> issuesResponse = restTemplate.exchange(
-                    uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() { });
+                    uri, HttpMethod.GET, getApplicationJsonHeaders(span), new ParameterizedTypeReference<>() { });
 
             issues = issuesResponse.getBody();
-            Span finalSpan = span;
-            issues.forEach((issue) -> issueService.setStoryPoint(issue, finalSpan));
+            for (var issue: issues) {
+                issueService.setStoryPoint(issue, span);
+            }
             if (!issues.isEmpty()) {
                 nextResource.setProjectId(projectId);
                 nextResource.setPageNumber(1);
@@ -130,28 +131,29 @@ public class IssuePagingService implements IIssuePagingService {
 
 
     @Override
-    public boolean isLastProject(final int workspaceId, final int projectId, Span span) {
+    public boolean isLastProject(int workspaceId, int projectId, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Is Last Project Check").asChildOf(span).start();
         ArrayList<Integer> workspaceProjectIds = workspaceService.getProjectIdsForWorkspace(workspaceId, span);
         span.finish();
         return workspaceProjectIds.lastIndexOf(projectId) == workspaceProjectIds.size() - 1;
     }
 
-    private HttpEntity<String> getApplicationJsonHeaders() {
+    private HttpEntity<String> getApplicationJsonHeaders(Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Retrieving Application Headers").asChildOf(span).start();
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        span.finish();
         return new HttpEntity(headers);
     }
 
     @Override
-    public IssuePageResult getPageOfIssues(final int workspaceId, int projectId, int page, final String filter,
-                                           final String searchTerm, final String accessToken, Span span) {
+    public IssuePageResult getPageOfIssues(int workspaceId, int projectId, int page, String filter,
+                                           String searchTerm, String accessToken, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Get Page of Issues").asChildOf(span).start();
         // Initial call for a workspaces issues will pass number 0 for page and project id.
         // SB works out which project it should start from
         page = (page == 0) ? 1 : page;
         projectId = (projectId == 0) ? workspaceService.getProjectIdsForWorkspace(workspaceId, span).get(0) : projectId;
-
 
         String uri = String.format("%s/projects?access_token=%s&simple=true&membership=true", gitLabApiUrl, accessToken);
         ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(uri, Project[].class);
@@ -165,16 +167,15 @@ public class IssuePagingService implements IIssuePagingService {
 
         while (true) {
             ResponseEntity<ArrayList<Issue>> issuesResponse = restTemplate.exchange(
-                    queryUri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() { });
+                    queryUri, HttpMethod.GET, getApplicationJsonHeaders(span), new ParameterizedTypeReference<>() { });
             var openSprints = sprintService.getSprintsForWorkspace(workspaceId, "active", span);
 
             issues = issuesResponse.getBody();
-            Span finalSpan = span;
-            issues.forEach((issue) -> {
-                issueService.setStoryPoint(issue, finalSpan);
-                issueService.setProjectName(issue, projects, finalSpan);
-                sprintService.setSprintForIssue(workspaceId, issue, openSprints, finalSpan);
-            });
+            for (var issue: issues) {
+                issueService.setStoryPoint(issue, span);
+                issueService.setProjectName(issue, projects, span);
+                sprintService.setSprintForIssue(workspaceId, issue, openSprints, span);
+            }
             issuePageResult.setIssues(issues);
 
             if (!issues.isEmpty()) {

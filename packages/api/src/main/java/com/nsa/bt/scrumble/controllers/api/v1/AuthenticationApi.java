@@ -27,7 +27,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class AuthenticationApi {
 
-    public AuthenticationApi(final AppProperties appProperties) {
+    public AuthenticationApi(AppProperties appProperties) {
         this.appProperties = appProperties;
     }
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsApi.class);
@@ -43,7 +43,7 @@ public class AuthenticationApi {
     private TokenUtils tokenUtils;
 
     @GetMapping("/auth/token")
-    public ResponseEntity<Object> exchangeShortLifeToken(final HttpServletRequest request) {
+    public ResponseEntity<Object> exchangeShortLifeToken(HttpServletRequest request) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /auth/token").start();
         String jwt = tokenUtils.getJwtFromRequest(request, span);
         String token = "";
@@ -64,7 +64,7 @@ public class AuthenticationApi {
     }
 
     @DeleteMapping("/auth/token")
-    public ResponseEntity<Object> deleteToken(final Authentication authentication) {
+    public ResponseEntity<Object> deleteToken(Authentication authentication) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP DELETE /auth/token").start();
 
         try {

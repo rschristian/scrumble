@@ -30,7 +30,7 @@ public class SprintRepository  implements ISprintRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public Sprint getSprintById(final int sprintId) {
+    public Sprint getSprintById(int sprintId) {
         String selectStatement = "SELECT * FROM sprints where id = ?";
         Object[] params = new Object[]{sprintId};
         int[] types = new int[]{Types.INTEGER};
@@ -55,7 +55,7 @@ public class SprintRepository  implements ISprintRepository {
     }
 
     @Override
-    public List<Sprint> getAllSprintsForWorkspace(final int workspaceId, final String filter) {
+    public List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter) {
         String selectStatement;
         Object[] params;
         int[] types;
@@ -72,7 +72,7 @@ public class SprintRepository  implements ISprintRepository {
     }
 
     @Override
-    public Map<String, Integer> getProjectIdsToMilestoneIds(final int sprintId, Span span) {
+    public Map<String, Integer> getProjectIdsToMilestoneIds(int sprintId, Span span) {
         span = RepositoryTracer.getTracer().buildSpan("SQL Select All Sprint Data").asChildOf(span).start();
         var projectIdsToMilestoneIds = jdbcTemplate.queryForObject("SELECT sprint_data FROM sprints where id = ?",
             new Object[]{sprintId},
@@ -90,7 +90,7 @@ public class SprintRepository  implements ISprintRepository {
     }
 
     @Override
-    public Sprint createSprint(final int workspaceId, final Sprint sprint, Span span)  {
+    public Sprint createSprint(int workspaceId, Sprint sprint, Span span)  {
         span = RepositoryTracer.getTracer().buildSpan("SQL Insert New Sprint").asChildOf(span).start();
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -115,7 +115,7 @@ public class SprintRepository  implements ISprintRepository {
     }
 
     @Override
-    public Sprint editSprint(final int workspaceId, final Sprint sprint, Span span) {
+    public Sprint editSprint(int workspaceId, Sprint sprint, Span span) {
         span = RepositoryTracer.getTracer().buildSpan("SQL Update Sprint").asChildOf(span).start();
         jdbcTemplate.update(
             "UPDATE sprints SET title = ?, description = ?, status = ?, start_date = ?, due_date = ?, sprint_data = ? WHERE id = ?",
@@ -134,7 +134,7 @@ public class SprintRepository  implements ISprintRepository {
         return sprint;
     }
 
-    private List<Sprint> mapRowsToSprintList(final String sqlSelect, final Object[] params, final int[] types) {
+    private List<Sprint> mapRowsToSprintList(String sqlSelect, Object[] params, int[] types) {
         return new ArrayList<>(jdbcTemplate.query(sqlSelect,
                 params,
                 types,
@@ -155,7 +155,7 @@ public class SprintRepository  implements ISprintRepository {
                 }));
     }
 
-    private PGobject getSprintJsonbData(final Sprint sprint) {
+    private PGobject getSprintJsonbData(Sprint sprint) {
         try {
             Map<Object, Object> dataMap = new HashMap<>();
             PGobject jsonObject = new PGobject();
@@ -171,7 +171,7 @@ public class SprintRepository  implements ISprintRepository {
         }
     }
 
-    private Map<String, Integer> parseJsonDataToMilestoneIds(final PGobject jsonData) throws IOException {
+    private Map<String, Integer> parseJsonDataToMilestoneIds(PGobject jsonData) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return (Map<String, Integer>) mapper.readValue(jsonData.getValue(), Map.class).get("projects_to_milestones");
     }

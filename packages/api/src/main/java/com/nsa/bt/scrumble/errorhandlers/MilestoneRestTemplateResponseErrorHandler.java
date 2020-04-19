@@ -21,13 +21,13 @@ public class MilestoneRestTemplateResponseErrorHandler implements ResponseErrorH
     private static final Logger LOGGER = LoggerFactory.getLogger(MilestoneRestTemplateResponseErrorHandler.class);
 
     @Override
-    public boolean hasError(final ClientHttpResponse httpResponse) throws IOException {
+    public boolean hasError(ClientHttpResponse httpResponse) throws IOException {
         return (httpResponse.getStatusCode().series() == CLIENT_ERROR
                 || httpResponse.getStatusCode().series() == SERVER_ERROR);
     }
 
     @Override
-    public void handleError(final ClientHttpResponse httpResponse)
+    public void handleError(ClientHttpResponse httpResponse)
             throws IOException {
         String milestoneNameInUseError = "already being used for another group or project milestone";
         BufferedReader reader = new BufferedReader(new InputStreamReader(httpResponse.getBody()));

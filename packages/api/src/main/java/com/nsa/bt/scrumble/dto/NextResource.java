@@ -12,7 +12,7 @@ public class NextResource {
         return projectId;
     }
 
-    public void setProjectId(final int projectId) {
+    public void setProjectId(int projectId) {
         this.projectId = projectId;
     }
 
@@ -20,7 +20,7 @@ public class NextResource {
         return pageSize;
     }
 
-    public void setPageSize(final int pageSize) {
+    public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
 
@@ -28,7 +28,7 @@ public class NextResource {
         return pageNumber;
     }
 
-    public void setPageNumber(final int pageNumber) {
+    public void setPageNumber(int pageNumber) {
         this.pageNumber = pageNumber;
     }
 }

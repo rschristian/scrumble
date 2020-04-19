@@ -52,12 +52,12 @@ public class LinearRegression {
         c = yBar - m * xBar;
     }
 
-    public double predict(final int x) {
+    public double predict(int x) {
         return m * x + c; // Finds y value
     }
 
     // Default conversion rates are 1mo = 4w, 1w = 5d and 1d = 8h.
-    public String timeConversion(final double time) {
+    public String timeConversion(double time) {
         double tmp = time;
         String timeString = "";
         if (tmp >= 576000) { // Equivalent to 1 month
@@ -83,7 +83,7 @@ public class LinearRegression {
         return timeString;
     }
 
-    public void setEstimate(final int projectId, final Issue issue, final String accessToken) {
+    public void setEstimate(int projectId, Issue issue, String accessToken) {
         Issue[] closedIssues = dataGrabber.getClosedIssues(gitLabApiUrl, projectId, accessToken);
         dataGrabber.setDataPoints(closedIssues);
         int[][] dataPoints = dataGrabber.getDataPoints();

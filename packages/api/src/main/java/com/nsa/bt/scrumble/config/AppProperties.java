@@ -19,7 +19,7 @@ public class AppProperties {
             return tokenSecret;
         }
 
-        public void setTokenSecret(final String tokenSecret) {
+        public void setTokenSecret(String tokenSecret) {
             this.tokenSecret = tokenSecret;
         }
 
@@ -31,7 +31,7 @@ public class AppProperties {
             return redirectUri;
         }
 
-        public void setRedirectUri(final String redirectUri) {
+        public void setRedirectUri(String redirectUri) {
             this.redirectUri = redirectUri;
         }
 
@@ -39,10 +39,10 @@ public class AppProperties {
             return shortLifeTokenExpirationMsec;
         }
 
-        public void setLongLifeTokenExpirationMsec(final long tokenExpirationMsec) {
+        public void setLongLifeTokenExpirationMsec(long tokenExpirationMsec) {
             this.longLifeTokenExpirationMsec = tokenExpirationMsec;
         }
-        public void setShortLifeTokenExpirationMsec(final long tokenExpirationMsec) {
+        public void setShortLifeTokenExpirationMsec(long tokenExpirationMsec) {
             this.shortLifeTokenExpirationMsec = tokenExpirationMsec;
         }
     }
@@ -54,7 +54,7 @@ public class AppProperties {
             return authorizedRedirectUris;
         }
 
-        public OAuth2 authorizedRedirectUris(final List<String> authorizedRedirectUris) {
+        public OAuth2 authorizedRedirectUris(List<String> authorizedRedirectUris) {
             this.authorizedRedirectUris = authorizedRedirectUris;
             return this;
         }

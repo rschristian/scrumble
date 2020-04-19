@@ -34,16 +34,16 @@ public class OAuth2AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
     @Autowired
-    OAuth2AuthSuccessHandler(final TokenProvider tokenProvider, final AppProperties appProperties,
-                             final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
+    OAuth2AuthSuccessHandler(TokenProvider tokenProvider, AppProperties appProperties,
+                             HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
         this.tokenProvider = tokenProvider;
         this.appProperties = appProperties;
         this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
     }
 
     @Override
-    public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response,
-                                        final Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                        Authentication authentication) throws IOException, ServletException {
         String targetUrl = determineTargetUrl(request, authentication);
 
         if (response.isCommitted()) {
@@ -55,7 +55,7 @@ public class OAuth2AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    protected String determineTargetUrl(final HttpServletRequest request, final Authentication authentication) {
+    protected String determineTargetUrl(HttpServletRequest request, Authentication authentication) {
         var span = SecurityTracer.getTracer().buildSpan("Determine Target URL").start();
         Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
@@ -74,7 +74,7 @@ public class OAuth2AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
                 .build().toUriString();
     }
 
-    protected void clearAuthenticationAttributes(final HttpServletRequest request, final HttpServletResponse response) {
+    protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
         httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
     }

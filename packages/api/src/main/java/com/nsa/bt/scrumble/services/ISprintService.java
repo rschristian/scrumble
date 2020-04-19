@@ -15,5 +15,5 @@ public interface ISprintService {
 
     Issue setSprintForIssue(int workspaceId, Issue issue, List<Sprint> sprints, Span span);
 
-    int getMilestoneId(int workspaceId, int projectId, int sprintId);
+    int getMilestoneId(int workspaceId, int projectId, int sprintId, Span span);
 }

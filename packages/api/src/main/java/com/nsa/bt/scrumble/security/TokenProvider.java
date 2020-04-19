@@ -18,11 +18,11 @@ public class TokenProvider {
 
     private final AppProperties appProperties;
 
-    public TokenProvider(final AppProperties appProperties) {
+    public TokenProvider(AppProperties appProperties) {
         this.appProperties = appProperties;
     }
 
-    public String createToken(final int userId, final long validFor, Span span) {
+    public String createToken(int userId, long validFor, Span span) {
         span = SecurityTracer.getTracer().buildSpan("Create a new JWT").asChildOf(span).start();
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + validFor);
@@ -36,7 +36,7 @@ public class TokenProvider {
         return token;
     }
 
-    public Long getUserIdFromToken(final String token, Span span) {
+    public Long getUserIdFromToken(String token, Span span) {
         span = SecurityTracer.getTracer().buildSpan("Return User ID from Token").asChildOf(span).start();
         Claims claims = Jwts.parser()
                 .setSigningKey(appProperties.getAuth().getTokenSecret())
@@ -47,7 +47,7 @@ public class TokenProvider {
         return userId;
     }
 
-    public boolean isValidToken(final String authToken) {
+    public boolean isValidToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
             return true;
@@ -64,6 +64,5 @@ public class TokenProvider {
         }
         return false;
     }
-
 }
 

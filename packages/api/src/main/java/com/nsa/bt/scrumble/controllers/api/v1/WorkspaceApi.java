@@ -39,8 +39,7 @@ public class WorkspaceApi {
     }
 
     @GetMapping("/workspace/{id}/projects")
-    public ResponseEntity<Object> getWorkspaceProjects(final Authentication authentication,
-                                                       final @PathVariable(value = "id") int workspaceId) {
+    public ResponseEntity<Object> getWorkspaceProjects(Authentication authentication, @PathVariable(value = "id") int workspaceId) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /workspace/" + workspaceId + "/projects").start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
@@ -53,7 +52,7 @@ public class WorkspaceApi {
     }
 
     @PostMapping("/workspace")
-    public ResponseEntity<Object> createWorkspace(final Authentication authentication, @RequestBody Workspace workspace) {
+    public ResponseEntity<Object> createWorkspace(Authentication authentication, @RequestBody Workspace workspace) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP POST /workspace").start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
@@ -72,7 +71,7 @@ public class WorkspaceApi {
     }
 
     @PutMapping("/workspace/{id}")
-    public ResponseEntity<Object> editWorkspace(final Authentication authentication, final @RequestBody Workspace workspace) {
+    public ResponseEntity<Object> editWorkspace(Authentication authentication, @RequestBody Workspace workspace) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP PUT /workspace/" + workspace.getId()).start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);

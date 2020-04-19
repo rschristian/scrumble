@@ -36,7 +36,7 @@ public class IssueService implements IIssueService {
     private LinearRegression linearRegression;
 
     @Override
-    public void setStoryPoint(final Issue issue, Span span) {
+    public void setStoryPoint(Issue issue, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Set Story Point").asChildOf(span).start();
         OptionalInt storyPoint = issue.getLabels()
                 .stream()
@@ -49,11 +49,11 @@ public class IssueService implements IIssueService {
     }
 
     // Ref: https://stackoverflow.com/a/5439547/11679751
-    public static boolean isInteger(final String s) {
+    public static boolean isInteger(String s) {
         return isInteger(s, 10);
     }
 
-    public static boolean isInteger(final String s, final int radix) {
+    public static boolean isInteger(String s,  int radix) {
         if (s.isEmpty()) return false;
         for (int i = 0; i < s.length(); i++) {
             if (i == 0 && s.charAt(i) == '-') {
@@ -66,7 +66,7 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public String getFilterQuery(final String filter, Span span) {
+    public String getFilterQuery(String filter, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Get Filter Query").asChildOf(span).start();
         switch (filter) {
             case UNPLANNED:
@@ -85,7 +85,7 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public void setProjectName(final Issue issue, final Project[] projects, Span span) {
+    public void setProjectName(Issue issue, Project[] projects, Span span) {
         span = ServiceTracer.getTracer().buildSpan("Set Project Name").asChildOf(span).start();
         for (Project project : projects) {
             if (issue.getProjectId() == project.getId()) {
@@ -97,10 +97,10 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public Issue createIssue(final int workspaceId, final int projectId, final Issue issue, final String accessToken,
+    public Issue createIssue(int workspaceId, int projectId, Issue issue, String accessToken,
                              Span span) {
         span = ServiceTracer.getTracer().buildSpan("Create Issue").asChildOf(span).start();
-        String issueUri = getIssueUri(workspaceId, projectId, issue, accessToken);
+        String issueUri = getIssueUri(workspaceId, projectId, issue, accessToken, span);
         String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
                 gitLabApiUrl, accessToken);
         ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(projectUri, Project[].class);
@@ -114,13 +114,13 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public Issue editIssue(final int workspaceId, final int projectId, final Issue issue, final String accessToken,
+    public Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken,
                            Span span) {
         span = ServiceTracer.getTracer().buildSpan("Edit Issue").asChildOf(span).start();
         String uri;
 
         if (issue.getSprint() != null) {
-            int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
+            int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId(), span);
             uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
                     gitLabApiUrl, projectId, issue.getIid(), issue.getTitle(), issue.getDescription(),
                     issue.getStoryPoint(), issue.getAssignee().getId(), milestoneId, accessToken);
@@ -136,12 +136,15 @@ public class IssueService implements IIssueService {
         return issue;
     }
 
-    private String getIssueUri(final int workspaceId, final int projectId, final Issue issue, final String accessToken) {
+    private String getIssueUri(int workspaceId, int projectId, Issue issue, String accessToken, Span span) {
+        span = ServiceTracer.getTracer().buildSpan("Get Issue URI").asChildOf(span).start();
         if (issue.getSprint() != null) {
-            int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
+            int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId(), span);
+            span.finish();
             return String.format("%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
                     gitLabApiUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getAssignee().getId(), milestoneId, accessToken);
         } else {
+            span.finish();
             return String.format("%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
                     gitLabApiUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getAssignee().getId(), accessToken);
         }

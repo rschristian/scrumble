@@ -34,7 +34,7 @@ public class ProjectApi {
     private String authErrorMsg;
 
     @GetMapping("/projects")
-    public ResponseEntity<Object> getIssues(final Authentication auth) {
+    public ResponseEntity<Object> getIssues(Authentication auth) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /projects").start();
 
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();

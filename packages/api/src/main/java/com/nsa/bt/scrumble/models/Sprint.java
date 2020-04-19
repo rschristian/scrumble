@@ -12,9 +12,9 @@ public class Sprint {
     private Date dueDate;
     private Map<String, Integer> projectIdToMilestoneIds;
 
-    public Sprint(final int id, final String title, final String description,
-                  final String status, final Date startDate, final Date dueDate,
-                  final Map<String, Integer>  projectIdToMilestoneIds) {
+    public Sprint(int id, String title, String description,
+                  String status, Date startDate, Date dueDate,
+                  Map<String, Integer> projectIdToMilestoneIds) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -28,7 +28,7 @@ public class Sprint {
         return id;
     }
 
-    public void setId(final int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -36,7 +36,7 @@ public class Sprint {
         return title;
     }
 
-    public void setTitle(final String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -44,7 +44,7 @@ public class Sprint {
         return description;
     }
 
-    public void setDescription(final String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -52,7 +52,7 @@ public class Sprint {
         return status;
     }
 
-    public void setStatus(final String status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -60,7 +60,7 @@ public class Sprint {
         return startDate;
     }
 
-    public void setStartDate(final Date startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
@@ -68,7 +68,7 @@ public class Sprint {
         return dueDate;
     }
 
-    public void setDueDate(final Date dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -76,7 +76,7 @@ public class Sprint {
         return projectIdToMilestoneIds;
     }
 
-    public void setProjectIdToMilestoneIds(final Map<String, Integer> projectIdToMilestoneIds) {
+    public void setProjectIdToMilestoneIds(Map<String, Integer> projectIdToMilestoneIds) {
         this.projectIdToMilestoneIds = projectIdToMilestoneIds;
     }
 }

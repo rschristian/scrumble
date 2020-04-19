@@ -30,9 +30,9 @@ public class SprintApi {
 
     @GetMapping("/workspace/{workspaceId}/sprints")
     public ResponseEntity<Object> getWorkspaceSprints(
-            final Authentication auth,
-            final @PathVariable(value = "workspaceId") int workspaceId,
-            final @RequestParam(value = "filter") String filter
+            Authentication auth,
+            @PathVariable(value = "workspaceId") int workspaceId,
+            @RequestParam(value = "filter") String filter
     ) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP GET /workspace/" + workspaceId + "/sprints").start();
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
@@ -48,9 +48,9 @@ public class SprintApi {
 
     @PostMapping("/workspace/{workspaceId}/sprint")
     public ResponseEntity<Object> createSprint(
-            final Authentication auth,
-            final @PathVariable(value = "workspaceId") int workspaceId,
-            final @RequestBody Sprint sprint
+            Authentication auth,
+            @PathVariable(value = "workspaceId") int workspaceId,
+            @RequestBody Sprint sprint
     ) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP POST /workspace/" + workspaceId + "/sprint").start();
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
@@ -65,8 +65,8 @@ public class SprintApi {
 
     @PutMapping("/workspace/{workspaceId}/sprint")
     public ResponseEntity<Object> editSprint(
-            final Authentication auth,
-            final @PathVariable(value = "workspaceId") int workspaceId,
+            Authentication auth,
+            @PathVariable(value = "workspaceId") int workspaceId,
             @RequestBody Sprint sprint
     ) {
         Span span = ApiTracer.getTracer().buildSpan("HTTP PUT /workspace/" + workspaceId + "/sprint").start();

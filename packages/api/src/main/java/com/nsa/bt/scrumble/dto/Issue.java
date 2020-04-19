@@ -32,8 +32,8 @@ public class Issue implements Serializable {
 
     public Issue() { }
 
-    public Issue(final int projectId, final String title, final String description,
-                 final int storyPoint, final String status) {
+    public Issue(int projectId, String title, String description,
+                 int storyPoint, String status) {
         this.projectId = projectId;
         this.title = title;
         this.description = description;
@@ -41,11 +41,11 @@ public class Issue implements Serializable {
         this.status = status;
     }
 
-    public Issue(final int iid, final Sprint sprint, final int projectId,
-                 final String projectName, final String title,
-                 final String description, final int storyPoint, final String state,
-                 final ArrayList<String> labels, final int timeSpent, final String author,
-                 final String createdAt, final User assignee) {
+    public Issue(int iid, Sprint sprint, int projectId,
+                 String projectName, String title,
+                 String description, int storyPoint, String state,
+                 ArrayList<String> labels, int timeSpent, String author,
+                 String createdAt, User assignee) {
         this.iid = iid;
         this.sprint = sprint;
         this.projectId = projectId;
@@ -65,7 +65,7 @@ public class Issue implements Serializable {
         return iid;
     }
 
-    public void setIid(final int iid) {
+    public void setIid(int iid) {
         this.iid = iid;
     }
 
@@ -73,7 +73,7 @@ public class Issue implements Serializable {
         return sprint;
     }
 
-    public void setSprint(final Sprint sprint) {
+    public void setSprint(Sprint sprint) {
         this.sprint = sprint;
     }
 
@@ -81,7 +81,7 @@ public class Issue implements Serializable {
         return projectId;
     }
 
-    public void setProjectId(final int projectId) {
+    public void setProjectId(int projectId) {
         this.projectId = projectId;
     }
 
@@ -89,7 +89,7 @@ public class Issue implements Serializable {
         return projectName;
     }
 
-    public void setProjectName(final String projectName) {
+    public void setProjectName(String projectName) {
         this.projectName = projectName;
     }
 
@@ -97,7 +97,7 @@ public class Issue implements Serializable {
         return title;
     }
 
-    public void setTitle(final String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -105,7 +105,7 @@ public class Issue implements Serializable {
         return description;
     }
 
-    public void setDescription(final String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -113,7 +113,7 @@ public class Issue implements Serializable {
         return storyPoint;
     }
 
-    public void setStoryPoint(final int storyPoint) {
+    public void setStoryPoint(int storyPoint) {
         this.storyPoint = storyPoint;
     }
 
@@ -121,7 +121,7 @@ public class Issue implements Serializable {
         return status;
     }
 
-    public void setStatus(final String status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -129,7 +129,7 @@ public class Issue implements Serializable {
         return labels;
     }
 
-    public void setLabels(final ArrayList<String> labels) {
+    public void setLabels(ArrayList<String> labels) {
         this.labels = labels;
     }
 
@@ -139,12 +139,12 @@ public class Issue implements Serializable {
 
 
     @JsonProperty("time_stats")
-    public void setTimeSpent(final Map<String, Object> timeSpent) {
+    public void setTimeSpent(Map<String, Object> timeSpent) {
         this.timeSpent = (timeSpent != null) ? (Integer) timeSpent.get("total_time_spent") : 0;
     }
 
     @JsonAlias("timeSpent")
-    public void setTimeSpent(final int timeSpent) {
+    public void setTimeSpent(int timeSpent) {
         this.timeSpent = timeSpent;
     }
 
@@ -153,7 +153,7 @@ public class Issue implements Serializable {
     }
 
     @JsonProperty("author")
-    public void setAuthor(final Map<String, Object> author) {
+    public void setAuthor(Map<String, Object> author) {
         this.author = author;
     }
 
@@ -161,7 +161,7 @@ public class Issue implements Serializable {
         return createdAt;
     }
 
-    public void setCreatedAt(final Date createdAt) {
+    public void setCreatedAt(Date createdAt) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         this.createdAt = formatter.format(createdAt);
     }
@@ -170,7 +170,7 @@ public class Issue implements Serializable {
         return assignee;
     }
 
-    public void setAssignee(final User assignedTo) {
+    public void setAssignee(User assignedTo) {
         if (assignedTo != null) {
             this.assignee = assignedTo;
         }

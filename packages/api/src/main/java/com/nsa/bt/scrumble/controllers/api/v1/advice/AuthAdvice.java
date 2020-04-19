@@ -14,11 +14,11 @@ public class AuthAdvice {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthAdvice.class);
 
     @ExceptionHandler({AccessDeniedException.class})
-    public ResponseEntity<String> handleAccessDeniedException(final AccessDeniedException e) {
+    public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException e) {
         return error(e);
     }
 
-    private ResponseEntity<String> error(final Exception e) {
+    private ResponseEntity<String> error(Exception e) {
         LOGGER.error(e.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
     }
