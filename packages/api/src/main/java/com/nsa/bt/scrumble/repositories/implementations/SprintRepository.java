@@ -52,13 +52,14 @@ public class SprintRepository implements ISprintRepository {
                     }
                     return null;
                 });
+        span.setTag("sql query", "SELECT * FROM sprints where id = ?");
         span.finish();
         return sprint;
     }
 
     @Override
     public List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter, Span parentSpan) {
-        var span = RepositoryTracer.getTracer().buildSpan("SQL Select all Sprints for Workspace").asChildOf(parentSpan).start();
+        var span = RepositoryTracer.getTracer().buildSpan("Get all Sprints for Workspace").asChildOf(parentSpan).start();
         String selectStatement;
         Object[] params;
         int[] types;
@@ -90,6 +91,7 @@ public class SprintRepository implements ISprintRepository {
                     }
                     return null;
                 });
+        span.setTag("sql query", "SELECT sprint_data FROM sprints where id = ?");
         span.finish();
         return projectIdsToMilestoneIds;
     }
@@ -115,6 +117,7 @@ public class SprintRepository implements ISprintRepository {
             return ps;
         }, keyHolder);
         sprint.setId(Math.toIntExact(keyHolder.getKey().longValue()));
+        span.setTag("sql query", "INSERT INTO sprints (workspace_id, title, description, status, start_date, due_date, sprint_data)");
         span.finish();
         return sprint;
     }
@@ -136,6 +139,7 @@ public class SprintRepository implements ISprintRepository {
                 new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.DATE, Types.OTHER, Types.INTEGER}
         );
         span.finish();
+        span.setTag("sql query", "UPDATE sprints SET title = ?, description = ?, status = ?, start_date = ?, due_date = ?, sprint_data = ? WHERE id = ?");
         return sprint;
     }
 
@@ -159,6 +163,7 @@ public class SprintRepository implements ISprintRepository {
                     }
                     return null;
                 }));
+        span.setTag("sql query", sqlSelect);
         span.finish();
         return sprintList;
     }

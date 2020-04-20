@@ -24,6 +24,7 @@ public class UserRepository implements IUserRepository {
         Object[] params = new Object[]{user.getServiceId(), user.getProviderId()};
         int[] types = new int[]{Types.INTEGER, Types.VARCHAR};
         jdbcTemplate.update(insertStatement, params, types);
+        span.setTag("sql query", "INSERT INTO users (service_id, provider_id) VALUES (?, ?);");
         span.finish();
         return user;
     }
@@ -45,6 +46,7 @@ public class UserRepository implements IUserRepository {
             );
         } catch (IncorrectResultSizeDataAccessException ignored) {
         }
+        span.setTag("sql query", "SELECT * FROM users WHERE service_id = ?;");
         span.finish();
         return optionalUser;
     }
@@ -66,6 +68,7 @@ public class UserRepository implements IUserRepository {
             );
         } catch (IncorrectResultSizeDataAccessException ignored) {
         }
+        span.setTag("sql query", "SELECT * FROM users WHERE id = ?;");
         span.finish();
         return optionalUser;
     }
@@ -77,6 +80,7 @@ public class UserRepository implements IUserRepository {
         Object[] params = new Object[]{token, userId};
         int[] types = new int[]{Types.VARCHAR, Types.INTEGER};
         jdbcTemplate.update(insertStatement, params, types);
+        span.setTag("sql query", "UPDATE users SET access_token = ? WHERE id = ?");
         span.finish();
     }
 
@@ -87,6 +91,7 @@ public class UserRepository implements IUserRepository {
         Object[] params = new Object[]{userId};
         int[] types = new int[]{Types.INTEGER};
         jdbcTemplate.update(insertStatement, params, types);
+        span.setTag("sql query", "UPDATE users SET access_token = null WHERE id = ?");
         span.finish();
     }
 
@@ -103,6 +108,7 @@ public class UserRepository implements IUserRepository {
             );
         } catch (IncorrectResultSizeDataAccessException ignored) {
         }
+        span.setTag("sql query", "SELECT * FROM users WHERE id = ?;");
         span.finish();
         return stringOptional;
     }

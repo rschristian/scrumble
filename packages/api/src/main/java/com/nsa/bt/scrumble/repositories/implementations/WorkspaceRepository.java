@@ -51,6 +51,7 @@ public class WorkspaceRepository implements IWorkspaceRepository {
                     }
                     return null;
                 }));
+        span.setTag("sql query", "SELECT * FROM workspaces as workspaces INNER JOIN users AS users ON workspaces.created_by_user = users.id");
         span.finish();
         return workspaces;
     }
@@ -70,6 +71,7 @@ public class WorkspaceRepository implements IWorkspaceRepository {
                     return new ArrayList<>();
                 }
         );
+        span.setTag("sql query", "SELECT workspace_data FROM workspaces WHERE id = ?;");
         span.finish();
         return projectIds;
     }
@@ -107,6 +109,7 @@ public class WorkspaceRepository implements IWorkspaceRepository {
             return ps;
         }, keyHolder);
         workspace.setId(Math.toIntExact(Objects.requireNonNull(keyHolder.getKey()).longValue()));
+        span.setTag("sql query", "INSERT INTO workspaces (name, created_by_user, description, workspace_data) VALUES (?, ?, ?, ?);");
         span.finish();
         return workspace;
     }
@@ -124,6 +127,7 @@ public class WorkspaceRepository implements IWorkspaceRepository {
                 };
         int[] types = new int[]{Types.VARCHAR, Types.VARCHAR, Types.OTHER, Types.INTEGER};
         jdbcTemplate.update(deleteWorkspace, params, types);
+        span.setTag("sql query", "UPDATE workspaces SET name = ?, description = ?, workspace_data = ? WHERE id = ?");
         span.finish();
     }
 
@@ -143,6 +147,7 @@ public class WorkspaceRepository implements IWorkspaceRepository {
             return jsonObject;
         } catch (SQLException | JsonProcessingException exception) {
             LOGGER.error(exception.getMessage());
+            span.log(exception.getMessage());
             span.finish();
             return null;
         }
