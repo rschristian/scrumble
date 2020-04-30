@@ -8,7 +8,7 @@ Please see [running.md](running.md) for instructions on how to build the project
 
 ## Built With
 
-* [Preact](https://reactjs.org/) - Web Library used to Build the Client
+* [Preact](https://preactjs.com/) - Web Library used to Build the Client
   * [TypeScript](https://www.typescriptlang.org/) - Language used
   * [Tailwind](https://tailwindcss.com) - Utility-First Styling Framework
   * [NPM](https://www.npmjs.com/) - Dependency Management Tool
