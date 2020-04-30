@@ -55,7 +55,7 @@ npm run lint
 
 ## Built With
 
--   [Preact](https://reactjs.org/) - Library Used to Build Interface
+-   [Preact](https://preactjs.com/) - Library Used to Build Interface
     -   [Typescript](https://www.typescriptlang.org/) - A Typed Superset (sorta) of JavaScript
     -   [MobX](https://mobx.js.org/README.html) - Global State Management Tool
     -   [NPM](https://www.npmjs.com/) - Dependency Management Tool
