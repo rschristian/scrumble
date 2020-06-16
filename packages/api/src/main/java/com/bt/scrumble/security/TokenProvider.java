@@ -2,7 +2,6 @@ package com.bt.scrumble.security;
 
 import com.bt.scrumble.config.AppProperties;
 import io.jsonwebtoken.*;
-import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.web.authentication.www.NonceExpiredException;
@@ -22,36 +21,28 @@ public class TokenProvider {
         this.appProperties = appProperties;
     }
 
-    public String createToken(int userId, long validFor, Span parentSpan) {
-        var span = SecurityTracer.getTracer().buildSpan("Create a new JWT").asChildOf(parentSpan).start();
+    public String createToken(int userId, long validFor) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + validFor);
-        var token = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(Long.toString(userId))
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
                 .compact();
-        span.finish();
-        return token;
     }
 
-    public Long getUserIdFromToken(String token, Span parentSpan) {
-        var span = SecurityTracer.getTracer().buildSpan("Return User ID from Token").asChildOf(parentSpan).start();
+    public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(appProperties.getAuth().getTokenSecret())
                 .parseClaimsJws(token)
                 .getBody();
-        var userId = Long.parseLong(claims.getSubject());
-        span.finish();
-        return userId;
+        return Long.parseLong(claims.getSubject());
     }
 
-    public boolean isValidToken(String authToken, Span parentSpan) {
-        var span = SecurityTracer.getTracer().buildSpan("Checking Token Validity").asChildOf(parentSpan).start();
+    public boolean isValidToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
-            span.finish();
             return true;
         } catch (SignatureException ex) {
             LOGGER.error("Invalid JWT signature");
@@ -64,7 +55,6 @@ public class TokenProvider {
         } catch (IllegalArgumentException ex) {
             LOGGER.error("JWT claims string is empty.");
         }
-        span.finish();
         return false;
     }
 }

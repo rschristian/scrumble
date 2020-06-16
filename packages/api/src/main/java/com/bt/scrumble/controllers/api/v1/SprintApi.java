@@ -4,7 +4,6 @@ import com.bt.scrumble.models.Sprint;
 import com.bt.scrumble.security.UserPrincipal;
 import com.bt.scrumble.services.ISprintService;
 import com.bt.scrumble.services.IUserService;
-import io.opentracing.Span;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -34,15 +33,12 @@ public class SprintApi {
             @PathVariable(value = "workspaceId") int workspaceId,
             @RequestParam(value = "filter") String filter
     ) {
-        Span span = ApiTracer.getTracer().buildSpan("HTTP GET /workspace/" + workspaceId + "/sprints").start();
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if (accessTokenOptional.isPresent()) {
-            var sprints = sprintService.getSprintsForWorkspace(workspaceId, filter, span);
-            span.finish();
+            var sprints = sprintService.getSprintsForWorkspace(workspaceId, filter);
             return ResponseEntity.ok().body(sprints);
         }
-        span.finish();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(authErrorMsg);
     }
 
@@ -52,14 +48,12 @@ public class SprintApi {
             @PathVariable(value = "workspaceId") int workspaceId,
             @RequestBody Sprint sprint
     ) {
-        Span span = ApiTracer.getTracer().buildSpan("HTTP POST /workspace/" + workspaceId + "/sprint").start();
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         var response = accessTokenOptional.<ResponseEntity<Object>>map(s ->
-                ResponseEntity.ok().body(sprintService.createSprint(workspaceId, sprint, s, span))).orElseGet(() ->
+                ResponseEntity.ok().body(sprintService.createSprint(workspaceId, sprint, s))).orElseGet(() ->
                 ResponseEntity.status(HttpStatus.FORBIDDEN).body(authErrorMsg)
         );
-        span.finish();
         return response;
     }
 
@@ -69,15 +63,12 @@ public class SprintApi {
             @PathVariable(value = "workspaceId") int workspaceId,
             @RequestBody Sprint sprint
     ) {
-        Span span = ApiTracer.getTracer().buildSpan("HTTP PUT /workspace/" + workspaceId + "/sprint").start();
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if (accessTokenOptional.isPresent()) {
-            sprint = sprintService.editSprint(workspaceId, sprint, accessTokenOptional.get(), span);
-            span.finish();
+            sprint = sprintService.editSprint(workspaceId, sprint, accessTokenOptional.get());
             return ResponseEntity.ok().body(sprint);
         }
-        span.finish();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", authErrorMsg));
     }
 
@@ -88,12 +79,10 @@ public class SprintApi {
             @PathVariable(value = "workspaceId") int workspaceId,
             @RequestBody Sprint sprint
     ) {
-        // Just here to fulfill mandatory reqs, not actually used.
-        Span span = ApiTracer.getTracer().buildSpan("HTTP PUT /workspace/" + workspaceId + "/sprint").start();
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         return accessTokenOptional.<ResponseEntity<Object>>map(s ->
-                ResponseEntity.ok().body(sprintService.getSprintIssues(workspaceId, sprint, s, span))).orElseGet(() ->
+                ResponseEntity.ok().body(sprintService.getSprintIssues(workspaceId, sprint, s))).orElseGet(() ->
                 ResponseEntity.status(400).body(authErrorMsg));
     }
 }

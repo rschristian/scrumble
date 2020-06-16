@@ -5,7 +5,6 @@ import com.bt.scrumble.models.User;
 import com.bt.scrumble.models.Workspace;
 import com.bt.scrumble.repositories.IWorkspaceRepository;
 import com.bt.scrumble.services.IWorkspaceService;
-import io.opentracing.Span;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -28,53 +27,40 @@ public class WorkspaceService implements IWorkspaceService {
     private IWorkspaceRepository workspaceRepository;
 
     @Override
-    public List<Workspace> getAllWorkspaces(Span parentSpan) {
-        var span = ServiceTracer.getTracer().buildSpan("Get all Workspaces").asChildOf(parentSpan).start();
-        var allWorkspaces = workspaceRepository.getAllWorkspaces(span);
-        span.finish();
-        return allWorkspaces;
+    public List<Workspace> getAllWorkspaces() {
+        return workspaceRepository.getAllWorkspaces();
     }
 
     @Override
-    public ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId, Span parentSpan) {
-        var span = ServiceTracer.getTracer().buildSpan("Get Project IDs for a given Workspace").asChildOf(parentSpan).start();
-        var projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId, span);
-        span.finish();
-        return projectIds;
+    public ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId) {
+        return workspaceRepository.projectIdsForWorkspace(workspaceId);
     }
 
     @Override
-    public Workspace createWorkspace(Workspace workspace, User user, Span parentSpan) {
-        var span = ServiceTracer.getTracer().buildSpan("Create Workspace").asChildOf(parentSpan).start();
-        workspace = workspaceRepository.createWorkspace(workspace, user, span);
-        span.finish();
+    public Workspace createWorkspace(Workspace workspace, User user) {
+        workspace = workspaceRepository.createWorkspace(workspace, user);
         return workspace;
     }
 
     @Override
-    public void editWorkspace(Workspace updatedWorkspace, Span parentSpan) {
-        var span = ServiceTracer.getTracer().buildSpan("Edit Workspace").asChildOf(parentSpan).start();
-        workspaceRepository.editWorkspace(updatedWorkspace, span);
-        span.finish();
+    public void editWorkspace(Workspace updatedWorkspace) {
+        workspaceRepository.editWorkspace(updatedWorkspace);
     }
 
     @Override
-    public List<Project> getWorkspaceProjects(int workspaceId, String accessToken, Span parentSpan) {
-        var span = ServiceTracer.getTracer().buildSpan("Get all Workspace Projects").asChildOf(parentSpan).start();
-        ArrayList<Integer> projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId, span);
+    public List<Project> getWorkspaceProjects(int workspaceId, String accessToken) {
+        ArrayList<Integer> projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId);
         List<Project> result = new ArrayList<>();
         for (int projectId : projectIds) {
             String uri = String.format("%s/projects/%d?simple=true&access_token=%3s",
                     gitLabApiUrl, projectId, accessToken);
             result.add(restTemplate.getForObject(uri, Project.class));
         }
-        span.finish();
         return result;
     }
 
     @Override
-    public void setWorkspaceUsers(Workspace workspace, Optional<String> accessToken, Span parentSpan) {
-        var span = ServiceTracer.getTracer().buildSpan("Set Workspace Users").asChildOf(parentSpan).start();
+    public void setWorkspaceUsers(Workspace workspace, Optional<String> accessToken) {
         List<User> allUsers = new ArrayList<>();
         Hashtable<User, ArrayList<Integer>> usersProjectIds = new Hashtable<>();
 
@@ -82,7 +68,7 @@ public class WorkspaceService implements IWorkspaceService {
             String uri = String.format("%1s/projects/%2s/users?access_token=%3s",
                     gitLabApiUrl, projectId, accessToken.get());
             ResponseEntity<ArrayList<User>> projectUsersResponse = restTemplate.exchange(
-                    uri, HttpMethod.GET, getApplicationJsonHeaders(span), new ParameterizedTypeReference<>() {
+                    uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {
                     });
             ArrayList<User> projectUsers = projectUsersResponse.getBody();
 
@@ -109,14 +95,11 @@ public class WorkspaceService implements IWorkspaceService {
             }
         });
         workspace.setUsers(resultant);
-        span.finish();
     }
 
-    private HttpEntity<String> getApplicationJsonHeaders(Span parentSpan) {
-        var span = ServiceTracer.getTracer().buildSpan("Get Application Headers").asChildOf(parentSpan).start();
+    private HttpEntity<String> getApplicationJsonHeaders() {
         var headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        span.finish();
         return new HttpEntity(headers);
     }
 }

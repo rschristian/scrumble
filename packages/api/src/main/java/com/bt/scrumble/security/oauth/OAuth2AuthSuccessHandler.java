@@ -3,7 +3,6 @@ package com.bt.scrumble.security.oauth;
 import com.bt.scrumble.config.AppProperties;
 import com.bt.scrumble.exception.BadRequestException;
 import com.bt.scrumble.security.CookieUtils;
-import com.bt.scrumble.security.SecurityTracer;
 import com.bt.scrumble.security.TokenProvider;
 import com.bt.scrumble.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +54,6 @@ public class OAuth2AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
     }
 
     protected String determineTargetUrl(HttpServletRequest request, Authentication authentication) {
-        var span = SecurityTracer.getTracer().buildSpan("Determine Target URL").start();
         Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
 
@@ -66,7 +64,7 @@ public class OAuth2AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         String targetUrl = redirectUri.orElse(appProperties.getAuth().getRedirectUri());
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        String token = tokenProvider.createToken(userPrincipal.getId(), appProperties.getAuth().getShortLifeTokenExpirationMsec(), span);
+        String token = tokenProvider.createToken(userPrincipal.getId(), appProperties.getAuth().getShortLifeTokenExpirationMsec());
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)

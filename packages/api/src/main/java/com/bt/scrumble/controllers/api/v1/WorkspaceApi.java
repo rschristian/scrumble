@@ -5,7 +5,6 @@ import com.bt.scrumble.models.Workspace;
 import com.bt.scrumble.security.UserPrincipal;
 import com.bt.scrumble.services.IUserService;
 import com.bt.scrumble.services.IWorkspaceService;
-import io.opentracing.Span;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -31,56 +30,44 @@ public class WorkspaceApi {
 
     @GetMapping("/workspaces")
     public ResponseEntity<Object> getAllWorkspaces() {
-        Span span = ApiTracer.getTracer().buildSpan("HTTP GET /workspaces").start();
-        var workspaces = workspaceService.getAllWorkspaces(span);
-        span.finish();
+        var workspaces = workspaceService.getAllWorkspaces();
         return ResponseEntity.ok().body(workspaces);
     }
 
     @GetMapping("/workspace/{id}/projects")
     public ResponseEntity<Object> getWorkspaceProjects(Authentication authentication, @PathVariable(value = "id") int workspaceId) {
-        Span span = ApiTracer.getTracer().buildSpan("HTTP GET /workspace/" + workspaceId + "/projects").start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
-        var projects = accessTokenOptional.<ResponseEntity<Object>>map(s ->
-                ResponseEntity.ok().body(workspaceService.getWorkspaceProjects(workspaceId, s, span))).orElseGet(() ->
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+        return accessTokenOptional.<ResponseEntity<Object>>map(s ->
+                ResponseEntity.ok().body(workspaceService.getWorkspaceProjects(workspaceId, s))).orElseGet(() ->
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", authErrorMsg))
         );
-        span.finish();
-        return projects;
     }
 
     @PostMapping("/workspace")
     public ResponseEntity<Object> createWorkspace(Authentication authentication, @RequestBody Workspace workspace) {
-        Span span = ApiTracer.getTracer().buildSpan("HTTP POST /workspace").start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if (accessTokenOptional.isPresent()) {
-            workspaceService.setWorkspaceUsers(workspace, accessTokenOptional, span);
+            workspaceService.setWorkspaceUsers(workspace, accessTokenOptional);
             workspace = workspaceService.createWorkspace(
                     workspace,
-                    new User(userPrincipal.getId(), userPrincipal.getServiceId(), userPrincipal.getProviderId()),
-                    span
+                    new User(userPrincipal.getId(), userPrincipal.getServiceId(), userPrincipal.getProviderId())
             );
-            span.finish();
             return ResponseEntity.status(HttpStatus.CREATED).body(workspace);
         }
-        span.finish();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", authErrorMsg));
     }
 
     @PutMapping("/workspace/{id}")
     public ResponseEntity<Object> editWorkspace(Authentication authentication, @RequestBody Workspace workspace) {
-        Span span = ApiTracer.getTracer().buildSpan("HTTP PUT /workspace/" + workspace.getId()).start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if (accessTokenOptional.isPresent()) {
-            workspaceService.setWorkspaceUsers(workspace, accessTokenOptional, span);
-            workspaceService.editWorkspace(workspace, span);
-            span.finish();
+            workspaceService.setWorkspaceUsers(workspace, accessTokenOptional);
+            workspaceService.editWorkspace(workspace);
             return ResponseEntity.ok().body(workspace);
         }
-        span.finish();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", authErrorMsg));
     }
 }

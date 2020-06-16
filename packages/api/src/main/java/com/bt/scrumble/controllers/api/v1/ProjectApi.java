@@ -3,7 +3,6 @@ package com.bt.scrumble.controllers.api.v1;
 import com.bt.scrumble.dto.Project;
 import com.bt.scrumble.security.UserPrincipal;
 import com.bt.scrumble.services.IUserService;
-import io.opentracing.Span;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -36,10 +35,9 @@ public class ProjectApi {
 
     @GetMapping("/projects")
     public ResponseEntity<Object> getIssues(Authentication auth) {
-        Span span = ApiTracer.getTracer().buildSpan("HTTP GET /projects").start();
 
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if (accessTokenOptional.isPresent()) {
             var headers = new HttpHeaders();
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -48,10 +46,8 @@ public class ProjectApi {
             ResponseEntity<ArrayList<Project>> userProjectsResponse =
                     restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity(headers), new ParameterizedTypeReference<>() {
                     });
-            span.finish();
             return ResponseEntity.ok().body(userProjectsResponse.getBody());
         }
-        span.finish();
         return ResponseEntity.ok().body(authErrorMsg);
     }
 }

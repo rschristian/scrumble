@@ -6,7 +6,6 @@ import com.bt.scrumble.regression.LinearRegression;
 import com.bt.scrumble.repositories.IIssueRepository;
 import com.bt.scrumble.services.IIssueService;
 import com.bt.scrumble.services.ISprintService;
-import io.opentracing.Span;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -56,8 +55,7 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public void setStoryPoint(Issue issue, Span parentSpan) {
-        var span = ServiceTracer.getTracer().buildSpan("Set Story Point").asChildOf(parentSpan).start();
+    public void setStoryPoint(Issue issue) {
         OptionalInt storyPoint = issue.getLabels()
                 .stream()
                 .filter(IssueService::isInteger)
@@ -65,38 +63,32 @@ public class IssueService implements IIssueService {
                 .findFirst();
 
         if (storyPoint.isPresent()) issue.setStoryPoint(storyPoint.getAsInt());
-        span.finish();
+
     }
 
     @Override
-    public String getFilterQuery(String filter, Span parentSpan) {
-        var span = ServiceTracer.getTracer().buildSpan("Get Filter Query").asChildOf(parentSpan).start();
+    public String getFilterQuery(String filter) {
         switch (filter) {
             case UNPLANNED:
-                span.finish();
                 return "labels=unplanned";
             case OPENED:
-                span.finish();
                 return "state=opened";
             case CLOSED:
-                span.finish();
                 return "state=closed";
             default:
-                span.finish();
                 return "scope=all";
         }
     }
 
     @Override
-    public void setProjectName(Issue issue, Project[] projects, Span parentSpan) {
-        var span = ServiceTracer.getTracer().buildSpan("Set Project Name").asChildOf(parentSpan).start();
+    public void setProjectName(Issue issue, Project[] projects) {
         for (Project project : projects) {
             if (issue.getProjectId() == project.getId()) {
                 issue.setProjectName(project.getName());
                 return;
             }
         }
-        span.finish();
+
     }
 
     @Override
@@ -115,28 +107,25 @@ public class IssueService implements IIssueService {
     }
 
     @Override
-    public Issue createIssue(int workspaceId, int projectId, Issue issue, String accessToken, Span parentSpan) {
-        var span = ServiceTracer.getTracer().buildSpan("Create Issue").asChildOf(parentSpan).start();
-        String issueUri = getIssueUri(workspaceId, projectId, issue, accessToken, span);
+    public Issue createIssue(int workspaceId, int projectId, Issue issue, String accessToken) {
+        String issueUri = getIssueUri(workspaceId, projectId, issue, accessToken);
         String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
                 gitLabApiUrl, accessToken);
         ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(projectUri, Project[].class);
         Project[] projects = userProjectsResponse.getBody();
         Issue newIssue = restTemplate.postForObject(issueUri, null, Issue.class);
-        setStoryPoint(newIssue, span);
-        setProjectName(newIssue, projects, span);
+        setStoryPoint(newIssue);
+        setProjectName(newIssue, projects);
         linearRegression.setEstimate(projectId, newIssue, accessToken);
-        span.finish();
         return newIssue;
     }
 
     @Override
-    public Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken, Span parentSpan) {
-        var span = ServiceTracer.getTracer().buildSpan("Edit Issue").asChildOf(parentSpan).start();
+    public Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken) {
         String uri;
 
         if (issue.getSprint() != null) {
-            int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId(), span);
+            int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
             if (issue.getSprint().getId() == 0) { //No Sprint selected
                 issueRepository.removeIssue(issue.getIid(), projectId);
             } else { // adds start time
@@ -166,19 +155,18 @@ public class IssueService implements IIssueService {
         } else {
             linearRegression.setEstimate(projectId, issue, accessToken);
         }
-        span.finish();
+
         return issue;
     }
 
-    private String getIssueUri(int workspaceId, int projectId, Issue issue, String accessToken, Span parentSpan) {
-        var span = ServiceTracer.getTracer().buildSpan("Get Issue URI").asChildOf(parentSpan).start();
+    private String getIssueUri(int workspaceId, int projectId, Issue issue, String accessToken) {
         if (issue.getSprint() != null) {
-            int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId(), span);
-            span.finish();
+            int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
+
             return String.format("%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
                     gitLabApiUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getAssignee().getId(), milestoneId, accessToken);
         } else {
-            span.finish();
+
             return String.format("%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
                     gitLabApiUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getAssignee().getId(), accessToken);
         }

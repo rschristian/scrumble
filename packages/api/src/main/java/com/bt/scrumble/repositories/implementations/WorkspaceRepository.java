@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.bt.scrumble.models.User;
 import com.bt.scrumble.models.Workspace;
 import com.bt.scrumble.repositories.IWorkspaceRepository;
-import io.opentracing.Span;
 import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +32,9 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<Workspace> getAllWorkspaces(Span parentSpan) {
-        var span = RepositoryTracer.getTracer().buildSpan("SQL Select All Workspaces").asChildOf(parentSpan).start();
+    public List<Workspace> getAllWorkspaces() {
         var workspaces = new ArrayList<>(jdbcTemplate.query(
-                "SELECT * FROM workspaces as workspaces INNER JOIN users AS users ON workspaces.created_by_user = users.id",
+                "SELECT * FROM workspaces INNER JOIN users ON workspaces.created_by_user = users.id",
                 (rs, row) -> {
                     try {
                         return new Workspace(
@@ -51,14 +49,11 @@ public class WorkspaceRepository implements IWorkspaceRepository {
                     }
                     return null;
                 }));
-        span.setTag("sql query", "SELECT * FROM workspaces as workspaces INNER JOIN users AS users ON workspaces.created_by_user = users.id");
-        span.finish();
         return workspaces;
     }
 
     @Override
-    public ArrayList<Integer> projectIdsForWorkspace(int workspaceId, Span parentSpan) {
-        var span = RepositoryTracer.getTracer().buildSpan("SQL Select Project IDs from Workspace ID").asChildOf(parentSpan).start();
+    public ArrayList<Integer> projectIdsForWorkspace(int workspaceId) {
         ArrayList<Integer> projectIds = jdbcTemplate.queryForObject(
                 "SELECT workspace_data FROM workspaces WHERE id = ?;",
                 new Object[]{workspaceId},
@@ -71,8 +66,6 @@ public class WorkspaceRepository implements IWorkspaceRepository {
                     return new ArrayList<>();
                 }
         );
-        span.setTag("sql query", "SELECT workspace_data FROM workspaces WHERE id = ?;");
-        span.finish();
         return projectIds;
     }
 
@@ -94,8 +87,7 @@ public class WorkspaceRepository implements IWorkspaceRepository {
     }
 
     @Override
-    public Workspace createWorkspace(Workspace workspace, User user, Span parentSpan) {
-        var span = RepositoryTracer.getTracer().buildSpan("SQL Insert New Workspace").asChildOf(parentSpan).start();
+    public Workspace createWorkspace(Workspace workspace, User user) {
         String insertStatement = "INSERT INTO workspaces (name, created_by_user, description, workspace_data) VALUES (?, ?, ?, ?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -105,34 +97,28 @@ public class WorkspaceRepository implements IWorkspaceRepository {
             ps.setString(1, workspace.getName());
             ps.setInt(2, user.getId());
             ps.setString(3, workspace.getDescription());
-            ps.setObject(4, getWorkspaceJsonbData(workspace, span));
+            ps.setObject(4, getWorkspaceJsonbData(workspace));
             return ps;
         }, keyHolder);
         workspace.setId(Math.toIntExact(Objects.requireNonNull(keyHolder.getKey()).longValue()));
-        span.setTag("sql query", "INSERT INTO workspaces (name, created_by_user, description, workspace_data) VALUES (?, ?, ?, ?);");
-        span.finish();
         return workspace;
     }
 
     @Override
-    public void editWorkspace(Workspace updatedWorkspace, Span parentSpan) {
-        var span = RepositoryTracer.getTracer().buildSpan("SQL Update Workspace").asChildOf(parentSpan).start();
+    public void editWorkspace(Workspace updatedWorkspace) {
         String deleteWorkspace = "UPDATE workspaces SET name = ?, description = ?, workspace_data = ? WHERE id = ?";
         Object[] params = new Object[]
                 {
                         updatedWorkspace.getName(),
                         updatedWorkspace.getDescription(),
-                        getWorkspaceJsonbData(updatedWorkspace, span),
+                        getWorkspaceJsonbData(updatedWorkspace),
                         updatedWorkspace.getId()
                 };
         int[] types = new int[]{Types.VARCHAR, Types.VARCHAR, Types.OTHER, Types.INTEGER};
         jdbcTemplate.update(deleteWorkspace, params, types);
-        span.setTag("sql query", "UPDATE workspaces SET name = ?, description = ?, workspace_data = ? WHERE id = ?");
-        span.finish();
     }
 
-    private PGobject getWorkspaceJsonbData(Workspace workspace, Span parentSpan) {
-        var span = RepositoryTracer.getTracer().buildSpan("Get Workspace JSCNB Data").asChildOf(parentSpan).start();
+    private PGobject getWorkspaceJsonbData(Workspace workspace) {
         try {
             PGobject jsonObject = new PGobject();
             ObjectMapper objectMapper = new ObjectMapper();
@@ -143,12 +129,9 @@ public class WorkspaceRepository implements IWorkspaceRepository {
                             "project_users", workspace.getUsers()
                     )
             ));
-            span.finish();
             return jsonObject;
         } catch (SQLException | JsonProcessingException exception) {
             LOGGER.error(exception.getMessage());
-            span.log(exception.getMessage());
-            span.finish();
             return null;
         }
     }

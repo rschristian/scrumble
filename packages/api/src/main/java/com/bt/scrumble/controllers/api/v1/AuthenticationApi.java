@@ -6,7 +6,6 @@ import com.bt.scrumble.security.TokenProvider;
 import com.bt.scrumble.security.TokenUtils;
 import com.bt.scrumble.security.UserPrincipal;
 import com.bt.scrumble.services.IUserService;
-import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,37 +42,29 @@ public class AuthenticationApi {
 
     @GetMapping("/auth/token")
     public ResponseEntity<Object> exchangeShortLifeToken(HttpServletRequest request) {
-        Span span = ApiTracer.getTracer().buildSpan("HTTP GET /auth/token").start();
-        String jwt = tokenUtils.getJwtFromRequest(request, span);
+        String jwt = tokenUtils.getJwtFromRequest(request);
         String token = "";
 
         if (StringUtils.hasText(jwt)) {
-            Long userId = tokenProvider.getUserIdFromToken(jwt, span);
-            Optional<User> userOptional = userService.findUserById(userId.intValue(), span);
+            Long userId = tokenProvider.getUserIdFromToken(jwt);
+            Optional<User> userOptional = userService.findUserById(userId.intValue());
 
             if (userOptional.isEmpty()) {
                 LOGGER.error("User not found");
-                span.finish();
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
             }
-            token = tokenProvider.createToken(userId.intValue(), appProperties.getAuth().getLongLifeTokenExpirationMsec(), span);
+            token = tokenProvider.createToken(userId.intValue(), appProperties.getAuth().getLongLifeTokenExpirationMsec());
         }
-        span.finish();
         return ResponseEntity.ok().body(Map.of("jwt", token));
     }
 
     @DeleteMapping("/auth/token")
     public ResponseEntity<Object> deleteToken(Authentication authentication) {
-        Span span = ApiTracer.getTracer().buildSpan("HTTP DELETE /auth/token").start();
-
         try {
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-            userService.removeToken(userPrincipal.getId(), span);
-            span.finish();
-
+            userService.removeToken(userPrincipal.getId());
             return ResponseEntity.ok().body(null);
         } catch (InternalAuthenticationServiceException exception) {
-            span.finish();
             return ResponseEntity.status(500).body(null);
         }
     }

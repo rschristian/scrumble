@@ -41,18 +41,17 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        var span = SecurityTracer.getTracer().buildSpan("Do Filter Internal").start();
         try {
-            String jwt = tokenUtils.getJwtFromRequest(request, span);
+            String jwt = tokenUtils.getJwtFromRequest(request);
 
-            if (!tokenProvider.isValidToken(jwt, span)) {
+            if (!tokenProvider.isValidToken(jwt)) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid authentication.");
             }
 
             if (StringUtils.hasText(jwt)) {
-                Long userId = tokenProvider.getUserIdFromToken(jwt, span);
+                Long userId = tokenProvider.getUserIdFromToken(jwt);
 
-                Optional<User> userOptional = userService.findUserById(userId.intValue(), span);
+                Optional<User> userOptional = userService.findUserById(userId.intValue());
 
                 if (userOptional.isPresent()) {
                     UserDetails userDetails = UserPrincipal.create(userOptional.get());

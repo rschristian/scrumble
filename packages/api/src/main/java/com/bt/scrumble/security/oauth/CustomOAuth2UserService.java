@@ -1,12 +1,9 @@
 package com.bt.scrumble.security.oauth;
 
 import com.bt.scrumble.models.User;
-import com.bt.scrumble.security.SecurityTracer;
 import com.bt.scrumble.security.UserPrincipal;
 import com.bt.scrumble.security.oauth.users.OAuth2UserInfo;
 import com.bt.scrumble.services.IUserService;
-import com.bt.scrumble.services.implementations.ServiceTracer;
-import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,51 +28,43 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
-        var span = SecurityTracer.getTracer().buildSpan("Load User").start();
         OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
 
         try {
-            var oauth2User = processOAuth2User(oAuth2UserRequest, oAuth2User, span);
-            span.finish();
-            return oauth2User;
+            return processOAuth2User(oAuth2UserRequest, oAuth2User);
         } catch (AuthenticationException ex) {
             throw ex;
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());
-            span.finish();
             throw new InternalAuthenticationServiceException(ex.getMessage(), ex.getCause());
         }
     }
 
-    private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User, Span parentSpan) {
-        var span = ServiceTracer.getTracer().buildSpan("Process OAuth2 User").asChildOf(parentSpan).start();
+    private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(
                 oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes()
         );
 
         User user;
-        Optional<User> userOptional = userService.findUserByServiceId(oAuth2UserInfo.getId(), span);
+        Optional<User> userOptional = userService.findUserByServiceId(oAuth2UserInfo.getId());
 
         if (userOptional.isEmpty()) {
-            user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo, span);
+            user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         } else {
             user = userOptional.get();
         }
 
-        userService.addToken(user.getId(), oAuth2UserRequest.getAccessToken().getTokenValue(), span);
-        span.finish();
+        userService.addToken(user.getId(), oAuth2UserRequest.getAccessToken().getTokenValue());
         return UserPrincipal.create(userOptional.get(), oAuth2User.getAttributes());
     }
 
-    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo, Span parentSpan) {
-        var span = ServiceTracer.getTracer().buildSpan("Register New User").asChildOf(parentSpan).start();
+    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
         User user = new User();
 
         user.setServiceId(oAuth2UserInfo.getId());
         user.setProviderId(oAuth2UserRequest.getClientRegistration().getRegistrationId());
 
-        user = userService.createUser(user, span);
-        span.finish();
+        user = userService.createUser(user);
         return user;
     }
 }

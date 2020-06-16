@@ -85,9 +85,4 @@ dependencies {
     testImplementation('io.projectreactor:reactor-test')
     testImplementation('org.springframework.security:spring-security-test')
     implementation('org.springframework.boot:spring-boot-starter-actuator')
-
-    /*
-        JAEGER
-    */
-    implementation('io.jaegertracing:jaeger-client:1.2.0')
 }

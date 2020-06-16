@@ -4,7 +4,6 @@ import com.bt.scrumble.dto.ScrumbleUser;
 import com.bt.scrumble.dto.User;
 import com.bt.scrumble.security.UserPrincipal;
 import com.bt.scrumble.services.IUserService;
-import io.opentracing.Span;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,19 +39,15 @@ public class UserDetailsApi {
 
     @GetMapping("/user/info")
     public ResponseEntity<Object> getUserInfo(Authentication authentication) {
-        Span span = ApiTracer.getTracer().buildSpan("HTTP GET /user/info").start();
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId(), span);
+        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
 
         if (accessTokenOptional.isPresent()) {
             String uri = String.format("%1s/users/%2s?access_token=%3s", gitLabBaseUrlApi, userPrincipal.getServiceId(), accessTokenOptional.get());
             User currentUser = restTemplate.getForObject(uri, User.class);
-            span.finish();
             return ResponseEntity.ok().body(new ScrumbleUser(currentUser.getId(), currentUser.getName(), currentUser.getUsername(), currentUser.getAvatarUrl()));
         }
         LOGGER.error("Unable to authenticate with authentication provider");
-
-        span.finish();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", authErrorMsg));
     }
 }
