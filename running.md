@@ -31,7 +31,7 @@ To run database migrations, run the following command again from within the [API
 
 ```
 docker run --rm \
-    -v "$PWD/src/main/resources/db/migration/:/flyway/sql" \
+    -v "$PWD/src/main/resources/db-migrations/:/flyway/sql" \
     -v "$PWD:/flyway/conf" \
     --network="api_default" \
     flyway/flyway:latest-alpine migrate
