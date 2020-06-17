@@ -12,20 +12,4 @@ public class User {
         this.username = "smoketester";
         this.avatar_url = "https://www.gravatar.com/avatar/e64c7d89f26bd1972efa854d13d7dd61?s=46&d=identicon";
     }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getUsername() {
-        return this.username;
-    }
-
-    public String getAvatarUrl() {
-        return this.avatar_url;
-    }
 }
