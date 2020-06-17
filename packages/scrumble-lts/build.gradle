@@ -1,0 +1,22 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+group 'com.bt'
+version '1.0'
+mainClassName = 'com.bt.scrumbleLts.ScrumbleLtsApi'
+
+repositories {
+    mavenCentral()
+}
+
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
+
+dependencies {
+    implementation('com.bladejava:blade-mvc:2.0.15.RELEASE')
+}
