@@ -1,4 +1,4 @@
-package com.nsa.bt.scrumble;
+package com.bt.scrumble;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
