@@ -30,8 +30,7 @@ public class WorkspaceApi {
 
     @GetMapping("/workspaces")
     public ResponseEntity<Object> getAllWorkspaces() {
-        var workspaces = workspaceService.getAllWorkspaces();
-        return ResponseEntity.ok().body(workspaces);
+        return ResponseEntity.ok().body(workspaceService.getAllWorkspaces());
     }
 
     @GetMapping("/workspace/{id}/projects")
@@ -50,11 +49,10 @@ public class WorkspaceApi {
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
         if (accessTokenOptional.isPresent()) {
             workspaceService.setWorkspaceUsers(workspace, accessTokenOptional);
-            workspace = workspaceService.createWorkspace(
+            return ResponseEntity.status(HttpStatus.CREATED).body(workspaceService.createWorkspace(
                     workspace,
                     new User(userPrincipal.getId(), userPrincipal.getServiceId(), userPrincipal.getProviderId())
-            );
-            return ResponseEntity.status(HttpStatus.CREATED).body(workspace);
+            ));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", authErrorMsg));
     }

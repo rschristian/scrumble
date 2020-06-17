@@ -50,11 +50,10 @@ public class SprintApi {
     ) {
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-        var response = accessTokenOptional.<ResponseEntity<Object>>map(s ->
+        return accessTokenOptional.<ResponseEntity<Object>>map(s ->
                 ResponseEntity.ok().body(sprintService.createSprint(workspaceId, sprint, s))).orElseGet(() ->
                 ResponseEntity.status(HttpStatus.FORBIDDEN).body(authErrorMsg)
         );
-        return response;
     }
 
     @PutMapping("/workspace/{workspaceId}/sprint")
