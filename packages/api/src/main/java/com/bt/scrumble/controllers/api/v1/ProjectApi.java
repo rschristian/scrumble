@@ -34,7 +34,7 @@ public class ProjectApi {
     private String authErrorMsg;
 
     @GetMapping("/projects")
-    public ResponseEntity<Object> getIssues(Authentication auth) {
+    public ResponseEntity<Object> getProjects(Authentication auth) {
 
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
