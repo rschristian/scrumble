@@ -3,11 +3,16 @@ import { useEffect } from 'preact/hooks';
 
 import scrumCards from 'assets/icons/scrumCards.png';
 import { authStore } from 'stores/authStore';
+import { route } from 'preact-router';
 
 const Login: FunctionalComponent = () => {
     useEffect(() => {
         authStore.logout().then();
     });
+
+    // const linkTo = (): void => {
+    //     authStore.login().then(() => route('/', true));
+    // };
 
     return (
         <div class="login-page">
@@ -17,6 +22,7 @@ const Login: FunctionalComponent = () => {
                 <button
                     class="btn-create mx-auto my-auto"
                     onClick={(): string => (location.href = '/api/oauth2/authorize/gitlab')}
+                    // onClick={linkTo}
                 >
                     Login with GitLab
                 </button>

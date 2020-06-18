@@ -1,17 +1,16 @@
 import { FunctionalComponent, h, VNode } from 'preact';
 import { useEffect } from 'preact/hooks';
-import { lazy, Suspense } from 'preact/compat';
+import { Suspense } from 'preact/compat';
 import { Route, route, Router } from 'preact-router';
 import Notifications from 'react-notify-toast';
 
 import { TopBar } from 'components/Core/TopBar';
+import AuthSuccess from 'routes/Auth/authSuccess';
 import Login from 'routes/Auth/login';
+import Home from 'routes/Home';
+import Workspace from 'routes/Workspace';
+import Sprint from 'routes/Sprint';
 import { useStore } from 'stores';
-
-const AuthSuccess = lazy(() => import('routes/Auth/authSuccess'));
-const Home = lazy(() => import('routes/Home'));
-const Workspace = lazy(() => import('routes/Workspace'));
-const Sprint = lazy(() => import('routes/Sprint'));
 
 const App: FunctionalComponent = () => {
     return (
