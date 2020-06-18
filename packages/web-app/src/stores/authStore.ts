@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppDispatch, AppThunk } from 'stores';
 
 import { User } from 'models/User';
+import { login } from 'services/api/auth';
 import { apiFetchUserInfo, apiLogin, destroyOAuthToken } from 'services/api/auth';
 import { route } from 'preact-router';
 import { authStorageService } from 'ts-api-toolkit';
