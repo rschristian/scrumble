@@ -14,8 +14,12 @@ public class DataGrabber {
     private RestTemplate restTemplate;
 
     public Issue[] getClosedIssues(String gitLabBaseUrl, int projectId, String accessToken) {
-        String closedIssuesUri = String.format("%1s/projects/%2s/issues?state=closed&access_token=%3s", gitLabBaseUrl, projectId, accessToken);
-        ResponseEntity<Issue[]> closeIssuesResponse = restTemplate.getForEntity(closedIssuesUri, Issue[].class);
+        String closedIssuesUri =
+                String.format(
+                        "%1s/projects/%2s/issues?state=closed&access_token=%3s",
+                        gitLabBaseUrl, projectId, accessToken);
+        ResponseEntity<Issue[]> closeIssuesResponse =
+                restTemplate.getForEntity(closedIssuesUri, Issue[].class);
         return closeIssuesResponse.getBody();
     }
 

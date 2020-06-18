@@ -1,9 +1,9 @@
 package com.bt.scrumble.repositories.implementations;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.bt.scrumble.models.Sprint;
 import com.bt.scrumble.repositories.ISprintRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,24 +32,26 @@ public class SprintRepository implements ISprintRepository {
 
     @Override
     public Sprint getSprintById(int sprintId) {
-        var sprint = jdbcTemplate.queryForObject("SELECT * FROM sprints where id = ?",
-                new Object[]{sprintId},
-                new int[]{Types.INTEGER},
-                (rs, row) -> {
-                    try {
-                        return new Sprint(
-                                rs.getInt("id"),
-                                rs.getString("title"),
-                                rs.getString("description"),
-                                rs.getString("status"),
-                                rs.getDate("start_date"),
-                                rs.getDate("due_date"),
-                                parseJsonDataToMilestoneIds(((PGobject) rs.getObject("sprint_data"))));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                });
+        var sprint =
+                jdbcTemplate.queryForObject(
+                        "SELECT * FROM sprints where id = ?",
+                        new Object[]{sprintId},
+                        new int[]{Types.INTEGER},
+                        (rs, row) -> {
+                            try {
+                                return new Sprint(
+                                        rs.getInt("id"),
+                                        rs.getString("title"),
+                                        rs.getString("description"),
+                                        rs.getString("status"),
+                                        rs.getDate("start_date"),
+                                        rs.getDate("due_date"),
+                                        parseJsonDataToMilestoneIds(((PGobject) rs.getObject("sprint_data"))));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            return null;
+                        });
         return sprint;
     }
 
@@ -73,17 +75,19 @@ public class SprintRepository implements ISprintRepository {
 
     @Override
     public Map<String, Integer> getProjectIdsToMilestoneIds(int sprintId) {
-        var projectIdsToMilestoneIds = jdbcTemplate.queryForObject("SELECT sprint_data FROM sprints where id = ?",
-                new Object[]{sprintId},
-                new int[]{Types.INTEGER},
-                (rs, row) -> {
-                    try {
-                        return parseJsonDataToMilestoneIds(((PGobject) rs.getObject("sprint_data")));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                });
+        var projectIdsToMilestoneIds =
+                jdbcTemplate.queryForObject(
+                        "SELECT sprint_data FROM sprints where id = ?",
+                        new Object[]{sprintId},
+                        new int[]{Types.INTEGER},
+                        (rs, row) -> {
+                            try {
+                                return parseJsonDataToMilestoneIds(((PGobject) rs.getObject("sprint_data")));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            return null;
+                        });
         return projectIdsToMilestoneIds;
     }
 
@@ -91,21 +95,23 @@ public class SprintRepository implements ISprintRepository {
     public Sprint createSprint(int workspaceId, Sprint sprint) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection
-                    .prepareStatement(
-                            "INSERT INTO sprints (workspace_id, title, description, status, start_date, due_date, sprint_data) "
-                                    + "VALUES (?, ?, ?, ?, ?, ?, ?);",
-                            new String[]{"id"});
-            ps.setInt(1, workspaceId);
-            ps.setString(2, sprint.getTitle());
-            ps.setString(3, sprint.getDescription());
-            ps.setString(4, sprint.getStatus());
-            ps.setDate(5, sprint.getStartDate());
-            ps.setDate(6, sprint.getDueDate());
-            ps.setObject(7, getSprintJsonbData(sprint));
-            return ps;
-        }, keyHolder);
+        jdbcTemplate.update(
+                connection -> {
+                    PreparedStatement ps =
+                            connection.prepareStatement(
+                                    "INSERT INTO sprints (workspace_id, title, description, status, start_date, due_date, sprint_data) "
+                                            + "VALUES (?, ?, ?, ?, ?, ?, ?);",
+                                    new String[]{"id"});
+                    ps.setInt(1, workspaceId);
+                    ps.setString(2, sprint.getTitle());
+                    ps.setString(3, sprint.getDescription());
+                    ps.setString(4, sprint.getStatus());
+                    ps.setDate(5, sprint.getStartDate());
+                    ps.setDate(6, sprint.getDueDate());
+                    ps.setObject(7, getSprintJsonbData(sprint));
+                    return ps;
+                },
+                keyHolder);
         sprint.setId(Math.toIntExact(keyHolder.getKey().longValue()));
         return sprint;
     }
@@ -123,30 +129,40 @@ public class SprintRepository implements ISprintRepository {
                         getSprintJsonbData(sprint),
                         sprint.getId()
                 },
-                new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.DATE, Types.OTHER, Types.INTEGER}
-        );
+                new int[]{
+                        Types.VARCHAR,
+                        Types.VARCHAR,
+                        Types.VARCHAR,
+                        Types.DATE,
+                        Types.DATE,
+                        Types.OTHER,
+                        Types.INTEGER
+                });
         return sprint;
     }
 
     private List<Sprint> mapRowsToSprintList(String sqlSelect, Object[] params, int[] types) {
-        var sprintList = new ArrayList<>(jdbcTemplate.query(sqlSelect,
-                params,
-                types,
-                (rs, row) -> {
-                    try {
-                        return new Sprint(
-                                rs.getInt("id"),
-                                rs.getString("title"),
-                                rs.getString("description"),
-                                rs.getString("status"),
-                                rs.getDate("start_date"),
-                                rs.getDate("due_date"),
-                                parseJsonDataToMilestoneIds(((PGobject) rs.getObject("sprint_data"))));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }));
+        var sprintList =
+                new ArrayList<>(
+                        jdbcTemplate.query(
+                                sqlSelect,
+                                params,
+                                types,
+                                (rs, row) -> {
+                                    try {
+                                        return new Sprint(
+                                                rs.getInt("id"),
+                                                rs.getString("title"),
+                                                rs.getString("description"),
+                                                rs.getString("status"),
+                                                rs.getDate("start_date"),
+                                                rs.getDate("due_date"),
+                                                parseJsonDataToMilestoneIds(((PGobject) rs.getObject("sprint_data"))));
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    return null;
+                                }));
         return sprintList;
     }
 
@@ -168,6 +184,7 @@ public class SprintRepository implements ISprintRepository {
 
     private Map<String, Integer> parseJsonDataToMilestoneIds(PGobject jsonData) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return (Map<String, Integer>) mapper.readValue(jsonData.getValue(), Map.class).get("projects_to_milestones");
+        return (Map<String, Integer>)
+                mapper.readValue(jsonData.getValue(), Map.class).get("projects_to_milestones");
     }
 }

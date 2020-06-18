@@ -8,6 +8,7 @@ public class Project implements Serializable {
     private int id;
     private String description;
     private String name;
+
     @JsonAlias("avatar_url")
     private String avatarUrl;
 

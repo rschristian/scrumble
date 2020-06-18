@@ -26,16 +26,7 @@ public class IssueService implements IIssueService {
     private String gitLabApiUrl;
 
     @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
     private ISprintService sprintService;
-
-    @Autowired
-    private LinearRegression linearRegression;
-
-    @Autowired
-    private IIssueRepository issueRepository;
 
     // Ref: https://stackoverflow.com/a/5439547/11679751
     public static boolean isInteger(String s) {
@@ -56,14 +47,13 @@ public class IssueService implements IIssueService {
 
     @Override
     public void setStoryPoint(Issue issue) {
-        OptionalInt storyPoint = issue.getLabels()
-                .stream()
-                .filter(IssueService::isInteger)
-                .mapToInt(Integer::parseInt)
-                .findFirst();
+        OptionalInt storyPoint =
+                issue.getLabels().stream()
+                        .filter(IssueService::isInteger)
+                        .mapToInt(Integer::parseInt)
+                        .findFirst();
 
         if (storyPoint.isPresent()) issue.setStoryPoint(storyPoint.getAsInt());
-
     }
 
     @Override
@@ -88,7 +78,6 @@ public class IssueService implements IIssueService {
                 return;
             }
         }
-
     }
 
     @Override
@@ -106,69 +95,32 @@ public class IssueService implements IIssueService {
         }
     }
 
-    @Override
-    public Issue createIssue(int workspaceId, int projectId, Issue issue, String accessToken) {
-        String issueUri = getIssueUri(workspaceId, projectId, issue, accessToken);
-        String projectUri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
-                gitLabApiUrl, accessToken);
-        ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(projectUri, Project[].class);
-        Project[] projects = userProjectsResponse.getBody();
-        Issue newIssue = restTemplate.postForObject(issueUri, null, Issue.class);
-        setStoryPoint(newIssue);
-        setProjectName(newIssue, projects);
-        linearRegression.setEstimate(projectId, newIssue, accessToken);
-        return newIssue;
-    }
-
-    @Override
-    public Issue editIssue(int workspaceId, int projectId, Issue issue, String accessToken) {
-        String uri;
-
-        if (issue.getSprint() != null) {
-            int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
-            if (issue.getSprint().getId() == 0) { //No Sprint selected
-                issueRepository.removeIssue(issue.getIid(), projectId);
-            } else { // adds start time
-                issueRepository.updateStartTime(issue.getIid(), projectId);
-            }
-            uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
-                    gitLabApiUrl, projectId, issue.getIid(), issue.getTitle(), issue.getDescription(),
-                    issue.getStoryPoint(), issue.getAssignee().getId(), milestoneId, accessToken);
-        } else {
-            if (issue.getStatus().equals("closed")) {
-                issueRepository.updateEndTime(issue.getIid(), projectId);
-                int timeSpent = issueRepository.calculateTime(issue.getIid(), projectId);
-                issue.setTimeSpent(timeSpent);
-                uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
-                        gitLabApiUrl, projectId, issue.getIid(), issue.getTitle(), issue.getDescription(),
-                        issue.getStoryPoint(), issue.getAssignee().getId(), accessToken);
-            } else {
-                issueRepository.removeEndTime(issue.getIid(), projectId);
-                uri = String.format("%s/projects/%s/issues/%s?title=%s&description=%s&labels=%s,%s&assignee_ids[]=%s&state_event=reopen&access_token=%s",
-                        gitLabApiUrl, projectId, issue.getIid(), issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getStatus(), issue.getAssignee().getId(), accessToken);
-            }
-        }
-
-        restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
-        if (issue.getStatus().equals("closed")) {
-            linearRegression.setTimeSpent(projectId, issue, accessToken);
-        } else {
-            linearRegression.setEstimate(projectId, issue, accessToken);
-        }
-
-        return issue;
-    }
-
     private String getIssueUri(int workspaceId, int projectId, Issue issue, String accessToken) {
         if (issue.getSprint() != null) {
-            int milestoneId = sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
+            int milestoneId =
+                    sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
 
-            return String.format("%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
-                    gitLabApiUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getAssignee().getId(), milestoneId, accessToken);
+            return String.format(
+                    "%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&milestone_id=%d&access_token=%s",
+                    gitLabApiUrl,
+                    projectId,
+                    issue.getTitle(),
+                    issue.getDescription(),
+                    issue.getStoryPoint(),
+                    issue.getAssignee().getId(),
+                    milestoneId,
+                    accessToken);
         } else {
 
-            return String.format("%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
-                    gitLabApiUrl, projectId, issue.getTitle(), issue.getDescription(), issue.getStoryPoint(), issue.getAssignee().getId(), accessToken);
+            return String.format(
+                    "%s/projects/%s/issues?title=%s&description=%s&labels=%s&assignee_ids[]=%s&access_token=%s",
+                    gitLabApiUrl,
+                    projectId,
+                    issue.getTitle(),
+                    issue.getDescription(),
+                    issue.getStoryPoint(),
+                    issue.getAssignee().getId(),
+                    accessToken);
         }
     }
 }

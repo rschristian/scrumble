@@ -4,7 +4,8 @@ import com.bt.scrumble.dto.IssuePageResult;
 import com.bt.scrumble.dto.NextResource;
 
 public interface IIssuePagingService {
-    NextResource findNextProjectWithQueryResults(NextResource nextResource, int workspaceId, int projectId, String uri);
+    NextResource findNextProjectWithQueryResults(
+            NextResource nextResource, int workspaceId, int projectId, String uri);
 
     String getNextProjectIssuesUri(String uri, int nextProjectId);
 
@@ -12,5 +13,6 @@ public interface IIssuePagingService {
 
     boolean isLastProject(int workspaceId, int projectId);
 
-    IssuePageResult getPageOfIssues(int workspaceId, int projectId, int page, String filter, String searchTerm);
+    IssuePageResult getPageOfIssues(
+            int workspaceId, int projectId, int page, String filter, String searchTerm);
 }

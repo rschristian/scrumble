@@ -18,7 +18,8 @@ import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
 @Component
 public class MilestoneRestTemplateResponseErrorHandler implements ResponseErrorHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MilestoneRestTemplateResponseErrorHandler.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(MilestoneRestTemplateResponseErrorHandler.class);
 
     @Override
     public boolean hasError(ClientHttpResponse httpResponse) throws IOException {
@@ -27,8 +28,7 @@ public class MilestoneRestTemplateResponseErrorHandler implements ResponseErrorH
     }
 
     @Override
-    public void handleError(ClientHttpResponse httpResponse)
-            throws IOException {
+    public void handleError(ClientHttpResponse httpResponse) throws IOException {
         String milestoneNameInUseError = "already being used for another group or project milestone";
         BufferedReader reader = new BufferedReader(new InputStreamReader(httpResponse.getBody()));
         String httpBodyResponse = reader.lines().collect(Collectors.joining(""));

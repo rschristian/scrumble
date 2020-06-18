@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface ISprintRepository {
 
-    Sprint getSprintById(int sprintId);
+  Sprint getSprintById(int sprintId);
 
     List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter);
 

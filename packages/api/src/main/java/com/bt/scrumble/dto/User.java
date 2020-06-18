@@ -9,12 +9,14 @@ public class User implements Serializable {
     private final int id;
     private final String name;
     private final String username;
+
     @JsonAlias("avatar_url")
     private final String avatarUrl;
+
     private final ArrayList<Integer> projectIds;
 
-    public User(int id, String name, String username,
-                String avatarUrl, ArrayList<Integer> projectIds) {
+    public User(
+            int id, String name, String username, String avatarUrl, ArrayList<Integer> projectIds) {
         this.id = id;
         this.name = name;
         this.username = username;

@@ -12,9 +12,14 @@ public class Sprint {
     private Date dueDate;
     private Map<String, Integer> projectIdToMilestoneIds;
 
-    public Sprint(int id, String title, String description,
-                  String status, Date startDate, Date dueDate,
-                  Map<String, Integer> projectIdToMilestoneIds) {
+    public Sprint(
+            int id,
+            String title,
+            String description,
+            String status,
+            Date startDate,
+            Date dueDate,
+            Map<String, Integer> projectIdToMilestoneIds) {
         this.id = id;
         this.title = title;
         this.description = description;

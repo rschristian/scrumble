@@ -65,8 +65,7 @@ public class IssueRepository implements IIssueRepository {
             return jdbcTemplate.queryForObject(
                     "SELECT EXTRACT(EPOCH FROM (end_time - start_time)) FROM issues WHERE id = ? AND project_id = ?;",
                     new Object[]{issueId, projectId},
-                    Integer.class
-            );
+                    Integer.class);
         } catch (IncorrectResultSizeDataAccessException e) {
             return 0;
         }
@@ -78,12 +77,8 @@ public class IssueRepository implements IIssueRepository {
                     "SELECT * FROM issues WHERE id = ? AND project_id = ?;",
                     new Object[]{issueId, projectId},
                     (rs, rowNum) ->
-                            Optional.of(new Issue(
-                                    rs.getInt("Id"),
-                                    rs.getDate("start_time"),
-                                    rs.getDate("end_time")
-                            ))
-            );
+                            Optional.of(
+                                    new Issue(rs.getInt("Id"), rs.getDate("start_time"), rs.getDate("end_time"))));
         } catch (IncorrectResultSizeDataAccessException e) {
             return Optional.empty();
         }

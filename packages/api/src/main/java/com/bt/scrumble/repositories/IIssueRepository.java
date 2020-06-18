@@ -1,7 +1,7 @@
 package com.bt.scrumble.repositories;
 
 public interface IIssueRepository {
-    void updateStartTime(int issueId, int projectId);
+  void updateStartTime(int issueId, int projectId);
 
     void updateEndTime(int issueId, int projectId);
 
@@ -10,5 +10,4 @@ public interface IIssueRepository {
     void removeEndTime(int issueId, int projectId);
 
     Integer calculateTime(int issueId, int projectId);
-
 }

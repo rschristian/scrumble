@@ -29,17 +29,16 @@ public class UserRepository implements IUserRepository {
     public Optional<User> findUserByServiceId(int serviceId) {
         Optional<User> optionalUser = Optional.empty();
         try {
-            optionalUser = jdbcTemplate.queryForObject(
-                    "SELECT * FROM users WHERE service_id = ?;",
-                    new Object[]{serviceId},
-                    (rs, rowNum) ->
-                            Optional.of(new User(
-                                    rs.getInt("id"),
-                                    rs.getInt("service_id"),
-                                    rs.getString("provider_id")
-                            ))
-            );
-        } catch (IncorrectResultSizeDataAccessException ignored) { }
+            optionalUser =
+                    jdbcTemplate.queryForObject(
+                            "SELECT * FROM users WHERE service_id = ?;",
+                            new Object[]{serviceId},
+                            (rs, rowNum) ->
+                                    Optional.of(
+                                            new User(
+                                                    rs.getInt("id"), rs.getInt("service_id"), rs.getString("provider_id"))));
+        } catch (IncorrectResultSizeDataAccessException ignored) {
+        }
         return optionalUser;
     }
 
@@ -47,17 +46,16 @@ public class UserRepository implements IUserRepository {
     public Optional<User> findUserById(int id) {
         Optional<User> optionalUser = Optional.empty();
         try {
-            optionalUser = jdbcTemplate.queryForObject(
-                    "SELECT * FROM users WHERE id = ?;",
-                    new Object[]{id},
-                    (rs, rowNum) ->
-                            Optional.of(new User(
-                                    rs.getInt("id"),
-                                    rs.getInt("service_id"),
-                                    rs.getString("provider_id")
-                            ))
-            );
-        } catch (IncorrectResultSizeDataAccessException ignored) { }
+            optionalUser =
+                    jdbcTemplate.queryForObject(
+                            "SELECT * FROM users WHERE id = ?;",
+                            new Object[]{id},
+                            (rs, rowNum) ->
+                                    Optional.of(
+                                            new User(
+                                                    rs.getInt("id"), rs.getInt("service_id"), rs.getString("provider_id"))));
+        } catch (IncorrectResultSizeDataAccessException ignored) {
+        }
         return optionalUser;
     }
 
@@ -81,13 +79,13 @@ public class UserRepository implements IUserRepository {
     public Optional<String> getToken(int userId) {
         Optional<String> stringOptional = Optional.empty();
         try {
-            stringOptional = jdbcTemplate.queryForObject(
-                    "SELECT * FROM users WHERE id = ?;",
-                    new Object[]{userId},
-                    (rs, rowNum) ->
-                            Optional.of(rs.getString("access_token"))
-            );
-        } catch (IncorrectResultSizeDataAccessException ignored) { }
+            stringOptional =
+                    jdbcTemplate.queryForObject(
+                            "SELECT * FROM users WHERE id = ?;",
+                            new Object[]{userId},
+                            (rs, rowNum) -> Optional.of(rs.getString("access_token")));
+        } catch (IncorrectResultSizeDataAccessException ignored) {
+        }
         return stringOptional;
     }
 }

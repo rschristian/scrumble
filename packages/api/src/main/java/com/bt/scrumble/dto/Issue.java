@@ -1,9 +1,9 @@
 package com.bt.scrumble.dto;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.bt.scrumble.models.Sprint;
 import com.bt.scrumble.models.User;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -13,28 +13,34 @@ import java.util.Map;
 
 public class Issue implements Serializable {
     private int iid;
+
     @JsonAlias("milestone")
     private Sprint sprint;
+
     @JsonAlias("project_id")
     private int projectId;
+
     private String projectName;
     private String title;
     private String description;
     private int storyPoint;
+
     @JsonAlias("state")
     private String status;
+
     private ArrayList<String> labels;
     private int timeSpent;
     private User author;
+
     @JsonAlias("created_at")
     private String createdAt;
+
     private User assignee;
 
     public Issue() {
     }
 
-    public Issue(int projectId, String title, String description,
-                 int storyPoint, String status) {
+    public Issue(int projectId, String title, String description, int storyPoint, String status) {
         this.projectId = projectId;
         this.title = title;
         this.description = description;
@@ -42,11 +48,20 @@ public class Issue implements Serializable {
         this.status = status;
     }
 
-    public Issue(int iid, Sprint sprint, int projectId,
-                 String projectName, String title,
-                 String description, int storyPoint, String state,
-                 ArrayList<String> labels, int timeSpent, User author,
-                 String createdAt, User assignee) {
+    public Issue(
+            int iid,
+            Sprint sprint,
+            int projectId,
+            String projectName,
+            String title,
+            String description,
+            int storyPoint,
+            String state,
+            ArrayList<String> labels,
+            int timeSpent,
+            User author,
+            String createdAt,
+            User assignee) {
         this.iid = iid;
         this.sprint = sprint;
         this.projectId = projectId;
@@ -137,7 +152,6 @@ public class Issue implements Serializable {
     public int getTimeSpent() {
         return timeSpent;
     }
-
 
     @JsonProperty("time_stats")
     public void setTimeSpent(Map<String, Object> timeSpent) {

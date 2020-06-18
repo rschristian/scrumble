@@ -29,8 +29,9 @@ public class ProjectApi {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         String uri = String.format("%s/projects", gitLabBaseUrl);
         ResponseEntity<ArrayList<Project>> userProjectsResponse =
-                restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity(headers), new ParameterizedTypeReference<>() {
-                });
+                restTemplate.exchange(
+                        uri, HttpMethod.GET, new HttpEntity(headers), new ParameterizedTypeReference<>() {
+                        });
         return ResponseEntity.ok().body(userProjectsResponse.getBody());
     }
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface IWorkspaceService {
-    List<Workspace> getAllWorkspaces();
+  List<Workspace> getAllWorkspaces();
 
     ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId);
 

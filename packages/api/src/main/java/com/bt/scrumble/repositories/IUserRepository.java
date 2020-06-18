@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface IUserRepository {
 
-    User createUser(User user);
+  User createUser(User user);
 
     Optional<User> findUserByServiceId(int serviceId);
 

@@ -9,37 +9,38 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class WorkspaceService implements IWorkspaceService {
-    @Value("${app.issues.provider.gitlab.baseUrl.api}")
-    private String gitLabApiUrl;
+  @Value("${app.issues.provider.gitlab.baseUrl.api}")
+  private String gitLabApiUrl;
 
-    @Autowired
-    private RestTemplate restTemplate;
+  @Autowired
+  private RestTemplate restTemplate;
 
-    @Autowired
-    private IWorkspaceRepository workspaceRepository;
+  @Autowired
+  private IWorkspaceRepository workspaceRepository;
 
-    @Override
-    public List<Workspace> getAllWorkspaces() {
-        return workspaceRepository.getAllWorkspaces();
+  @Override
+  public List<Workspace> getAllWorkspaces() {
+    return workspaceRepository.getAllWorkspaces();
+  }
+
+  @Override
+  public ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId) {
+    return workspaceRepository.projectIdsForWorkspace(workspaceId);
+  }
+
+  @Override
+  public List<Project> getWorkspaceProjects(int workspaceId) {
+    ArrayList<Integer> projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId);
+    List<Project> result = new ArrayList<>();
+    for (int projectId : projectIds) {
+      String uri = String.format("%s/projects/%d", gitLabApiUrl, projectId);
+      result.add(restTemplate.getForObject(uri, Project.class));
     }
-
-    @Override
-    public ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId) {
-        return workspaceRepository.projectIdsForWorkspace(workspaceId);
-    }
-
-    @Override
-    public List<Project> getWorkspaceProjects(int workspaceId) {
-        ArrayList<Integer> projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId);
-        List<Project> result = new ArrayList<>();
-        for (int projectId : projectIds) {
-            String uri = String.format("%s/projects/%d", gitLabApiUrl, projectId);
-            result.add(restTemplate.getForObject(uri, Project.class));
-        }
-        return result;
-    }
+    return result;
+  }
 }
