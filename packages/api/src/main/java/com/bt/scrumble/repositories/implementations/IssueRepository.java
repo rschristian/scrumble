@@ -26,7 +26,7 @@ public class IssueRepository implements IIssueRepository {
     public void updateStartTime(int issueId, int projectId) {
         Date currentDate = new Date();
         Optional<Issue> issue = findIssueById(issueId, projectId);
-        if (!issue.isPresent()) {
+        if (issue.isEmpty()) {
             String insertStatement = "INSERT INTO issues (id, project_id, start_time) VALUES (?,?,?);";
             Object[] params = new Object[]{issueId, projectId, new Timestamp(currentDate.getTime())};
             int[] types = new int[]{Types.INTEGER, Types.INTEGER, Types.TIMESTAMP};

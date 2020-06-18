@@ -29,19 +29,8 @@ public class GitLabLinkParser {
                     relValue = relValue.substring(1, relValue.length() - 1);
                 }
 
-                switch (relValue) {
-                    case "next":
-                        gitLabLinks.setNext(linkPart);
-                        break;
-                    case "last":
-                        gitLabLinks.setLast(linkPart);
-                        break;
-                    case "first":
-                        gitLabLinks.setFirst(linkPart);
-                        break;
-                    case "prev":
-                        gitLabLinks.setPrev(linkPart);
-                        break;
+                if ("next".equals(relValue)) {
+                    gitLabLinks.setNext(linkPart);
                 }
             }
         }

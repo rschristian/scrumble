@@ -24,9 +24,8 @@ public class Issue implements Serializable {
     @JsonAlias("state")
     private String status;
     private ArrayList<String> labels;
-    @JsonAlias("timeSpent")
     private int timeSpent;
-    private Object author;
+    private User author;
     @JsonAlias("created_at")
     private String createdAt;
     private User assignee;
@@ -46,7 +45,7 @@ public class Issue implements Serializable {
     public Issue(int iid, Sprint sprint, int projectId,
                  String projectName, String title,
                  String description, int storyPoint, String state,
-                 ArrayList<String> labels, int timeSpent, String author,
+                 ArrayList<String> labels, int timeSpent, User author,
                  String createdAt, User assignee) {
         this.iid = iid;
         this.sprint = sprint;
@@ -155,7 +154,7 @@ public class Issue implements Serializable {
     }
 
     @JsonProperty("author")
-    public void setAuthor(Map<String, Object> author) {
+    public void setAuthor(User author) {
         this.author = author;
     }
 

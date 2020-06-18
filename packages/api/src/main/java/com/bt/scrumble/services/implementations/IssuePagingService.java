@@ -37,8 +37,7 @@ public class IssuePagingService implements IIssuePagingService {
     @Override
     public int getNextProjectId(int workspaceId, int prevProjectId) {
         ArrayList<Integer> workspaceProjectIds = workspaceService.getProjectIdsForWorkspace(workspaceId);
-        var nextProjectId = workspaceProjectIds.get(workspaceProjectIds.lastIndexOf(prevProjectId) + 1);
-        return nextProjectId;
+        return workspaceProjectIds.get(workspaceProjectIds.lastIndexOf(prevProjectId) + 1);
     }
 
     public NextResource getNextResource(String requestUri, String linkHeader, int workspaceId,
@@ -81,21 +80,20 @@ public class IssuePagingService implements IIssuePagingService {
     @Override
     public NextResource findNextProjectWithQueryResults(NextResource nextResource, int workspaceId,
                                                         int projectId, String uri) {
-        ArrayList<Issue> issues;
-        boolean emptyResponse = true;
-
+        var emptyResponse = true;
         while (emptyResponse) {
             if (isLastProject(workspaceId, projectId)) {
                 return new NextResource();
             }
             projectId = getNextProjectId(workspaceId, projectId);
             uri = getNextProjectIssuesUri(uri, projectId);
+            System.out.println("Next Resource: " + uri);
 
             ResponseEntity<ArrayList<Issue>> issuesResponse = restTemplate.exchange(
                     uri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {
                     });
 
-            issues = issuesResponse.getBody();
+            var issues = issuesResponse.getBody();
             for (var issue : issues) {
                 issueService.setStoryPoint(issue);
             }
@@ -126,27 +124,28 @@ public class IssuePagingService implements IIssuePagingService {
 
     @Override
     public IssuePageResult getPageOfIssues(int workspaceId, int projectId, int page, String filter,
-                                           String searchTerm, String accessToken) {
+                                           String searchTerm) {
         // Initial call for a workspaces issues will pass number 0 for page and project id.
         // SB works out which project it should start from
         page = (page == 0) ? 1 : page;
         projectId = (projectId == 0) ? workspaceService.getProjectIdsForWorkspace(workspaceId).get(0) : projectId;
 
-        String uri = String.format("%s/projects?access_token=%s&simple=true&membership=true", gitLabApiUrl, accessToken);
+        String uri = String.format("%s/projects", gitLabApiUrl);
         ResponseEntity<Project[]> userProjectsResponse = restTemplate.getForEntity(uri, Project[].class);
         Project[] projects = userProjectsResponse.getBody();
 
-        String queryUri = String.format("%s/projects/%d/issues?%s&search=%s&page=%d&access_token=%s",
-                gitLabApiUrl, projectId, issueService.getFilterQuery(filter), searchTerm, page, accessToken);
+        String queryUri = String.format("%s/projects/%d/issues?%s&search=%s&page=%d",
+                gitLabApiUrl, projectId, issueService.getFilterQuery(filter), searchTerm, page);
 
         ArrayList<Issue> issues;
         IssuePageResult issuePageResult = new IssuePageResult();
 
         while (true) {
+            System.out.println("Query URI: " + queryUri);
             ResponseEntity<ArrayList<Issue>> issuesResponse = restTemplate.exchange(
-                    queryUri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() {
-                    });
+                    queryUri, HttpMethod.GET, getApplicationJsonHeaders(), new ParameterizedTypeReference<>() { });
             var openSprints = sprintService.getSprintsForWorkspace(workspaceId, "active");
+            System.out.println("Response header Link: " + issuesResponse.getHeaders().getFirst("Link"));
 
             issues = issuesResponse.getBody();
             for (var issue : issues) {

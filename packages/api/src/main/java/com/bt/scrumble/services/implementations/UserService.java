@@ -61,8 +61,7 @@ public class UserService implements IUserService {
                 workspaceRepository.workspaceUserList(workspaceId),
                 new TypeReference<List<User>>() {
                 });
-        ArrayList<User> userArray = new ArrayList();
-        userArray.addAll(userList);
+        ArrayList<User> userArray = new ArrayList(userList);
         userArray.forEach(user -> {
             if (issue.getAssignee().getId() == user.getId()) {
                 issue.getAssignee().setProjectIds(user.getProjectIds());
