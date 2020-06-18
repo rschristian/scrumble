@@ -1,4 +1,4 @@
-package com.bt.scrumbleLts.api.v1;
+package com.bt.scrumbleLts.api;
 
 import com.blade.mvc.RouteContext;
 import com.blade.mvc.annotation.*;
