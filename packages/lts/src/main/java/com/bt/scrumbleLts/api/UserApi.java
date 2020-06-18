@@ -1,4 +1,4 @@
-package com.bt.scrumbleLts.api.v1;
+package com.bt.scrumbleLts.api;
 
 import com.blade.mvc.annotation.*;
 import com.bt.scrumbleLts.dto.User;
@@ -7,7 +7,7 @@ import com.bt.scrumbleLts.dto.User;
 public class UserApi {
 
     @JSON
-    @GetRoute("/users/:userId")
+    @GetRoute("/users")
     public User getUserInfo() {
         return new User();
     }
