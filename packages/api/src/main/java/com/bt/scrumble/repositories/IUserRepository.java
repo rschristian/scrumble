@@ -6,15 +6,15 @@ import java.util.Optional;
 
 public interface IUserRepository {
 
-    User createUser(User user);
+  User createUser(User user);
 
-    Optional<User> findUserByServiceId(int serviceId);
+  Optional<User> findUserByServiceId(int serviceId);
 
-    Optional<User> findUserById(int id);
+  Optional<User> findUserById(int id);
 
-    void addToken(int userId, String token);
+  void addToken(int userId, String token);
 
-    void removeToken(int userId);
+  void removeToken(int userId);
 
-    Optional<String> getToken(int userId);
+  Optional<String> getToken(int userId);
 }

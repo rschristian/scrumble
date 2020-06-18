@@ -23,31 +23,38 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class UserDetailsApi {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsApi.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsApi.class);
 
-    @Autowired
-    private RestTemplate restTemplate;
+  @Autowired private RestTemplate restTemplate;
 
-    @Autowired
-    private IUserService userService;
+  @Autowired private IUserService userService;
 
-    @Value("${app.issues.provider.gitlab.baseUrl.api}")
-    private String gitLabBaseUrlApi;
+  @Value("${app.issues.provider.gitlab.baseUrl.api}")
+  private String gitLabBaseUrlApi;
 
-    @Value("${app.msg.error.auth}")
-    private String authErrorMsg;
+  @Value("${app.msg.error.auth}")
+  private String authErrorMsg;
 
-    @GetMapping("/user/info")
-    public ResponseEntity<Object> getUserInfo(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+  @GetMapping("/user/info")
+  public ResponseEntity<Object> getUserInfo(Authentication authentication) {
+    UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+    Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
 
-        if (accessTokenOptional.isPresent()) {
-            String uri = String.format("%1s/users/%2s?access_token=%3s", gitLabBaseUrlApi, userPrincipal.getServiceId(), accessTokenOptional.get());
-            User currentUser = restTemplate.getForObject(uri, User.class);
-            return ResponseEntity.ok().body(new ScrumbleUser(currentUser.getId(), currentUser.getName(), currentUser.getUsername(), currentUser.getAvatarUrl()));
-        }
-        LOGGER.error("Unable to authenticate with authentication provider");
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", authErrorMsg));
+    if (accessTokenOptional.isPresent()) {
+      String uri =
+          String.format(
+              "%1s/users/%2s?access_token=%3s",
+              gitLabBaseUrlApi, userPrincipal.getServiceId(), accessTokenOptional.get());
+      User currentUser = restTemplate.getForObject(uri, User.class);
+      return ResponseEntity.ok()
+          .body(
+              new ScrumbleUser(
+                  currentUser.getId(),
+                  currentUser.getName(),
+                  currentUser.getUsername(),
+                  currentUser.getAvatarUrl()));
     }
+    LOGGER.error("Unable to authenticate with authentication provider");
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", authErrorMsg));
+  }
 }

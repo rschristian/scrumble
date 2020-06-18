@@ -16,53 +16,57 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
+  @Autowired private CustomOAuth2UserService customOAuth2UserService;
 
-    @Autowired
-    private OAuth2AuthSuccessHandler oAuth2AuthSuccessHandler;
+  @Autowired private OAuth2AuthSuccessHandler oAuth2AuthSuccessHandler;
 
-    @Autowired
-    private OAuth2AuthFailureHandler oAuth2AuthFailureHandler;
+  @Autowired private OAuth2AuthFailureHandler oAuth2AuthFailureHandler;
 
-    @Bean
-    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
-        return new HttpCookieOAuth2AuthorizationRequestRepository();
-    }
+  @Bean
+  public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
+    return new HttpCookieOAuth2AuthorizationRequestRepository();
+  }
 
-    @Bean
-    public TokenAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter();
-    }
+  @Bean
+  public TokenAuthenticationFilter tokenAuthenticationFilter() {
+    return new TokenAuthenticationFilter();
+  }
 
-    @Override
-    protected void configure(final HttpSecurity http) throws Exception {
-        http.csrf().disable().cors().and().authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin().disable()
-                .httpBasic().disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .oauth2Login()
-                .redirectionEndpoint()
-                .baseUri("/api/login/oauth2/code")
-                .and()
-                .authorizationEndpoint()
-                .baseUri("/api/oauth2/authorize")
-                .authorizationRequestRepository(cookieAuthorizationRequestRepository())
-                .and()
-                .redirectionEndpoint()
-                .baseUri("/api/login/oauth2/code")
-                .and()
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService)
-                .and()
-                .successHandler(oAuth2AuthSuccessHandler)
-                .failureHandler(oAuth2AuthFailureHandler);
+  @Override
+  protected void configure(final HttpSecurity http) throws Exception {
+    http.csrf()
+        .disable()
+        .cors()
+        .and()
+        .authorizeRequests()
+        .anyRequest()
+        .authenticated()
+        .and()
+        .formLogin()
+        .disable()
+        .httpBasic()
+        .disable()
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .oauth2Login()
+        .redirectionEndpoint()
+        .baseUri("/api/login/oauth2/code")
+        .and()
+        .authorizationEndpoint()
+        .baseUri("/api/oauth2/authorize")
+        .authorizationRequestRepository(cookieAuthorizationRequestRepository())
+        .and()
+        .redirectionEndpoint()
+        .baseUri("/api/login/oauth2/code")
+        .and()
+        .userInfoEndpoint()
+        .userService(customOAuth2UserService)
+        .and()
+        .successHandler(oAuth2AuthSuccessHandler)
+        .failureHandler(oAuth2AuthFailureHandler);
 
-        // Add our custom Token based authentication filter
-        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-    }
+    // Add our custom Token based authentication filter
+    http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+  }
 }

@@ -27,45 +27,45 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class AuthenticationApi {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsApi.class);
-    private final AppProperties appProperties;
-    @Autowired
-    private TokenProvider tokenProvider;
-    @Autowired
-    private IUserService userService;
-    @Autowired
-    private TokenUtils tokenUtils;
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsApi.class);
+  private final AppProperties appProperties;
+  @Autowired private TokenProvider tokenProvider;
+  @Autowired private IUserService userService;
+  @Autowired private TokenUtils tokenUtils;
 
-    public AuthenticationApi(AppProperties appProperties) {
-        this.appProperties = appProperties;
+  public AuthenticationApi(AppProperties appProperties) {
+    this.appProperties = appProperties;
+  }
+
+  @GetMapping("/auth/token")
+  public ResponseEntity<Object> exchangeShortLifeToken(HttpServletRequest request) {
+    String jwt = tokenUtils.getJwtFromRequest(request);
+    String token = "";
+
+    if (StringUtils.hasText(jwt)) {
+      Long userId = tokenProvider.getUserIdFromToken(jwt);
+      Optional<User> userOptional = userService.findUserById(userId.intValue());
+
+      if (userOptional.isEmpty()) {
+        LOGGER.error("User not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(Map.of("message", "User not found"));
+      }
+      token =
+          tokenProvider.createToken(
+              userId.intValue(), appProperties.getAuth().getLongLifeTokenExpirationMsec());
     }
+    return ResponseEntity.ok().body(Map.of("jwt", token));
+  }
 
-    @GetMapping("/auth/token")
-    public ResponseEntity<Object> exchangeShortLifeToken(HttpServletRequest request) {
-        String jwt = tokenUtils.getJwtFromRequest(request);
-        String token = "";
-
-        if (StringUtils.hasText(jwt)) {
-            Long userId = tokenProvider.getUserIdFromToken(jwt);
-            Optional<User> userOptional = userService.findUserById(userId.intValue());
-
-            if (userOptional.isEmpty()) {
-                LOGGER.error("User not found");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
-            }
-            token = tokenProvider.createToken(userId.intValue(), appProperties.getAuth().getLongLifeTokenExpirationMsec());
-        }
-        return ResponseEntity.ok().body(Map.of("jwt", token));
+  @DeleteMapping("/auth/token")
+  public ResponseEntity<Object> deleteToken(Authentication authentication) {
+    try {
+      UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+      userService.removeToken(userPrincipal.getId());
+      return ResponseEntity.ok().body(null);
+    } catch (InternalAuthenticationServiceException exception) {
+      return ResponseEntity.status(500).body(null);
     }
-
-    @DeleteMapping("/auth/token")
-    public ResponseEntity<Object> deleteToken(Authentication authentication) {
-        try {
-            UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-            userService.removeToken(userPrincipal.getId());
-            return ResponseEntity.ok().body(null);
-        } catch (InternalAuthenticationServiceException exception) {
-            return ResponseEntity.status(500).body(null);
-        }
-    }
+  }
 }

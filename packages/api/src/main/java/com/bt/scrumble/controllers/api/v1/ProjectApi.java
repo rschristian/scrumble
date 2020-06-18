@@ -21,33 +21,33 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class ProjectApi {
 
-    @Autowired
-    private RestTemplate restTemplate;
+  @Autowired private RestTemplate restTemplate;
 
-    @Autowired
-    private IUserService userService;
+  @Autowired private IUserService userService;
 
-    @Value("${app.issues.provider.gitlab.baseUrl.api}")
-    private String gitLabBaseUrl;
+  @Value("${app.issues.provider.gitlab.baseUrl.api}")
+  private String gitLabBaseUrl;
 
-    @Value("${app.msg.error.auth}")
-    private String authErrorMsg;
+  @Value("${app.msg.error.auth}")
+  private String authErrorMsg;
 
-    @GetMapping("/projects")
-    public ResponseEntity<Object> getIssues(Authentication auth) {
+  @GetMapping("/projects")
+  public ResponseEntity<Object> getIssues(Authentication auth) {
 
-        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
-        if (accessTokenOptional.isPresent()) {
-            var headers = new HttpHeaders();
-            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-            String uri = String.format("%s/projects?access_token=%s&simple=true&membership=true",
-                    gitLabBaseUrl, accessTokenOptional.get());
-            ResponseEntity<ArrayList<Project>> userProjectsResponse =
-                    restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity(headers), new ParameterizedTypeReference<>() {
-                    });
-            return ResponseEntity.ok().body(userProjectsResponse.getBody());
-        }
-        return ResponseEntity.ok().body(authErrorMsg);
+    UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
+    Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
+    if (accessTokenOptional.isPresent()) {
+      var headers = new HttpHeaders();
+      headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+      String uri =
+          String.format(
+              "%s/projects?access_token=%s&simple=true&membership=true",
+              gitLabBaseUrl, accessTokenOptional.get());
+      ResponseEntity<ArrayList<Project>> userProjectsResponse =
+          restTemplate.exchange(
+              uri, HttpMethod.GET, new HttpEntity(headers), new ParameterizedTypeReference<>() {});
+      return ResponseEntity.ok().body(userProjectsResponse.getBody());
     }
+    return ResponseEntity.ok().body(authErrorMsg);
+  }
 }

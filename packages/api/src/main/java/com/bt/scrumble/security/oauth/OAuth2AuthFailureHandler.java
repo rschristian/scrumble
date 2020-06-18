@@ -15,26 +15,33 @@ import java.io.IOException;
 
 import static com.bt.scrumble.security.oauth.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
-// Adpated from https://github.com/callicoder/spring-boot-react-oauth2-social-login-demo/blob/master/spring-social/src/main/java/com/example/springsocial/security/oauth2/OAuth2AuthenticationFailureHandler.java
+// Adpated from
+// https://github.com/callicoder/spring-boot-react-oauth2-social-login-demo/blob/master/spring-social/src/main/java/com/example/springsocial/security/oauth2/OAuth2AuthenticationFailureHandler.java
 @Component
 public class OAuth2AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    @Autowired
-    private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+  @Autowired
+  private HttpCookieOAuth2AuthorizationRequestRepository
+      httpCookieOAuth2AuthorizationRequestRepository;
 
-    @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-                                        AuthenticationException exception) throws IOException, ServletException {
-        String targetUrl = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
-                .map(Cookie::getValue)
-                .orElse(("/"));
+  @Override
+  public void onAuthenticationFailure(
+      HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
+      throws IOException, ServletException {
+    String targetUrl =
+        CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
+            .map(Cookie::getValue)
+            .orElse(("/"));
 
-        targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("error", exception.getLocalizedMessage())
-                .build().toUriString();
+    targetUrl =
+        UriComponentsBuilder.fromUriString(targetUrl)
+            .queryParam("error", exception.getLocalizedMessage())
+            .build()
+            .toUriString();
 
-        httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
+    httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(
+        request, response);
 
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
-    }
+    getRedirectStrategy().sendRedirect(request, response, targetUrl);
+  }
 }

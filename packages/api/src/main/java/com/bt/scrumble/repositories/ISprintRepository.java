@@ -7,13 +7,13 @@ import java.util.Map;
 
 public interface ISprintRepository {
 
-    Sprint getSprintById(int sprintId);
+  Sprint getSprintById(int sprintId);
 
-    List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter);
+  List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter);
 
-    Map<String, Integer> getProjectIdsToMilestoneIds(int sprintId);
+  Map<String, Integer> getProjectIdsToMilestoneIds(int sprintId);
 
-    Sprint createSprint(int workspaceId, Sprint sprint);
+  Sprint createSprint(int workspaceId, Sprint sprint);
 
-    Sprint editSprint(int workspaceId, Sprint sprint);
+  Sprint editSprint(int workspaceId, Sprint sprint);
 }

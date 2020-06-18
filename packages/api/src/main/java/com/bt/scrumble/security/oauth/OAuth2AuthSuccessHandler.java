@@ -20,59 +20,72 @@ import java.util.Optional;
 
 import static com.bt.scrumble.security.oauth.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
-// Adapted from https://github.com/callicoder/spring-boot-react-oauth2-social-login-demo/blob/master/spring-social/src/main/java/com/example/springsocial/security/oauth2/OAuth2AuthenticationSuccessHandler.java
+// Adapted from
+// https://github.com/callicoder/spring-boot-react-oauth2-social-login-demo/blob/master/spring-social/src/main/java/com/example/springsocial/security/oauth2/OAuth2AuthenticationSuccessHandler.java
 
 @Component
 public class OAuth2AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final TokenProvider tokenProvider;
+  private final TokenProvider tokenProvider;
 
-    private final AppProperties appProperties;
+  private final AppProperties appProperties;
 
-    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+  private final HttpCookieOAuth2AuthorizationRequestRepository
+      httpCookieOAuth2AuthorizationRequestRepository;
 
-    @Autowired
-    OAuth2AuthSuccessHandler(TokenProvider tokenProvider, AppProperties appProperties,
-                             HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
-        this.tokenProvider = tokenProvider;
-        this.appProperties = appProperties;
-        this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
+  @Autowired
+  OAuth2AuthSuccessHandler(
+      TokenProvider tokenProvider,
+      AppProperties appProperties,
+      HttpCookieOAuth2AuthorizationRequestRepository
+          httpCookieOAuth2AuthorizationRequestRepository) {
+    this.tokenProvider = tokenProvider;
+    this.appProperties = appProperties;
+    this.httpCookieOAuth2AuthorizationRequestRepository =
+        httpCookieOAuth2AuthorizationRequestRepository;
+  }
+
+  @Override
+  public void onAuthenticationSuccess(
+      HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+      throws IOException, ServletException {
+    String targetUrl = determineTargetUrl(request, authentication);
+
+    if (response.isCommitted()) {
+      logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
+      return;
     }
 
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
-        String targetUrl = determineTargetUrl(request, authentication);
+    clearAuthenticationAttributes(request, response);
+    getRedirectStrategy().sendRedirect(request, response, targetUrl);
+  }
 
-        if (response.isCommitted()) {
-            logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
-            return;
-        }
+  protected String determineTargetUrl(HttpServletRequest request, Authentication authentication) {
+    Optional<String> redirectUri =
+        CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME).map(Cookie::getValue);
 
-        clearAuthenticationAttributes(request, response);
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+    if (redirectUri.isPresent()) {
+      throw new BadRequestException(
+          "Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
     }
 
-    protected String determineTargetUrl(HttpServletRequest request, Authentication authentication) {
-        Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
-                .map(Cookie::getValue);
+    String targetUrl = redirectUri.orElse(appProperties.getAuth().getRedirectUri());
 
-        if (redirectUri.isPresent()) {
-            throw new BadRequestException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
-        }
+    UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+    String token =
+        tokenProvider.createToken(
+            userPrincipal.getId(), appProperties.getAuth().getShortLifeTokenExpirationMsec());
 
-        String targetUrl = redirectUri.orElse(appProperties.getAuth().getRedirectUri());
+    return UriComponentsBuilder.fromUriString(targetUrl)
+        .queryParam("token", token)
+        .build()
+        .toUriString();
+  }
 
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        String token = tokenProvider.createToken(userPrincipal.getId(), appProperties.getAuth().getShortLifeTokenExpirationMsec());
-
-        return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("token", token)
-                .build().toUriString();
-    }
-
-    protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
-        super.clearAuthenticationAttributes(request);
-        httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
-    }
+  protected void clearAuthenticationAttributes(
+      HttpServletRequest request, HttpServletResponse response) {
+    super.clearAuthenticationAttributes(request);
+    httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(
+        request, response);
+  }
 }

@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class AuthAdvice {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthAdvice.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AuthAdvice.class);
 
-    @ExceptionHandler({AccessDeniedException.class})
-    public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException e) {
-        return error(e);
-    }
+  @ExceptionHandler({AccessDeniedException.class})
+  public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException e) {
+    return error(e);
+  }
 
-    private ResponseEntity<String> error(Exception e) {
-        LOGGER.error(e.getMessage());
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-    }
+  private ResponseEntity<String> error(Exception e) {
+    LOGGER.error(e.getMessage());
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+  }
 }

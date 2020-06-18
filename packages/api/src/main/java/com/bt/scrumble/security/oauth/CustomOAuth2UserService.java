@@ -17,54 +17,56 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-// Adapted from https://github.com/callicoder/spring-boot-react-oauth2-social-login-demo/blob/master/spring-social/src/main/java/com/example/springsocial/security/oauth2/CustomOAuth2UserService.java
+// Adapted from
+// https://github.com/callicoder/spring-boot-react-oauth2-social-login-demo/blob/master/spring-social/src/main/java/com/example/springsocial/security/oauth2/CustomOAuth2UserService.java
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CustomOAuth2UserService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CustomOAuth2UserService.class);
 
-    @Autowired
-    private IUserService userService;
+  @Autowired private IUserService userService;
 
-    @Override
-    public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
-        OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
+  @Override
+  public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest)
+      throws OAuth2AuthenticationException {
+    OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
 
-        try {
-            return processOAuth2User(oAuth2UserRequest, oAuth2User);
-        } catch (AuthenticationException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            LOGGER.error(ex.getMessage());
-            throw new InternalAuthenticationServiceException(ex.getMessage(), ex.getCause());
-        }
+    try {
+      return processOAuth2User(oAuth2UserRequest, oAuth2User);
+    } catch (AuthenticationException ex) {
+      throw ex;
+    } catch (Exception ex) {
+      LOGGER.error(ex.getMessage());
+      throw new InternalAuthenticationServiceException(ex.getMessage(), ex.getCause());
+    }
+  }
+
+  private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
+    OAuth2UserInfo oAuth2UserInfo =
+        OAuth2UserInfoFactory.getOAuth2UserInfo(
+            oAuth2UserRequest.getClientRegistration().getRegistrationId(),
+            oAuth2User.getAttributes());
+
+    User user;
+    Optional<User> userOptional = userService.findUserByServiceId(oAuth2UserInfo.getId());
+
+    if (userOptional.isEmpty()) {
+      user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
+    } else {
+      user = userOptional.get();
     }
 
-    private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
-        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(
-                oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes()
-        );
+    userService.addToken(user.getId(), oAuth2UserRequest.getAccessToken().getTokenValue());
+    return UserPrincipal.create(userOptional.get(), oAuth2User.getAttributes());
+  }
 
-        User user;
-        Optional<User> userOptional = userService.findUserByServiceId(oAuth2UserInfo.getId());
+  private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
+    User user = new User();
 
-        if (userOptional.isEmpty()) {
-            user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
-        } else {
-            user = userOptional.get();
-        }
+    user.setServiceId(oAuth2UserInfo.getId());
+    user.setProviderId(oAuth2UserRequest.getClientRegistration().getRegistrationId());
 
-        userService.addToken(user.getId(), oAuth2UserRequest.getAccessToken().getTokenValue());
-        return UserPrincipal.create(userOptional.get(), oAuth2User.getAttributes());
-    }
-
-    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
-        User user = new User();
-
-        user.setServiceId(oAuth2UserInfo.getId());
-        user.setProviderId(oAuth2UserRequest.getClientRegistration().getRegistrationId());
-
-        user = userService.createUser(user);
-        return user;
-    }
+    user = userService.createUser(user);
+    return user;
+  }
 }
