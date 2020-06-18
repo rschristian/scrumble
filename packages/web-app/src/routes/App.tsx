@@ -5,7 +5,6 @@ import { Route, route, Router } from 'preact-router';
 import Notifications from 'react-notify-toast';
 
 import { TopBar } from 'components/Core/TopBar';
-import AuthSuccess from 'routes/Auth/authSuccess';
 import Login from 'routes/Auth/login';
 import Home from 'routes/Home';
 import Workspace from 'routes/Workspace';
@@ -20,7 +19,6 @@ const App: FunctionalComponent = () => {
             <Suspense fallback={<Fallback />}>
                 <Router>
                     <Route path="/login" component={Login} />
-                    <Route path="/oauth-success" component={AuthSuccess} />
                     <AuthenticatedRoute path="/" component={Home} />
                     <AuthenticatedRoute path="/workspace/:workspaceId/:subPage?" component={Workspace} />
                     <AuthenticatedRoute path="/workspace/:workspaceId/sprint/:sprintId/:subPage?" component={Sprint} />

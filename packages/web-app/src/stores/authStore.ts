@@ -1,7 +1,6 @@
 import { observable, action } from 'mobx';
 
 import { User } from 'models/User';
-import { login } from 'services/api/auth';
 import { authStorageService } from 'ts-api-toolkit';
 
 class AuthStore {
@@ -23,10 +22,7 @@ class AuthStore {
         };
     }
 
-    @action async login(shortLivedJwt: string): Promise<void | string> {
-        const error = await login(shortLivedJwt);
-
-        if (error) return error;
+    @action async login(): Promise<void> {
         this.isAuthenticated = true;
     }
 
