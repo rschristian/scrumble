@@ -29,4 +29,12 @@ public class Issue {
         this.title = title;
         this.created_at = created_at;
     }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
 }
