@@ -20,6 +20,7 @@ public class IssueService implements IIssueService {
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabApiUrl;
 
+    // Causes circular dependency if consturctor
     @Autowired
     private ISprintService sprintService;
 

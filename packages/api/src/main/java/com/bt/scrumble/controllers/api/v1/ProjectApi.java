@@ -17,11 +17,14 @@ import java.util.Collections;
 @RequestMapping("/api/v1")
 public class ProjectApi {
 
-    @Autowired
-    private RestTemplate restTemplate;
-
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabBaseUrl;
+    private final RestTemplate restTemplate;
+
+    @Autowired
+    public ProjectApi(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     @GetMapping("/projects")
     public ResponseEntity<Object> getProjects() {

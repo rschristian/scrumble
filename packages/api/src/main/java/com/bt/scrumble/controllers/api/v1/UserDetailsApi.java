@@ -14,11 +14,14 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/api/v1")
 public class UserDetailsApi {
 
-    @Autowired
-    private RestTemplate restTemplate;
-
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabBaseUrlApi;
+    private final RestTemplate restTemplate;
+
+    @Autowired
+    public UserDetailsApi(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     @GetMapping("/user/info")
     public ResponseEntity<Object> getUserInfo() {

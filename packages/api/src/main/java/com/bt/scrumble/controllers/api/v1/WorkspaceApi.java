@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class WorkspaceApi {
 
+    private final IWorkspaceService workspaceService;
+
     @Autowired
-    private IWorkspaceService workspaceService;
+    public WorkspaceApi(IWorkspaceService workspaceService) {
+        this.workspaceService = workspaceService;
+    }
 
     @GetMapping("/workspaces")
     public ResponseEntity<Object> getAllWorkspaces() {

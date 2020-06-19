@@ -17,11 +17,14 @@ public class WorkspaceService implements IWorkspaceService {
   @Value("${app.issues.provider.gitlab.baseUrl.api}")
   private String gitLabApiUrl;
 
-  @Autowired
-  private RestTemplate restTemplate;
+  private final RestTemplate restTemplate;
+  private final IWorkspaceRepository workspaceRepository;
 
   @Autowired
-  private IWorkspaceRepository workspaceRepository;
+  public WorkspaceService(RestTemplate restTemplate, IWorkspaceRepository workspaceRepository) {
+    this.restTemplate = restTemplate;
+    this.workspaceRepository = workspaceRepository;
+  }
 
   @Override
   public List<Workspace> getAllWorkspaces() {

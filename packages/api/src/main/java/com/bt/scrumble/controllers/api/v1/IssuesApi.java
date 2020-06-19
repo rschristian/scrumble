@@ -13,15 +13,18 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class IssuesApi {
 
-  @Autowired
-  private IIssuePagingService issuePagingService;
+    private final IIssuePagingService issuePagingService;
+    private final IWorkspaceService workspaceService;
 
-  @Autowired
-  private IWorkspaceService workspaceService;
+    @Autowired
+    public IssuesApi(IIssuePagingService issuePagingService, IWorkspaceService workspaceService) {
+        this.issuePagingService = issuePagingService;
+        this.workspaceService = workspaceService;
+    }
 
-  @GetMapping("/workspace/{id}/issues")
-  public ResponseEntity<Object> getIssues(
-          @PathVariable(value = "id") int workspaceId,
+    @GetMapping("/workspace/{id}/issues")
+    public ResponseEntity<Object> getIssues(
+            @PathVariable(value = "id") int workspaceId,
           @RequestParam(value = "projectId") int projectId,
           @RequestParam(value = "page") int page,
           @RequestParam(value = "filter") String filter,

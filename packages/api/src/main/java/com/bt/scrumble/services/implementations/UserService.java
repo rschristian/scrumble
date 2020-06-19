@@ -15,13 +15,17 @@ import java.util.List;
 @Service
 public class UserService implements IUserService {
 
-  @Autowired
-  private IWorkspaceRepository workspaceRepository;
+    private final IWorkspaceRepository workspaceRepository;
 
-  @Override
-  public void setProjectId(int workspaceId, Issue issue) {
-    ObjectMapper mapper = new ObjectMapper();
-    List<User> userList =
+    @Autowired
+    public UserService(IWorkspaceRepository workspaceRepository) {
+        this.workspaceRepository = workspaceRepository;
+    }
+
+    @Override
+    public void setProjectId(int workspaceId, Issue issue) {
+        ObjectMapper mapper = new ObjectMapper();
+        List<User> userList =
             mapper.convertValue(
                     workspaceRepository.workspaceUserList(workspaceId), new TypeReference<List<User>>() {
                     });
