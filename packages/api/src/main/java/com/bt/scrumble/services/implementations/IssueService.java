@@ -2,16 +2,11 @@ package com.bt.scrumble.services.implementations;
 
 import com.bt.scrumble.dto.Issue;
 import com.bt.scrumble.dto.Project;
-import com.bt.scrumble.regression.LinearRegression;
-import com.bt.scrumble.repositories.IIssueRepository;
 import com.bt.scrumble.services.IIssueService;
 import com.bt.scrumble.services.ISprintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.OptionalInt;
 
@@ -28,19 +23,18 @@ public class IssueService implements IIssueService {
     @Autowired
     private ISprintService sprintService;
 
-    // Ref: https://stackoverflow.com/a/5439547/11679751
     public static boolean isInteger(String s) {
-        return isInteger(s, 10);
-    }
-
-    public static boolean isInteger(String s, int radix) {
         if (s.isEmpty()) return false;
         for (int i = 0; i < s.length(); i++) {
             if (i == 0 && s.charAt(i) == '-') {
-                if (s.length() == 1) return false;
+                if (s.length() == 1) {
+                    return false;
+                }
                 else continue;
             }
-            if (Character.digit(s.charAt(i), radix) < 0) return false;
+            if (Character.digit(s.charAt(i), 10) < 0) {
+                return false;
+            }
         }
         return true;
     }
@@ -53,7 +47,9 @@ public class IssueService implements IIssueService {
                         .mapToInt(Integer::parseInt)
                         .findFirst();
 
-        if (storyPoint.isPresent()) issue.setStoryPoint(storyPoint.getAsInt());
+        if (storyPoint.isPresent()) {
+            issue.setStoryPoint(storyPoint.getAsInt());
+        }
     }
 
     @Override

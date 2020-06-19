@@ -3,23 +3,19 @@ package com.bt.scrumble.dto;
 import java.util.ArrayList;
 
 public class IssuePageResult {
-    private ArrayList<Issue> issues;
+    private final ArrayList<Issue> issues;
     private NextResource nextResource;
 
-    public IssuePageResult(ArrayList<Issue> issues, NextResource nextResource) {
-        this.issues = issues;
-        this.nextResource = nextResource;
-    }
-
     public IssuePageResult() {
+        this.issues = new ArrayList<>();
     }
 
     public ArrayList<Issue> getIssues() {
         return issues;
     }
 
-    public void setIssues(ArrayList<Issue> issues) {
-        this.issues = issues;
+    public void appendIssues(ArrayList<Issue> issues) {
+        this.issues.addAll(issues);
     }
 
     public NextResource getNextResource() {

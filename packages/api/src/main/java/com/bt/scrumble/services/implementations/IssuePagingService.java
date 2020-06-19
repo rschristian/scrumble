@@ -4,11 +4,13 @@ import com.bt.scrumble.dto.Issue;
 import com.bt.scrumble.dto.IssuePageResult;
 import com.bt.scrumble.dto.NextResource;
 import com.bt.scrumble.dto.Project;
+import com.bt.scrumble.errorhandlers.MilestoneRestTemplateResponseErrorHandler;
 import com.bt.scrumble.services.*;
 import com.bt.scrumble.util.GitLabLinkParser;
 import com.bt.scrumble.util.GitLabLinks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -21,20 +23,25 @@ import java.util.Collections;
 public class IssuePagingService implements IIssuePagingService {
 
     private static final int ISSUE_PAGE_SIZE = 20;
-    @Autowired
-    private RestTemplate restTemplate;
 
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabApiUrl;
 
+    private final IWorkspaceService workspaceService;
+    private final IIssueService issueService;
+    private final ISprintService sprintService;
+    private final IUserService userService;
+    private final RestTemplate restTemplate;
+
     @Autowired
-    private IWorkspaceService workspaceService;
-    @Autowired
-    private IIssueService issueService;
-    @Autowired
-    private ISprintService sprintService;
-    @Autowired
-    private IUserService userService;
+    public IssuePagingService(IWorkspaceService workspaceService, IIssueService issueService, ISprintService sprintService,
+                              IUserService userService, RestTemplateBuilder restTemplateBuilder) {
+        this.workspaceService = workspaceService;
+        this.issueService = issueService;
+        this.sprintService = sprintService;
+        this.userService = userService;
+        this.restTemplate = restTemplateBuilder.errorHandler(new MilestoneRestTemplateResponseErrorHandler()).build();
+    }
 
     @Override
     public int getNextProjectId(int workspaceId, int prevProjectId) {
@@ -156,7 +163,6 @@ public class IssuePagingService implements IIssuePagingService {
         IssuePageResult issuePageResult = new IssuePageResult();
 
         while (true) {
-            System.out.println("Query URI: " + queryUri);
             ResponseEntity<ArrayList<Issue>> issuesResponse =
                     restTemplate.exchange(
                             queryUri,
@@ -165,7 +171,6 @@ public class IssuePagingService implements IIssuePagingService {
                             new ParameterizedTypeReference<>() {
                             });
             var openSprints = sprintService.getSprintsForWorkspace(workspaceId, "active");
-            System.out.println("Response header Link: " + issuesResponse.getHeaders().getFirst("Link"));
 
             issues = issuesResponse.getBody();
             for (var issue : issues) {
@@ -173,11 +178,13 @@ public class IssuePagingService implements IIssuePagingService {
                 issueService.setStatus(issue);
                 issueService.setProjectName(issue, projects);
                 sprintService.setSprintForIssue(workspaceId, issue, openSprints);
-                if (issue.getAssignee() != null) userService.setProjectId(workspaceId, issue);
+                if (issue.getAssignee() != null) {
+                    userService.setProjectId(workspaceId, issue);
+                }
             }
-            issuePageResult.setIssues(issues);
+            issuePageResult.appendIssues(issues);
 
-            if (!issues.isEmpty()) {
+            if (!issues.isEmpty() && issuePageResult.getIssues().size() >= 10) {
                 issuePageResult.setNextResource(
                         getNextResource(
                                 queryUri,

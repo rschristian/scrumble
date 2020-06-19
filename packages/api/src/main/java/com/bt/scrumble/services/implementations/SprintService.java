@@ -27,20 +27,20 @@ import java.util.Map;
 public class SprintService implements ISprintService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SprintService.class);
-    private final RestTemplate restTemplate;
-    @Autowired
-    IIssueService issueService;
-    @Autowired
-    IUserService userService;
 
     @Value("${app.issues.provider.gitlab.baseUrl.api}")
     private String gitLabApiUrl;
 
-    @Autowired
-    private ISprintRepository sprintRepository;
+    private final IIssueService issueService;
+    private final IUserService userService;
+    private final ISprintRepository sprintRepository;
+    private final RestTemplate restTemplate;
 
     @Autowired
-    public SprintService(RestTemplateBuilder restTemplateBuilder) {
+    public SprintService(IIssueService issueService, IUserService userService, ISprintRepository sprintRepository, RestTemplateBuilder restTemplateBuilder) {
+        this.issueService = issueService;
+        this.userService = userService;
+        this.sprintRepository = sprintRepository;
         this.restTemplate =
                 restTemplateBuilder.errorHandler(new MilestoneRestTemplateResponseErrorHandler()).build();
     }
@@ -55,7 +55,9 @@ public class SprintService implements ISprintService {
         // Initial assigning of sprint will be milestone data from api. If present, milestone values
         // must be swapped with Scrumble sprint values for future operations. Most importantly, id needs
         // to be changed
-        if (issue.getSprint() == null) return issue;
+        if (issue.getSprint() == null) {
+            return issue;
+        }
 
         for (Sprint sprint : sprints) {
             for (Map.Entry<String, Integer> pair : sprint.getProjectIdToMilestoneIds().entrySet()) {
@@ -71,7 +73,9 @@ public class SprintService implements ISprintService {
 
     @Override
     public int getMilestoneId(int workspaceId, int projectId, int sprintId) {
-        if (sprintId == 0) return sprintId;
+        if (sprintId == 0) {
+            return sprintId;
+        }
         Sprint sprint = sprintRepository.getSprintById(sprintId);
 
         try {
