@@ -10,7 +10,7 @@ public class Issue {
   private final User author;
   private final User assignee;
   private final String state;
-  private final Sprint milestone;
+  private final Milestone milestone;
   private final List<String> labels;
   private final String created_at;
 
@@ -22,7 +22,7 @@ public class Issue {
       User author,
       User assignee,
       String state,
-      Sprint milestone,
+      Milestone milestone,
       List<String> labels,
       String created_at) {
     this.project_id = project_id;
@@ -51,5 +51,9 @@ public class Issue {
 
   public List<String> getLabels() {
     return this.labels;
+  }
+
+  public Milestone getMilestone() {
+    return this.milestone;
   }
 }
