@@ -2,7 +2,7 @@ package com.bt.scrumbleLts.dto;
 
 import java.util.Map;
 
-public class Sprint {
+public class Milestone {
   private final int id;
   private final String title;
   private final String description;
@@ -11,7 +11,7 @@ public class Sprint {
   private final String dueDate;
   private final Map<String, Integer> projectIdToMilestoneIds;
 
-  public Sprint(
+  public Milestone(
       int id,
       String title,
       String description,
@@ -26,5 +26,9 @@ public class Sprint {
     this.startDate = startDate;
     this.dueDate = dueDate;
     this.projectIdToMilestoneIds = projectIdToMilestoneIds;
+  }
+
+  public int getId() {
+    return this.id;
   }
 }
