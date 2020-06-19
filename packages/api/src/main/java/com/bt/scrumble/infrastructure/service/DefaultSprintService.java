@@ -8,8 +8,6 @@ import com.bt.scrumble.core.project.Project;
 import com.bt.scrumble.core.sprint.SprintRepository;
 import com.bt.scrumble.core.sprint.SprintService;
 import com.bt.scrumble.core.user.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -30,7 +28,6 @@ import java.util.Map;
 @Service
 public class DefaultSprintService implements SprintService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSprintService.class);
   private final IssueService issueService;
   private final UserService userService;
   private final SprintRepository sprintRepository;
@@ -79,25 +76,7 @@ public class DefaultSprintService implements SprintService {
   }
 
   @Override
-  public int getMilestoneId(int workspaceId, int projectId, int sprintId) {
-    if (sprintId == 0) {
-      return sprintId;
-    }
-    SprintData sprint = sprintRepository.getSprintById(sprintId);
-
-    try {
-      return sprint.getProjectIdToMilestoneIds().get(Integer.toString(projectId));
-    } catch (NullPointerException e) {
-      LOGGER.error(
-          String.format(
-              "Project with id %d does not have a corresponding milestone for sprint with id %d",
-              projectId, sprintId));
-    }
-    return 0;
-  }
-
-  @Override
-  public ArrayList<Issue> getSprintIssues(int workspaceId, SprintData sprint) {
+  public ArrayList<Issue> getSprintIssues(int workspaceId, Map<String, Integer> projectIdToMilestoneIds) {
     var allIssues = new ArrayList<Issue>();
 
     String projectUri = String.format("%s/projects", gitLabApiUrl);
@@ -105,7 +84,7 @@ public class DefaultSprintService implements SprintService {
         restTemplate.getForEntity(projectUri, Project[].class);
     Project[] projects = userProjectsResponse.getBody();
 
-    for (Map.Entry<String, Integer> entry : sprint.getProjectIdToMilestoneIds().entrySet()) {
+    for (Map.Entry<String, Integer> entry : projectIdToMilestoneIds.entrySet()) {
       String projectId = entry.getKey();
       Integer milestoneId = entry.getValue();
       String uri =

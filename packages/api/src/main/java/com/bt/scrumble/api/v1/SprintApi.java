@@ -2,14 +2,18 @@ package com.bt.scrumble.api.v1;
 
 import com.bt.scrumble.application.data.SprintData;
 import com.bt.scrumble.core.sprint.SprintService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -31,7 +35,12 @@ public class SprintApi {
 
   @GetMapping("/workspace/{workspaceId}/sprint/issues")
   public ResponseEntity<Object> getSprintIssues(
-      @PathVariable(value = "workspaceId") int workspaceId, @RequestBody SprintData sprint) {
-    return ResponseEntity.ok().body(sprintService.getSprintIssues(workspaceId, sprint));
+      @PathVariable(value = "workspaceId") int workspaceId,
+      @RequestParam(value = "projectIdToMilestoneIds") String projectIdToMilestoneIds) throws JsonProcessingException {
+    ObjectMapper mapper = new ObjectMapper();
+    Map<String,Integer> result =
+        mapper.readValue(projectIdToMilestoneIds, new TypeReference<>() {
+        });
+    return ResponseEntity.ok().body(sprintService.getSprintIssues(workspaceId, result));
   }
 }
