@@ -1,6 +1,6 @@
 package com.bt.scrumble.errorhandlers;
 
-import com.bt.scrumble.exception.RestTemplateException;
+import com.bt.scrumble.api.v1.exception.RestTemplateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.client.ClientHttpResponse;

@@ -1,6 +1,5 @@
 package com.bt.scrumble;
 
-import com.bt.scrumble.config.AppProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -14,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @EnableOAuth2Client
 @EnableTransactionManagement
-@EnableConfigurationProperties(AppProperties.class)
+@EnableConfigurationProperties(ScrumbleConfig.class)
 public class ScrumbleApi extends SpringBootServletInitializer {
 
   public static void main(String[] args) {

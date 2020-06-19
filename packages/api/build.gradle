@@ -1,20 +1,11 @@
-buildscript {
-    ext {
-        springBootVersion = '2.1.0.RELEASE'
-    }
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    }
+plugins {
+    id 'org.springframework.boot' version '2.1.0.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+    id 'idea'
+    id 'checkstyle'
+    id 'io.freefair.lombok' version '5.1.0'
 }
-
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'checkstyle'
 
 group = 'com.bt'
 version = ''
@@ -77,6 +68,7 @@ dependencies {
         UTILS
      */
     implementation('org.springframework.boot:spring-boot-starter-validation')
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     /*
         TESTING
