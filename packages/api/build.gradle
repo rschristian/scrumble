@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.1.0.RELEASE'
+    id 'org.springframework.boot' version '2.2.0.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
     id 'idea'
@@ -52,6 +52,7 @@ dependencies {
         DATABASE
      */
     implementation('org.postgresql:postgresql')
+    implementation('org.flywaydb:flyway-core')
     implementation('org.springframework.boot:spring-boot-starter-jdbc')
 
 
