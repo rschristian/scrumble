@@ -21,7 +21,8 @@ public class DefaultUserService implements UserService {
   private final WorkspaceRepository workspaceRepository;
 
   @Autowired
-  public DefaultUserService(UserRepository userRepository, WorkspaceRepository workspaceRepository) {
+  public DefaultUserService(
+      UserRepository userRepository, WorkspaceRepository workspaceRepository) {
     this.userRepository = userRepository;
     this.workspaceRepository = workspaceRepository;
   }
@@ -62,7 +63,8 @@ public class DefaultUserService implements UserService {
     ObjectMapper mapper = new ObjectMapper();
     List<UserData> userList =
         mapper.convertValue(
-            workspaceRepository.workspaceUserList(workspaceId), new TypeReference<List<UserData>>() { });
+            workspaceRepository.workspaceUserList(workspaceId),
+            new TypeReference<List<UserData>>() {});
     ArrayList<UserData> userArray = new ArrayList();
     userArray.addAll(userList);
     userArray.forEach(

@@ -25,11 +25,10 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class SprintApi {
 
-  @Value("${app.msg.error.auth}")
-  private String authErrorMsg;
-
   private final SprintService sprintService;
   private final UserService userService;
+  @Value("${app.msg.error.auth}")
+  private String authErrorMsg;
 
   @Autowired
   public SprintApi(SprintService sprintService, UserService userService) {

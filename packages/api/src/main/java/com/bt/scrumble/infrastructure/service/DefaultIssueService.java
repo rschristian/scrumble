@@ -25,12 +25,16 @@ public class DefaultIssueService implements IssueService {
   private final IssueEstimation issueEstimation;
   private final IssueRepository issueRepository;
   private final RestTemplate restTemplate;
+
   @Value("${app.issues.provider.gitlab.baseUrl.api}")
   private String gitLabApiUrl;
 
   @Autowired
-  public DefaultIssueService(SprintService sprintService, IssueEstimation issueEstimation,
-                             IssueRepository issueRepository, RestTemplate restTemplate) {
+  public DefaultIssueService(
+      SprintService sprintService,
+      IssueEstimation issueEstimation,
+      IssueRepository issueRepository,
+      RestTemplate restTemplate) {
     this.sprintService = sprintService;
     this.issueEstimation = issueEstimation;
     this.issueRepository = issueRepository;
@@ -60,8 +64,8 @@ public class DefaultIssueService implements IssueService {
   @Override
   public void setStoryPoint(Issue issue) {
     OptionalInt storyPoint =
-            issue.getLabels().stream()
-                    .filter(DefaultIssueService::isInteger)
+        issue.getLabels().stream()
+            .filter(DefaultIssueService::isInteger)
             .mapToInt(Integer::parseInt)
             .findFirst();
 

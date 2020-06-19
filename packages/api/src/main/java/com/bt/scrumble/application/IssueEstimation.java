@@ -10,18 +10,16 @@ import org.springframework.web.client.RestTemplate;
 // Read more here https://www.mathsisfun.com/data/least-squares-regression.html
 @Service
 public class IssueEstimation {
-    private double c, m;
+  private double c, m;
 
-    @Value("${app.issues.provider.gitlab.baseUrl.api}")
-    private String gitLabApiUrl;
+  @Value("${app.issues.provider.gitlab.baseUrl.api}")
+  private String gitLabApiUrl;
 
-    @Autowired
-    private RestTemplate restTemplate;
+  @Autowired private RestTemplate restTemplate;
 
-    @Autowired
-    private DataGrabber dataGrabber;
+  @Autowired private DataGrabber dataGrabber;
 
-    public void trainModel(int[][] dataPoints) {
+  public void trainModel(int[][] dataPoints) {
     if (dataPoints.length < 10) { // if not enough data given resorts to default values
       dataPoints = new int[][] {{1, 28800}, {2, 86400}, {3, 144000}, {5, 201600}, {8, 288000}};
     }

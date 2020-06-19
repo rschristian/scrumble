@@ -21,22 +21,31 @@ import java.util.Map;
 @AllArgsConstructor
 public class Issue implements Serializable {
   private int iid;
+
   @JsonAlias("milestone")
   private SprintData sprint;
+
   @JsonAlias("project_id")
   private int projectId;
+
   private String projectName;
   private String title;
   private String description;
   private int storyPoint;
+
   @JsonAlias("state")
   private String status;
+
   private ArrayList<String> labels;
+
   @JsonAlias("timeSpent")
   private int timeSpent;
+
   private Object author;
+
   @JsonAlias("created_at")
   private String createdAt;
+
   private UserData assignee;
 
   public Issue(int projectId, String title, String description, int storyPoint, String status) {
@@ -49,9 +58,7 @@ public class Issue implements Serializable {
 
   @JsonProperty("time_stats")
   public void setTimeSpent(Map<String, Object> timeSpent) {
-    this.timeSpent = (timeSpent != null)
-        ? (Integer) timeSpent.get("total_time_spent")
-        : 0;
+    this.timeSpent = (timeSpent != null) ? (Integer) timeSpent.get("total_time_spent") : 0;
   }
 
   @JsonAlias("timeSpent")

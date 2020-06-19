@@ -26,24 +26,24 @@ import java.util.Objects;
 @Repository
 public class DefaultWorkspaceRepository implements WorkspaceRepository {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultWorkspaceRepository.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultWorkspaceRepository.class);
 
-    private final JdbcTemplate jdbcTemplate;
+  private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public DefaultWorkspaceRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+  @Autowired
+  public DefaultWorkspaceRepository(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
 
-    @Override
-    public List<WorkspaceData> getAllWorkspaces() {
-        var workspaces =
-                new ArrayList<>(
-                        jdbcTemplate.query(
-                                "SELECT * FROM workspaces INNER JOIN users ON workspaces.created_by_user = users.id",
-                                (rs, row) -> {
-                                    try {
-                                        return new WorkspaceData(
+  @Override
+  public List<WorkspaceData> getAllWorkspaces() {
+    var workspaces =
+        new ArrayList<>(
+            jdbcTemplate.query(
+                "SELECT * FROM workspaces INNER JOIN users ON workspaces.created_by_user = users.id",
+                (rs, row) -> {
+                  try {
+                    return new WorkspaceData(
                         rs.getInt("id"),
                         new UserData(
                             rs.getInt("created_by_user"),

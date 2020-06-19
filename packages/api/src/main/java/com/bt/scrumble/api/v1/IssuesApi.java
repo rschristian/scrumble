@@ -30,19 +30,20 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class IssuesApi {
 
-  @Value("${app.msg.error.auth}")
-  private String authErrorMsg;
-
   private static final Logger LOGGER = LoggerFactory.getLogger(IssuesApi.class);
-
   private final IssuePagingService issuePagingService;
   private final IssueService issueService;
   private final UserService userService;
   private final WorkspaceService workspaceService;
+  @Value("${app.msg.error.auth}")
+  private String authErrorMsg;
 
   @Autowired
-  public IssuesApi(IssuePagingService issuePagingService, IssueService issueService,
-                   UserService userService, WorkspaceService workspaceService) {
+  public IssuesApi(
+      IssuePagingService issuePagingService,
+      IssueService issueService,
+      UserService userService,
+      WorkspaceService workspaceService) {
     this.issuePagingService = issuePagingService;
     this.issueService = issueService;
     this.userService = userService;

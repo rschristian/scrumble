@@ -11,7 +11,7 @@ import java.util.ArrayList;
 @Setter
 @NoArgsConstructor
 public class IssuePageResult {
-  private ArrayList<Issue> issues = new ArrayList<Issue>();;
+  private ArrayList<Issue> issues = new ArrayList<Issue>();
   private NextResource nextResource;
 
   public void appendIssues(ArrayList<Issue> issues) {

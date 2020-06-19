@@ -13,23 +13,23 @@ import java.util.Optional;
 @Repository
 public class DefaultUserRepository implements UserRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+  private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public DefaultUserRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+  @Autowired
+  public DefaultUserRepository(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
 
-    @Override
-    public UserData createUser(UserData user) {
-        String insertStatement = "INSERT INTO users (service_id, provider_id) VALUES (?, ?);";
-        Object[] params = new Object[]{user.getServiceId(), user.getProviderId()};
-        int[] types = new int[]{Types.INTEGER, Types.VARCHAR};
-        jdbcTemplate.update(insertStatement, params, types);
-        return user;
-    }
+  @Override
+  public UserData createUser(UserData user) {
+    String insertStatement = "INSERT INTO users (service_id, provider_id) VALUES (?, ?);";
+    Object[] params = new Object[] {user.getServiceId(), user.getProviderId()};
+    int[] types = new int[] {Types.INTEGER, Types.VARCHAR};
+    jdbcTemplate.update(insertStatement, params, types);
+    return user;
+  }
 
-    @Override
+  @Override
   public Optional<UserData> findUserByServiceId(int serviceId) {
     Optional<UserData> optionalUser = Optional.empty();
     try {

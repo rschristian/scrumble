@@ -20,12 +20,15 @@ import static com.bt.scrumble.api.v1.security.oauth.HttpCookieOAuth2Authorizatio
 @Component
 public class OAuth2AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-  private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+  private final HttpCookieOAuth2AuthorizationRequestRepository
+      httpCookieOAuth2AuthorizationRequestRepository;
 
   @Autowired
-  public OAuth2AuthFailureHandler(HttpCookieOAuth2AuthorizationRequestRepository
-                                        httpCookieOAuth2AuthorizationRequestRepository) {
-    this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
+  public OAuth2AuthFailureHandler(
+      HttpCookieOAuth2AuthorizationRequestRepository
+          httpCookieOAuth2AuthorizationRequestRepository) {
+    this.httpCookieOAuth2AuthorizationRequestRepository =
+        httpCookieOAuth2AuthorizationRequestRepository;
   }
 
   @Override

@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface WorkspaceRepository {
 
-    List<WorkspaceData> getAllWorkspaces();
+  List<WorkspaceData> getAllWorkspaces();
 
-    ArrayList<Integer> projectIdsForWorkspace(int workspaceId);
+  ArrayList<Integer> projectIdsForWorkspace(int workspaceId);
 
-    WorkspaceData createWorkspace(WorkspaceData workspace, UserData user);
+  WorkspaceData createWorkspace(WorkspaceData workspace, UserData user);
 
-    void editWorkspace(WorkspaceData updatedWorkspace);
+  void editWorkspace(WorkspaceData updatedWorkspace);
 
-    List<UserData> workspaceUserList(int workspaceId);
+  List<UserData> workspaceUserList(int workspaceId);
 }

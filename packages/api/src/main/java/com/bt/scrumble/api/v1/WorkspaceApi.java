@@ -25,11 +25,10 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class WorkspaceApi {
 
-  @Value("${app.msg.error.auth}")
-  private String authErrorMsg;
-
   private final UserService userService;
   private final WorkspaceService workspaceService;
+  @Value("${app.msg.error.auth}")
+  private String authErrorMsg;
 
   @Autowired
   public WorkspaceApi(UserService userService, WorkspaceService workspaceService) {

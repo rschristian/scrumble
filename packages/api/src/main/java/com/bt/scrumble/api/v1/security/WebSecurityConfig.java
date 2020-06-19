@@ -20,9 +20,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   private final OAuth2AuthSuccessHandler oAuth2AuthSuccessHandler;
 
   @Autowired
-  public WebSecurityConfig(CustomOAuth2UserService customOAuth2UserService,
-                           OAuth2AuthFailureHandler oAuth2AuthFailureHandler,
-                           OAuth2AuthSuccessHandler oAuth2AuthSuccessHandler) {
+  public WebSecurityConfig(
+      CustomOAuth2UserService customOAuth2UserService,
+      OAuth2AuthFailureHandler oAuth2AuthFailureHandler,
+      OAuth2AuthSuccessHandler oAuth2AuthSuccessHandler) {
     this.customOAuth2UserService = customOAuth2UserService;
     this.oAuth2AuthFailureHandler = oAuth2AuthFailureHandler;
     this.oAuth2AuthSuccessHandler = oAuth2AuthSuccessHandler;

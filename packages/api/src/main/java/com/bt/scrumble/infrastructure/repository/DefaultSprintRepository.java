@@ -25,24 +25,24 @@ import java.util.Map;
 @Repository
 public class DefaultSprintRepository implements SprintRepository {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSprintRepository.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSprintRepository.class);
 
-    private final JdbcTemplate jdbcTemplate;
+  private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public DefaultSprintRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+  @Autowired
+  public DefaultSprintRepository(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
 
-    @Override
-    public SprintData getSprintById(int sprintId) {
-        var sprint =
-                jdbcTemplate.queryForObject(
-                        "SELECT * FROM sprints where id = ?",
-                        new Object[]{sprintId},
-                        new int[]{Types.INTEGER},
-                        (rs, row) -> {
-                            try {
+  @Override
+  public SprintData getSprintById(int sprintId) {
+    var sprint =
+        jdbcTemplate.queryForObject(
+            "SELECT * FROM sprints where id = ?",
+            new Object[] {sprintId},
+            new int[] {Types.INTEGER},
+            (rs, row) -> {
+              try {
                 return new SprintData(
                     rs.getInt("id"),
                     rs.getString("title"),

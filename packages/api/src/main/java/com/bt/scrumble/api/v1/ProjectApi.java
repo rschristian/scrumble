@@ -25,14 +25,12 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class ProjectApi {
 
-  @Value("${app.issues.provider.gitlab.baseUrl.api}")
-  private String gitLabBaseUrl;
-
-  @Value("${app.msg.error.auth}")
-  private String authErrorMsg;
-
   private final UserService userService;
   private final RestTemplate restTemplate;
+  @Value("${app.issues.provider.gitlab.baseUrl.api}")
+  private String gitLabBaseUrl;
+  @Value("${app.msg.error.auth}")
+  private String authErrorMsg;
 
   @Autowired
   public ProjectApi(UserService userService, RestTemplate restTemplate) {
@@ -54,7 +52,7 @@ public class ProjectApi {
               gitLabBaseUrl, accessTokenOptional.get());
       ResponseEntity<ArrayList<Project>> userProjectsResponse =
           restTemplate.exchange(
-              uri, HttpMethod.GET, new HttpEntity(headers), new ParameterizedTypeReference<>() { });
+              uri, HttpMethod.GET, new HttpEntity(headers), new ParameterizedTypeReference<>() {});
       return ResponseEntity.ok().body(userProjectsResponse.getBody());
     }
     return ResponseEntity.ok().body(authErrorMsg);

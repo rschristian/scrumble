@@ -15,22 +15,22 @@ import java.util.Optional;
 @Repository
 public class DefaultIssueRepository implements IssueRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+  private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public DefaultIssueRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+  @Autowired
+  public DefaultIssueRepository(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
 
-    @Override
-    public void updateStartTime(int issueId, int projectId) {
-        Date currentDate = new Date();
-        Optional<IssueData> issue = findIssueById(issueId, projectId);
-        if (!issue.isPresent()) {
-            String insertStatement = "INSERT INTO issues (id, project_id, start_time) VALUES (?,?,?);";
-            Object[] params = new Object[]{issueId, projectId, new Timestamp(currentDate.getTime())};
-            int[] types = new int[]{Types.INTEGER, Types.INTEGER, Types.TIMESTAMP};
-            jdbcTemplate.update(insertStatement, params, types);
+  @Override
+  public void updateStartTime(int issueId, int projectId) {
+    Date currentDate = new Date();
+    Optional<IssueData> issue = findIssueById(issueId, projectId);
+    if (!issue.isPresent()) {
+      String insertStatement = "INSERT INTO issues (id, project_id, start_time) VALUES (?,?,?);";
+      Object[] params = new Object[] {issueId, projectId, new Timestamp(currentDate.getTime())};
+      int[] types = new int[] {Types.INTEGER, Types.INTEGER, Types.TIMESTAMP};
+      jdbcTemplate.update(insertStatement, params, types);
     }
   }
 
@@ -78,7 +78,8 @@ public class DefaultIssueRepository implements IssueRepository {
           new Object[] {issueId, projectId},
           (rs, rowNum) ->
               Optional.of(
-                  new IssueData(rs.getInt("Id"), rs.getDate("start_time"), rs.getDate("end_time"))));
+                  new IssueData(
+                      rs.getInt("Id"), rs.getDate("start_time"), rs.getDate("end_time"))));
     } catch (IncorrectResultSizeDataAccessException e) {
       return Optional.empty();
     }

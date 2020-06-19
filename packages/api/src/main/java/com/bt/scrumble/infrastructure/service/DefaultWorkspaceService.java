@@ -28,14 +28,14 @@ import java.util.stream.Collectors;
 @Service
 public class DefaultWorkspaceService implements WorkspaceService {
 
+  private final WorkspaceRepository workspaceRepository;
+  private final RestTemplate restTemplate;
   @Value("${app.issues.provider.gitlab.baseUrl.api}")
   private String gitLabApiUrl;
 
-  private final WorkspaceRepository workspaceRepository;
-  private final RestTemplate restTemplate;
-
   @Autowired
-  public DefaultWorkspaceService(WorkspaceRepository workspaceRepository, RestTemplate restTemplate) {
+  public DefaultWorkspaceService(
+      WorkspaceRepository workspaceRepository, RestTemplate restTemplate) {
     this.workspaceRepository = workspaceRepository;
     this.restTemplate = restTemplate;
   }
@@ -81,16 +81,15 @@ public class DefaultWorkspaceService implements WorkspaceService {
 
     for (var projectId : workspace.getProjectIds()) {
       String uri =
-              String.format(
-                      "%1s/projects/%2s/users?access_token=%3s",
-                      gitLabApiUrl, projectId, accessToken.get());
+          String.format(
+              "%1s/projects/%2s/users?access_token=%3s",
+              gitLabApiUrl, projectId, accessToken.get());
       ResponseEntity<ArrayList<UserData>> projectUsersResponse =
-              restTemplate.exchange(
-                      uri,
-                      HttpMethod.GET,
-                      getApplicationJsonHeaders(),
-                      new ParameterizedTypeReference<>() {
-                      });
+          restTemplate.exchange(
+              uri,
+              HttpMethod.GET,
+              getApplicationJsonHeaders(),
+              new ParameterizedTypeReference<>() {});
       ArrayList<UserData> projectUsers = projectUsersResponse.getBody();
 
       for (var user : projectUsers) {

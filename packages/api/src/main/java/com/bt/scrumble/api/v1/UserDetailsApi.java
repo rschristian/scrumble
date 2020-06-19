@@ -23,16 +23,13 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class UserDetailsApi {
 
-  @Value("${app.issues.provider.gitlab.baseUrl.api}")
-  private String gitLabBaseUrlApi;
-
-  @Value("${app.msg.error.auth}")
-  private String authErrorMsg;
-
   private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsApi.class);
-
   private final RestTemplate restTemplate;
   private final UserService userService;
+  @Value("${app.issues.provider.gitlab.baseUrl.api}")
+  private String gitLabBaseUrlApi;
+  @Value("${app.msg.error.auth}")
+  private String authErrorMsg;
 
   @Autowired
   public UserDetailsApi(RestTemplate restTemplate, UserService userService) {

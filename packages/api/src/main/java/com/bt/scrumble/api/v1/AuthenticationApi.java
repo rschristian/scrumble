@@ -35,8 +35,11 @@ public class AuthenticationApi {
   private final UserService userService;
 
   @Autowired
-  public AuthenticationApi(ScrumbleConfig appProperties, TokenProvider tokenProvider,
-                           TokenUtils tokenUtils, UserService userService) {
+  public AuthenticationApi(
+      ScrumbleConfig appProperties,
+      TokenProvider tokenProvider,
+      TokenUtils tokenUtils,
+      UserService userService) {
     this.appProperties = appProperties;
     this.tokenProvider = tokenProvider;
     this.tokenUtils = tokenUtils;

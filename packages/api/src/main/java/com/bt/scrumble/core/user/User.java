@@ -10,10 +10,12 @@ import java.util.ArrayList;
 @Getter
 @AllArgsConstructor
 public class User implements Serializable {
-  private int id;
-  private String name;
-  private String username;
+  private final int id;
+  private final String name;
+  private final String username;
+
   @JsonAlias("avatar_url")
-  private String avatarUrl;
-  private ArrayList<Integer> projectIds;
+  private final String avatarUrl;
+
+  private final ArrayList<Integer> projectIds;
 }

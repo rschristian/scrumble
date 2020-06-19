@@ -27,20 +27,22 @@ import java.util.Collections;
 @Service
 public class DefaultIssuePagingService implements IssuePagingService {
 
-  @Value("${app.issues.provider.gitlab.baseUrl.api}")
-  private String gitLabApiUrl;
-
   private static final int ISSUE_PAGE_SIZE = 20;
-
   private final WorkspaceService workspaceService;
   private final IssueService issueService;
   private final SprintService sprintService;
   private final UserService userService;
   private final RestTemplate restTemplate;
+  @Value("${app.issues.provider.gitlab.baseUrl.api}")
+  private String gitLabApiUrl;
 
   @Autowired
-  public DefaultIssuePagingService(WorkspaceService workspaceService, IssueService issueService,
-                                   SprintService sprintService, UserService userService, RestTemplate restTemplate) {
+  public DefaultIssuePagingService(
+      WorkspaceService workspaceService,
+      IssueService issueService,
+      SprintService sprintService,
+      UserService userService,
+      RestTemplate restTemplate) {
     this.workspaceService = workspaceService;
     this.issueService = issueService;
     this.sprintService = sprintService;
@@ -51,12 +53,12 @@ public class DefaultIssuePagingService implements IssuePagingService {
   @Override
   public int getNextProjectId(int workspaceId, int prevProjectId) {
     ArrayList<Integer> workspaceProjectIds =
-            workspaceService.getProjectIdsForWorkspace(workspaceId);
+        workspaceService.getProjectIdsForWorkspace(workspaceId);
     return workspaceProjectIds.get(workspaceProjectIds.lastIndexOf(prevProjectId) + 1);
   }
 
   private NextResource getNextResource(
-          String requestUri, String linkHeader, int workspaceId, int currentProjectId, int prevPage) {
+      String requestUri, String linkHeader, int workspaceId, int currentProjectId, int prevPage) {
     NextResource nextResource = new NextResource();
     nextResource.setPageSize(ISSUE_PAGE_SIZE);
 
@@ -79,7 +81,7 @@ public class DefaultIssuePagingService implements IssuePagingService {
       // If it's not the last project in the workspace, try and find the next project that has query
       // results
       nextResource =
-              findNextProjectWithQueryResults(nextResource, workspaceId, currentProjectId, requestUri);
+          findNextProjectWithQueryResults(nextResource, workspaceId, currentProjectId, requestUri);
     }
 
     return nextResource;
@@ -159,7 +161,7 @@ public class DefaultIssuePagingService implements IssuePagingService {
               uri,
               HttpMethod.GET,
               getApplicationJsonHeaders(),
-              new ParameterizedTypeReference<>() { });
+              new ParameterizedTypeReference<>() {});
 
       issues = issuesResponse.getBody();
       for (var issue : issues) {
@@ -232,7 +234,7 @@ public class DefaultIssuePagingService implements IssuePagingService {
               queryUri,
               HttpMethod.GET,
               getApplicationJsonHeaders(),
-              new ParameterizedTypeReference<>() { });
+              new ParameterizedTypeReference<>() {});
       var openSprints = sprintService.getSprintsForWorkspace(workspaceId, "active");
 
       issues = issuesResponse.getBody();

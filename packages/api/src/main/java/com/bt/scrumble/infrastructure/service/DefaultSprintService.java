@@ -1,5 +1,6 @@
 package com.bt.scrumble.infrastructure.service;
 
+import com.bt.scrumble.application.MilestoneRestTemplateResponseErrorHandler;
 import com.bt.scrumble.application.data.SprintData;
 import com.bt.scrumble.core.issue.Issue;
 import com.bt.scrumble.core.issue.IssueService;
@@ -8,7 +9,6 @@ import com.bt.scrumble.core.sprint.SprintRepository;
 import com.bt.scrumble.core.sprint.SprintService;
 import com.bt.scrumble.core.user.UserService;
 import com.bt.scrumble.core.workspace.WorkspaceRepository;
-import com.bt.scrumble.application.MilestoneRestTemplateResponseErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +39,17 @@ public class DefaultSprintService implements SprintService {
   private final SprintRepository sprintRepository;
   private final WorkspaceRepository workspaceRepository;
   private final RestTemplate restTemplate;
+
   @Value("${app.issues.provider.gitlab.baseUrl.api}")
   private String gitLabApiUrl;
 
   @Autowired
-  public DefaultSprintService(@Lazy IssueService issueService, UserService userService, SprintRepository sprintRepository,
-                              WorkspaceRepository workspaceRepository, RestTemplateBuilder restTemplateBuilder) {
+  public DefaultSprintService(
+      @Lazy IssueService issueService,
+      UserService userService,
+      SprintRepository sprintRepository,
+      WorkspaceRepository workspaceRepository,
+      RestTemplateBuilder restTemplateBuilder) {
     this.issueService = issueService;
     this.userService = userService;
     this.sprintRepository = sprintRepository;
@@ -80,8 +85,8 @@ public class DefaultSprintService implements SprintService {
 
   @Override
   public SprintData editSprint(int workspaceId, SprintData sprint, String accessToken) {
-    for (Map.Entry<String, Integer> pair
-        : sprintRepository.getProjectIdsToMilestoneIds(sprint.getId()).entrySet()) {
+    for (Map.Entry<String, Integer> pair :
+        sprintRepository.getProjectIdsToMilestoneIds(sprint.getId()).entrySet()) {
       editGitLabMilestone(Integer.parseInt(pair.getKey()), pair.getValue(), sprint, accessToken);
     }
     sprint = sprintRepository.editSprint(workspaceId, sprint);
@@ -135,9 +140,7 @@ public class DefaultSprintService implements SprintService {
 
   private void editGitLabMilestone(
       int projectId, int milestoneId, SprintData sprint, String accessToken) {
-    String stateEvent = (sprint.getStatus().equalsIgnoreCase("active"))
-        ? "activate"
-        : "close";
+    String stateEvent = (sprint.getStatus().equalsIgnoreCase("active")) ? "activate" : "close";
     String uri =
         String.format(
             "%s/projects/%d/milestones/%d?title=%s&description=%s&start_date=%tF&due_date=%tF&state_event=%s&access_token=%s",
@@ -176,7 +179,7 @@ public class DefaultSprintService implements SprintService {
               uri,
               HttpMethod.GET,
               getApplicationJsonHeaders(),
-              new ParameterizedTypeReference<>() { });
+              new ParameterizedTypeReference<>() {});
       ArrayList<Issue> issues = issueResponse.getBody();
       issues.forEach(
           (issue) -> {
