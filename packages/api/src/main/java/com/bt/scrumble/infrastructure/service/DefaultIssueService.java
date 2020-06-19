@@ -73,16 +73,10 @@ public class DefaultIssueService implements IssueService {
 
   @Override
   public void setStatus(Issue issue) {
-    if (issue.getLabels().contains("opened")) {
-      issue.setStatus("opened");
-    } else if (issue.getLabels().contains("To Do")) {
+    if (issue.getLabels().contains("To Do")) {
       issue.setStatus("To Do");
     } else if (issue.getLabels().contains("Doing")) {
       issue.setStatus("Doing");
-    } else if (issue.getLabels().contains("closed")) {
-      issue.setStatus("closed");
-    } else {
-      issue.setStatus("opened");
     }
   }
 }
