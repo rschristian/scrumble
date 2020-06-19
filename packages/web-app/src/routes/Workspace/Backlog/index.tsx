@@ -1,11 +1,12 @@
-import { FunctionalComponent, h } from 'preact';
+import { Fragment, FunctionalComponent, h } from 'preact';
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
+import { DateTime } from 'luxon';
 import { notify } from 'react-notify-toast';
+
 import { IssueCard } from 'components/Cards/issue';
 import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
 import { IssueFilter } from 'components/Filter/issue';
 import { Modal } from 'components/Modal';
-import { DateTime } from 'luxon';
 import { Issue, IssueStatus } from 'models/Issue';
 import { createIssue, getIssues } from 'services/api/issues';
 import { errorColour, infoColour, successColour } from 'services/notification/colours';
@@ -83,7 +84,7 @@ const Backlog: FunctionalComponent = () => {
     };
 
     return (
-        <div class={showNewIssueModal ? 'modal-active' : ''}>
+        <Fragment>
             {showNewIssueModal ? (
                 <Modal
                     title="Create Issue"
@@ -97,24 +98,24 @@ const Backlog: FunctionalComponent = () => {
                 />
             ) : null}
 
-            <div class="create-bar">
+            <div class="md:mr-4 create-bar">
                 <h1 class="page-heading">Backlog</h1>
                 <button class="btn-create my-auto" onClick={(): void => setShowNewIssueModal(true)}>
                     New Issue
                 </button>
             </div>
-            <div>
+            <div class="md:mr-4">
                 <IssueFilter setFilter={updateIssueFilter} />
             </div>
             <div
-                class="rounded bg-white overflow-hidden shadow-lg overflow-y-scroll issuesList"
+                class="md:mr-4 rounded bg-white overflow-hidden shadow-lg overflow-y-scroll issuesList"
                 onScroll={(e): void => scrollCheck(e.target as HTMLDivElement)}
             >
                 {issuesArray.map((issue, index) => {
                     return <IssueCard key={index} issue={issue} updateIssue={updateIssue} />;
                 })}
             </div>
-        </div>
+        </Fragment>
     );
 };
 

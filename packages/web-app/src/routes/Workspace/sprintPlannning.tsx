@@ -73,13 +73,19 @@ const SprintPlanning: FunctionalComponent = () => {
             )}
 
             <div class="flex">
-                <div class={`w-11/12 md:w-1/2 md:block md:mr-4 ${!isSprintView ? '' : 'sm:hidden'} overflow-x-hidden`}>
+                <div
+                    class={`md:border-r border-gray-300 w-11/12 md:w-1/2 md:block ${
+                        !isSprintView ? '' : 'sm:hidden'
+                    } overflow-x-hidden pl-1`}
+                >
                     <Backlog />
                 </div>
                 <div
-                    class={`md:border-l border-gray-300 w-11/12 md:w-1/2 md:block " ${isSprintView ? '' : 'sm:hidden'}`}
+                    class={`md:border-l border-gray-300 w-11/12 md:w-1/2 md:block ${
+                        isSprintView ? '' : 'sm:hidden'
+                    } overflow-x-hidden pr-1`}
                 >
-                    <div class="create-bar">
+                    <div class="md:mr-4 create-bar">
                         <h1 class="md:ml-4 page-heading">Sprints</h1>
                         <button
                             onClick={(): void => setIsSprintView(!isSprintView)}
