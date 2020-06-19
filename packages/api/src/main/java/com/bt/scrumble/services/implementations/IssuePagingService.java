@@ -99,7 +99,6 @@ public class IssuePagingService implements IIssuePagingService {
             }
             projectId = getNextProjectId(workspaceId, projectId);
             uri = getNextProjectIssuesUri(uri, projectId);
-            System.out.println("Next Resource: " + uri);
 
             ResponseEntity<ArrayList<Issue>> issuesResponse =
                     restTemplate.exchange(
