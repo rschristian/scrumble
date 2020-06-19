@@ -1,5 +1,6 @@
 package com.bt.scrumble;
 
+import org.flywaydb.core.Flyway;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
@@ -24,11 +25,6 @@ public class ScrumbleApi extends SpringBootServletInitializer {
 
   @Bean
   public FlywayMigrationStrategy cleanAndMigrateStrategy() {
-    return flyway ->
-    {
-      flyway.clean();
-      flyway.migrate();
-    };
+    return Flyway::migrate;
   }
-
 }
