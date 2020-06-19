@@ -1,8 +1,8 @@
 package com.bt.scrumble.infrastructure.service;
 
-import com.bt.scrumble.application.dto.Issue;
-import com.bt.scrumble.application.dto.Project;
-import com.bt.scrumble.application.models.Sprint;
+import com.bt.scrumble.application.data.SprintData;
+import com.bt.scrumble.core.issue.Issue;
+import com.bt.scrumble.core.project.Project;
 import com.bt.scrumble.core.issue.IssueService;
 import com.bt.scrumble.core.sprint.SprintRepository;
 import com.bt.scrumble.core.sprint.SprintService;
@@ -54,7 +54,7 @@ public class DefaultSprintService implements SprintService {
     }
 
     @Override
-    public Sprint createSprint(int workspaceId, Sprint sprint, String accessToken) {
+    public SprintData createSprint(int workspaceId, SprintData sprint, String accessToken) {
         var projectMilestoneIds = new HashMap<String, Integer>();
     ArrayList<Integer> projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId);
 
@@ -69,7 +69,7 @@ public class DefaultSprintService implements SprintService {
               sprint.getStartDate(),
               sprint.getDueDate(),
               accessToken);
-      Sprint milestone = restTemplate.postForObject(uri, null, Sprint.class);
+      SprintData milestone = restTemplate.postForObject(uri, null, SprintData.class);
       projectMilestoneIds.put(Integer.toString(projectId), milestone.getId());
     }
     sprint.setProjectIdToMilestoneIds(projectMilestoneIds);
@@ -79,7 +79,7 @@ public class DefaultSprintService implements SprintService {
   }
 
   @Override
-  public Sprint editSprint(int workspaceId, Sprint sprint, String accessToken) {
+  public SprintData editSprint(int workspaceId, SprintData sprint, String accessToken) {
     for (Map.Entry<String, Integer> pair
         : sprintRepository.getProjectIdsToMilestoneIds(sprint.getId()).entrySet()) {
       editGitLabMilestone(Integer.parseInt(pair.getKey()), pair.getValue(), sprint, accessToken);
@@ -90,12 +90,12 @@ public class DefaultSprintService implements SprintService {
   }
 
   @Override
-  public List<Sprint> getSprintsForWorkspace(int workspaceId, String filter) {
+  public List<SprintData> getSprintsForWorkspace(int workspaceId, String filter) {
     return sprintRepository.getAllSprintsForWorkspace(workspaceId, filter);
   }
 
   @Override
-  public Issue setSprintForIssue(int workspaceId, Issue issue, List<Sprint> sprints) {
+  public Issue setSprintForIssue(int workspaceId, Issue issue, List<SprintData> sprints) {
     // Initial assigning of sprint will be milestone data from api. If present, milestone values
     // must be swapped with Scrumble sprint values for future operations. Most importantly, id needs
     // to be changed
@@ -103,7 +103,7 @@ public class DefaultSprintService implements SprintService {
       return issue;
     }
 
-    for (Sprint sprint : sprints) {
+    for (SprintData sprint : sprints) {
       for (Map.Entry<String, Integer> pair : sprint.getProjectIdToMilestoneIds().entrySet()) {
         // Look for a Scrumble sprint that includes the issue's milestone
         if (issue.getSprint().getId() == pair.getValue()) {
@@ -120,7 +120,7 @@ public class DefaultSprintService implements SprintService {
     if (sprintId == 0) {
       return sprintId;
     }
-    Sprint sprint = sprintRepository.getSprintById(sprintId);
+    SprintData sprint = sprintRepository.getSprintById(sprintId);
 
     try {
       return sprint.getProjectIdToMilestoneIds().get(Integer.toString(projectId));
@@ -134,7 +134,7 @@ public class DefaultSprintService implements SprintService {
   }
 
   private void editGitLabMilestone(
-      int projectId, int milestoneId, Sprint sprint, String accessToken) {
+      int projectId, int milestoneId, SprintData sprint, String accessToken) {
     String stateEvent = (sprint.getStatus().equalsIgnoreCase("active"))
         ? "activate"
         : "close";
@@ -154,7 +154,7 @@ public class DefaultSprintService implements SprintService {
   }
 
   @Override
-  public ArrayList<Issue> getSprintIssues(int workspaceId, Sprint sprint, String accessToken) {
+  public ArrayList<Issue> getSprintIssues(int workspaceId, SprintData sprint, String accessToken) {
     ArrayList<Issue> allIssues = new ArrayList();
 
     String projectUri =

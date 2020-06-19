@@ -1,19 +1,19 @@
 package com.bt.scrumble.core.sprint;
 
-import com.bt.scrumble.application.models.Sprint;
+import com.bt.scrumble.application.data.SprintData;
 
 import java.util.List;
 import java.util.Map;
 
 public interface SprintRepository {
 
-    Sprint getSprintById(int sprintId);
+    SprintData getSprintById(int sprintId);
 
-    List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter);
+    List<SprintData> getAllSprintsForWorkspace(int workspaceId, String filter);
 
     Map<String, Integer> getProjectIdsToMilestoneIds(int sprintId);
 
-    Sprint createSprint(int workspaceId, Sprint sprint);
+    SprintData createSprint(int workspaceId, SprintData sprint);
 
-    Sprint editSprint(int workspaceId, Sprint sprint);
+    SprintData editSprint(int workspaceId, SprintData sprint);
 }

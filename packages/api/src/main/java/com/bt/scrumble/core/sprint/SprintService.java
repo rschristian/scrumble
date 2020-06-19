@@ -1,21 +1,21 @@
 package com.bt.scrumble.core.sprint;
 
-import com.bt.scrumble.application.dto.Issue;
-import com.bt.scrumble.application.models.Sprint;
+import com.bt.scrumble.application.data.SprintData;
+import com.bt.scrumble.core.issue.Issue;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public interface SprintService {
-    Sprint createSprint(int workspaceId, Sprint sprint, String accessToken);
+    SprintData createSprint(int workspaceId, SprintData sprint, String accessToken);
 
-    Sprint editSprint(int workspaceId, Sprint sprint, String accessToken);
+    SprintData editSprint(int workspaceId, SprintData sprint, String accessToken);
 
-    List<Sprint> getSprintsForWorkspace(int workspaceId, String filter);
+    List<SprintData> getSprintsForWorkspace(int workspaceId, String filter);
 
-    Issue setSprintForIssue(int workspaceId, Issue issue, List<Sprint> sprints);
+    Issue setSprintForIssue(int workspaceId, Issue issue, List<SprintData> sprints);
 
     int getMilestoneId(int workspaceId, int projectId, int sprintId);
 
-    ArrayList<Issue> getSprintIssues(int workspaceId, Sprint sprint, String accessToken);
+    ArrayList<Issue> getSprintIssues(int workspaceId, SprintData sprint, String accessToken);
 }

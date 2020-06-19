@@ -1,8 +1,5 @@
 package com.bt.scrumble.core.issuePaging;
 
-import com.bt.scrumble.application.dto.IssuePageResult;
-import com.bt.scrumble.application.dto.NextResource;
-
 public interface IssuePagingService {
     NextResource findNextProjectWithQueryResults(
             NextResource nextResource, int workspaceId, int projectId, String uri);

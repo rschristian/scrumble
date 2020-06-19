@@ -1,8 +1,8 @@
 package com.bt.scrumble.infrastructure.service;
 
-import com.bt.scrumble.application.dto.Project;
-import com.bt.scrumble.application.models.User;
-import com.bt.scrumble.application.models.Workspace;
+import com.bt.scrumble.application.data.UserData;
+import com.bt.scrumble.core.project.Project;
+import com.bt.scrumble.application.data.WorkspaceData;
 import com.bt.scrumble.core.workspace.WorkspaceRepository;
 import com.bt.scrumble.core.workspace.WorkspaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class DefaultWorkspaceService implements WorkspaceService {
   private WorkspaceRepository workspaceRepository;
 
   @Override
-  public List<Workspace> getAllWorkspaces() {
+  public List<WorkspaceData> getAllWorkspaces() {
     return workspaceRepository.getAllWorkspaces();
   }
 
@@ -48,13 +48,13 @@ public class DefaultWorkspaceService implements WorkspaceService {
   }
 
   @Override
-  public Workspace createWorkspace(Workspace workspace, User user) {
+  public WorkspaceData createWorkspace(WorkspaceData workspace, UserData user) {
     workspace = workspaceRepository.createWorkspace(workspace, user);
     return workspace;
   }
 
   @Override
-  public void editWorkspace(Workspace updatedWorkspace) {
+  public void editWorkspace(WorkspaceData updatedWorkspace) {
     workspaceRepository.editWorkspace(updatedWorkspace);
   }
 
@@ -72,23 +72,23 @@ public class DefaultWorkspaceService implements WorkspaceService {
   }
 
   @Override
-  public void setWorkspaceUsers(Workspace workspace, Optional<String> accessToken) {
-    List<User> allUsers = new ArrayList<>();
-    Hashtable<User, ArrayList<Integer>> usersProjectIds = new Hashtable<>();
+  public void setWorkspaceUsers(WorkspaceData workspace, Optional<String> accessToken) {
+    List<UserData> allUsers = new ArrayList<>();
+    Hashtable<UserData, ArrayList<Integer>> usersProjectIds = new Hashtable<>();
 
     for (var projectId : workspace.getProjectIds()) {
       String uri =
               String.format(
                       "%1s/projects/%2s/users?access_token=%3s",
                       gitLabApiUrl, projectId, accessToken.get());
-      ResponseEntity<ArrayList<User>> projectUsersResponse =
+      ResponseEntity<ArrayList<UserData>> projectUsersResponse =
               restTemplate.exchange(
                       uri,
                       HttpMethod.GET,
                       getApplicationJsonHeaders(),
                       new ParameterizedTypeReference<>() {
                       });
-      ArrayList<User> projectUsers = projectUsersResponse.getBody();
+      ArrayList<UserData> projectUsers = projectUsersResponse.getBody();
 
       for (var user : projectUsers) {
         if (usersProjectIds.containsKey(user)) {
@@ -108,8 +108,8 @@ public class DefaultWorkspaceService implements WorkspaceService {
       allUsers.addAll(projectUsers);
     }
 
-    Set<User> uniqueUsers = new HashSet<>(allUsers); // getting all unique users
-    List<User> resultant =
+    Set<UserData> uniqueUsers = new HashSet<>(allUsers); // getting all unique users
+    List<UserData> resultant =
         new ArrayList<>(uniqueUsers); // adding unique users to list instead of set
     resultant.forEach(
         (user) -> {

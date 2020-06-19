@@ -4,7 +4,7 @@ import com.bt.scrumble.ScrumbleConfig;
 import com.bt.scrumble.api.v1.security.TokenProvider;
 import com.bt.scrumble.api.v1.security.TokenUtils;
 import com.bt.scrumble.api.v1.security.UserPrincipal;
-import com.bt.scrumble.application.models.User;
+import com.bt.scrumble.application.data.UserData;
 import com.bt.scrumble.core.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,12 +47,12 @@ public class AuthenticationApi {
 
     if (StringUtils.hasText(jwt)) {
       Long userId = tokenProvider.getUserIdFromToken(jwt);
-      Optional<User> userOptional = userService.findUserById(userId.intValue());
+      Optional<UserData> userOptional = userService.findUserById(userId.intValue());
 
       if (userOptional.isEmpty()) {
-        LOGGER.error("User not found");
+        LOGGER.error("UserData not found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body(Map.of("message", "User not found"));
+            .body(Map.of("message", "UserData not found"));
       }
       token =
           tokenProvider.createToken(

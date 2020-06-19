@@ -1,6 +1,6 @@
 package com.bt.scrumble.api.v1.security;
 
-import com.bt.scrumble.application.models.User;
+import com.bt.scrumble.application.data.UserData;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,14 +29,14 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     this.authorities = authorities;
   }
 
-  public static UserPrincipal create(User user) {
+  public static UserPrincipal create(UserData user) {
     List<GrantedAuthority> authorities =
         Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
 
     return new UserPrincipal(user.getId(), user.getServiceId(), user.getProviderId(), authorities);
   }
 
-  public static UserPrincipal create(User user, Map<String, Object> attributes) {
+  public static UserPrincipal create(UserData user, Map<String, Object> attributes) {
     UserPrincipal userPrincipal = UserPrincipal.create(user);
     userPrincipal.setAttributes(attributes);
     return userPrincipal;

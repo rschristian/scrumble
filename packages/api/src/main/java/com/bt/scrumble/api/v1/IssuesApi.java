@@ -1,8 +1,8 @@
 package com.bt.scrumble.api.v1;
 
 import com.bt.scrumble.api.v1.security.UserPrincipal;
-import com.bt.scrumble.application.dto.Issue;
-import com.bt.scrumble.application.dto.IssuePageResult;
+import com.bt.scrumble.core.issue.Issue;
+import com.bt.scrumble.core.issuePaging.IssuePageResult;
 import com.bt.scrumble.core.issue.IssueService;
 import com.bt.scrumble.core.issuePaging.IssuePagingService;
 import com.bt.scrumble.core.user.UserService;
@@ -82,9 +82,9 @@ public class IssuesApi {
     Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
 
     if (!issue.getAssignee().getProjectIds().contains(projectId)) {
-      LOGGER.error("User does not exist on this project");
+      LOGGER.error("UserData does not exist on this project");
       return ResponseEntity.status(HttpStatus.FORBIDDEN)
-          .body(Map.of("message", "User does not exist on this project"));
+          .body(Map.of("message", "UserData does not exist on this project"));
     }
 
     if (accessTokenOptional.isPresent()) {
@@ -107,9 +107,9 @@ public class IssuesApi {
     Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
 
     if (!issue.getAssignee().getProjectIds().contains(projectId)) {
-      LOGGER.error("User does not exist on this project");
+      LOGGER.error("UserData does not exist on this project");
       return ResponseEntity.status(HttpStatus.FORBIDDEN)
-          .body(Map.of("message", "User does not exist on this project"));
+          .body(Map.of("message", "UserData does not exist on this project"));
     }
 
     if (accessTokenOptional.isPresent()) {

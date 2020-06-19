@@ -1,7 +1,7 @@
 package com.bt.scrumble.infrastructure.repository;
 
-import com.bt.scrumble.application.models.User;
-import com.bt.scrumble.application.models.Workspace;
+import com.bt.scrumble.application.data.UserData;
+import com.bt.scrumble.application.data.WorkspaceData;
 import com.bt.scrumble.core.workspace.WorkspaceRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,16 +36,16 @@ public class DefaultWorkspaceRepository implements WorkspaceRepository {
     }
 
     @Override
-    public List<Workspace> getAllWorkspaces() {
+    public List<WorkspaceData> getAllWorkspaces() {
         var workspaces =
                 new ArrayList<>(
                         jdbcTemplate.query(
                                 "SELECT * FROM workspaces INNER JOIN users ON workspaces.created_by_user = users.id",
                                 (rs, row) -> {
                                     try {
-                                        return new Workspace(
+                                        return new WorkspaceData(
                         rs.getInt("id"),
-                        new User(
+                        new UserData(
                             rs.getInt("created_by_user"),
                             rs.getInt("service_id"),
                             rs.getString("provider_id")),
@@ -79,7 +79,7 @@ public class DefaultWorkspaceRepository implements WorkspaceRepository {
   }
 
   @Override
-  public List<User> workspaceUserList(int workspaceId) {
+  public List<UserData> workspaceUserList(int workspaceId) {
     return jdbcTemplate.queryForObject(
         "SELECT workspace_data FROM workspaces WHERE id = ?;",
         new Object[] {workspaceId},
@@ -94,7 +94,7 @@ public class DefaultWorkspaceRepository implements WorkspaceRepository {
   }
 
   @Override
-  public Workspace createWorkspace(Workspace workspace, User user) {
+  public WorkspaceData createWorkspace(WorkspaceData workspace, UserData user) {
     String insertStatement =
         "INSERT INTO workspaces (name, created_by_user, description, workspace_data) VALUES (?, ?, ?, ?);";
     KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -114,7 +114,7 @@ public class DefaultWorkspaceRepository implements WorkspaceRepository {
   }
 
   @Override
-  public void editWorkspace(Workspace updatedWorkspace) {
+  public void editWorkspace(WorkspaceData updatedWorkspace) {
     String deleteWorkspace =
         "UPDATE workspaces SET name = ?, description = ?, workspace_data = ? WHERE id = ?";
     Object[] params =
@@ -128,7 +128,7 @@ public class DefaultWorkspaceRepository implements WorkspaceRepository {
     jdbcTemplate.update(deleteWorkspace, params, types);
   }
 
-  private PGobject getWorkspaceJsonbData(Workspace workspace) {
+  private PGobject getWorkspaceJsonbData(WorkspaceData workspace) {
     try {
       PGobject jsonObject = new PGobject();
       ObjectMapper objectMapper = new ObjectMapper();
@@ -153,8 +153,8 @@ public class DefaultWorkspaceRepository implements WorkspaceRepository {
     return (ArrayList<Integer>) mapper.readValue(jsonData.getValue(), Map.class).get("project_ids");
   }
 
-  private List<User> parseJsonDataToUserList(PGobject jsonData) throws IOException {
+  private List<UserData> parseJsonDataToUserList(PGobject jsonData) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
-    return (List<User>) mapper.readValue(jsonData.getValue(), Map.class).get("project_users");
+    return (List<UserData>) mapper.readValue(jsonData.getValue(), Map.class).get("project_users");
   }
 }

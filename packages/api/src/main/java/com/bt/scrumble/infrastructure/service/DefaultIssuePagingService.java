@@ -1,10 +1,10 @@
 package com.bt.scrumble.infrastructure.service;
 
-import com.bt.scrumble.application.dto.Issue;
-import com.bt.scrumble.application.dto.IssuePageResult;
-import com.bt.scrumble.application.dto.NextResource;
-import com.bt.scrumble.application.dto.Project;
-import com.bt.scrumble.application.models.GitLabLinks;
+import com.bt.scrumble.core.issue.Issue;
+import com.bt.scrumble.core.issuePaging.IssuePageResult;
+import com.bt.scrumble.core.issuePaging.NextResource;
+import com.bt.scrumble.core.project.Project;
+import com.bt.scrumble.application.data.GitLabLinksData;
 import com.bt.scrumble.core.issue.IssueService;
 import com.bt.scrumble.core.issuePaging.IssuePagingService;
 import com.bt.scrumble.core.sprint.SprintService;
@@ -55,7 +55,7 @@ public class DefaultIssuePagingService implements IssuePagingService {
     NextResource nextResource = new NextResource();
     nextResource.setPageSize(ISSUE_PAGE_SIZE);
 
-    GitLabLinks links = parseLink(linkHeader);
+    GitLabLinksData links = parseLink(linkHeader);
 
     boolean nextPagePresent = links.getNext() != null && !links.getNext().isEmpty();
 
@@ -80,8 +80,8 @@ public class DefaultIssuePagingService implements IssuePagingService {
     return nextResource;
   }
 
-  private GitLabLinks parseLink(String linkHeader) {
-    GitLabLinks gitLabLinks = new GitLabLinks();
+  private GitLabLinksData parseLink(String linkHeader) {
+    GitLabLinksData gitLabLinks = new GitLabLinksData();
     String[] links = linkHeader.split(",");
     for (String link : links) {
       String[] segments = link.split(";");
@@ -240,9 +240,9 @@ public class DefaultIssuePagingService implements IssuePagingService {
           userService.setProjectId(workspaceId, issue);
         }
       }
-      issuePageResult.setIssues(issues);
+      issuePageResult.appendIssues(issues);
 
-      if (!issues.isEmpty()) {
+      if (!issues.isEmpty() && issuePageResult.getIssues().size() >= 20) {
         issuePageResult.setNextResource(
             getNextResource(
                 queryUri,

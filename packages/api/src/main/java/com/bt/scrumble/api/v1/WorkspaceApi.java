@@ -1,8 +1,8 @@
 package com.bt.scrumble.api.v1;
 
 import com.bt.scrumble.api.v1.security.UserPrincipal;
-import com.bt.scrumble.application.models.User;
-import com.bt.scrumble.application.models.Workspace;
+import com.bt.scrumble.application.data.UserData;
+import com.bt.scrumble.application.data.WorkspaceData;
 import com.bt.scrumble.core.user.UserService;
 import com.bt.scrumble.core.workspace.WorkspaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class WorkspaceApi {
 
   @PostMapping("/workspace")
   public ResponseEntity<Object> createWorkspace(
-      Authentication authentication, @RequestBody Workspace workspace) {
+      Authentication authentication, @RequestBody WorkspaceData workspace) {
     UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
     Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
     if (accessTokenOptional.isPresent()) {
@@ -64,7 +64,7 @@ public class WorkspaceApi {
           .body(
               workspaceService.createWorkspace(
                   workspace,
-                  new User(
+                  new UserData(
                       userPrincipal.getId(),
                       userPrincipal.getServiceId(),
                       userPrincipal.getProviderId())));
@@ -74,7 +74,7 @@ public class WorkspaceApi {
 
   @PutMapping("/workspace/{id}")
   public ResponseEntity<Object> editWorkspace(
-      Authentication authentication, @RequestBody Workspace workspace) {
+      Authentication authentication, @RequestBody WorkspaceData workspace) {
     UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
     Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
     if (accessTokenOptional.isPresent()) {

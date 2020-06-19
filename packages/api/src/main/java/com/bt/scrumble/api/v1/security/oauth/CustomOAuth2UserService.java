@@ -2,7 +2,7 @@ package com.bt.scrumble.api.v1.security.oauth;
 
 import com.bt.scrumble.api.v1.security.UserPrincipal;
 import com.bt.scrumble.api.v1.security.oauth.users.OAuth2UserInfo;
-import com.bt.scrumble.application.models.User;
+import com.bt.scrumble.application.data.UserData;
 import com.bt.scrumble.core.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,8 +48,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             oAuth2UserRequest.getClientRegistration().getRegistrationId(),
             oAuth2User.getAttributes());
 
-    User user;
-    Optional<User> userOptional = userService.findUserByServiceId(oAuth2UserInfo.getId());
+    UserData user;
+    Optional<UserData> userOptional = userService.findUserByServiceId(oAuth2UserInfo.getId());
 
     if (userOptional.isEmpty()) {
       user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
@@ -61,8 +61,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     return UserPrincipal.create(userOptional.get(), oAuth2User.getAttributes());
   }
 
-  private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
-    User user = new User();
+  private UserData registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
+    UserData user = new UserData();
 
     user.setServiceId(oAuth2UserInfo.getId());
     user.setProviderId(oAuth2UserRequest.getClientRegistration().getRegistrationId());

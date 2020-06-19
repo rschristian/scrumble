@@ -1,8 +1,8 @@
 package com.bt.scrumble.infrastructure.service;
 
 import com.bt.scrumble.application.IssueEstimation;
-import com.bt.scrumble.application.dto.Issue;
-import com.bt.scrumble.application.dto.Project;
+import com.bt.scrumble.core.issue.Issue;
+import com.bt.scrumble.core.project.Project;
 import com.bt.scrumble.core.issue.IssueRepository;
 import com.bt.scrumble.core.issue.IssueService;
 import com.bt.scrumble.core.sprint.SprintService;
@@ -132,7 +132,7 @@ public class DefaultIssueService implements IssueService {
     if (issue.getSprint() != null) {
       int milestoneId =
           sprintService.getMilestoneId(workspaceId, projectId, issue.getSprint().getId());
-      if (issue.getSprint().getId() == 0) { // No Sprint selected
+      if (issue.getSprint().getId() == 0) { // No SprintData selected
         issueRepository.removeIssue(issue.getIid(), projectId);
       } else { // adds start time
         issueRepository.updateStartTime(issue.getIid(), projectId);

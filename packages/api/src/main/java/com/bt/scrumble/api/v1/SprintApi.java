@@ -1,7 +1,7 @@
 package com.bt.scrumble.api.v1;
 
 import com.bt.scrumble.api.v1.security.UserPrincipal;
-import com.bt.scrumble.application.models.Sprint;
+import com.bt.scrumble.application.data.SprintData;
 import com.bt.scrumble.core.sprint.SprintService;
 import com.bt.scrumble.core.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class SprintApi {
   public ResponseEntity<Object> createSprint(
       Authentication auth,
       @PathVariable(value = "workspaceId") int workspaceId,
-      @RequestBody Sprint sprint) {
+      @RequestBody SprintData sprint) {
     UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
     Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
     return accessTokenOptional
@@ -65,7 +65,7 @@ public class SprintApi {
   public ResponseEntity<Object> editSprint(
       Authentication auth,
       @PathVariable(value = "workspaceId") int workspaceId,
-      @RequestBody Sprint sprint) {
+      @RequestBody SprintData sprint) {
     UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
     Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
     if (accessTokenOptional.isPresent()) {
@@ -80,7 +80,7 @@ public class SprintApi {
   public ResponseEntity<Object> getSprintIssues(
       Authentication auth,
       @PathVariable(value = "workspaceId") int workspaceId,
-      @RequestBody Sprint sprint) {
+      @RequestBody SprintData sprint) {
     UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
     Optional<String> accessTokenOptional = userService.getToken(userPrincipal.getId());
     return accessTokenOptional

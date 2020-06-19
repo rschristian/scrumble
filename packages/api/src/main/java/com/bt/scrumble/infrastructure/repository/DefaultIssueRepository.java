@@ -1,6 +1,6 @@
 package com.bt.scrumble.infrastructure.repository;
 
-import com.bt.scrumble.application.models.Issue;
+import com.bt.scrumble.application.data.IssueData;
 import com.bt.scrumble.core.issue.IssueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -25,7 +25,7 @@ public class DefaultIssueRepository implements IssueRepository {
     @Override
     public void updateStartTime(int issueId, int projectId) {
         Date currentDate = new Date();
-        Optional<Issue> issue = findIssueById(issueId, projectId);
+        Optional<IssueData> issue = findIssueById(issueId, projectId);
         if (!issue.isPresent()) {
             String insertStatement = "INSERT INTO issues (id, project_id, start_time) VALUES (?,?,?);";
             Object[] params = new Object[]{issueId, projectId, new Timestamp(currentDate.getTime())};
@@ -71,14 +71,14 @@ public class DefaultIssueRepository implements IssueRepository {
     }
   }
 
-  private Optional<Issue> findIssueById(int issueId, int projectId) {
+  private Optional<IssueData> findIssueById(int issueId, int projectId) {
     try {
       return jdbcTemplate.queryForObject(
           "SELECT * FROM issues WHERE id = ? AND project_id = ?;",
           new Object[] {issueId, projectId},
           (rs, rowNum) ->
               Optional.of(
-                  new Issue(rs.getInt("Id"), rs.getDate("start_time"), rs.getDate("end_time"))));
+                  new IssueData(rs.getInt("Id"), rs.getDate("start_time"), rs.getDate("end_time"))));
     } catch (IncorrectResultSizeDataAccessException e) {
       return Optional.empty();
     }

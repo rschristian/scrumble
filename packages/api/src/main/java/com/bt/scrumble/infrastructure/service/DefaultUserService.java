@@ -1,7 +1,7 @@
 package com.bt.scrumble.infrastructure.service;
 
-import com.bt.scrumble.application.dto.Issue;
-import com.bt.scrumble.application.models.User;
+import com.bt.scrumble.core.issue.Issue;
+import com.bt.scrumble.application.data.UserData;
 import com.bt.scrumble.core.user.UserRepository;
 import com.bt.scrumble.core.user.UserService;
 import com.bt.scrumble.core.workspace.WorkspaceRepository;
@@ -24,18 +24,18 @@ public class DefaultUserService implements UserService {
     private WorkspaceRepository workspaceRepository;
 
     @Override
-    public User createUser(User user) {
+    public UserData createUser(UserData user) {
         user = userRepository.createUser(user);
         return user;
     }
 
   @Override
-  public Optional<User> findUserByServiceId(int serviceId) {
+  public Optional<UserData> findUserByServiceId(int serviceId) {
     return userRepository.findUserByServiceId(serviceId);
   }
 
   @Override
-  public Optional<User> findUserById(int id) {
+  public Optional<UserData> findUserById(int id) {
     return userRepository.findUserById(id);
   }
 
@@ -57,10 +57,10 @@ public class DefaultUserService implements UserService {
   @Override
   public void setProjectId(int workspaceId, Issue issue) {
     ObjectMapper mapper = new ObjectMapper();
-    List<User> userList =
+    List<UserData> userList =
         mapper.convertValue(
-            workspaceRepository.workspaceUserList(workspaceId), new TypeReference<List<User>>() { });
-    ArrayList<User> userArray = new ArrayList();
+            workspaceRepository.workspaceUserList(workspaceId), new TypeReference<List<UserData>>() { });
+    ArrayList<UserData> userArray = new ArrayList();
     userArray.addAll(userList);
     userArray.forEach(
         user -> {

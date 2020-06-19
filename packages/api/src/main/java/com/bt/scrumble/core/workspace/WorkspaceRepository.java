@@ -1,20 +1,20 @@
 package com.bt.scrumble.core.workspace;
 
-import com.bt.scrumble.application.models.User;
-import com.bt.scrumble.application.models.Workspace;
+import com.bt.scrumble.application.data.UserData;
+import com.bt.scrumble.application.data.WorkspaceData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public interface WorkspaceRepository {
 
-    List<Workspace> getAllWorkspaces();
+    List<WorkspaceData> getAllWorkspaces();
 
     ArrayList<Integer> projectIdsForWorkspace(int workspaceId);
 
-    Workspace createWorkspace(Workspace workspace, User user);
+    WorkspaceData createWorkspace(WorkspaceData workspace, UserData user);
 
-    void editWorkspace(Workspace updatedWorkspace);
+    void editWorkspace(WorkspaceData updatedWorkspace);
 
-    List<User> workspaceUserList(int workspaceId);
+    List<UserData> workspaceUserList(int workspaceId);
 }

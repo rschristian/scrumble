@@ -1,7 +1,6 @@
 package com.bt.scrumble.core.issue;
 
-import com.bt.scrumble.application.dto.Issue;
-import com.bt.scrumble.application.dto.Project;
+import com.bt.scrumble.core.project.Project;
 import org.springframework.stereotype.Service;
 
 @Service

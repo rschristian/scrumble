@@ -1,6 +1,6 @@
 package com.bt.scrumble.infrastructure.repository;
 
-import com.bt.scrumble.application.models.Sprint;
+import com.bt.scrumble.application.data.SprintData;
 import com.bt.scrumble.core.sprint.SprintRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,7 +35,7 @@ public class DefaultSprintRepository implements SprintRepository {
     }
 
     @Override
-    public Sprint getSprintById(int sprintId) {
+    public SprintData getSprintById(int sprintId) {
         var sprint =
                 jdbcTemplate.queryForObject(
                         "SELECT * FROM sprints where id = ?",
@@ -43,7 +43,7 @@ public class DefaultSprintRepository implements SprintRepository {
                         new int[]{Types.INTEGER},
                         (rs, row) -> {
                             try {
-                return new Sprint(
+                return new SprintData(
                     rs.getInt("id"),
                     rs.getString("title"),
                     rs.getString("description"),
@@ -60,7 +60,7 @@ public class DefaultSprintRepository implements SprintRepository {
   }
 
   @Override
-  public List<Sprint> getAllSprintsForWorkspace(int workspaceId, String filter) {
+  public List<SprintData> getAllSprintsForWorkspace(int workspaceId, String filter) {
     String selectStatement;
     Object[] params;
     int[] types;
@@ -96,7 +96,7 @@ public class DefaultSprintRepository implements SprintRepository {
   }
 
   @Override
-  public Sprint createSprint(int workspaceId, Sprint sprint) {
+  public SprintData createSprint(int workspaceId, SprintData sprint) {
     KeyHolder keyHolder = new GeneratedKeyHolder();
 
     jdbcTemplate.update(
@@ -121,7 +121,7 @@ public class DefaultSprintRepository implements SprintRepository {
   }
 
   @Override
-  public Sprint editSprint(int workspaceId, Sprint sprint) {
+  public SprintData editSprint(int workspaceId, SprintData sprint) {
     jdbcTemplate.update(
         "UPDATE sprints SET title = ?, description = ?, status = ?, start_date = ?, due_date = ?, sprint_data = ? WHERE id = ?",
         new Object[] {
@@ -145,7 +145,7 @@ public class DefaultSprintRepository implements SprintRepository {
     return sprint;
   }
 
-  private List<Sprint> mapRowsToSprintList(String sqlSelect, Object[] params, int[] types) {
+  private List<SprintData> mapRowsToSprintList(String sqlSelect, Object[] params, int[] types) {
     var sprintList =
         new ArrayList<>(
             jdbcTemplate.query(
@@ -154,7 +154,7 @@ public class DefaultSprintRepository implements SprintRepository {
                 types,
                 (rs, row) -> {
                   try {
-                    return new Sprint(
+                    return new SprintData(
                         rs.getInt("id"),
                         rs.getString("title"),
                         rs.getString("description"),
@@ -170,7 +170,7 @@ public class DefaultSprintRepository implements SprintRepository {
     return sprintList;
   }
 
-  private PGobject getSprintJsonbData(Sprint sprint) {
+  private PGobject getSprintJsonbData(SprintData sprint) {
     try {
       Map<Object, Object> dataMap = new HashMap<>();
       PGobject jsonObject = new PGobject();

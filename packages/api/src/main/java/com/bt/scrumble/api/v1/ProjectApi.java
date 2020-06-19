@@ -1,7 +1,7 @@
 package com.bt.scrumble.api.v1;
 
 import com.bt.scrumble.api.v1.security.UserPrincipal;
-import com.bt.scrumble.application.dto.Project;
+import com.bt.scrumble.core.project.Project;
 import com.bt.scrumble.core.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

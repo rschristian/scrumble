@@ -1,6 +1,6 @@
 package com.bt.scrumble.infrastructure.repository;
 
-import com.bt.scrumble.application.models.User;
+import com.bt.scrumble.application.data.UserData;
 import com.bt.scrumble.core.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -21,7 +21,7 @@ public class DefaultUserRepository implements UserRepository {
     }
 
     @Override
-    public User createUser(User user) {
+    public UserData createUser(UserData user) {
         String insertStatement = "INSERT INTO users (service_id, provider_id) VALUES (?, ?);";
         Object[] params = new Object[]{user.getServiceId(), user.getProviderId()};
         int[] types = new int[]{Types.INTEGER, Types.VARCHAR};
@@ -30,8 +30,8 @@ public class DefaultUserRepository implements UserRepository {
     }
 
     @Override
-  public Optional<User> findUserByServiceId(int serviceId) {
-    Optional<User> optionalUser = Optional.empty();
+  public Optional<UserData> findUserByServiceId(int serviceId) {
+    Optional<UserData> optionalUser = Optional.empty();
     try {
       optionalUser =
           jdbcTemplate.queryForObject(
@@ -39,7 +39,7 @@ public class DefaultUserRepository implements UserRepository {
               new Object[] {serviceId},
               (rs, rowNum) ->
                   Optional.of(
-                      new User(
+                      new UserData(
                           rs.getInt("id"), rs.getInt("service_id"), rs.getString("provider_id"))));
     } catch (IncorrectResultSizeDataAccessException ignored) {
     }
@@ -47,8 +47,8 @@ public class DefaultUserRepository implements UserRepository {
   }
 
   @Override
-  public Optional<User> findUserById(int id) {
-    Optional<User> optionalUser = Optional.empty();
+  public Optional<UserData> findUserById(int id) {
+    Optional<UserData> optionalUser = Optional.empty();
     try {
       optionalUser =
           jdbcTemplate.queryForObject(
@@ -56,7 +56,7 @@ public class DefaultUserRepository implements UserRepository {
               new Object[] {id},
               (rs, rowNum) ->
                   Optional.of(
-                      new User(
+                      new UserData(
                           rs.getInt("id"), rs.getInt("service_id"), rs.getString("provider_id"))));
     } catch (IncorrectResultSizeDataAccessException ignored) {
     }

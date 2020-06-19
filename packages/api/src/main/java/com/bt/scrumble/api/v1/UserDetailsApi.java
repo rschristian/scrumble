@@ -1,8 +1,8 @@
 package com.bt.scrumble.api.v1;
 
 import com.bt.scrumble.api.v1.security.UserPrincipal;
-import com.bt.scrumble.application.dto.ScrumbleUser;
-import com.bt.scrumble.application.dto.User;
+import com.bt.scrumble.core.user.ScrumbleUser;
+import com.bt.scrumble.core.user.User;
 import com.bt.scrumble.core.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

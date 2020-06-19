@@ -1,6 +1,6 @@
 package com.bt.scrumble.application;
 
-import com.bt.scrumble.application.dto.Issue;
+import com.bt.scrumble.core.issue.Issue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

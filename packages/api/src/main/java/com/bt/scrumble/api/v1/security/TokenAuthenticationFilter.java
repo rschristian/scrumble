@@ -1,6 +1,6 @@
 package com.bt.scrumble.api.v1.security;
 
-import com.bt.scrumble.application.models.User;
+import com.bt.scrumble.application.data.UserData;
 import com.bt.scrumble.core.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +51,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
       if (StringUtils.hasText(jwt)) {
         Long userId = tokenProvider.getUserIdFromToken(jwt);
 
-        Optional<User> userOptional = userService.findUserById(userId.intValue());
+        Optional<UserData> userOptional = userService.findUserById(userId.intValue());
 
         if (userOptional.isPresent()) {
           UserDetails userDetails = UserPrincipal.create(userOptional.get());
