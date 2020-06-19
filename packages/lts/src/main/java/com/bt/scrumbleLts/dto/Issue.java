@@ -1,6 +1,6 @@
 package com.bt.scrumbleLts.dto;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Issue {
     private final int iid;
@@ -11,13 +11,13 @@ public class Issue {
     private final User assignee;
     private final String state;
     private final Sprint milestone;
-    private final ArrayList<String> labels;
+    private final List<String> labels;
     private final String created_at;
 
     public Issue(int iid, int project_id, String title,
                  String description, User author, User assignee,
                  String state, Sprint milestone,
-                 ArrayList<String> labels, String created_at) {
+                 List<String> labels, String created_at) {
         this.project_id = project_id;
         this.milestone = milestone;
         this.author = author;
@@ -36,5 +36,13 @@ public class Issue {
 
     public String getDescription() {
         return this.description;
+    }
+
+    public String getState() {
+        return this.state;
+    }
+
+    public List<String> getLabels() {
+        return this.labels;
     }
 }
