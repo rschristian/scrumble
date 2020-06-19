@@ -67,17 +67,22 @@ public class IssuesApi {
                     projectId, projectId, page, search, state));
         }
 
-        if (projectId == 1) {
-            return Arrays.copyOfRange(getSeedData(), 0, 5);
-        } else if (projectId == 2) {
-            return Arrays.copyOfRange(getSeedData(), 5, 10);
-        } else if (projectId == 3) {
-            return Arrays.copyOfRange(getSeedData(), 10, 15);
-        } else if (projectId == 4) {
-            return Arrays.copyOfRange(getSeedData(), 15, 20);
-        } else if (projectId == 5) {
-            return Arrays.copyOfRange(getSeedData(), 20, 25);
+        var max = projectId * 5;
+        var min = max - 5;
+
+        if (!search.isEmpty()) {
+            var issuesWithSearchTerm = new ArrayList<Issue>();
+            for (var issue: Arrays.copyOfRange(getSeedData(), min, max)) {
+                if (issue.getTitle().contains(search) || issue.getDescription().contains(search)) {
+                    issuesWithSearchTerm.add(issue);
+                }
+            }
+            return issuesWithSearchTerm.toArray(Issue[]::new);
+        } else {
+            if (projectId < 6) {
+                return Arrays.copyOfRange(getSeedData(), min, max);
+            }
+            else return new Issue[]{};
         }
-        else return new Issue[]{};
     }
 }
