@@ -59,7 +59,7 @@ const SprintPlanning: FunctionalComponent = () => {
 
     return (
         <Fragment>
-            {showNewSprintModal ? (
+            {showNewSprintModal && (
                 <Modal
                     title="Create Sprint"
                     content={
@@ -70,10 +70,10 @@ const SprintPlanning: FunctionalComponent = () => {
                     }
                     close={(): void => setShowNewSprintModal(false)}
                 />
-            ) : null}
+            )}
 
             <div class="flex">
-                <div class={`w-11/12 md:w-1/2 md:block md:mr-4 ${!isSprintView ? '' : 'sm:hidden'}`}>
+                <div class={`w-11/12 md:w-1/2 md:block md:mr-4 ${!isSprintView ? '' : 'sm:hidden'} overflow-x-hidden`}>
                     <Backlog />
                 </div>
                 <div

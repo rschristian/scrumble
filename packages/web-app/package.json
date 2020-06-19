@@ -3,13 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve:dev": "preact watch --port 3000",
-    "serve:prod": "npm run build && sirv build --port 3000 --single",
-    "build": "preact build --no-esm --no-prerender --template src/index.html",
-    "build:analyze": "npm run build -- --analyze",
-    "lint": "eslint src/**/*.{js,ts,tsx} --fix",
-    "prettier": "prettier src/**/*.{css,scss,json} --write",
-    "postinstall": "node ./mobx-postinstall.js"
+    "serve:dev": "preact watch -p 3000",
+    "serve:prod": "yarn build && sirv build -p 3000 --single",
+    "build": "preact build --no-prerender --template src/index.html",
+    "build:analyze": "yarn build --analyze",
+    "lint": "yarn eslint --fix && yarn prettier --write",
+    "lint:ci": "yarn eslint && yarn prettier",
+    "eslint": "eslint 'src/**/*.{js,ts,tsx}' '*.js'",
+    "prettier": "prettier 'src/**/*.{css,scss,json}' '*.json'",
+    "postinstall": "node mobx-postinstall.js"
   },
   "husky": {
     "hooks": {
@@ -47,10 +49,10 @@
     "husky": "^4.2.3",
     "lint-staged": "^10.0.8",
     "node-sass": "^4.13.1",
-    "preact-cli": "^3.0.0-rc.10",
+    "preact-cli": "3.0.0-rc.14",
     "prettier": "^1.19.1",
     "sass-loader": "^8.0.2",
     "sirv-cli": "^1.0.0-next.3",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.5"
   }
 }
