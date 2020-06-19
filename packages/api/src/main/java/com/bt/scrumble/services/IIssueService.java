@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 public interface IIssueService {
   void setStoryPoint(Issue issue);
 
-    void setProjectName(Issue issue, Project[] projects);
+  void setProjectName(Issue issue, Project[] projects);
 
-    void setStatus(Issue issue);
+  void setStatus(Issue issue);
 
-    String getFilterQuery(String filter);
+  String getFilterQuery(String filter);
 }

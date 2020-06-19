@@ -14,11 +14,10 @@ import java.util.List;
 
 @Service
 public class WorkspaceService implements IWorkspaceService {
-  @Value("${app.issues.provider.gitlab.baseUrl.api}")
-  private String gitLabApiUrl;
-
   private final RestTemplate restTemplate;
   private final IWorkspaceRepository workspaceRepository;
+  @Value("${app.issues.provider.gitlab.baseUrl.api}")
+  private String gitLabApiUrl;
 
   @Autowired
   public WorkspaceService(RestTemplate restTemplate, IWorkspaceRepository workspaceRepository) {

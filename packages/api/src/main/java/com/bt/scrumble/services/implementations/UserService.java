@@ -15,26 +15,25 @@ import java.util.List;
 @Service
 public class UserService implements IUserService {
 
-    private final IWorkspaceRepository workspaceRepository;
+  private final IWorkspaceRepository workspaceRepository;
 
-    @Autowired
-    public UserService(IWorkspaceRepository workspaceRepository) {
-        this.workspaceRepository = workspaceRepository;
-    }
+  @Autowired
+  public UserService(IWorkspaceRepository workspaceRepository) {
+    this.workspaceRepository = workspaceRepository;
+  }
 
-    @Override
-    public void setProjectId(int workspaceId, Issue issue) {
-        ObjectMapper mapper = new ObjectMapper();
-        List<User> userList =
-            mapper.convertValue(
-                    workspaceRepository.workspaceUserList(workspaceId), new TypeReference<List<User>>() {
-                    });
+  @Override
+  public void setProjectId(int workspaceId, Issue issue) {
+    ObjectMapper mapper = new ObjectMapper();
+    List<User> userList =
+        mapper.convertValue(
+            workspaceRepository.workspaceUserList(workspaceId), new TypeReference<List<User>>() {});
     ArrayList<User> userArray = new ArrayList(userList);
     userArray.forEach(
-            user -> {
-              if (issue.getAssignee().getId() == user.getId()) {
-                issue.getAssignee().setProjectIds(user.getProjectIds());
-              }
-            });
+        user -> {
+          if (issue.getAssignee().getId() == user.getId()) {
+            issue.getAssignee().setProjectIds(user.getProjectIds());
+          }
+        });
   }
 }

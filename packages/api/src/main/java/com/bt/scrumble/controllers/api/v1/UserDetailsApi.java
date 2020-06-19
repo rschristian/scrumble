@@ -14,25 +14,25 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/api/v1")
 public class UserDetailsApi {
 
-    @Value("${app.issues.provider.gitlab.baseUrl.api}")
-    private String gitLabBaseUrlApi;
-    private final RestTemplate restTemplate;
+  private final RestTemplate restTemplate;
+  @Value("${app.issues.provider.gitlab.baseUrl.api}")
+  private String gitLabBaseUrlApi;
 
-    @Autowired
-    public UserDetailsApi(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
+  @Autowired
+  public UserDetailsApi(RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
+  }
 
-    @GetMapping("/user/info")
-    public ResponseEntity<Object> getUserInfo() {
-        String uri = String.format("%1s/users", gitLabBaseUrlApi);
-        User currentUser = restTemplate.getForObject(uri, User.class);
-        return ResponseEntity.ok()
-                .body(
-                        new ScrumbleUser(
-                                currentUser.getId(),
-                                currentUser.getName(),
-                                currentUser.getUsername(),
-                                currentUser.getAvatarUrl()));
-    }
+  @GetMapping("/user/info")
+  public ResponseEntity<Object> getUserInfo() {
+    String uri = String.format("%1s/users", gitLabBaseUrlApi);
+    User currentUser = restTemplate.getForObject(uri, User.class);
+    return ResponseEntity.ok()
+        .body(
+            new ScrumbleUser(
+                currentUser.getId(),
+                currentUser.getName(),
+                currentUser.getUsername(),
+                currentUser.getAvatarUrl()));
+  }
 }

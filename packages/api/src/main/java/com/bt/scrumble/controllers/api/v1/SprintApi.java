@@ -10,25 +10,23 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 public class SprintApi {
 
-    private final ISprintService sprintService;
+  private final ISprintService sprintService;
 
-    @Autowired
-    public SprintApi(ISprintService sprintService) {
-        this.sprintService = sprintService;
-    }
+  @Autowired
+  public SprintApi(ISprintService sprintService) {
+    this.sprintService = sprintService;
+  }
 
-    @GetMapping("/workspace/{workspaceId}/sprints")
-    public ResponseEntity<Object> getWorkspaceSprints(
-            @PathVariable(value = "workspaceId") int workspaceId,
-            @RequestParam(value = "filter") String filter) {
+  @GetMapping("/workspace/{workspaceId}/sprints")
+  public ResponseEntity<Object> getWorkspaceSprints(
+      @PathVariable(value = "workspaceId") int workspaceId,
+      @RequestParam(value = "filter") String filter) {
     return ResponseEntity.ok().body(sprintService.getSprintsForWorkspace(workspaceId, filter));
   }
 
   @GetMapping("/workspace/{workspaceId}/sprint/issues")
   public ResponseEntity<Object> getSprintIssues(
-          @PathVariable(value = "workspaceId") int workspaceId,
-          @RequestBody Sprint sprint
-  ) {
+      @PathVariable(value = "workspaceId") int workspaceId, @RequestBody Sprint sprint) {
     return ResponseEntity.ok().body(sprintService.getSprintIssues(workspaceId, sprint));
   }
 }

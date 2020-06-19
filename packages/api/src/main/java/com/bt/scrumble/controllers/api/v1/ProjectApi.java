@@ -17,24 +17,23 @@ import java.util.Collections;
 @RequestMapping("/api/v1")
 public class ProjectApi {
 
-    @Value("${app.issues.provider.gitlab.baseUrl.api}")
-    private String gitLabBaseUrl;
-    private final RestTemplate restTemplate;
+  private final RestTemplate restTemplate;
+  @Value("${app.issues.provider.gitlab.baseUrl.api}")
+  private String gitLabBaseUrl;
 
-    @Autowired
-    public ProjectApi(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
+  @Autowired
+  public ProjectApi(RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
+  }
 
-    @GetMapping("/projects")
-    public ResponseEntity<Object> getProjects() {
-        var headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        String uri = String.format("%s/projects", gitLabBaseUrl);
-        ResponseEntity<ArrayList<Project>> userProjectsResponse =
-                restTemplate.exchange(
-                        uri, HttpMethod.GET, new HttpEntity(headers), new ParameterizedTypeReference<>() {
-                        });
-        return ResponseEntity.ok().body(userProjectsResponse.getBody());
-    }
+  @GetMapping("/projects")
+  public ResponseEntity<Object> getProjects() {
+    var headers = new HttpHeaders();
+    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+    String uri = String.format("%s/projects", gitLabBaseUrl);
+    ResponseEntity<ArrayList<Project>> userProjectsResponse =
+        restTemplate.exchange(
+            uri, HttpMethod.GET, new HttpEntity(headers), new ParameterizedTypeReference<>() {});
+    return ResponseEntity.ok().body(userProjectsResponse.getBody());
+  }
 }

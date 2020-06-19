@@ -9,7 +9,7 @@ import java.util.List;
 public interface IWorkspaceService {
   List<Workspace> getAllWorkspaces();
 
-    ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId);
+  ArrayList<Integer> getProjectIdsForWorkspace(int workspaceId);
 
-    List<Project> getWorkspaceProjects(int workspaceId);
+  List<Project> getWorkspaceProjects(int workspaceId);
 }

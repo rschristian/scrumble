@@ -12,20 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class WorkspaceApi {
 
-    private final IWorkspaceService workspaceService;
+  private final IWorkspaceService workspaceService;
 
-    @Autowired
-    public WorkspaceApi(IWorkspaceService workspaceService) {
-        this.workspaceService = workspaceService;
-    }
+  @Autowired
+  public WorkspaceApi(IWorkspaceService workspaceService) {
+    this.workspaceService = workspaceService;
+  }
 
-    @GetMapping("/workspaces")
-    public ResponseEntity<Object> getAllWorkspaces() {
-        return ResponseEntity.ok().body(workspaceService.getAllWorkspaces());
-    }
+  @GetMapping("/workspaces")
+  public ResponseEntity<Object> getAllWorkspaces() {
+    return ResponseEntity.ok().body(workspaceService.getAllWorkspaces());
+  }
 
-    @GetMapping("/workspace/{id}/projects")
-    public ResponseEntity<Object> getWorkspaceProjects(@PathVariable(value = "id") int workspaceId) {
-        return ResponseEntity.ok().body(workspaceService.getWorkspaceProjects(workspaceId));
-    }
+  @GetMapping("/workspace/{id}/projects")
+  public ResponseEntity<Object> getWorkspaceProjects(@PathVariable(value = "id") int workspaceId) {
+    return ResponseEntity.ok().body(workspaceService.getWorkspaceProjects(workspaceId));
+  }
 }
