@@ -15,18 +15,22 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
+  private final CustomOAuth2UserService customOAuth2UserService;
+  private final OAuth2AuthFailureHandler oAuth2AuthFailureHandler;
+  private final OAuth2AuthSuccessHandler oAuth2AuthSuccessHandler;
 
-    @Autowired
-    private OAuth2AuthSuccessHandler oAuth2AuthSuccessHandler;
+  @Autowired
+  public WebSecurityConfig(CustomOAuth2UserService customOAuth2UserService,
+                           OAuth2AuthFailureHandler oAuth2AuthFailureHandler,
+                           OAuth2AuthSuccessHandler oAuth2AuthSuccessHandler) {
+    this.customOAuth2UserService = customOAuth2UserService;
+    this.oAuth2AuthFailureHandler = oAuth2AuthFailureHandler;
+    this.oAuth2AuthSuccessHandler = oAuth2AuthSuccessHandler;
+  }
 
-    @Autowired
-    private OAuth2AuthFailureHandler oAuth2AuthFailureHandler;
-
-    @Bean
-    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
-        return new HttpCookieOAuth2AuthorizationRequestRepository();
+  @Bean
+  public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
+    return new HttpCookieOAuth2AuthorizationRequestRepository();
   }
 
   @Bean

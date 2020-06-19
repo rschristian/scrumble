@@ -15,14 +15,18 @@ import java.io.IOException;
 
 import static com.bt.scrumble.api.v1.security.oauth.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
-// Adpated from
+// Adapted from
 // https://github.com/callicoder/spring-boot-react-oauth2-social-login-demo/blob/master/spring-social/src/main/java/com/example/springsocial/security/oauth2/OAuth2AuthenticationFailureHandler.java
 @Component
 public class OAuth2AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
+  private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+
   @Autowired
-  private HttpCookieOAuth2AuthorizationRequestRepository
-      httpCookieOAuth2AuthorizationRequestRepository;
+  public OAuth2AuthFailureHandler(HttpCookieOAuth2AuthorizationRequestRepository
+                                        httpCookieOAuth2AuthorizationRequestRepository) {
+    this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
+  }
 
   @Override
   public void onAuthenticationFailure(

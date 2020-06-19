@@ -27,18 +27,21 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class AuthenticationApi {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsApi.class);
-    private final ScrumbleConfig appProperties;
-    @Autowired
-    private TokenProvider tokenProvider;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private TokenUtils tokenUtils;
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsApi.class);
 
-    public AuthenticationApi(ScrumbleConfig appProperties) {
-        this.appProperties = appProperties;
-    }
+  private final ScrumbleConfig appProperties;
+  private final TokenProvider tokenProvider;
+  private final TokenUtils tokenUtils;
+  private final UserService userService;
+
+  @Autowired
+  public AuthenticationApi(ScrumbleConfig appProperties, TokenProvider tokenProvider,
+                           TokenUtils tokenUtils, UserService userService) {
+    this.appProperties = appProperties;
+    this.tokenProvider = tokenProvider;
+    this.tokenUtils = tokenUtils;
+    this.userService = userService;
+  }
 
   @GetMapping("/auth/token")
   public ResponseEntity<Object> exchangeShortLifeToken(HttpServletRequest request) {

@@ -28,17 +28,16 @@ public class OAuth2AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
 
   private final TokenProvider tokenProvider;
 
-    private final ScrumbleConfig appProperties;
+  private final ScrumbleConfig appProperties;
 
   private final HttpCookieOAuth2AuthorizationRequestRepository
       httpCookieOAuth2AuthorizationRequestRepository;
 
   @Autowired
   OAuth2AuthSuccessHandler(
-          TokenProvider tokenProvider,
-          ScrumbleConfig appProperties,
-          HttpCookieOAuth2AuthorizationRequestRepository
-                  httpCookieOAuth2AuthorizationRequestRepository) {
+      TokenProvider tokenProvider,
+      ScrumbleConfig appProperties,
+      HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
     this.tokenProvider = tokenProvider;
     this.appProperties = appProperties;
     this.httpCookieOAuth2AuthorizationRequestRepository =

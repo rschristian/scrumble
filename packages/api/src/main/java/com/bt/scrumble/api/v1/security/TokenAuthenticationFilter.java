@@ -25,12 +25,12 @@ import java.util.Optional;
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
-  @Autowired private TokenUtils tokenUtils;
-
-  @Autowired private TokenProvider tokenProvider;
-
-    @Autowired
-    private UserService userService;
+  @Autowired
+  private TokenUtils tokenUtils;
+  @Autowired
+  private TokenProvider tokenProvider;
+  @Autowired
+  private UserService userService;
 
   @Bean
   public TokenUtils tokenUtils() {

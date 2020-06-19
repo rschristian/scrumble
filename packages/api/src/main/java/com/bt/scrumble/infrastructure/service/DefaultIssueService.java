@@ -2,9 +2,9 @@ package com.bt.scrumble.infrastructure.service;
 
 import com.bt.scrumble.application.IssueEstimation;
 import com.bt.scrumble.core.issue.Issue;
-import com.bt.scrumble.core.project.Project;
 import com.bt.scrumble.core.issue.IssueRepository;
 import com.bt.scrumble.core.issue.IssueService;
+import com.bt.scrumble.core.project.Project;
 import com.bt.scrumble.core.sprint.SprintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,24 +18,24 @@ import java.util.OptionalInt;
 @Service
 public class DefaultIssueService implements IssueService {
 
-    private static final String UNPLANNED = "unplanned";
-    private static final String OPENED = "opened";
-    private static final String CLOSED = "closed";
+  private static final String UNPLANNED = "unplanned";
+  private static final String OPENED = "opened";
+  private static final String CLOSED = "closed";
+  private final SprintService sprintService;
+  private final IssueEstimation issueEstimation;
+  private final IssueRepository issueRepository;
+  private final RestTemplate restTemplate;
+  @Value("${app.issues.provider.gitlab.baseUrl.api}")
+  private String gitLabApiUrl;
 
-    @Value("${app.issues.provider.gitlab.baseUrl.api}")
-    private String gitLabApiUrl;
-
-    @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
-    private SprintService sprintService;
-
-    @Autowired
-    private IssueEstimation linearRegression;
-
-    @Autowired
-    private IssueRepository issueRepository;
+  @Autowired
+  public DefaultIssueService(SprintService sprintService, IssueEstimation issueEstimation,
+                             IssueRepository issueRepository, RestTemplate restTemplate) {
+    this.sprintService = sprintService;
+    this.issueEstimation = issueEstimation;
+    this.issueRepository = issueRepository;
+    this.restTemplate = restTemplate;
+  }
 
   // Ref: https://stackoverflow.com/a/5439547/11679751
   public static boolean isInteger(String s) {
@@ -121,7 +121,7 @@ public class DefaultIssueService implements IssueService {
     Issue newIssue = restTemplate.postForObject(issueUri, null, Issue.class);
     setStoryPoint(newIssue);
     setProjectName(newIssue, projects);
-    linearRegression.setEstimate(projectId, newIssue, accessToken);
+    issueEstimation.setEstimate(projectId, newIssue, accessToken);
     return newIssue;
   }
 
@@ -184,9 +184,9 @@ public class DefaultIssueService implements IssueService {
 
     restTemplate.exchange(uri, HttpMethod.PUT, null, Void.class);
     if (issue.getStatus().equals("closed")) {
-      linearRegression.setTimeSpent(projectId, issue, accessToken);
+      issueEstimation.setTimeSpent(projectId, issue, accessToken);
     } else {
-      linearRegression.setEstimate(projectId, issue, accessToken);
+      issueEstimation.setEstimate(projectId, issue, accessToken);
     }
 
     return issue;

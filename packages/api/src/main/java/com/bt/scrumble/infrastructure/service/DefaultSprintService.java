@@ -2,18 +2,19 @@ package com.bt.scrumble.infrastructure.service;
 
 import com.bt.scrumble.application.data.SprintData;
 import com.bt.scrumble.core.issue.Issue;
-import com.bt.scrumble.core.project.Project;
 import com.bt.scrumble.core.issue.IssueService;
+import com.bt.scrumble.core.project.Project;
 import com.bt.scrumble.core.sprint.SprintRepository;
 import com.bt.scrumble.core.sprint.SprintService;
 import com.bt.scrumble.core.user.UserService;
 import com.bt.scrumble.core.workspace.WorkspaceRepository;
-import com.bt.scrumble.errorhandlers.MilestoneRestTemplateResponseErrorHandler;
+import com.bt.scrumble.application.MilestoneRestTemplateResponseErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -32,30 +33,29 @@ import java.util.Map;
 @Service
 public class DefaultSprintService implements SprintService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSprintService.class);
-    private final RestTemplate restTemplate;
-    @Autowired
-    IssueService issueService;
-    @Autowired
-    UserService userService;
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSprintService.class);
+  private final IssueService issueService;
+  private final UserService userService;
+  private final SprintRepository sprintRepository;
+  private final WorkspaceRepository workspaceRepository;
+  private final RestTemplate restTemplate;
+  @Value("${app.issues.provider.gitlab.baseUrl.api}")
+  private String gitLabApiUrl;
 
-    @Value("${app.issues.provider.gitlab.baseUrl.api}")
-    private String gitLabApiUrl;
+  @Autowired
+  public DefaultSprintService(@Lazy IssueService issueService, UserService userService, SprintRepository sprintRepository,
+                              WorkspaceRepository workspaceRepository, RestTemplateBuilder restTemplateBuilder) {
+    this.issueService = issueService;
+    this.userService = userService;
+    this.sprintRepository = sprintRepository;
+    this.workspaceRepository = workspaceRepository;
+    this.restTemplate =
+        restTemplateBuilder.errorHandler(new MilestoneRestTemplateResponseErrorHandler()).build();
+  }
 
-    @Autowired
-    private SprintRepository sprintRepository;
-    @Autowired
-    private WorkspaceRepository workspaceRepository;
-
-    @Autowired
-    public DefaultSprintService(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate =
-                restTemplateBuilder.errorHandler(new MilestoneRestTemplateResponseErrorHandler()).build();
-    }
-
-    @Override
-    public SprintData createSprint(int workspaceId, SprintData sprint, String accessToken) {
-        var projectMilestoneIds = new HashMap<String, Integer>();
+  @Override
+  public SprintData createSprint(int workspaceId, SprintData sprint, String accessToken) {
+    var projectMilestoneIds = new HashMap<String, Integer>();
     ArrayList<Integer> projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId);
 
     for (int projectId : projectIds) {
@@ -155,7 +155,7 @@ public class DefaultSprintService implements SprintService {
 
   @Override
   public ArrayList<Issue> getSprintIssues(int workspaceId, SprintData sprint, String accessToken) {
-    ArrayList<Issue> allIssues = new ArrayList();
+    var allIssues = new ArrayList<Issue>();
 
     String projectUri =
         String.format(

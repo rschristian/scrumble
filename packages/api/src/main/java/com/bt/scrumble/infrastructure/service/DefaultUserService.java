@@ -1,7 +1,7 @@
 package com.bt.scrumble.infrastructure.service;
 
-import com.bt.scrumble.core.issue.Issue;
 import com.bt.scrumble.application.data.UserData;
+import com.bt.scrumble.core.issue.Issue;
 import com.bt.scrumble.core.user.UserRepository;
 import com.bt.scrumble.core.user.UserService;
 import com.bt.scrumble.core.workspace.WorkspaceRepository;
@@ -17,17 +17,20 @@ import java.util.Optional;
 @Service
 public class DefaultUserService implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+  private final UserRepository userRepository;
+  private final WorkspaceRepository workspaceRepository;
 
-    @Autowired
-    private WorkspaceRepository workspaceRepository;
+  @Autowired
+  public DefaultUserService(UserRepository userRepository, WorkspaceRepository workspaceRepository) {
+    this.userRepository = userRepository;
+    this.workspaceRepository = workspaceRepository;
+  }
 
-    @Override
-    public UserData createUser(UserData user) {
-        user = userRepository.createUser(user);
-        return user;
-    }
+  @Override
+  public UserData createUser(UserData user) {
+    user = userRepository.createUser(user);
+    return user;
+  }
 
   @Override
   public Optional<UserData> findUserByServiceId(int serviceId) {

@@ -1,8 +1,8 @@
 package com.bt.scrumble.infrastructure.service;
 
 import com.bt.scrumble.application.data.UserData;
-import com.bt.scrumble.core.project.Project;
 import com.bt.scrumble.application.data.WorkspaceData;
+import com.bt.scrumble.core.project.Project;
 import com.bt.scrumble.core.workspace.WorkspaceRepository;
 import com.bt.scrumble.core.workspace.WorkspaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +31,14 @@ public class DefaultWorkspaceService implements WorkspaceService {
   @Value("${app.issues.provider.gitlab.baseUrl.api}")
   private String gitLabApiUrl;
 
-  @Autowired
-  private RestTemplate restTemplate;
+  private final WorkspaceRepository workspaceRepository;
+  private final RestTemplate restTemplate;
 
   @Autowired
-  private WorkspaceRepository workspaceRepository;
+  public DefaultWorkspaceService(WorkspaceRepository workspaceRepository, RestTemplate restTemplate) {
+    this.workspaceRepository = workspaceRepository;
+    this.restTemplate = restTemplate;
+  }
 
   @Override
   public List<WorkspaceData> getAllWorkspaces() {

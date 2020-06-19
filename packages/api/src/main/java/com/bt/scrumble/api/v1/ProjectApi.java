@@ -25,16 +25,20 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class ProjectApi {
 
-  @Autowired private RestTemplate restTemplate;
-
-  @Autowired
-  private UserService userService;
-
   @Value("${app.issues.provider.gitlab.baseUrl.api}")
   private String gitLabBaseUrl;
 
   @Value("${app.msg.error.auth}")
   private String authErrorMsg;
+
+  private final UserService userService;
+  private final RestTemplate restTemplate;
+
+  @Autowired
+  public ProjectApi(UserService userService, RestTemplate restTemplate) {
+    this.userService = userService;
+    this.restTemplate = restTemplate;
+  }
 
   @GetMapping("/projects")
   public ResponseEntity<Object> getIssues(Authentication auth) {

@@ -21,11 +21,11 @@ public class TokenProvider {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(TokenProvider.class);
 
-    private final ScrumbleConfig appProperties;
+  private final ScrumbleConfig appProperties;
 
-    public TokenProvider(ScrumbleConfig appProperties) {
-        this.appProperties = appProperties;
-    }
+  public TokenProvider(ScrumbleConfig appProperties) {
+    this.appProperties = appProperties;
+  }
 
   public String createToken(int userId, long validFor) {
     Date now = new Date();

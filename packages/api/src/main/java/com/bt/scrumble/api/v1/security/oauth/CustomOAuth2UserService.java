@@ -24,8 +24,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CustomOAuth2UserService.class);
 
-    @Autowired
-    private UserService userService;
+  private final UserService userService;
+
+  @Autowired
+  public CustomOAuth2UserService(UserService userService) {
+    this.userService = userService;
+  }
 
   @Override
   public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest)

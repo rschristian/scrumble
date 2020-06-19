@@ -1,12 +1,12 @@
 package com.bt.scrumble.infrastructure.service;
 
+import com.bt.scrumble.application.data.GitLabLinksData;
 import com.bt.scrumble.core.issue.Issue;
+import com.bt.scrumble.core.issue.IssueService;
 import com.bt.scrumble.core.issuePaging.IssuePageResult;
+import com.bt.scrumble.core.issuePaging.IssuePagingService;
 import com.bt.scrumble.core.issuePaging.NextResource;
 import com.bt.scrumble.core.project.Project;
-import com.bt.scrumble.application.data.GitLabLinksData;
-import com.bt.scrumble.core.issue.IssueService;
-import com.bt.scrumble.core.issuePaging.IssuePagingService;
 import com.bt.scrumble.core.sprint.SprintService;
 import com.bt.scrumble.core.user.UserService;
 import com.bt.scrumble.core.workspace.WorkspaceService;
@@ -27,21 +27,26 @@ import java.util.Collections;
 @Service
 public class DefaultIssuePagingService implements IssuePagingService {
 
-  private static final int ISSUE_PAGE_SIZE = 20;
-  @Autowired
-  private RestTemplate restTemplate;
-
   @Value("${app.issues.provider.gitlab.baseUrl.api}")
   private String gitLabApiUrl;
 
+  private static final int ISSUE_PAGE_SIZE = 20;
+
+  private final WorkspaceService workspaceService;
+  private final IssueService issueService;
+  private final SprintService sprintService;
+  private final UserService userService;
+  private final RestTemplate restTemplate;
+
   @Autowired
-  private WorkspaceService workspaceService;
-  @Autowired
-  private IssueService issueService;
-  @Autowired
-  private SprintService sprintService;
-  @Autowired
-  private UserService userService;
+  public DefaultIssuePagingService(WorkspaceService workspaceService, IssueService issueService,
+                                   SprintService sprintService, UserService userService, RestTemplate restTemplate) {
+    this.workspaceService = workspaceService;
+    this.issueService = issueService;
+    this.sprintService = sprintService;
+    this.userService = userService;
+    this.restTemplate = restTemplate;
+  }
 
   @Override
   public int getNextProjectId(int workspaceId, int prevProjectId) {

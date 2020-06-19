@@ -1,4 +1,4 @@
-package com.bt.scrumble.errorhandlers;
+package com.bt.scrumble.application;
 
 import com.bt.scrumble.api.v1.exception.RestTemplateException;
 import org.slf4j.Logger;

@@ -25,14 +25,17 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class SprintApi {
 
-  @Autowired
-  private UserService userService;
-
-  @Autowired
-  private SprintService sprintService;
-
   @Value("${app.msg.error.auth}")
   private String authErrorMsg;
+
+  private final SprintService sprintService;
+  private final UserService userService;
+
+  @Autowired
+  public SprintApi(SprintService sprintService, UserService userService) {
+    this.sprintService = sprintService;
+    this.userService = userService;
+  }
 
   @GetMapping("/workspace/{workspaceId}/sprints")
   public ResponseEntity<Object> getWorkspaceSprints(

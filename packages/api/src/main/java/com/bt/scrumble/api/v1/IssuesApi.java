@@ -2,8 +2,8 @@ package com.bt.scrumble.api.v1;
 
 import com.bt.scrumble.api.v1.security.UserPrincipal;
 import com.bt.scrumble.core.issue.Issue;
-import com.bt.scrumble.core.issuePaging.IssuePageResult;
 import com.bt.scrumble.core.issue.IssueService;
+import com.bt.scrumble.core.issuePaging.IssuePageResult;
 import com.bt.scrumble.core.issuePaging.IssuePagingService;
 import com.bt.scrumble.core.user.UserService;
 import com.bt.scrumble.core.workspace.WorkspaceService;
@@ -30,22 +30,24 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class IssuesApi {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(IssuesApi.class);
-
-    @Autowired
-    private UserService userService;
-
   @Value("${app.msg.error.auth}")
   private String authErrorMsg;
 
-    @Autowired
-    private IssuePagingService issuePagingService;
+  private static final Logger LOGGER = LoggerFactory.getLogger(IssuesApi.class);
 
-    @Autowired
-    private IssueService issueService;
+  private final IssuePagingService issuePagingService;
+  private final IssueService issueService;
+  private final UserService userService;
+  private final WorkspaceService workspaceService;
 
-    @Autowired
-    private WorkspaceService workspaceService;
+  @Autowired
+  public IssuesApi(IssuePagingService issuePagingService, IssueService issueService,
+                   UserService userService, WorkspaceService workspaceService) {
+    this.issuePagingService = issuePagingService;
+    this.issueService = issueService;
+    this.userService = userService;
+    this.workspaceService = workspaceService;
+  }
 
   @GetMapping("/workspace/{id}/issues")
   public ResponseEntity<Object> getIssues(
