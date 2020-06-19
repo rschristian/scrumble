@@ -100,9 +100,7 @@ public class DefaultSprintService implements SprintService {
   public ArrayList<Issue> getSprintIssues(int workspaceId, SprintData sprint) {
     var allIssues = new ArrayList<Issue>();
 
-    String projectUri =
-        String.format(
-            "%s/projects", gitLabApiUrl);
+    String projectUri = String.format("%s/projects", gitLabApiUrl);
     ResponseEntity<Project[]> userProjectsResponse =
         restTemplate.getForEntity(projectUri, Project[].class);
     Project[] projects = userProjectsResponse.getBody();
@@ -112,8 +110,7 @@ public class DefaultSprintService implements SprintService {
       Integer milestoneId = entry.getValue();
       String uri =
           String.format(
-              "%s/projects/%s/milestones/%s/issues",
-              gitLabApiUrl, projectId, milestoneId);
+              "%s/projects/%s/milestones/%s/issues", gitLabApiUrl, projectId, milestoneId);
       ResponseEntity<ArrayList<Issue>> issueResponse =
           restTemplate.exchange(
               uri,

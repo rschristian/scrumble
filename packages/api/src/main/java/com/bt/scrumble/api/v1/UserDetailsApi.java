@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 public class UserDetailsApi {
 
   private final RestTemplate restTemplate;
+
   @Value("${app.issues.provider.gitlab.baseUrl.api}")
   private String gitLabBaseUrlApi;
 

@@ -11,9 +11,5 @@ public interface IssuePagingService {
   boolean isLastProject(int workspaceId, int projectId);
 
   IssuePageResult getPageOfIssues(
-      int workspaceId,
-      int projectId,
-      int page,
-      String filter,
-      String searchTerm);
+      int workspaceId, int projectId, int page, String filter, String searchTerm);
 }

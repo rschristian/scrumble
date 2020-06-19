@@ -89,6 +89,7 @@ public class DefaultSprintRepository implements SprintRepository {
 
   private Map<String, Integer> parseJsonDataToMilestoneIds(PGobject jsonData) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
-    return (Map<String, Integer>) mapper.readValue(jsonData.getValue(), Map.class).get("projects_to_milestones");
+    return (Map<String, Integer>)
+        mapper.readValue(jsonData.getValue(), Map.class).get("projects_to_milestones");
   }
 }

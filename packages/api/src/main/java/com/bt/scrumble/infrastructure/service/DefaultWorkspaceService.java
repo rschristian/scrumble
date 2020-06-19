@@ -17,6 +17,7 @@ public class DefaultWorkspaceService implements WorkspaceService {
 
   private final WorkspaceRepository workspaceRepository;
   private final RestTemplate restTemplate;
+
   @Value("${app.issues.provider.gitlab.baseUrl.api}")
   private String gitLabApiUrl;
 
@@ -42,9 +43,7 @@ public class DefaultWorkspaceService implements WorkspaceService {
     ArrayList<Integer> projectIds = workspaceRepository.projectIdsForWorkspace(workspaceId);
     List<Project> result = new ArrayList<>();
     for (int projectId : projectIds) {
-      String uri =
-          String.format(
-              "%s/projects/%d", gitLabApiUrl, projectId);
+      String uri = String.format("%s/projects/%d", gitLabApiUrl, projectId);
       result.add(restTemplate.getForObject(uri, Project.class));
     }
     return result;

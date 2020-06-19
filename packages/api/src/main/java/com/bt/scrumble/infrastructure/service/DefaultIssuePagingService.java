@@ -33,6 +33,7 @@ public class DefaultIssuePagingService implements IssuePagingService {
   private final SprintService sprintService;
   private final UserService userService;
   private final RestTemplate restTemplate;
+
   @Value("${app.issues.provider.gitlab.baseUrl.api}")
   private String gitLabApiUrl;
 
@@ -184,11 +185,7 @@ public class DefaultIssuePagingService implements IssuePagingService {
 
   @Override
   public IssuePageResult getPageOfIssues(
-      int workspaceId,
-      int projectId,
-      int page,
-      String filter,
-      String searchTerm) {
+      int workspaceId, int projectId, int page, String filter, String searchTerm) {
     // Initial call for a workspaces issues will pass number 0 for page and project id.
     // SB works out which project it should start from
     page = (page == 0) ? 1 : page;
@@ -197,9 +194,7 @@ public class DefaultIssuePagingService implements IssuePagingService {
             ? workspaceService.getProjectIdsForWorkspace(workspaceId).get(0)
             : projectId;
 
-    String uri =
-        String.format(
-            "%s/projects", gitLabApiUrl);
+    String uri = String.format("%s/projects", gitLabApiUrl);
     ResponseEntity<Project[]> userProjectsResponse =
         restTemplate.getForEntity(uri, Project[].class);
     Project[] projects = userProjectsResponse.getBody();
@@ -207,11 +202,7 @@ public class DefaultIssuePagingService implements IssuePagingService {
     String queryUri =
         String.format(
             "%s/projects/%d/issues?%s&search=%s&page=%d",
-            gitLabApiUrl,
-            projectId,
-            issueService.getFilterQuery(filter),
-            searchTerm,
-            page);
+            gitLabApiUrl, projectId, issueService.getFilterQuery(filter), searchTerm, page);
 
     ArrayList<Issue> issues;
     IssuePageResult issuePageResult = new IssuePageResult();
