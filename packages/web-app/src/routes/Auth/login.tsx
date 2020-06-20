@@ -1,17 +1,21 @@
 import { FunctionalComponent, h } from 'preact';
 import { useEffect } from 'preact/hooks';
+import { useDispatch } from 'react-redux';
 
 import scrumCards from 'assets/icons/scrumCards.png';
-import { authStore } from 'stores/authStore';
+import { login, logout } from 'stores/authStore';
 import { route } from 'preact-router';
 
 const Login: FunctionalComponent = () => {
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        authStore.logout().then();
+        dispatch(logout());
     });
 
     const linkTo = (): void => {
-        authStore.login().then(() => route('/', true));
+        dispatch(login());
+        route('/', true);
     };
 
     return (

@@ -1,5 +1,6 @@
 import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { useDispatch } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
 import { WorkspaceCard } from 'components/Cards/workspace';
@@ -7,24 +8,26 @@ import { CreateOrEditWorkspace } from 'components/CreateOrEdit/workspace';
 import { Modal } from 'components/Modal';
 import { SearchBar } from 'components/SearchBar';
 import { Workspace } from 'models/Workspace';
-import { fetchUserInfo } from 'services/api/auth';
 import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
 import { errorColour, successColour, warningColour } from 'services/notification/colours';
-import { useStore } from 'stores';
+import { fetchCurrentUserInfo } from 'stores/authStore';
+import { setActiveSideBarMenuItem } from 'stores/userLocationStore';
 
 const Home: FunctionalComponent = () => {
-    const rootStore = useStore();
-    const { authStore, userLocationStore } = rootStore;
+    const dispatch = useDispatch();
 
     const [workspacesArray, setWorkspacesArray] = useState<Workspace[]>([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
 
     useEffect(() => {
+        dispatch(fetchCurrentUserInfo());
+        dispatch(setActiveSideBarMenuItem(0));
+
         getWorkspaces().then((res) => {
             if (typeof res !== 'string') setWorkspacesArray(res);
             else notify.show(res, 'error', 5000, errorColour);
         });
-    }, []);
+    }, [dispatch]);
 
     const submitNewWorkspace = (newWorkspace: Workspace): void => {
         if (newWorkspace.name === '') notify.show('You must provide a name', 'warning', 5000, warningColour);
@@ -39,11 +42,6 @@ const Home: FunctionalComponent = () => {
             });
         }
     };
-
-    useEffect(() => {
-        fetchUserInfo().then((response) => authStore.setCurrentUser(response));
-        userLocationStore.setActiveSideBarItem(0);
-    }, [authStore, userLocationStore]);
 
     return (
         <div class="mt-16 flex justify-center bg-blue-100">

@@ -1,36 +1,58 @@
-import { observable, action } from 'mobx';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AppDispatch } from 'stores';
 
 import { User } from 'models/User';
-import { authStorageService } from 'ts-api-toolkit';
+import { fetchUserInfo } from 'services/api/auth';
 
-class AuthStore {
-    @observable isAuthenticated = false;
-    @observable currentUser: User = null;
+type State = {
+    isAuthenticated: boolean;
+    currentUser: User;
+};
 
-    @action setCurrentUser(user: User): void {
-        const avatarUrl: string =
-            user.avatarUrl.indexOf('gravatar.com') > -1
-                ? user.avatarUrl
-                : `https://gitlab.ryanchristian.dev${user.avatarUrl.slice(user.avatarUrl.indexOf('/uploads'))}`;
+const initialState: State = {
+    isAuthenticated: false,
+    currentUser: null,
+};
 
-        this.currentUser = {
-            id: user.id,
-            name: user.name,
-            username: user.username,
-            avatarUrl,
-            projectIds: user.projectIds,
-        };
-    }
+const slice = createSlice({
+    name: 'auth',
+    initialState,
+    reducers: {
+        logOut: (state: State): void => {
+            state.isAuthenticated = false;
+            state.currentUser = null;
+        },
+        logIn: (state: State): void => {
+            state.isAuthenticated = true;
+        },
+        setCurrentUser: (state: State, action: PayloadAction<User>): void => {
+            const user = action.payload;
 
-    @action async login(): Promise<void> {
-        this.isAuthenticated = true;
-    }
+            state.currentUser = {
+                id: user.id,
+                name: user.name,
+                username: user.username,
+                avatarUrl: user.avatarUrl,
+                projectIds: user.projectIds,
+            };
+        },
+    },
+});
+export default slice.reducer;
 
-    @action async logout(): Promise<void> {
-        authStorageService.destroyToken();
-        this.isAuthenticated = false;
-        this.currentUser = null;
-    }
-}
+// Actions
+const { logOut, logIn, setCurrentUser } = slice.actions;
 
-export const authStore = new AuthStore();
+export const logout = () => async (dispatch: AppDispatch): Promise<void> => {
+    dispatch(logOut());
+};
+
+export const login = () => async (dispatch: AppDispatch): Promise<void> => {
+    dispatch(logIn());
+};
+
+export const fetchCurrentUserInfo = () => async (dispatch: AppDispatch): Promise<void> => {
+    return await fetchUserInfo().then((user) => {
+        dispatch(setCurrentUser(user));
+    });
+};

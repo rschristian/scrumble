@@ -1,16 +1,21 @@
-import { createContext } from 'preact';
-import { useContext } from 'preact/hooks';
+import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
+import { useDispatch } from 'react-redux';
 
-import { authStore } from 'stores/authStore';
-import { userLocationStore } from 'stores/userLocationStore';
+import auth from './authStore';
+import userLocation from './userLocationStore';
 
-export class RootStore {
-    authStore = authStore;
-    userLocationStore = userLocationStore;
-}
+const reducer = combineReducers({
+    auth,
+    userLocation,
+});
 
-export const rootStore = new RootStore();
+const store = configureStore({
+    reducer,
+});
 
-export const StoreContext = createContext(rootStore);
-export const StoreProvider = StoreContext.Provider;
-export const useStore = (): RootStore => useContext(StoreContext);
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof reducer>;
+export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>();
+
+export default store;

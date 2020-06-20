@@ -1,16 +1,17 @@
 import { ComponentChild, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { useSelector } from 'react-redux';
 
 import sprinter from 'assets/icons/sprinter.png';
 import metrics from 'assets/icons/metrics.png';
 import edit from 'assets/icons/edit.png';
 import { BreadCrumbs } from 'components/BreadCrumbs';
 import { SideBar, SideBarLink } from 'components/Core/SideBar';
+import { RootState } from 'stores';
 
 import SprintPlanning from './sprintPlannning';
 import WorkspaceMetrics from './metrics';
 import WorkspaceEdit from './edit';
-import { useStore } from 'stores';
 
 interface IProps {
     workspaceId: number;
@@ -24,7 +25,7 @@ enum SubPage {
 }
 
 const WorkspaceContainer: FunctionalComponent<IProps> = (props: IProps) => {
-    const userLocationStore = useStore().userLocationStore;
+    const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
     const [currentPageTitle, setCurrentPageTitle] = useState('');
     const [subPage, setSubPage] = useState<ComponentChild>(null);
@@ -53,7 +54,7 @@ const WorkspaceContainer: FunctionalComponent<IProps> = (props: IProps) => {
                 <div class="main-content">
                     <BreadCrumbs
                         workspaceId={props.workspaceId}
-                        workspaceName={userLocationStore.currentWorkspace.name}
+                        workspaceName={currentWorkspace.name}
                         currentPage={currentPageTitle}
                     />
                     {subPage}

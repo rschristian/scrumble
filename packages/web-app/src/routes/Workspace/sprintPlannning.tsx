@@ -1,5 +1,6 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { useDispatch, useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
 import { SprintCard } from 'components/Cards/sprint';
@@ -9,12 +10,14 @@ import { Modal } from 'components/Modal';
 import { Sprint, SprintStatus } from 'models/Sprint';
 import { createSprint, getSprints } from 'services/api/sprints';
 import { errorColour, successColour } from 'services/notification/colours';
-import { useStore } from 'stores';
+import { RootState } from 'stores';
+import { setActiveSideBarMenuItem } from 'stores/userLocationStore';
 
 import Backlog from './Backlog';
 
 const SprintPlanning: FunctionalComponent = () => {
-    const userLocationStore = useStore().userLocationStore;
+    const dispatch = useDispatch();
+    const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
     // For mobile
     const [isSprintView, setIsSprintView] = useState(false);
@@ -24,15 +27,15 @@ const SprintPlanning: FunctionalComponent = () => {
     const [sprints, setSprints] = useState<Sprint[]>([]);
 
     useEffect(() => {
-        userLocationStore.setActiveSideBarItem(0);
-        getSprints(userLocationStore.currentWorkspace.id, 'none').then((result) => {
+        dispatch(setActiveSideBarMenuItem(0));
+        getSprints(currentWorkspace.id, 'none').then((result) => {
             if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
             else setSprints(result);
         });
-    }, [userLocationStore]);
+    }, [currentWorkspace.id, dispatch]);
 
     const handleSprintCreation = async (newSprint: Sprint): Promise<void> => {
-        return await createSprint(userLocationStore.currentWorkspace.id, newSprint).then((result) => {
+        return await createSprint(currentWorkspace.id, newSprint).then((result) => {
             if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
             else {
                 notify.show('New sprint created!', 'success', 5000, successColour);

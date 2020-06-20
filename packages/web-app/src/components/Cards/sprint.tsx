@@ -2,14 +2,15 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { getCurrentUrl, route } from 'preact-router';
 import { MoreVertical } from 'preact-feather';
+import { useDispatch, useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
 import { Modal } from 'components/Modal';
 import { Sprint, SprintStatus } from 'models/Sprint';
 import { editSprint } from 'services/api/sprints';
-import { observer } from 'services/mobx';
 import { errorColour } from 'services/notification/colours';
-import { useStore } from 'stores';
+import { RootState } from 'stores';
+import { setCurrentSprint } from 'stores/userLocationStore';
 
 interface IProps {
     sprint: Sprint;
@@ -17,15 +18,16 @@ interface IProps {
     updateSprint: (sprint: Sprint) => void;
 }
 
-export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) => {
-    const userLocationStore = useStore().userLocationStore;
+export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
+    const dispatch = useDispatch();
+    const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
     const [showClosureModal, setShowClosureModal] = useState(false);
     const [showOpeningModal, setShowOpeningModal] = useState(false);
 
     const linkTo = (): void => {
         route(`${getUrlSubstringAndFix()}/sprint/${props.sprint.id}/`);
-        userLocationStore.setSprint(props.sprint);
+        dispatch(setCurrentSprint(props.sprint));
     };
 
     const closureModalContent = <div>Are you sure you want to close this sprint?</div>;
@@ -39,7 +41,7 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
     };
 
     const handleToggleSprintStatus = async (): Promise<void> => {
-        return await editSprint(userLocationStore.currentWorkspace.id, {
+        return await editSprint(currentWorkspace.id, {
             ...props.sprint,
             status: sprintStatus(),
         }).then((result) => {
@@ -104,7 +106,7 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
             </div>
         </Fragment>
     );
-});
+};
 
 const getUrlSubstringAndFix = (): string => {
     const currentUrl = getCurrentUrl().replace(/\D+$/g, '');

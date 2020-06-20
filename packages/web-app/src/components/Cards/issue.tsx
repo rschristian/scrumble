@@ -1,15 +1,15 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
+import { useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
 import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
 import { Modal } from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
-import { editIssue } from 'services/api/issues';
-import { observer } from 'services/mobx';
-import { errorColour, successColour } from 'services/notification/colours';
-import { useStore } from 'stores';
 import { User } from 'models/User';
+import { editIssue } from 'services/api/issues';
+import { errorColour, successColour } from 'services/notification/colours';
+import { RootState } from 'stores';
 
 interface IssuesBoardProps {
     issues: Issue[];
@@ -25,9 +25,10 @@ const unassigned: User = {
     avatarUrl: null,
     projectIds: [],
 };
+
 export const IssueBoardCardList: FunctionalComponent<IssuesBoardProps> = (props: IssuesBoardProps) => {
-    const userLocationStore = useStore().userLocationStore;
-    const currentWorkspace = userLocationStore.currentWorkspace;
+    const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
+
     const [headingColour] = useState(`issue-list-title-holder bg-${props.headingColour}-300`);
     const [issuesList, setIssueList] = useState<Issue[]>([]);
 
@@ -117,14 +118,14 @@ interface IProps {
     updateIssue: (issue: Issue) => void;
 }
 
-export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
-    const userLocationStore = useStore().userLocationStore;
+export const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
+    const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
     const [showEditIssueModal, setShowEditIssueModal] = useState(false);
     const [showIssueCardInformation, setShowIssueCardInformation] = useState(false);
 
     const handleIssueEdit = async (issue: Issue): Promise<void> => {
-        return await editIssue(userLocationStore.currentWorkspace.id, issue).then((error) => {
+        return await editIssue(currentWorkspace.id, issue).then((error) => {
             if (error) notify.show(error, 'error', 5000, errorColour);
             else {
                 notify.show('Issue successfully updated!', 'success', 5000, successColour);
@@ -192,7 +193,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
             </div>
         </div>
     );
-});
+};
 
 interface InformationProps {
     issue: Issue;

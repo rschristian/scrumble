@@ -3,27 +3,33 @@ import { useEffect } from 'preact/hooks';
 import { Suspense } from 'preact/compat';
 import { Route, route, Router } from 'preact-router';
 import Notifications from 'react-notify-toast';
+import { useSelector, Provider } from 'react-redux';
 
 import { TopBar } from 'components/Core/TopBar';
 import Login from 'routes/Auth/login';
 import Home from 'routes/Home';
 import Workspace from 'routes/Workspace';
 import Sprint from 'routes/Sprint';
-import { useStore } from 'stores';
+import store, { RootState } from 'stores';
 
 const App: FunctionalComponent = () => {
     return (
         <div id="app" class="bg-blue-100">
-            <Notifications />
-            <TopBar />
-            <Suspense fallback={<Fallback />}>
-                <Router>
-                    <Route path="/login" component={Login} />
-                    <AuthenticatedRoute path="/" component={Home} />
-                    <AuthenticatedRoute path="/workspace/:workspaceId/:subPage?" component={Workspace} />
-                    <AuthenticatedRoute path="/workspace/:workspaceId/sprint/:sprintId/:subPage?" component={Sprint} />
-                </Router>
-            </Suspense>
+            <Provider store={store}>
+                <Notifications />
+                <TopBar />
+                <Suspense fallback={<Fallback />}>
+                    <Router>
+                        <Route path="/login" component={Login} />
+                        <AuthenticatedRoute path="/" component={Home} />
+                        <AuthenticatedRoute path="/workspace/:workspaceId/:subPage?" component={Workspace} />
+                        <AuthenticatedRoute
+                            path="/workspace/:workspaceId/sprint/:sprintId/:subPage?"
+                            component={Sprint}
+                        />
+                    </Router>
+                </Suspense>
+            </Provider>
         </div>
     );
 };
@@ -39,13 +45,13 @@ const Fallback: FunctionalComponent = () => {
 };
 
 const AuthenticatedRoute = (props: { path: string; component: FunctionalComponent }): VNode => {
-    const isLoggedIn = useStore().authStore.isAuthenticated;
+    const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
-        if (!isLoggedIn) route('/login', true);
-    }, [isLoggedIn]);
+        if (!isAuthenticated) route('/login', true);
+    }, [isAuthenticated]);
 
-    if (!isLoggedIn) return null;
+    if (!isAuthenticated) return null;
 
     return <Route {...props} />;
 };

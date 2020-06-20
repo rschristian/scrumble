@@ -33,6 +33,7 @@ export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) =
             dueDate: dueDate ? dueDate.toISOString() : '',
             totalStoryPoint: props.sprint?.totalStoryPoint || 0,
             totalNumberOfIssues: props.sprint?.totalNumberOfIssues || 0,
+            projectIdToMilestoneIds: {},
         };
     };
 
@@ -64,7 +65,6 @@ export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) =
                 <textarea
                     class="form-input"
                     rows={5}
-                    type="text"
                     placeholder="Description"
                     value={description}
                     onInput={(e): void => setDescription((e.target as HTMLInputElement).value)}

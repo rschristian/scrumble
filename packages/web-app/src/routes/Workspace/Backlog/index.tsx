@@ -1,5 +1,6 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
+import { useSelector } from 'react-redux';
 import { DateTime } from 'luxon';
 import { notify } from 'react-notify-toast';
 
@@ -10,10 +11,10 @@ import { Modal } from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
 import { createIssue, getIssues } from 'services/api/issues';
 import { errorColour, infoColour, successColour } from 'services/notification/colours';
-import { useStore } from 'stores';
+import { RootState } from 'stores';
 
 const Backlog: FunctionalComponent = () => {
-    const currentWorkspace = useStore().userLocationStore.currentWorkspace;
+    const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
 

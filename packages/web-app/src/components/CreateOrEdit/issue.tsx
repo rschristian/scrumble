@@ -1,16 +1,17 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { notify } from 'react-notify-toast';
 
 import { Issue } from 'models/Issue';
 import { User } from 'models/User';
-import { useStore } from 'stores';
 import { Project } from 'models/Project';
 import { getWorkspaceProjects } from 'services/api/projects';
-import { notify } from 'react-notify-toast';
+
 import { errorColour } from 'services/notification/colours';
-import { observer } from 'services/mobx';
 import { getSprints } from 'services/api/sprints';
 import { Sprint, SprintStatus } from 'models/Sprint';
+import { RootState } from 'stores';
+import { useSelector } from 'react-redux';
 
 interface IProps {
     issue?: Issue;
@@ -31,6 +32,7 @@ const emptySprint = (): Sprint => {
         id: 0,
         title: 'No sprint',
         status: SprintStatus.active,
+        projectIdToMilestoneIds: {},
     };
 };
 
@@ -41,10 +43,10 @@ const emptyProject = (): Project => {
     };
 };
 
-export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: IProps) => {
-    const authStore = useStore().authStore;
-    const userLocationStore = useStore().userLocationStore;
-    const currentWorkspace = userLocationStore.currentWorkspace;
+export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
+    const { currentUser } = useSelector((state: RootState) => state.auth);
+    const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
+
     const [title, setTitle] = useState(props.issue?.title || '');
     const [description, setDescription] = useState(props.issue?.description || '');
     const [storyPoint, setStoryPoint] = useState(props.issue?.storyPoint || 0);
@@ -65,7 +67,7 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
             projectId,
             projectName,
             sprint,
-            author: props.issue?.author || authStore.currentUser,
+            author: props.issue?.author || currentUser,
             createdAt: new Date(),
             assignee,
         };
@@ -96,11 +98,11 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
     };
 
     useEffect(() => {
-        getWorkspaceProjects(userLocationStore.currentWorkspace.id).then((result) => {
+        getWorkspaceProjects(currentWorkspace.id).then((result) => {
             if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
             else setProjects(result);
         });
-        getSprints(userLocationStore.currentWorkspace.id, 'active').then((result) => {
+        getSprints(currentWorkspace.id, 'active').then((result) => {
             if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
             else {
                 result.unshift(emptySprint());
@@ -193,4 +195,4 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = observer((props: I
             </div>
         </Fragment>
     );
-});
+};

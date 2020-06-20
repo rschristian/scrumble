@@ -42,7 +42,11 @@ const SprintMetrics: FunctionalComponent = () => {
                         />
                     </div>
                     <div>
-                        <img src={burndown} class="mt-10 mb-5 mx-auto shadow-xl w-5/6" />
+                        <img
+                            src={burndown}
+                            class="mt-10 mb-5 mx-auto shadow-xl w-5/6"
+                            alt="Static burndown chart image, not dynamic"
+                        />
                     </div>
                 </Fragment>
             }

@@ -1,16 +1,17 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { useSelector } from 'react-redux';
+import { notify } from 'react-notify-toast';
 
 import { IssueBoardCardList } from 'components/Cards/issue';
 import { Issue, IssueStatus } from 'models/Issue';
 import { editIssue } from 'services/api/issues';
-import { useStore } from 'stores';
-import { notify } from 'react-notify-toast';
-import { errorColour } from 'services/notification/colours';
 import { getSprintIssues } from 'services/api/sprints';
+import { errorColour } from 'services/notification/colours';
+import { RootState } from 'stores';
 
 const IssuesBoard: FunctionalComponent = () => {
-    const userLocationStore = useStore().userLocationStore;
+    const { currentWorkspace, currentSprint } = useSelector((state: RootState) => state.userLocation);
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
 
     const updateIssueBoard = (updatedIssue: Issue): void => {
@@ -24,7 +25,7 @@ const IssuesBoard: FunctionalComponent = () => {
     };
 
     const updateIssue = async (issue: Issue): Promise<void> => {
-        return await editIssue(userLocationStore.currentWorkspace.id, issue).then((error) => {
+        return await editIssue(currentWorkspace.id, issue).then((error) => {
             if (error) notify.show(error, 'error', 5000, errorColour);
             else {
                 updateIssueBoard(issue);
@@ -33,7 +34,7 @@ const IssuesBoard: FunctionalComponent = () => {
     };
 
     const fetchIssues = async (): Promise<void> => {
-        getSprintIssues(userLocationStore.currentWorkspace.id, userLocationStore.currentSprint).then((result) => {
+        getSprintIssues(currentWorkspace.id, currentSprint).then((result) => {
             if (typeof result == 'string') {
                 notify.show(result, 'error', 5000, errorColour);
             } else {
@@ -43,7 +44,7 @@ const IssuesBoard: FunctionalComponent = () => {
     };
 
     useEffect(() => {
-        fetchIssues();
+        fetchIssues().then();
     }, []);
 
     return (
