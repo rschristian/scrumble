@@ -15,13 +15,6 @@ export const login = async (shortLivedJwt: string): Promise<void | string> => {
         });
 };
 
-export const destroyOAuthToken = async (): Promise<void> => {
-    return await apiService.delete('/auth/token').then(() => {
-        authStorageService.destroyToken();
-        return;
-    });
-};
-
 export const fetchUserInfo = async (): Promise<User> => {
     return await apiService.get('user/info').then(({ data }) => {
         return data;

@@ -24,7 +24,7 @@ export const getIssues = async (
 // GitLab API: POST /projects/:id/issues
 export const createIssue = async (workspaceId: number, issue: Issue): Promise<Issue | string> => {
     return await apiService
-        .post(`/workspace/${workspaceId}/project/${issue.projectId}/issue`, issue)
+        .post(`/workspace/${workspaceId}/project/${issue.projectId}/issue`, { issue })
         .then((response) => {
             return response.data;
         })
@@ -36,7 +36,7 @@ export const createIssue = async (workspaceId: number, issue: Issue): Promise<Is
 // GitLab API: PUT /projects/:id/issues/:issue_iid
 export const editIssue = async (workspaceId: number, issue: Issue): Promise<void | string> => {
     return await apiService
-        .put(`/workspace/${workspaceId}/project/${issue.projectId}/issue/${issue.iid}`, issue)
+        .put(`/workspace/${workspaceId}/project/${issue.projectId}/issue/${issue.iid}`, { issue })
         .then(() => {
             return;
         })

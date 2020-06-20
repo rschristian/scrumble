@@ -15,7 +15,7 @@ export const getWorkspaces = async (): Promise<Workspace[] | string> => {
 
 export const createWorkspace = async (newWorkspace: Workspace): Promise<Workspace | string> => {
     return await apiService
-        .post('/workspace', newWorkspace)
+        .post('/workspace', { newWorkspace })
         .then((response) => {
             return response.data;
         })
@@ -27,7 +27,7 @@ export const createWorkspace = async (newWorkspace: Workspace): Promise<Workspac
 // Implementation will be Scrumble-Only, GitLab has no concept of Workspaces
 export const editWorkspace = async (workspaceId: number, updatedWorkspace: Workspace): Promise<Workspace | string> => {
     return await apiService
-        .put(`/workspace/${workspaceId}`, updatedWorkspace)
+        .put(`/workspace/${workspaceId}`, { updatedWorkspace })
         .then((result) => {
             return result.data;
         })
