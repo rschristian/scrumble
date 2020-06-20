@@ -1,7 +1,6 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { useSelector } from 'react-redux';
-import { DateTime } from 'luxon';
 import { notify } from 'react-notify-toast';
 
 import { IssueCard } from 'components/Cards/issue';
@@ -65,7 +64,8 @@ const Backlog: FunctionalComponent = () => {
         if (found) {
             issuesArray.forEach((issue: Issue, index) => {
                 if (issue.iid === updatedIssue.iid) {
-                    updatedIssue.createdAt = DateTime.local().toLocaleString();
+                    const now = new Date();
+                    updatedIssue.createdAt = `${now.getMonth()}/${now.getDate()}/${now.getFullYear()}`;
                     arrayCopy[index] = updatedIssue;
                     setIssuesArray(arrayCopy);
                 }
