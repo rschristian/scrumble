@@ -1,4 +1,5 @@
 import { ComponentChild, FunctionalComponent, h } from 'preact';
+import { createPortal } from 'preact/compat';
 import { X } from 'preact-feather';
 
 interface IProps {
@@ -9,7 +10,7 @@ interface IProps {
 }
 
 export const Modal: FunctionalComponent<IProps> = (props: IProps) => {
-    return (
+    return createPortal(
         <div class="modal">
             <div class="modal-overlay" onClick={props.close} />
             <div class="modal-container md:max-w-xl">
@@ -41,6 +42,7 @@ export const Modal: FunctionalComponent<IProps> = (props: IProps) => {
                     )}
                 </div>
             </div>
-        </div>
+        </div>,
+        document.getElementById('modal'),
     );
 };

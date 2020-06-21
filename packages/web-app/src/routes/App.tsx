@@ -1,6 +1,5 @@
-import { FunctionalComponent, h, VNode } from 'preact';
+import { Fragment, FunctionalComponent, h, VNode } from 'preact';
 import { useEffect } from 'preact/hooks';
-import { Suspense } from 'preact/compat';
 import { Route, route, Router } from 'preact-router';
 import Notifications from 'react-notify-toast';
 import { useSelector, Provider } from 'react-redux';
@@ -15,23 +14,26 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 const App: FunctionalComponent = () => {
     return (
-        <div id="app" class="bg-blue-100">
-            <Provider store={redux.store}>
-                <PersistGate loading={<Fallback />} persistor={redux.persistor}>
-                    <Notifications />
-                    <TopBar />
-                    <Router>
-                        <Route path="/login" component={Login} />
-                        <AuthenticatedRoute path="/" component={Home} />
-                        <AuthenticatedRoute path="/workspace/:workspaceId/:subPage?" component={Workspace} />
-                        <AuthenticatedRoute
-                            path="/workspace/:workspaceId/sprint/:sprintId/:subPage?"
-                            component={Sprint}
-                        />
-                    </Router>
-                </PersistGate>
-            </Provider>
-        </div>
+        <Fragment>
+            <div id="app" class="bg-blue-100">
+                <Provider store={redux.store}>
+                    <PersistGate loading={<Fallback />} persistor={redux.persistor}>
+                        <TopBar />
+                        <Router>
+                            <Route path="/login" component={Login} />
+                            <AuthenticatedRoute path="/" component={Home} />
+                            <AuthenticatedRoute path="/workspace/:workspaceId/:subPage?" component={Workspace} />
+                            <AuthenticatedRoute
+                                path="/workspace/:workspaceId/sprint/:sprintId/:subPage?"
+                                component={Sprint}
+                            />
+                        </Router>
+                    </PersistGate>
+                </Provider>
+            </div>
+            <Notifications />
+            <div id="modal" />
+        </Fragment>
     );
 };
 
