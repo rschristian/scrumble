@@ -17,6 +17,7 @@ public class IssuesApi {
   private final List<String> toDo = Collections.singletonList("To Do");
   private final List<String> doing = Collections.singletonList("Doing");
   private final List<String> unplanned = Collections.singletonList("unplanned");
+  private final List<String> emptyTags = Collections.singletonList("");
 
   private final Milestone milestone1 =
       new Milestone(1, "Requirement Gathering", "", "open",
@@ -90,15 +91,15 @@ public class IssuesApi {
           "", new User(), new User(), "opened", milestone4, unplanned, LocalDateTime.now().toString()),
 
       new Issue(1, 5, "Milestone Metrics - expected story points vs actual (worked out from calculating time spent on the card)",
-          "", new User(), new User(), "closed", milestone5, toDo, LocalDateTime.now().toString()),
+          "", new User(), new User(), "closed", milestone5, emptyTags, LocalDateTime.now().toString()),
       new Issue(2, 5, "Workspace Metrics view - showing key metrics for the workspace - total projects, average velocity etc",
-          "", new User(), new User(), "closed", milestone5, unplanned, LocalDateTime.now().toString()),
+          "", new User(), new User(), "closed", milestone5, emptyTags, LocalDateTime.now().toString()),
       new Issue(3, 5, "Milestone Metrics view - showing by milestone, metrics showing the total issues completed, issues planned but not completed, and total story points",
-          "", new User(), new User(), "opened", milestone5, unplanned, LocalDateTime.now().toString()),
+          "", new User(), new User(), "opened", milestone5, emptyTags, LocalDateTime.now().toString()),
       new Issue(4, 5, "Burn down chart for a Milestone - showing progress against plan",
-          "", new User(), new User(), "closed", milestone5, doing, LocalDateTime.now().toString()),
+          "", new User(), new User(), "closed", milestone5, emptyTags, LocalDateTime.now().toString()),
       new Issue(5, 5, "Ability to add a new issue (with corresponding add onto GitLab)",
-          "", new User(), new User(), "closed", milestone5, unplanned, LocalDateTime.now().toString()),
+          "", new User(), new User(), "closed", milestone5, emptyTags, LocalDateTime.now().toString()),
     };
   }
 
