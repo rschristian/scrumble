@@ -71,6 +71,7 @@ public class DefaultIssueService implements IssueService {
     }
   }
 
+  // TODO Reevaluate this system of tags/status
   @Override
   public void setStatus(Issue issue) {
     if (issue.getLabels().contains("To Do")) {
