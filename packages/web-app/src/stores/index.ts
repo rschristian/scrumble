@@ -1,21 +1,31 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
-import { useDispatch } from 'react-redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 import auth from './authStore';
 import userLocation from './userLocationStore';
+
+const persistConfig = {
+    key: 'root',
+    storage,
+};
 
 const reducer = combineReducers({
     auth,
     userLocation,
 });
 
+const persistedReducer = persistReducer(persistConfig, reducer);
+
 const store = configureStore({
-    reducer,
+    reducer: persistedReducer,
+    middleware: getDefaultMiddleware({
+        serializableCheck: false,
+    }),
 });
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof reducer>;
-export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>();
 
-export default store;
+export default { store, persistor: persistStore(store) };

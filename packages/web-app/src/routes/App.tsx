@@ -10,15 +10,16 @@ import Login from 'routes/Auth/login';
 import Home from 'routes/Home';
 import Workspace from 'routes/Workspace';
 import Sprint from 'routes/Sprint';
-import store, { RootState } from 'stores';
+import redux, { RootState } from 'stores';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const App: FunctionalComponent = () => {
     return (
         <div id="app" class="bg-blue-100">
-            <Provider store={store}>
-                <Notifications />
-                <TopBar />
-                <Suspense fallback={<Fallback />}>
+            <Provider store={redux.store}>
+                <PersistGate loading={<Fallback />} persistor={redux.persistor}>
+                    <Notifications />
+                    <TopBar />
                     <Router>
                         <Route path="/login" component={Login} />
                         <AuthenticatedRoute path="/" component={Home} />
@@ -28,7 +29,7 @@ const App: FunctionalComponent = () => {
                             component={Sprint}
                         />
                     </Router>
-                </Suspense>
+                </PersistGate>
             </Provider>
         </div>
     );

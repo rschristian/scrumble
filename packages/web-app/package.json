@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve:dev": "preact watch -p 3000",
+    "serve:dev": "preact watch -p 3000 --template src/index.html",
     "serve:prod": "yarn build && sirv build -p 3000 --single",
     "build": "preact build --no-prerender --template src/index.html",
     "build:analyze": "yarn build --no-esm --analyze",
     "lint": "yarn eslint --fix && yarn prettier --write",
     "lint:ci": "yarn eslint && yarn prettier",
     "eslint": "eslint 'src/**/*.{js,ts,tsx}' '*.js'",
-    "prettier": "prettier 'src/**/*.{css,scss,json}' '*.json'"
+    "prettier": "prettier 'src/**/*.{css,scss,json}' '*.json'",
+    "postinstall": "node redux-persist-postinstall.mjs"
   },
   "husky": {
     "hooks": {
@@ -30,6 +31,7 @@
     "preact-router": "^3.2.1",
     "react-notify-toast": "^0.5.1",
     "react-redux": "^7.2.0",
+    "redux-persist": "^6.0.0",
     "tailwindcss": "^1.2.0",
     "ts-api-toolkit": "^2.0.1"
   },
