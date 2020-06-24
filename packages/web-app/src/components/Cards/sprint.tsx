@@ -2,15 +2,12 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { getCurrentUrl, route } from 'preact-router';
 import { MoreVertical } from 'preact-feather';
-import { useDispatch, useSelector } from 'react-redux';
-import { notify } from 'react-notify-toast';
+import { useDispatch } from 'react-redux';
 
 import { Modal } from 'components/Modal';
-import { Sprint, SprintStatus } from 'models/Sprint';
-import { editSprint } from 'services/api/sprints';
-import { errorColour } from 'services/notification/colours';
-import { RootState } from 'stores';
+import { Sprint } from 'models/Sprint';
 import { setCurrentSprint } from 'stores/userLocationStore';
+import { useLtsWarning } from 'services/notification/hooks';
 
 interface IProps {
     sprint: Sprint;
@@ -20,7 +17,6 @@ interface IProps {
 
 export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
     const dispatch = useDispatch();
-    const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
     const [showClosureModal, setShowClosureModal] = useState(false);
     const [showOpeningModal, setShowOpeningModal] = useState(false);
@@ -33,42 +29,20 @@ export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
     const closureModalContent = <div>Are you sure you want to close this sprint?</div>;
     const openingModalContent = <div>Are you sure you want to open this sprint?</div>;
 
-    const sprintStatus = (): SprintStatus => {
-        if (props.sprint.status === SprintStatus.closed) {
-            return SprintStatus.active;
-        }
-        return SprintStatus.closed;
-    };
-
-    const handleToggleSprintStatus = async (): Promise<void> => {
-        return await editSprint(currentWorkspace.id, {
-            ...props.sprint,
-            status: sprintStatus(),
-        }).then((result) => {
-            if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
-            else {
-                props.updateSprint(result);
-                setShowClosureModal(false);
-                setShowOpeningModal(false);
-                notify.show('Status updated!', 'success', 5000);
-            }
-        });
-    };
-
     return (
         <Fragment>
             {showClosureModal ? (
                 <Modal
                     title="Close Sprint?"
                     content={closureModalContent}
-                    submit={async (): Promise<void> => await handleToggleSprintStatus()}
+                    submit={useLtsWarning}
                     close={(): void => setShowClosureModal(false)}
                 />
             ) : showOpeningModal ? (
                 <Modal
                     title="Open Sprint?"
                     content={openingModalContent}
-                    submit={async (): Promise<void> => await handleToggleSprintStatus()}
+                    submit={useLtsWarning}
                     close={(): void => setShowOpeningModal(false)}
                 />
             ) : null}

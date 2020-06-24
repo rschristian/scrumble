@@ -10,7 +10,6 @@ import { SearchBar } from 'components/SearchBar';
 import { Workspace } from 'models/Workspace';
 import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
 import { errorColour, successColour, warningColour } from 'services/notification/colours';
-import { fetchCurrentUserInfo } from 'stores/authStore';
 import { setActiveSideBarMenuItem } from 'stores/userLocationStore';
 
 const Home: FunctionalComponent = () => {
@@ -20,13 +19,13 @@ const Home: FunctionalComponent = () => {
     const [showCreateModal, setShowCreateModal] = useState(false);
 
     useEffect(() => {
-        dispatch(fetchCurrentUserInfo());
         dispatch(setActiveSideBarMenuItem(0));
-
-        getWorkspaces().then((res) => {
-            if (typeof res !== 'string') setWorkspacesArray(res);
-            else notify.show(res, 'error', 5000, errorColour);
-        });
+        async function getAllWorkspaces(): Promise<void> {
+            const result = await getWorkspaces();
+            if (typeof result !== 'string') setWorkspacesArray(result);
+            else notify.show(result, 'error', 5000, errorColour);
+        }
+        getAllWorkspaces();
     }, [dispatch]);
 
     const submitNewWorkspace = (newWorkspace: Workspace): void => {

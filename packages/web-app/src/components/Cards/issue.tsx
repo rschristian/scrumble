@@ -1,15 +1,13 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import { useSelector } from 'react-redux';
-import { notify } from 'react-notify-toast';
 
 import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
 import { Modal } from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
 import { User } from 'models/User';
-import { editIssue } from 'services/api/issues';
-import { errorColour, successColour } from 'services/notification/colours';
 import { RootState } from 'stores';
+import { useLtsWarning } from 'services/notification/hooks';
 
 interface IssuesBoardProps {
     issues: Issue[];
@@ -119,21 +117,8 @@ interface IProps {
 }
 
 export const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
-    const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
-
     const [showEditIssueModal, setShowEditIssueModal] = useState(false);
     const [showIssueCardInformation, setShowIssueCardInformation] = useState(false);
-
-    const handleIssueEdit = async (issue: Issue): Promise<void> => {
-        return await editIssue(currentWorkspace.id, issue).then((error) => {
-            if (error) notify.show(error, 'error', 5000, errorColour);
-            else {
-                notify.show('Issue successfully updated!', 'success', 5000, successColour);
-                setShowEditIssueModal(false);
-                props.updateIssue(issue);
-            }
-        });
-    };
 
     return (
         <div class="cursor-default capitalize">
@@ -143,7 +128,7 @@ export const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
                     content={
                         <CreateOrEditIssue
                             issue={props.issue}
-                            submit={handleIssueEdit}
+                            submit={useLtsWarning}
                             close={(): void => setShowEditIssueModal(false)}
                         />
                     }

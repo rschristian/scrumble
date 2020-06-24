@@ -8,9 +8,10 @@ import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
 import { IssueFilter } from 'components/Filter/issue';
 import { Modal } from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
-import { createIssue, getIssues } from 'services/api/issues';
-import { errorColour, infoColour, successColour } from 'services/notification/colours';
+import { getIssues } from 'services/api/issues';
+import { errorColour, infoColour } from 'services/notification/colours';
 import { RootState } from 'stores';
+import { useLtsWarning } from 'services/notification/hooks';
 
 const Backlog: FunctionalComponent = () => {
     const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
@@ -23,17 +24,6 @@ const Backlog: FunctionalComponent = () => {
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
     const projectId = useRef(0);
     const pageNumber = useRef(0);
-
-    const handleIssueCreation = async (newIssue: Issue): Promise<void> => {
-        return await createIssue(currentWorkspace.id, newIssue).then((result) => {
-            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-            else {
-                notify.show('New issue created!', 'success', 5000, successColour);
-                setShowNewIssueModal(false);
-                updateIssue(result);
-            }
-        });
-    };
 
     const updateIssueFilter = useCallback((filterStatus: string, searchTerm: string): void => {
         projectId.current = 0;
@@ -90,10 +80,7 @@ const Backlog: FunctionalComponent = () => {
                 <Modal
                     title="Create Issue"
                     content={
-                        <CreateOrEditIssue
-                            submit={handleIssueCreation}
-                            close={(): void => setShowNewIssueModal(false)}
-                        />
+                        <CreateOrEditIssue submit={useLtsWarning} close={(): void => setShowNewIssueModal(false)} />
                     }
                     close={(): void => setShowNewIssueModal(false)}
                 />

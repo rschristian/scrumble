@@ -8,12 +8,13 @@ import { CreateOrEditSprint } from 'components/CreateOrEdit/sprint';
 import { SprintFilter } from 'components/Filter/sprint';
 import { Modal } from 'components/Modal';
 import { Sprint, SprintStatus } from 'models/Sprint';
-import { createSprint, getSprints } from 'services/api/sprints';
-import { errorColour, successColour } from 'services/notification/colours';
+import { getSprints } from 'services/api/sprints';
+import { errorColour } from 'services/notification/colours';
 import { RootState } from 'stores';
 import { setActiveSideBarMenuItem } from 'stores/userLocationStore';
 
 import Backlog from './Backlog';
+import { useLtsWarning } from 'services/notification/hooks';
 
 const SprintPlanning: FunctionalComponent = () => {
     const dispatch = useDispatch();
@@ -33,17 +34,6 @@ const SprintPlanning: FunctionalComponent = () => {
             else setSprints(result);
         });
     }, [currentWorkspace.id, dispatch]);
-
-    const handleSprintCreation = async (newSprint: Sprint): Promise<void> => {
-        return await createSprint(currentWorkspace.id, newSprint).then((result) => {
-            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-            else {
-                notify.show('New sprint created!', 'success', 5000, successColour);
-                setShowNewSprintModal(false);
-                setSprints([...sprints, result]);
-            }
-        });
-    };
 
     const updateSprint = (updatedSprint: Sprint): void => {
         const arrayCopy = [...sprints];
@@ -66,10 +56,7 @@ const SprintPlanning: FunctionalComponent = () => {
                 <Modal
                     title="Create Sprint"
                     content={
-                        <CreateOrEditSprint
-                            submit={handleSprintCreation}
-                            close={(): void => setShowNewSprintModal(false)}
-                        />
+                        <CreateOrEditSprint submit={useLtsWarning} close={(): void => setShowNewSprintModal(false)} />
                     }
                     close={(): void => setShowNewSprintModal(false)}
                 />
