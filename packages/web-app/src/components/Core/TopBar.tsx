@@ -1,12 +1,12 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
-import { Link, route } from 'preact-router';
+import { Link } from 'preact-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Menu, X } from 'preact-feather';
 
 import scrumCards from 'assets/icons/scrumCards.png';
 import { RootState } from 'stores';
-import { logout as reduxLogout } from 'stores/authStore';
+import { logUserOut } from 'stores/authStore';
 
 export const TopBar: FunctionalComponent = () => {
     const dispatch = useDispatch();
@@ -14,9 +14,8 @@ export const TopBar: FunctionalComponent = () => {
 
     const [showAccountDropdown, setShowAccountDropdown] = useState(false);
 
-    const logout = async (): Promise<void> => {
-        await dispatch(reduxLogout());
-        route('/login', true);
+    const logout = (): void => {
+        dispatch(logUserOut());
     };
 
     return (

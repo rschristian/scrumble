@@ -3,13 +3,13 @@ import { useEffect } from 'preact/hooks';
 import { useDispatch } from 'react-redux';
 
 import scrumCards from 'assets/icons/scrumCards.png';
-import { loginAndFetchUserInfo, logout } from 'stores/authStore';
+import { loginAndFetchUserInfo, logUserOut } from 'stores/authStore';
 
 const Login: FunctionalComponent = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(logout());
+        dispatch(logUserOut());
     }, [dispatch]);
 
     const linkTo = (): void => {

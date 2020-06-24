@@ -42,7 +42,12 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-export const { logout, login, setUser } = slice.actions;
+const { logout, login, setUser } = slice.actions;
+
+export const logUserOut = (): AppThunk => async (dispatch: AppDispatch): Promise<void> => {
+    await dispatch(logout());
+    route('/login', true);
+};
 
 export const loginAndFetchUserInfo = (): AppThunk => async (dispatch: AppDispatch): Promise<void> => {
     dispatch(login());
