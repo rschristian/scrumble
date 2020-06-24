@@ -1,10 +1,10 @@
-package com.bt.scrumbleLts.api;
+package com.bt.scrumble.lts.api;
 
 import com.blade.mvc.RouteContext;
 import com.blade.mvc.annotation.*;
-import com.bt.scrumbleLts.dto.Issue;
-import com.bt.scrumbleLts.dto.Milestone;
-import com.bt.scrumbleLts.dto.User;
+import com.bt.scrumble.lts.dto.Issue;
+import com.bt.scrumble.lts.dto.Milestone;
+import com.bt.scrumble.lts.dto.User;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

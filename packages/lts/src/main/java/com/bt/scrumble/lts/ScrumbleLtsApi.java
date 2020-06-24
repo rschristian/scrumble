@@ -1,4 +1,4 @@
-package com.bt.scrumbleLts;
+package com.bt.scrumble.lts;
 
 import com.blade.Blade;
 
