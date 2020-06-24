@@ -1,8 +1,9 @@
 import { Fragment, FunctionalComponent, h, VNode } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { Route, route, Router } from 'preact-router';
-import Notifications from 'react-notify-toast';
 import { useSelector, Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import Notifications from 'react-notify-toast';
 
 import { TopBar } from 'components/Core/TopBar';
 import Login from 'routes/Auth/login';
@@ -10,7 +11,6 @@ import Home from 'routes/Home';
 import Workspace from 'routes/Workspace';
 import Sprint from 'routes/Sprint';
 import redux, { RootState } from 'stores';
-import { PersistGate } from 'redux-persist/integration/react';
 
 const App: FunctionalComponent = () => {
     return (
