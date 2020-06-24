@@ -20,27 +20,3 @@ export const getIssues = async (
             return response.data?.message || 'Unknown error while fetching workspace issues';
         });
 };
-
-// GitLab API: POST /projects/:id/issues
-export const createIssue = async (workspaceId: number, issue: Issue): Promise<Issue | string> => {
-    return await apiService
-        .post(`/workspace/${workspaceId}/project/${issue.projectId}/issue`, { issue })
-        .then((response) => {
-            return response.data;
-        })
-        .catch(({ response }) => {
-            return response.data?.message || 'Unknown error while creating issue';
-        });
-};
-
-// GitLab API: PUT /projects/:id/issues/:issue_iid
-export const editIssue = async (workspaceId: number, issue: Issue): Promise<void | string> => {
-    return await apiService
-        .put(`/workspace/${workspaceId}/project/${issue.projectId}/issue/${issue.iid}`, { issue })
-        .then(() => {
-            return;
-        })
-        .catch(({ response }) => {
-            return response.data?.message || 'Unknown error while editing issue';
-        });
-};

@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppDispatch } from 'stores';
+import { AppDispatch, AppThunk } from 'stores';
 
 import { User } from 'models/User';
-import { fetchUserInfo } from 'services/api/auth';
+import { apiFetchUserInfo } from 'services/api/auth';
+import { route } from 'preact-router';
 
 type State = {
     isAuthenticated: boolean;
@@ -18,14 +19,14 @@ const slice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        logOut: (state: State): void => {
+        logout: (state: State): void => {
             state.isAuthenticated = false;
             state.currentUser = null;
         },
-        logIn: (state: State): void => {
+        login: (state: State): void => {
             state.isAuthenticated = true;
         },
-        setCurrentUser: (state: State, action: PayloadAction<User>): void => {
+        setUser: (state: State, action: PayloadAction<User>): void => {
             const user = action.payload;
 
             state.currentUser = {
@@ -41,18 +42,11 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-const { logOut, logIn, setCurrentUser } = slice.actions;
+export const { logout, login, setUser } = slice.actions;
 
-export const logout = () => async (dispatch: AppDispatch): Promise<void> => {
-    dispatch(logOut());
-};
-
-export const login = () => async (dispatch: AppDispatch): Promise<void> => {
-    dispatch(logIn());
-};
-
-export const fetchCurrentUserInfo = () => async (dispatch: AppDispatch): Promise<void> => {
-    return await fetchUserInfo().then((user) => {
-        dispatch(setCurrentUser(user));
-    });
+export const loginAndFetchUserInfo = (): AppThunk => async (dispatch: AppDispatch): Promise<void> => {
+    dispatch(login());
+    const result = await apiFetchUserInfo();
+    await dispatch(setUser(result));
+    route('/', true);
 };

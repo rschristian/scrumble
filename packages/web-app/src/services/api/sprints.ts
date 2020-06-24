@@ -15,30 +15,6 @@ export const getSprints = async (workspaceId: number, filter: string): Promise<S
         });
 };
 
-// GitLab API: POST /projects/:id/milestones/
-export const createSprint = async (workspaceId: number, newSprint: Sprint): Promise<Sprint | string> => {
-    return await apiService
-        .post(`/workspace/${workspaceId}/sprint`, { newSprint })
-        .then((result) => {
-            return result.data;
-        })
-        .catch(({ response }) => {
-            return response.data?.message || 'Unknown error while creating sprint';
-        });
-};
-
-// GitLab API: PUT /projects/:id/milestones/:milestone_id
-export const editSprint = async (workspaceId: number, updatedSprint: Sprint): Promise<Sprint | string> => {
-    return await apiService
-        .put(`/workspace/${workspaceId}/sprint`, { updatedSprint })
-        .then((result) => {
-            return result.data;
-        })
-        .catch(({ response }) => {
-            return response.data?.message || 'Unknown error while updating sprint details';
-        });
-};
-
 export const getSprintIssues = async (workspaceId: number, sprint: Sprint): Promise<Issue[] | string> => {
     const projectIdToMilestoneIds = sprint.projectIdToMilestoneIds;
     const args = { projectIdToMilestoneIds };

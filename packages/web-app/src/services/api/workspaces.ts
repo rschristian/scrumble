@@ -23,15 +23,3 @@ export const createWorkspace = async (newWorkspace: Workspace): Promise<Workspac
             return response.data?.message || 'Unknown error while updating workspace details';
         });
 };
-
-// Implementation will be Scrumble-Only, GitLab has no concept of Workspaces
-export const editWorkspace = async (workspaceId: number, updatedWorkspace: Workspace): Promise<Workspace | string> => {
-    return await apiService
-        .put(`/workspace/${workspaceId}`, { updatedWorkspace })
-        .then((result) => {
-            return result.data;
-        })
-        .catch(({ response }) => {
-            return response.data?.message || 'Unknown error while updating workspace details';
-        });
-};
