@@ -8,6 +8,7 @@ import Notifications from 'react-notify-toast';
 import { TopBar } from 'components/Core/TopBar';
 import Login from 'routes/Auth/login';
 import Home from 'routes/Home';
+import NotFound from 'routes/errors/404';
 import Workspace from 'routes/Workspace';
 import Sprint from 'routes/Sprint';
 import redux, { RootState } from 'stores';
@@ -27,6 +28,7 @@ const App: FunctionalComponent = () => {
                                 path="/workspace/:workspaceId/sprint/:sprintId/:subPage?"
                                 component={Sprint}
                             />
+                            <Route default component={NotFound} />
                         </Router>
                     </PersistGate>
                 </Provider>
