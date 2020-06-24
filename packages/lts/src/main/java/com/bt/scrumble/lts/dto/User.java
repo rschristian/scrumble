@@ -1,4 +1,4 @@
-package com.bt.scrumbleLts.dto;
+package com.bt.scrumble.lts.dto;
 
 public class User {
   private final int id;
