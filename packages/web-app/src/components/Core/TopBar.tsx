@@ -16,6 +16,7 @@ export const TopBar: FunctionalComponent = () => {
 
     const logout = (): void => {
         dispatch(logUserOut());
+        setShowAccountDropdown(false);
     };
 
     return (
