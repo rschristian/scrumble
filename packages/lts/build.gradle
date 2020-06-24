@@ -4,7 +4,7 @@ apply plugin: 'application'
 
 group 'com.bt'
 version '1.0'
-mainClassName = 'com.bt.scrumbleLts.ScrumbleLtsApi'
+mainClassName = 'com.bt.scrumble.lts.ScrumbleLtsApi'
 
 repositories {
     mavenCentral()
