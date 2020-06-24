@@ -12,9 +12,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class Project implements Serializable {
   private int id;
-  private String description;
   private String name;
-
+  private String description;
   @JsonAlias("avatar_url")
   private String avatarUrl;
 }
