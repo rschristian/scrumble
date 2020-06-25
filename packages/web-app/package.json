@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve:dev": "preact watch --port 3000",
-    "serve:prod": "npm run build && sirv build --port 3000 --single",
-    "build": "preact build --no-esm --no-prerender --template src/index.html",
-    "build:analyze": "npm run build -- --analyze",
-    "lint": "eslint src/**/*.{js,ts,tsx} --fix",
-    "prettier": "prettier src/**/*.{css,scss,json} --write",
+    "serve:dev": "preact watch -p 3000 --template src/index.html",
+    "serve:prod": "yarn build && sirv build -p 3000 --single",
+    "build": "preact build --no-prerender --template src/index.html",
+    "build:analyze": "yarn build --no-esm --analyze",
+    "lint": "yarn eslint --fix && yarn prettier --write",
+    "lint:ci": "yarn eslint && yarn prettier",
+    "eslint": "eslint 'src/**/*.{js,ts,tsx}' '*.js'",
+    "prettier": "prettier 'src/**/*.{css,scss,json}' '*.json'",
     "postinstall": "node ./mobx-postinstall.js"
   },
   "husky": {
