@@ -7,9 +7,9 @@ plugins {
     id 'io.freefair.lombok' version '5.1.0'
 }
 
-group = 'com.bt'
-version = ''
-sourceCompatibility = 11
+group 'com.bt'
+version ''
+mainClassName = 'com.bt.scrumble.ScrumbleApi'
 
 repositories {
     mavenCentral()
@@ -17,7 +17,7 @@ repositories {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.bt.scrumble.ScrumbleApi'
+        attributes 'Main-Class': mainClassName
     }
 }
 
@@ -40,7 +40,6 @@ tasks.withType(Checkstyle) {
 }
 
 dependencies {
-
     /*
         WEB
      */
