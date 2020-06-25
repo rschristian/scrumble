@@ -1,0 +1,46 @@
+name: Preact CD
+
+on:
+  push:
+    branches: [ lts ]
+    paths: 'packages/web-app/**'
+  pull_request:
+    branches: [ lts ]
+    paths: 'packages/web-app/**'
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/web-app
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14.x
+
+    - uses: actions/cache@v1
+      id: yarn-cache
+      with:
+        path: /home/runner/.cache/yarn/v6
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+          
+    - name: Install Dependencies
+      run: yarn
+    - name: Build App
+      run: yarn build
+
+    - name: rsync deployments (Build)
+      uses: burnett01/rsync-deployments@4.0
+      with:
+        switches: -avzr --delete
+        path: packages/web-app/build/*
+        remote_path: /home/${{ secrets.DEPLOY_USER }}/scrumble/www/
+        remote_host: ${{ secrets.DEPLOY_HOST }}
+        remote_user: ${{ secrets.DEPLOY_USER }}
+        remote_key: ${{ secrets.DEPLOY_KEY }}
