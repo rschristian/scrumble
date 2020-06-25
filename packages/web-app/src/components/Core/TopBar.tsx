@@ -1,6 +1,6 @@
 import { FunctionalComponent, h } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
-import { getCurrentUrl, Link } from 'preact-router';
+import { useState } from 'preact/hooks';
+import { Link } from 'preact-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Menu, X } from 'preact-feather';
 
@@ -8,14 +8,15 @@ import scrumCards from 'assets/icons/scrumCards.png';
 import { RootState } from 'stores';
 import { logUserOut } from 'stores/authStore';
 
-export const TopBar: FunctionalComponent = () => {
+interface IProps {
+    notLoginPage: boolean;
+}
+
+export const TopBar: FunctionalComponent<IProps> = (props: IProps) => {
     const dispatch = useDispatch();
     const { isAuthenticated, currentUser } = useSelector((state: RootState) => state.auth);
 
     const [showAccountDropdown, setShowAccountDropdown] = useState<boolean>(false);
-    const [notLoginPage, setNotLoginPage] = useState<boolean>(getCurrentUrl() != '/login');
-
-    useEffect(() => setNotLoginPage(getCurrentUrl() != '/login'), []);
 
     const logout = (): void => {
         dispatch(logUserOut());
@@ -50,7 +51,7 @@ export const TopBar: FunctionalComponent = () => {
                         </div>
                     )}
                 </div>
-                {notLoginPage && isAuthenticated && (
+                {props.notLoginPage && isAuthenticated && (
                     <nav class={`sm:block ${showAccountDropdown ? '' : 'hidden'}`}>
                         <div class="sm:flex sm:p-0">
                             <div class="hidden sm:block sm:ml-6">
@@ -82,7 +83,7 @@ export const TopBar: FunctionalComponent = () => {
                     </nav>
                 )}
             </div>
-            {notLoginPage && isAuthenticated && (
+            {props.notLoginPage && isAuthenticated && (
                 <div
                     class={`sm:hidden z-20 fixed w-full mt-16 bg-gray-200 border-b border-gray-500 ${
                         showAccountDropdown ? 'block' : 'hidden'
