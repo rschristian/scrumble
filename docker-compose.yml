@@ -11,8 +11,12 @@ services:
 
   scrumble:
     container_name: 'scrumble'
-    build: .
+    build: ryanchristian4427/scrumble-api
     depends_on:
       - postgres
     ports:
       - "8000:8000"
+
+  scrumble-lts:
+      container_name: 'scrumble-lts'
+      build: ryanchristian4427/scrumble-lts
