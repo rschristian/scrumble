@@ -24,7 +24,6 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.4.0",
-    "multiselect-react-dropdown": "^1.5.0",
     "preact": "^10.4.4",
     "preact-feather": "^4.1.0",
     "preact-render-to-string": "^5.1.9",
