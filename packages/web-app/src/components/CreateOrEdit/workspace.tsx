@@ -9,12 +9,10 @@ import { Project } from 'models/Project';
 import { Workspace } from 'models/Workspace';
 import { useLtsWarning } from 'services/notification/hooks';
 
-const customStyles = {
-    menuPortal: (provided: object): object => ({
-        ...provided,
-        zIndex: 50,
-    }),
-};
+interface DropdownMenuOption {
+    value: Project;
+    label: string;
+}
 
 interface IProps {
     workspace?: Workspace;
@@ -26,34 +24,30 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
     const [name, setName] = useState<string>(props.workspace?.name || '');
     const [description, setDescription] = useState<string>(props.workspace?.description || '');
 
-    const [projectOptions, setProjectOptions] = useState<{ value: Project; label: string }[]>([]);
-    const [selectedProjectIds, setSelectedProjectIds] = useState<number[]>(props.workspace?.projectIds || []);
-
-    // const selected = projectOptions.filter((project) => selectedProjectIds.includes(project.id));
+    const [projectOptions, setProjectOptions] = useState<DropdownMenuOption[]>([]);
+    const [selectedProjectOptions, setSelectedProjectOptions] = useState<DropdownMenuOption[]>([]);
 
     useEffect(() => {
-        getProjects().then((result) => {
+        async function getProjectData(): Promise<void> {
+            const result = await getProjects();
             if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
             else {
-                const options: { value: Project; label: string }[] = [];
+                const options: DropdownMenuOption[] = [];
                 result.map((project) => {
                     options.push({
-                        label: project.name,
                         value: project,
+                        label: project.name,
                     });
                 });
                 setProjectOptions(options);
+                setSelectedProjectOptions(
+                    options.filter((project) => props.workspace?.projectIds.includes(project.value.id)),
+                );
             }
-        });
-    }, []);
+        }
 
-    const onSelect = (selectedProjects: Project[], selectedProject: Project): void => {
-        setSelectedProjectIds([...selectedProjectIds, selectedProject.id]);
-    };
-
-    const onRemove = (selectedProjects: Project[], removedProject: Project): void => {
-        setSelectedProjectIds(selectedProjectIds.filter((id) => id != removedProject.id));
-    };
+        getProjectData();
+    }, [props.workspace]);
 
     return (
         <Fragment>
@@ -81,11 +75,20 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
                 <div className="m-4">
                     <label className="form-label">Projects in this workspace</label>
                     <Select
-                        styles={customStyles}
+                        styles={{
+                            menuPortal: (provided: object): object => ({
+                                ...provided,
+                                zIndex: 50,
+                            }),
+                        }}
                         isMulti={true}
-                        onChange={onSelect}
                         options={projectOptions}
                         menuPortalTarget={document.body}
+                        value={selectedProjectOptions}
+                        onChange={(selectedOptions: DropdownMenuOption[]): void => {
+                            if (selectedOptions !== null) setSelectedProjectOptions(selectedOptions);
+                            else setSelectedProjectOptions([]);
+                        }}
                     />
                 </div>
                 <button class="btn-create mx-auto mb-4 ml-4" onClick={useLtsWarning}>
