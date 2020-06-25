@@ -1,0 +1,40 @@
+name: Preact CD
+
+on:
+  push:
+    branches: [ master ]
+    paths: 'packages/web-app/**'
+  pull_request:
+    branches: [ master ]
+    paths: 'packages/web-app/**'
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/web-app
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14.x
+
+    - uses: actions/cache@v1
+      id: yarn-cache
+      with:
+        path: /home/runner/.cache/yarn/v6
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+          
+    - name: Install Dependencies
+      run: yarn
+
+    - name: Build App
+      run: yarn build
+      
+    - name: Lint App
+      run: yarn lint:ci
