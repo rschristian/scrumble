@@ -2,7 +2,7 @@ import { apiService } from 'ts-api-toolkit';
 
 import { Project } from 'models/Project';
 
-export const getProjects = async (): Promise<Project[] | string> => {
+export const apiFetchProjects = async (): Promise<Project[] | string> => {
     try {
         const { data } = await apiService.get('/projects');
         return data;
@@ -11,7 +11,7 @@ export const getProjects = async (): Promise<Project[] | string> => {
     }
 };
 
-export const getWorkspaceProjects = async (workspaceId: number): Promise<Project[] | string> => {
+export const apiFetchWorkspaceProjects = async (workspaceId: number): Promise<Project[] | string> => {
     try {
         const { data } = await apiService.get(`/workspace/${workspaceId}/projects`);
         return data;

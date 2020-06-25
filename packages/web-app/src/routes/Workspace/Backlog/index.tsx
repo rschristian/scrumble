@@ -8,18 +8,18 @@ import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
 import { IssueFilter } from 'components/Filter/issue';
 import { Modal } from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
-import { getIssues } from 'services/api/issues';
+import { apiFetchIssues } from 'services/api/issues';
 import { errorColour, infoColour } from 'services/notification/colours';
-import { RootState } from 'stores';
 import { useLtsWarning } from 'services/notification/hooks';
+import { RootState } from 'stores';
 
 const Backlog: FunctionalComponent = () => {
     const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
-    const [showNewIssueModal, setShowNewIssueModal] = useState(false);
+    const [showNewIssueModal, setShowNewIssueModal] = useState<boolean>(false);
 
     const [issueFilter, setIssueFilter] = useState(IssueStatus.open.toString());
-    const [issueFilterTerm, setIssueFilterTerm] = useState('');
+    const [issueFilterTerm, setIssueFilterTerm] = useState<string>('');
 
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
     const projectId = useRef(0);
@@ -34,41 +34,28 @@ const Backlog: FunctionalComponent = () => {
     }, []);
 
     const fetchIssues = useCallback((): void => {
-        getIssues(currentWorkspace.id, projectId.current, pageNumber.current, issueFilter, issueFilterTerm).then(
-            (result) => {
-                if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-                else if (result.issues.length == 0)
-                    notify.show('No issues found for your filter', 'custom', 5000, infoColour);
-                else {
-                    setIssuesArray((oldValues) => oldValues.concat(result.issues));
-                    projectId.current = result.nextResource.projectId;
-                    pageNumber.current = result.nextResource.pageNumber;
-                }
-            },
-        );
+        async function getIssues(): Promise<void> {
+            const result = await apiFetchIssues(
+                currentWorkspace.id,
+                projectId.current,
+                pageNumber.current,
+                issueFilter,
+                issueFilterTerm,
+            );
+
+            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
+            else if (result.issues.length == 0) {
+                notify.show('No issues found for your filter', 'custom', 5000, infoColour);
+            } else {
+                setIssuesArray((oldValues) => oldValues.concat(result.issues));
+                projectId.current = result.nextResource.projectId;
+                pageNumber.current = result.nextResource.pageNumber;
+            }
+        }
+        getIssues();
     }, [currentWorkspace.id, issueFilter, issueFilterTerm]);
 
-    const updateIssue = (updatedIssue: Issue): void => {
-        const arrayCopy = [...issuesArray];
-        const found = arrayCopy.some((issue) => updatedIssue.iid === issue.iid);
-        if (found) {
-            issuesArray.forEach((issue: Issue, index) => {
-                if (issue.iid === updatedIssue.iid) {
-                    const now = new Date();
-                    updatedIssue.createdAt = `${now.getMonth()}/${now.getDate()}/${now.getFullYear()}`;
-                    arrayCopy[index] = updatedIssue;
-                    setIssuesArray(arrayCopy);
-                }
-            });
-        } else {
-            arrayCopy.unshift(updatedIssue);
-            setIssuesArray(arrayCopy);
-        }
-    };
-
-    useEffect(() => {
-        fetchIssues();
-    }, [fetchIssues]);
+    useEffect(() => fetchIssues(), [fetchIssues]);
 
     const scrollCheck = (e: HTMLDivElement): void => {
         if (e.scrollHeight - e.scrollTop === e.clientHeight && pageNumber.current !== 0) fetchIssues();
@@ -100,7 +87,7 @@ const Backlog: FunctionalComponent = () => {
                 onScroll={(e): void => scrollCheck(e.target as HTMLDivElement)}
             >
                 {issuesArray.map((issue, index) => {
-                    return <IssueCard key={index} issue={issue} updateIssue={updateIssue} />;
+                    return <IssueCard key={index} issue={issue} />;
                 })}
             </div>
         </Fragment>

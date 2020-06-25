@@ -5,10 +5,10 @@ import { notify } from 'react-notify-toast';
 import { Issue } from 'models/Issue';
 import { User } from 'models/User';
 import { Project } from 'models/Project';
-import { getWorkspaceProjects } from 'services/api/projects';
+import { apiFetchWorkspaceProjects } from 'services/api/projects';
 
 import { errorColour } from 'services/notification/colours';
-import { getSprints } from 'services/api/sprints';
+import { apiFetchSprints } from 'services/api/sprints';
 import { Sprint, SprintStatus } from 'models/Sprint';
 import { RootState } from 'stores';
 import { useSelector } from 'react-redux';
@@ -98,11 +98,11 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
     };
 
     useEffect(() => {
-        getWorkspaceProjects(currentWorkspace.id).then((result) => {
+        apiFetchWorkspaceProjects(currentWorkspace.id).then((result) => {
             if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
             else setProjects(result);
         });
-        getSprints(currentWorkspace.id, 'active').then((result) => {
+        apiFetchSprints(currentWorkspace.id, 'active').then((result) => {
             if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
             else {
                 result.unshift(emptySprint());

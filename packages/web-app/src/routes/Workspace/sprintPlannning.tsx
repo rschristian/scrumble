@@ -8,7 +8,7 @@ import { CreateOrEditSprint } from 'components/CreateOrEdit/sprint';
 import { SprintFilter } from 'components/Filter/sprint';
 import { Modal } from 'components/Modal';
 import { Sprint, SprintStatus } from 'models/Sprint';
-import { getSprints } from 'services/api/sprints';
+import { apiFetchSprints } from 'services/api/sprints';
 import { errorColour } from 'services/notification/colours';
 import { RootState } from 'stores';
 import { setActiveSideBarMenuItem } from 'stores/userLocationStore';
@@ -29,7 +29,7 @@ const SprintPlanning: FunctionalComponent = () => {
 
     useEffect(() => {
         dispatch(setActiveSideBarMenuItem(0));
-        getSprints(currentWorkspace.id, 'none').then((result) => {
+        apiFetchSprints(currentWorkspace.id, 'none').then((result) => {
             if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
             else setSprints(result);
         });

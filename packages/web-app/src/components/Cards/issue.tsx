@@ -112,7 +112,6 @@ export const IssueBoardCardList: FunctionalComponent<IssuesBoardProps> = (props:
 
 interface IProps {
     issue: Issue;
-    updateIssue: (issue: Issue) => void;
 }
 
 export const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {

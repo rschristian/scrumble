@@ -8,7 +8,7 @@ import { CreateOrEditWorkspace } from 'components/CreateOrEdit/workspace';
 import { Modal } from 'components/Modal';
 import { SearchBar } from 'components/SearchBar';
 import { Workspace } from 'models/Workspace';
-import { getWorkspaces } from 'services/api/workspaces';
+import { apiFetchWorkspaces } from 'services/api/workspaces';
 import { errorColour } from 'services/notification/colours';
 import { setActiveSideBarMenuItem } from 'stores/userLocationStore';
 import { useLtsWarning } from 'services/notification/hooks';
@@ -22,7 +22,7 @@ const Home: FunctionalComponent = () => {
     useEffect(() => {
         dispatch(setActiveSideBarMenuItem(0));
         async function getAllWorkspaces(): Promise<void> {
-            const result = await getWorkspaces();
+            const result = await apiFetchWorkspaces();
             if (typeof result !== 'string') setWorkspacesArray(result);
             else notify.show(result, 'error', 5000, errorColour);
         }

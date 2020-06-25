@@ -3,7 +3,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { notify } from 'react-notify-toast';
 import Select from 'react-select';
 
-import { getProjects } from 'services/api/projects';
+import { apiFetchProjects } from 'services/api/projects';
 import { errorColour } from 'services/notification/colours';
 import { Project } from 'models/Project';
 import { Workspace } from 'models/Workspace';
@@ -29,7 +29,7 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
 
     useEffect(() => {
         async function getProjectData(): Promise<void> {
-            const result = await getProjects();
+            const result = await apiFetchProjects();
             if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
             else {
                 const options: DropdownMenuOption[] = [];

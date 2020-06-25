@@ -2,7 +2,7 @@ import { apiService } from 'ts-api-toolkit';
 
 import { Workspace } from 'models/Workspace';
 
-export const getWorkspaces = async (): Promise<Workspace[] | string> => {
+export const apiFetchWorkspaces = async (): Promise<Workspace[] | string> => {
     try {
         const { data } = await apiService.get('/workspaces');
         return data;

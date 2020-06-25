@@ -5,7 +5,7 @@ import { notify } from 'react-notify-toast';
 
 import { IssueBoardCardList } from 'components/Cards/issue';
 import { Issue, IssueStatus } from 'models/Issue';
-import { getSprintIssues } from 'services/api/sprints';
+import { apiFetchSprintIssues } from 'services/api/issues';
 import { errorColour } from 'services/notification/colours';
 import { RootState } from 'stores';
 import { useLtsWarning } from 'services/notification/hooks';
@@ -15,7 +15,7 @@ const IssuesBoard: FunctionalComponent = () => {
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
 
     useEffect(() => {
-        getSprintIssues(currentWorkspace.id, currentSprint).then((result) => {
+        apiFetchSprintIssues(currentWorkspace.id, currentSprint).then((result) => {
             if (typeof result == 'string') {
                 notify.show(result, 'error', 5000, errorColour);
             } else {

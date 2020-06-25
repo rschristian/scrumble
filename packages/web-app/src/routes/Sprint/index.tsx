@@ -10,7 +10,7 @@ import metrics from 'assets/icons/metrics.png';
 import edit from 'assets/icons/edit.png';
 import { BreadCrumbs } from 'components/BreadCrumbs';
 import { SideBar, SideBarLink } from 'components/Core/SideBar';
-import { getSprints } from 'services/api/sprints';
+import { apiFetchSprints } from 'services/api/sprints';
 import { errorColour } from 'services/notification/colours';
 import { RootState } from 'stores';
 
@@ -70,7 +70,7 @@ const SprintContainer: FunctionalComponent<IProps> = (props: IProps) => {
     const [subPageContent, setSubPageContent] = useState<ComponentChild>(null);
 
     useEffect(() => {
-        getSprints(currentWorkspace.id, 'none').then((result) => {
+        apiFetchSprints(currentWorkspace.id, 'none').then((result) => {
             if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
             else {
                 for (const sprint of result) {
