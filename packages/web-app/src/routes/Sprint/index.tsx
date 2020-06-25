@@ -20,6 +20,34 @@ import SprintShowAndTell from './showAndTell';
 import SprintMetrics from './metrics';
 import SprintEdit from './edit';
 
+const sideNavItems: SideBarLink[] = [
+    {
+        label: 'Daily Stand-up',
+        icon: team,
+        path: '/',
+    },
+    {
+        label: 'Issues Board',
+        icon: kanbanBoard,
+        path: '/issuesBoard',
+    },
+    {
+        label: 'Show and Tell',
+        icon: presentation,
+        path: '/showAndTell',
+    },
+    {
+        label: 'Metrics',
+        icon: metrics,
+        path: '/metrics',
+    },
+    {
+        label: 'Edit',
+        icon: edit,
+        path: '/edit',
+    },
+];
+
 interface IProps {
     workspaceId: number;
     sprintId: number;
@@ -73,7 +101,7 @@ const SprintContainer: FunctionalComponent<IProps> = (props: IProps) => {
                 setSubPageContent(<DailyStandUp />);
                 break;
         }
-    }, [props.sprintId, props.workspaceId, props.subPage]);
+    }, [props.sprintId, props.workspaceId, props.subPage, currentWorkspace.id]);
 
     return (
         <div class="page">
@@ -93,33 +121,5 @@ const SprintContainer: FunctionalComponent<IProps> = (props: IProps) => {
         </div>
     );
 };
-
-const sideNavItems: SideBarLink[] = [
-    {
-        label: 'Daily Stand-up',
-        icon: team,
-        path: '/',
-    },
-    {
-        label: 'Issues Board',
-        icon: kanbanBoard,
-        path: '/issuesBoard',
-    },
-    {
-        label: 'Show and Tell',
-        icon: presentation,
-        path: '/showAndTell',
-    },
-    {
-        label: 'Metrics',
-        icon: metrics,
-        path: '/metrics',
-    },
-    {
-        label: 'Edit',
-        icon: edit,
-        path: '/edit',
-    },
-];
 
 export default SprintContainer;

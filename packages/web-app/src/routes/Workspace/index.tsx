@@ -13,6 +13,24 @@ import SprintPlanning from './sprintPlannning';
 import WorkspaceMetrics from './metrics';
 import WorkspaceEdit from './edit';
 
+const sideNavItems: SideBarLink[] = [
+    {
+        label: 'Sprint Planning',
+        icon: sprinter,
+        path: '/',
+    },
+    {
+        label: 'Metrics',
+        icon: metrics,
+        path: '/metrics',
+    },
+    {
+        label: 'Edit',
+        icon: edit,
+        path: '/edit',
+    },
+];
+
 interface IProps {
     workspaceId: number;
     subPage?: SubPage;
@@ -63,23 +81,5 @@ const WorkspaceContainer: FunctionalComponent<IProps> = (props: IProps) => {
         </div>
     );
 };
-
-const sideNavItems: SideBarLink[] = [
-    {
-        label: 'Sprint Planning',
-        icon: sprinter,
-        path: '/',
-    },
-    {
-        label: 'Metrics',
-        icon: metrics,
-        path: '/metrics',
-    },
-    {
-        label: 'Edit',
-        icon: edit,
-        path: '/edit',
-    },
-];
 
 export default WorkspaceContainer;

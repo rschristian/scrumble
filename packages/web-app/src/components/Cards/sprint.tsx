@@ -9,6 +9,12 @@ import { Sprint } from 'models/Sprint';
 import { setCurrentSprint } from 'stores/userLocationStore';
 import { useLtsWarning } from 'services/notification/hooks';
 
+function getUrlSubstringAndFix(): string {
+    const currentUrl = getCurrentUrl().replace(/\D+$/g, '');
+    if (currentUrl.substring(currentUrl.length - 1) == '/') return currentUrl.substring(0, currentUrl.length - 1);
+    return currentUrl;
+}
+
 interface IProps {
     sprint: Sprint;
     closed: boolean;
@@ -80,10 +86,4 @@ export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
             </div>
         </Fragment>
     );
-};
-
-const getUrlSubstringAndFix = (): string => {
-    const currentUrl = getCurrentUrl().replace(/\D+$/g, '');
-    if (currentUrl.substring(currentUrl.length - 1) == '/') return currentUrl.substring(0, currentUrl.length - 1);
-    return currentUrl;
 };

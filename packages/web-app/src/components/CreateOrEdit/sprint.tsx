@@ -1,8 +1,12 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
+import { notify } from 'react-notify-toast';
 
 import { Sprint, SprintStatus } from 'models/Sprint';
-import { notify } from 'react-notify-toast';
+
+function zeroPad(value: number): string {
+    return (value < 10 ? '0' : '') + value;
+}
 
 interface IProps {
     sprint?: Sprint;
@@ -108,8 +112,4 @@ export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) =
             )}
         </Fragment>
     );
-};
-
-const zeroPad = (value: number): string => {
-    return (value < 10 ? '0' : '') + value;
 };
