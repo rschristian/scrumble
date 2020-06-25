@@ -27,7 +27,6 @@ const unassigned: User = {
 export const IssueBoardCardList: FunctionalComponent<IssuesBoardProps> = (props: IssuesBoardProps) => {
     const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
-    const [headingColour] = useState(`issue-list-title-holder bg-${props.headingColour}-300`);
     const [issuesList, setIssueList] = useState<Issue[]>([]);
 
     unassigned.projectIds = currentWorkspace.projectIds;
@@ -64,7 +63,7 @@ export const IssueBoardCardList: FunctionalComponent<IssuesBoardProps> = (props:
 
     return (
         <div class="issue-list">
-            <div class={headingColour}>
+            <div class={`issue-list-title-holder ${props.headingColour}`}>
                 <h2 class="capitalize issue-list-title border-l border-deep-space-sparkle">{props.status}</h2>
             </div>
             {issuesList.map((issue) => {

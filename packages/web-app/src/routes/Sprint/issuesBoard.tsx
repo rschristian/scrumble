@@ -32,25 +32,25 @@ const IssuesBoard: FunctionalComponent = () => {
             <div class="issue-board">
                 <IssueBoardCardList
                     status={IssueStatus.open}
-                    headingColour="green"
+                    headingColour="bg-green-300"
                     issues={issuesArray}
                     updateIssueBoard={useLtsWarning}
                 />
                 <IssueBoardCardList
                     status={IssueStatus.todo}
-                    headingColour="yellow"
+                    headingColour="bg-yellow-300"
                     issues={issuesArray}
                     updateIssueBoard={useLtsWarning}
                 />
                 <IssueBoardCardList
                     status={IssueStatus.doing}
-                    headingColour="orange"
+                    headingColour="bg-orange-300"
                     issues={issuesArray}
                     updateIssueBoard={useLtsWarning}
                 />
                 <IssueBoardCardList
                     status={IssueStatus.closed}
-                    headingColour="red"
+                    headingColour="bg-red-300"
                     issues={issuesArray}
                     updateIssueBoard={useLtsWarning}
                 />
