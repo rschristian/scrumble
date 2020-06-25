@@ -1,0 +1,42 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ lts ]
+  pull_request:
+    branches: [ lts ]
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/api
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+
+    - name: Cache API Gradle
+      uses: actions/cache@v2
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/api/*.gradle*') }}
+        restore-keys: |
+            ${{ runner.os }}-gradle-
+          
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew bootJar
+
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v1.1.0
+      with:
+        username: ryanchristian4427
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: ryanchristian4427/scrumble-api
+        tags: latest
