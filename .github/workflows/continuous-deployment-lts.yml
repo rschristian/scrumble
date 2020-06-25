@@ -3,8 +3,10 @@ name: LTS CD
 on:
   push:
     branches: [ lts ]
+    paths: 'packages/lts/**'
   pull_request:
     branches: [ lts ]
+    paths: 'packages/lts/**'
     
 jobs:
   build:
