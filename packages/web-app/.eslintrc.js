@@ -1,20 +1,21 @@
 module.exports = {
-    parser: '@typescript-eslint/parser',
+    plugins: ['@typescript-eslint'],
     extends: [
         'preact',
         'plugin:@typescript-eslint/recommended',
         'prettier/@typescript-eslint',
         'plugin:prettier/recommended',
     ],
+    parser: '@typescript-eslint/parser',
+    parserOptions: {
+        ecmaFeatures: {
+            jsx: true,
+        },
+    },
     settings: {
         react: {
             pragma: 'h',
             version: 'detect',
-        },
-    },
-    parserOptions: {
-        ecmaFeatures: {
-            jsx: true,
         },
     },
     rules: {
