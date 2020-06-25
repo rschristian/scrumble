@@ -25,6 +25,9 @@ export default {
         plugins.unshift(tailwindCss);
         if (env.production) plugins.push(purgecss);
 
+        const critters = helpers.getPluginsByName(config, 'Critters')[0];
+        if (critters) critters.plugin.options.preload = 'body';
+
         // Sets default import to 'src/'
         config.resolve.modules.push(env.src);
 
