@@ -7,12 +7,12 @@ import { route } from 'preact-router';
 
 type State = {
     isAuthenticated: boolean;
-    currentUser: User;
+    currentUser: User | undefined;
 };
 
 const initialState: State = {
     isAuthenticated: false,
-    currentUser: null,
+    currentUser: undefined,
 };
 
 const slice = createSlice({
@@ -21,7 +21,7 @@ const slice = createSlice({
     reducers: {
         logout: (state: State): void => {
             state.isAuthenticated = false;
-            state.currentUser = null;
+            state.currentUser = undefined;
         },
         login: (state: State): void => {
             state.isAuthenticated = true;

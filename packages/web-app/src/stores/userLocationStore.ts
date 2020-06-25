@@ -5,14 +5,14 @@ import { Workspace } from 'models/Workspace';
 import { Sprint } from 'models/Sprint';
 
 type State = {
-    currentWorkspace: Workspace;
-    currentSprint: Sprint;
+    currentWorkspace: Workspace | undefined;
+    currentSprint: Sprint | undefined;
     activeSideBarItem: number;
 };
 
 const initialState: State = {
-    currentWorkspace: null,
-    currentSprint: null,
+    currentWorkspace: undefined,
+    currentSprint: undefined,
     activeSideBarItem: 0,
 };
 

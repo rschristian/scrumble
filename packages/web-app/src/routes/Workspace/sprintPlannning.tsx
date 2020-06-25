@@ -33,7 +33,7 @@ const SprintPlanning: FunctionalComponent = () => {
             if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
             else setSprints(result);
         });
-    }, [currentWorkspace.id, dispatch]);
+    }, [currentWorkspace, dispatch]);
 
     const updateSprint = (updatedSprint: Sprint): void => {
         const arrayCopy = [...sprints];
