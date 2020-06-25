@@ -11,7 +11,7 @@ services:
 
   scrumble:
     container_name: 'scrumble'
-    build: ryanchristian4427/scrumble-api
+    image: ryanchristian4427/scrumble-api
     depends_on:
       - postgres
     ports:
@@ -19,4 +19,4 @@ services:
 
   scrumble-lts:
       container_name: 'scrumble-lts'
-      build: ryanchristian4427/scrumble-lts
+      image: ryanchristian4427/scrumble-lts
