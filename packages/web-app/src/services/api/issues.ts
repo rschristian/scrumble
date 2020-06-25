@@ -1,6 +1,5 @@
 import { apiService } from 'ts-api-toolkit';
 
-import { Issue } from 'models/Issue';
 import { IssuePagination } from 'models/IssuePagination';
 
 export const getIssues = async (

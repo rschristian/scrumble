@@ -1,4 +1,5 @@
 import { apiService } from 'ts-api-toolkit';
+
 import { Project } from 'models/Project';
 
 export const getProjects = async (): Promise<Project[] | string> => {
