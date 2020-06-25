@@ -9,7 +9,6 @@ plugins {
 
 group 'com.bt'
 version ''
-mainClassName = 'com.bt.scrumble.ScrumbleApi'
 
 repositories {
     mavenCentral()
@@ -17,7 +16,7 @@ repositories {
 
 jar {
     manifest {
-        attributes 'Main-Class': mainClassName
+        attributes 'Main-Class': 'com.bt.scrumble.ScrumbleApi'
     }
 }
 
