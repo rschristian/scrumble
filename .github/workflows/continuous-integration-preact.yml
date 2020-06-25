@@ -1,4 +1,4 @@
-name: Preact CD
+name: Preact CI
 
 on:
   push:
