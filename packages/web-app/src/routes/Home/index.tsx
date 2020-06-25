@@ -8,9 +8,10 @@ import { CreateOrEditWorkspace } from 'components/CreateOrEdit/workspace';
 import { Modal } from 'components/Modal';
 import { SearchBar } from 'components/SearchBar';
 import { Workspace } from 'models/Workspace';
-import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
-import { errorColour, successColour, warningColour } from 'services/notification/colours';
+import { getWorkspaces } from 'services/api/workspaces';
+import { errorColour } from 'services/notification/colours';
 import { setActiveSideBarMenuItem } from 'stores/userLocationStore';
+import { useLtsWarning } from 'services/notification/hooks';
 
 const Home: FunctionalComponent = () => {
     const dispatch = useDispatch();
@@ -28,20 +29,6 @@ const Home: FunctionalComponent = () => {
         getAllWorkspaces();
     }, [dispatch]);
 
-    const submitNewWorkspace = (newWorkspace: Workspace): void => {
-        if (newWorkspace.name === '') notify.show('You must provide a name', 'warning', 5000, warningColour);
-        else {
-            createWorkspace(newWorkspace).then((res) => {
-                if (typeof res === 'string') notify.show(res, 'error', 5000, errorColour);
-                else {
-                    setWorkspacesArray([...workspacesArray, res]);
-                    setShowCreateModal(false);
-                    notify.show('Workspace created!', 'success', 5000, successColour);
-                }
-            });
-        }
-    };
-
     return (
         <div class="mt-16 flex justify-center bg-blue-100">
             {showCreateModal ? (
@@ -49,10 +36,7 @@ const Home: FunctionalComponent = () => {
                     title="Create New Workspace"
                     close={(): void => setShowCreateModal(false)}
                     content={
-                        <CreateOrEditWorkspace
-                            close={(): void => setShowCreateModal(false)}
-                            submit={submitNewWorkspace}
-                        />
+                        <CreateOrEditWorkspace close={(): void => setShowCreateModal(false)} submit={useLtsWarning} />
                     }
                 />
             ) : null}
