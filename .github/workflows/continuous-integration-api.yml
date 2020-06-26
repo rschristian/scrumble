@@ -2,10 +2,8 @@ name: API CI
 
 on:
   push:
-    branches: [ master ]
     paths: 'packages/api/**'
   pull_request:
-    branches: [ master ]
     paths: 'packages/api/**'
     
 jobs:

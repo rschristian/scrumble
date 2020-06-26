@@ -2,10 +2,8 @@ name: Preact CI
 
 on:
   push:
-    branches: [ master ]
     paths: 'packages/web-app/**'
   pull_request:
-    branches: [ master ]
     paths: 'packages/web-app/**'
     
 jobs:
