@@ -4,7 +4,7 @@ interface IProps {
     editForm: VNode;
 }
 
-export const GenericEdit: FunctionalComponent<IProps> = (props: IProps) => {
+const GenericEdit: FunctionalComponent<IProps> = (props: IProps) => {
     return (
         <Fragment>
             <div class="create-bar">
@@ -14,3 +14,5 @@ export const GenericEdit: FunctionalComponent<IProps> = (props: IProps) => {
         </Fragment>
     );
 };
+
+export default GenericEdit;

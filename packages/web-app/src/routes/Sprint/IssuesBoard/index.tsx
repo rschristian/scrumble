@@ -3,11 +3,12 @@ import { useEffect, useState } from 'preact/hooks';
 import { useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
-import { IssueBoardCardList } from 'components/Cards/issue';
 import { isIssueArray, Issue, IssueStatus } from 'models/Issue';
 import { apiUpdateIssue, apiFetchSprintIssues } from 'services/api/issues';
 import { errorColour } from 'services/notification/colours';
 import { RootState } from 'stores';
+
+import IssueBoardColumn from './issueBoardColumn';
 
 const IssuesBoard: FunctionalComponent = () => {
     const { currentSprint, currentWorkspace } = useSelector((state: RootState) => state.userLocation);
@@ -45,25 +46,25 @@ const IssuesBoard: FunctionalComponent = () => {
                 <h1 class="page-heading">Issues Board</h1>
             </div>
             <div class="issue-board">
-                <IssueBoardCardList
+                <IssueBoardColumn
                     status={IssueStatus.open}
                     headingColour="bg-green-300"
                     issues={issuesArray}
                     updateIssueBoard={updateIssue}
                 />
-                <IssueBoardCardList
+                <IssueBoardColumn
                     status={IssueStatus.todo}
                     headingColour="bg-yellow-300"
                     issues={issuesArray}
                     updateIssueBoard={updateIssue}
                 />
-                <IssueBoardCardList
+                <IssueBoardColumn
                     status={IssueStatus.doing}
                     headingColour="bg-orange-300"
                     issues={issuesArray}
                     updateIssueBoard={updateIssue}
                 />
-                <IssueBoardCardList
+                <IssueBoardColumn
                     status={IssueStatus.closed}
                     headingColour="bg-red-300"
                     issues={issuesArray}

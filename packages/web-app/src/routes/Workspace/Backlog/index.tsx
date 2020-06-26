@@ -3,10 +3,10 @@ import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
-import { IssueCard } from 'components/Cards/issue';
-import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
-import { IssueFilter } from 'components/Filter/issue';
-import { Modal } from 'components/Modal';
+import IssueCard from 'components/Cards/Issue/issueCard';
+import CreateOrEditIssue from 'components/CreateOrEdit/issue';
+import IssueFilter from 'components/Filter/issue';
+import Modal from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
 import { apiCreateIssue, apiFetchIssues } from 'services/api/issues';
 import { errorColour, infoColour, successColour } from 'services/notification/colours';

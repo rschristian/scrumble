@@ -3,7 +3,7 @@ import { useEffect } from 'preact/hooks';
 import { getCurrentUrl, route } from 'preact-router';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Error } from 'components/Error';
+import Error from 'components/Error';
 import { RootState } from 'stores';
 import { reduxLoginAndFetchUserInfo } from 'stores/authStore';
 

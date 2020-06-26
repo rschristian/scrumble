@@ -7,7 +7,7 @@ interface IProps {
     handleOnInput: (e: string) => void;
 }
 
-export const SearchBar: FunctionalComponent<IProps> = (props: IProps) => {
+const SearchBar: FunctionalComponent<IProps> = (props: IProps) => {
     const debouncedSearchTerm = useDebouncedCallback((value: string) => props.handleOnInput(value), 500);
 
     return (
@@ -25,3 +25,5 @@ export const SearchBar: FunctionalComponent<IProps> = (props: IProps) => {
         </div>
     );
 };
+
+export default SearchBar;

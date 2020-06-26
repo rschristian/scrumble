@@ -4,7 +4,7 @@ interface IProps {
     metricsContent: VNode | null;
 }
 
-export const GenericMetrics: FunctionalComponent<IProps> = (props: IProps) => {
+const GenericMetrics: FunctionalComponent<IProps> = (props: IProps) => {
     return (
         <Fragment>
             <div class="create-bar">
@@ -14,3 +14,5 @@ export const GenericMetrics: FunctionalComponent<IProps> = (props: IProps) => {
         </Fragment>
     );
 };
+
+export default GenericMetrics;

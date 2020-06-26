@@ -3,7 +3,7 @@ import { useState } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { Menu, X } from 'preact-feather';
 
-import { SideBarItem } from 'components/Core/SideBar/SideBarItem';
+import SideBarLinkItem from 'components/Core/SideBar/SideBarLinkItem';
 import { RootState } from 'stores';
 import { reduxSetActiveSideBarMenuItem } from 'stores/userLocationStore';
 
@@ -17,7 +17,7 @@ interface IProps {
     links: SideBarLink[];
 }
 
-export const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
+const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
     const dispatch = useDispatch();
     const { activeSideBarItem } = useSelector((state: RootState) => state.userLocation);
 
@@ -27,9 +27,9 @@ export const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
         dispatch(reduxSetActiveSideBarMenuItem(index));
     };
 
-    const sensors = props.links.map((menuItem, index) => {
+    const sideBarLinks = props.links.map((menuItem, index) => {
         return (
-            <SideBarItem
+            <SideBarLinkItem
                 key={index}
                 menuItem={menuItem}
                 index={index}
@@ -54,8 +54,10 @@ export const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
                         <p class={`ml-3 my-auto ${isOpen ? 'block' : 'hidden'}`}>Close sidebar</p>
                     </div>
                 </li>
-                {sensors}
+                {sideBarLinks}
             </ul>
         </div>
     );
 };
+
+export default SideBar;

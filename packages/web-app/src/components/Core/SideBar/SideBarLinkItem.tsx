@@ -12,7 +12,7 @@ interface IProps {
     onClick: (index: number) => void;
 }
 
-export const SideBarItem: FunctionalComponent<IProps> = (props: IProps) => {
+const SideBarLinkItem: FunctionalComponent<IProps> = (props: IProps) => {
     const [currentUrl] = useState(getCurrentUrl());
 
     const handleOnClick = (): void => {
@@ -39,3 +39,5 @@ export const SideBarItem: FunctionalComponent<IProps> = (props: IProps) => {
         </Link>
     );
 };
+
+export default SideBarLinkItem;

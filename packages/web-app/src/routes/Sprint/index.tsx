@@ -7,12 +7,12 @@ import kanbanBoard from 'assets/icons/kanbanBoard.png';
 import presentation from 'assets/icons/presentation.png';
 import metrics from 'assets/icons/metrics.png';
 import edit from 'assets/icons/edit.png';
-import { BreadCrumbs } from 'components/BreadCrumbs';
-import { SideBar, SideBarLink } from 'components/Core/SideBar';
+import BreadCrumbs from 'components/BreadCrumbs';
+import SideBar, { SideBarLink } from 'components/Core/SideBar';
 import { RootState } from 'stores';
 
 import DailyStandUp from './dailyStandUp';
-import IssuesBoard from './issuesBoard';
+import IssuesBoard from './IssuesBoard';
 import SprintShowAndTell from './showAndTell';
 import SprintMetrics from './metrics';
 import SprintEdit from './edit';

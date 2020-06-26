@@ -7,7 +7,7 @@ interface IProps {
     borderColour: string;
 }
 
-export const MetricBubble: FunctionalComponent<IProps> = (props: IProps) => {
+const MetricBubble: FunctionalComponent<IProps> = (props: IProps) => {
     return (
         <div class={`m-4 h-40 w-40 rounded-full shadow-xl border-8 ${props.bgColour} ${props.borderColour}`}>
             <div class="flex flex-col justify-center items-center mt-4">
@@ -17,3 +17,5 @@ export const MetricBubble: FunctionalComponent<IProps> = (props: IProps) => {
         </div>
     );
 };
+
+export default MetricBubble;

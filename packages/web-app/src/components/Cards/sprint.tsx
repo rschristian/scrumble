@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 import { MoreVertical } from 'preact-feather';
 
-import { Modal } from 'components/Modal';
+import Modal from 'components/Modal';
 import { isSprint, Sprint, SprintStatus } from 'models/Sprint';
 import { apiUpdateSprint } from 'services/api/sprints';
 import { errorColour } from 'services/notification/colours';
@@ -24,7 +24,7 @@ interface IProps {
     updateSprint: (sprint: Sprint) => void;
 }
 
-export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
+const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
     const dispatch = useDispatch();
     const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
@@ -116,3 +116,5 @@ export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
         </Fragment>
     );
 };
+
+export default SprintCard;

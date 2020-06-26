@@ -44,7 +44,7 @@ const emptyProject = (): Project => {
     };
 };
 
-export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
+const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
     const { currentUser } = useSelector((state: RootState) => state.auth);
     const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
@@ -203,3 +203,5 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
         </Fragment>
     );
 };
+
+export default CreateOrEditIssue;

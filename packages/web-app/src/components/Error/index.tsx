@@ -4,7 +4,7 @@ interface IProps {
     message: string;
 }
 
-export const Error: FunctionalComponent<IProps> = (props: IProps) => {
+const Error: FunctionalComponent<IProps> = (props: IProps) => {
     return (
         <Fragment>
             <div class="page w-full">
@@ -16,3 +16,5 @@ export const Error: FunctionalComponent<IProps> = (props: IProps) => {
         </Fragment>
     );
 };
+
+export default Error;

@@ -12,7 +12,7 @@ interface IProps {
     notLoginPage: boolean;
 }
 
-export const TopBar: FunctionalComponent<IProps> = (props: IProps) => {
+const TopBar: FunctionalComponent<IProps> = (props: IProps) => {
     const dispatch = useDispatch();
     const { isAuthenticated, currentUser } = useSelector((state: RootState) => state.auth);
 
@@ -105,3 +105,5 @@ export const TopBar: FunctionalComponent<IProps> = (props: IProps) => {
         </header>
     );
 };
+
+export default TopBar;

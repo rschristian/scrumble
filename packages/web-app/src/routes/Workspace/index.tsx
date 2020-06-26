@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import sprinter from 'assets/icons/sprinter.png';
 import metrics from 'assets/icons/metrics.png';
 import edit from 'assets/icons/edit.png';
-import { BreadCrumbs } from 'components/BreadCrumbs';
-import { SideBar, SideBarLink } from 'components/Core/SideBar';
+import BreadCrumbs from 'components/BreadCrumbs';
+import SideBar, { SideBarLink } from 'components/Core/SideBar';
 import { RootState } from 'stores';
 
 import SprintPlanning from './sprintPlannning';

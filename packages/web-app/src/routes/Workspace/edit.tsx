@@ -2,8 +2,8 @@ import { FunctionalComponent, h } from 'preact';
 import { useDispatch, useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
-import { CreateOrEditWorkspace } from 'components/CreateOrEdit/workspace';
-import { GenericEdit } from 'components/CommonRoutes/Edit';
+import CreateOrEditWorkspace from 'components/CreateOrEdit/workspace';
+import GenericEdit from 'components/CommonRoutes/edit';
 import { isWorkspace, Workspace } from 'models/Workspace';
 import { apiUpdateWorkspace } from 'services/api/workspaces';
 import { errorColour, infoColour } from 'services/notification/colours';

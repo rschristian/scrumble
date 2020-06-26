@@ -1,7 +1,7 @@
 import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
-import { SearchBar } from 'components/SearchBar';
+import SearchBar from 'components/SearchBar';
 import { SprintStatus } from 'models/Sprint';
 
 interface IProps {
@@ -17,7 +17,7 @@ const filterStatusEnum = {
     all: 'all',
 };
 
-export const SprintFilter: FunctionalComponent<IProps> = (props: IProps) => {
+const SprintFilter: FunctionalComponent<IProps> = (props: IProps) => {
     const [filterStatus, setFilterStatus] = useState<filterStatusEnum>(filterStatusEnum.active);
     const [searchTerm, setSearchTerm] = useState('');
     const { setFilter } = props;
@@ -52,3 +52,5 @@ export const SprintFilter: FunctionalComponent<IProps> = (props: IProps) => {
         </div>
     );
 };
+
+export default SprintFilter;

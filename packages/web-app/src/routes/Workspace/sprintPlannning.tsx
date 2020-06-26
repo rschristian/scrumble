@@ -3,10 +3,10 @@ import { useEffect, useState } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
-import { SprintCard } from 'components/Cards/sprint';
-import { CreateOrEditSprint } from 'components/CreateOrEdit/sprint';
-import { SprintFilter } from 'components/Filter/sprint';
-import { Modal } from 'components/Modal';
+import SprintCard from 'components/Cards/sprint';
+import CreateOrEditSprint from 'components/CreateOrEdit/sprint';
+import SprintFilter from 'components/Filter/sprint';
+import Modal from 'components/Modal';
 import { isSprint, isSprintArray, Sprint, SprintStatus } from 'models/Sprint';
 import { apiCreateSprint, apiFetchSprints } from 'services/api/sprints';
 import { errorColour, successColour } from 'services/notification/colours';

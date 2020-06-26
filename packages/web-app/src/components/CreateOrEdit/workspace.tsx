@@ -19,7 +19,7 @@ interface IProps {
     submit: (workspace: Workspace) => void;
 }
 
-export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
+const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
     const [name, setName] = useState<string>(props.workspace?.name || '');
     const [description, setDescription] = useState<string>(props.workspace?.description || '');
 
@@ -108,3 +108,5 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
         </Fragment>
     );
 };
+
+export default CreateOrEditWorkspace;

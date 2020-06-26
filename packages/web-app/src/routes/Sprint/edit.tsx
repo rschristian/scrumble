@@ -2,8 +2,8 @@ import { FunctionalComponent, h } from 'preact';
 import { useDispatch, useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
-import { GenericEdit } from 'components/CommonRoutes/Edit';
-import { CreateOrEditSprint } from 'components/CreateOrEdit/sprint';
+import GenericEdit from 'components/CommonRoutes/edit';
+import CreateOrEditSprint from 'components/CreateOrEdit/sprint';
 import { isSprint, Sprint } from 'models/Sprint';
 import { apiUpdateSprint } from 'services/api/sprints';
 import { errorColour, successColour } from 'services/notification/colours';

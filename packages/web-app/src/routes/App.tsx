@@ -5,7 +5,7 @@ import { useSelector, Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import Notifications from 'react-notify-toast';
 
-import { TopBar } from 'components/Core/TopBar';
+import TopBar from 'components/Core/TopBar';
 import Login from 'routes/Auth/login';
 import AuthSuccess from 'routes/Auth/authSuccess';
 import Home from 'routes/Home';

@@ -2,7 +2,7 @@ import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
 import { IssueStatus } from 'models/Issue';
-import { SearchBar } from 'components/SearchBar';
+import SearchBar from 'components/SearchBar';
 
 interface IProps {
     setFilter: (filterStatus: string, searchTerm: string) => void;
@@ -16,7 +16,7 @@ const filterStatusEnum = {
     all: 'all',
 };
 
-export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
+const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
     const [filterStatus, setFilterStatus] = useState<filterStatusEnum>(filterStatusEnum.open);
     const [searchTerm, setSearchTerm] = useState('');
     const { setFilter } = props;
@@ -57,3 +57,5 @@ export const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
         </div>
     );
 };
+
+export default IssueFilter;

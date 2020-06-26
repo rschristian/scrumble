@@ -9,7 +9,7 @@ interface IProps {
     close: () => void;
 }
 
-export const Modal: FunctionalComponent<IProps> = (props: IProps) => {
+const Modal: FunctionalComponent<IProps> = (props: IProps) => {
     return createPortal(
         <div class="modal">
             <div class="modal-overlay" onClick={props.close} />
@@ -47,3 +47,5 @@ export const Modal: FunctionalComponent<IProps> = (props: IProps) => {
         document.getElementById('modal')!,
     );
 };
+
+export default Modal;

@@ -4,9 +4,9 @@ import { useDispatch } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
 import { WorkspaceCard } from 'components/Cards/workspace';
-import { CreateOrEditWorkspace } from 'components/CreateOrEdit/workspace';
-import { Modal } from 'components/Modal';
-import { SearchBar } from 'components/SearchBar';
+import CreateOrEditWorkspace from 'components/CreateOrEdit/workspace';
+import Modal from 'components/Modal';
+import SearchBar from 'components/SearchBar';
 import { isWorkspace, isWorkspaceArray, Workspace } from 'models/Workspace';
 import { apiCreateWorkspace, apiFetchWorkspaces } from 'services/api/workspaces';
 import { errorColour, successColour, warningColour } from 'services/notification/colours';

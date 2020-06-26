@@ -12,7 +12,7 @@ interface IProps {
     close?: () => void;
 }
 
-export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) => {
+const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) => {
     const [title, setTitle] = useState(props.sprint?.title || '');
     const [description, setDescription] = useState(props.sprint?.description || '');
     const [startDate, setStartDate] = useState(
@@ -120,3 +120,5 @@ export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) =
         </Fragment>
     );
 };
+
+export default CreateOrEditSprint;

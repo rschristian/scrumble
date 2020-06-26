@@ -9,7 +9,7 @@ interface IProps {
     sprintName?: string;
 }
 
-export const BreadCrumbs: FunctionalComponent<IProps> = (props: IProps) => {
+const BreadCrumbs: FunctionalComponent<IProps> = (props: IProps) => {
     return (
         <h1 class="user-path">
             <Link href="/">Workspaces</Link> &gt;{' '}
@@ -28,3 +28,5 @@ export const BreadCrumbs: FunctionalComponent<IProps> = (props: IProps) => {
         </h1>
     );
 };
+
+export default BreadCrumbs;
