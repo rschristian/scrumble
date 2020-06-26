@@ -104,13 +104,13 @@ public class DefaultIssuePagingService implements IssuePagingService {
       linkPart = linkPart.replaceAll("http://10.72.98.102", "https://gitlab.ryanchristian.dev");
 
       for (int i = 1; i < segments.length; i++) {
-        String[] rel = segments[i].trim().split("="); // $NON-NLS-1$
+        String[] rel = segments[i].trim().split("=");
         if (rel.length < 2 || !"rel".equals(rel[0])) {
           continue;
         }
 
         String relValue = rel[1];
-        if (relValue.startsWith("\"") && relValue.endsWith("\"")) { // $NON-NLS-1$ //$NON-NLS-2$
+        if (relValue.startsWith("\"") && relValue.endsWith("\"")) {
           relValue = relValue.substring(1, relValue.length() - 1);
         }
 
@@ -161,7 +161,7 @@ public class DefaultIssuePagingService implements IssuePagingService {
               uri,
               HttpMethod.GET,
               getApplicationJsonHeaders(),
-              new ParameterizedTypeReference<>() {});
+              new ParameterizedTypeReference<>() { });
 
       issues = issuesResponse.getBody();
       for (var issue : issues) {
@@ -234,7 +234,7 @@ public class DefaultIssuePagingService implements IssuePagingService {
               queryUri,
               HttpMethod.GET,
               getApplicationJsonHeaders(),
-              new ParameterizedTypeReference<>() {});
+              new ParameterizedTypeReference<>() { });
       var openSprints = sprintService.getSprintsForWorkspace(workspaceId, "active");
 
       issues = issuesResponse.getBody();
