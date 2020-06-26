@@ -1,4 +1,4 @@
 FROM openjdk:13-alpine
-COPY scrumbleApi.jar /scrumbleApi.jar
-WORKDIR /
+WORKDIR /app
+COPY ./build/libs/scrumbleApi.jar /app
 CMD ["java","-jar","-Dspring.profiles.active=prod","scrumbleApi.jar"]
