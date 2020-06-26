@@ -38,7 +38,7 @@ public class ProjectApi {
     String uri = String.format("%s/projects", gitLabBaseUrl);
     ResponseEntity<ArrayList<Project>> userProjectsResponse =
         restTemplate.exchange(
-            uri, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {});
+            uri, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() { });
     return ResponseEntity.ok().body(userProjectsResponse.getBody());
   }
 }

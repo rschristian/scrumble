@@ -27,7 +27,7 @@ public class DefaultUserService implements UserService {
     ObjectMapper mapper = new ObjectMapper();
     List<UserData> userList =
         mapper.convertValue(
-            workspaceRepository.workspaceUserList(workspaceId), new TypeReference<>() {});
+            workspaceRepository.workspaceUserList(workspaceId), new TypeReference<>() { });
     var userArray = new ArrayList<>(userList);
     userArray.forEach(
         user -> {

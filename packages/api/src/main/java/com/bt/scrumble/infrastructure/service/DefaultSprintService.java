@@ -95,7 +95,7 @@ public class DefaultSprintService implements SprintService {
               uri,
               HttpMethod.GET,
               getApplicationJsonHeaders(),
-              new ParameterizedTypeReference<>() {});
+              new ParameterizedTypeReference<>() { });
       ArrayList<Issue> issues = issueResponse.getBody();
       if (issues != null) {
         issues.forEach(

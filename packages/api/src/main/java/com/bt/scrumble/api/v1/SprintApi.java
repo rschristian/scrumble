@@ -1,6 +1,5 @@
 package com.bt.scrumble.api.v1;
 
-import com.bt.scrumble.application.data.SprintData;
 import com.bt.scrumble.core.sprint.SprintService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -38,7 +37,7 @@ public class SprintApi {
       @PathVariable(value = "workspaceId") int workspaceId,
       @RequestParam(value = "projectIdToMilestoneIds") String projectIdToMilestoneIds) throws JsonProcessingException {
     ObjectMapper mapper = new ObjectMapper();
-    Map<String,Integer> result =
+    Map<String, Integer> result =
         mapper.readValue(projectIdToMilestoneIds, new TypeReference<>() {
         });
     return ResponseEntity.ok().body(sprintService.getSprintIssues(workspaceId, result));
