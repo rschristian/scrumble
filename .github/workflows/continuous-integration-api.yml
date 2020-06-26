@@ -2,10 +2,8 @@ name: API CI
 
 on:
   push:
-    branches: [ master ]
     paths: 'packages/api/**'
   pull_request:
-    branches: [ master ]
     paths: 'packages/api/**'
     
 jobs:
@@ -29,8 +27,12 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/api/*.gradle*') }}
         restore-keys: |
             ${{ runner.os }}-gradle-
+            
+    - name: Build Postgres DB
+      run: docker-compose up -d
           
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+
     - name: Build with Gradle
       run: ./gradlew build
