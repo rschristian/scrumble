@@ -43,6 +43,7 @@ export const Modal: FunctionalComponent<IProps> = (props: IProps) => {
                 </div>
             </div>
         </div>,
-        document.getElementById('modal'),
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        document.getElementById('modal')!,
     );
 };

@@ -3,11 +3,11 @@ import { useEffect, useState } from 'preact/hooks';
 import { useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
-import { Issue } from 'models/Issue';
+import { Issue, IssueStatus } from 'models/Issue';
 import { Project } from 'models/Project';
 import { Sprint, SprintStatus } from 'models/Sprint';
 import { User } from 'models/User';
-import { apiFetchProjects, apiFetchWorkspaceProjects } from 'services/api/projects';
+import { apiFetchWorkspaceProjects } from 'services/api/projects';
 import { apiFetchSprints } from 'services/api/sprints';
 import { errorColour } from 'services/notification/colours';
 import { RootState } from 'stores';
@@ -22,14 +22,15 @@ const unassigned: User = {
     id: 0,
     name: 'Unassigned',
     username: 'unassigned',
-    avatarUrl: null,
+    avatarUrl: '',
     projectIds: [],
 };
 
 const emptySprint = (): Sprint => {
     return {
-        id: 0,
-        title: 'No sprint',
+        id: -1,
+        title: '',
+        description: '',
         status: SprintStatus.active,
         // TODO Reevaluate this
         projectIdToMilestoneIds: {},
@@ -60,7 +61,7 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
     const createIssue = (): Issue => {
         return {
             iid: props.issue?.iid || 0,
-            status: props.issue?.status,
+            status: props.issue?.status || IssueStatus.open,
             title,
             description,
             storyPoint,
@@ -81,12 +82,17 @@ export const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) =>
 
     const handleProjectChange = (projectName: string): void => {
         const project = projects.find((p) => p.name === projectName);
-        setProjectId(project.id);
-        setProjectName(project.name);
+        if (project) {
+            setProjectId(project.id);
+            setProjectName(project.name);
+        }
     };
 
     const handleSprintChange = (sprintTitle: string): void => {
-        setSprint(sprints.find((sprint) => sprint.title === sprintTitle));
+        const sprint = sprints.find((sprint) => sprint.title === sprintTitle);
+        if (sprint) {
+            setSprint(sprint);
+        }
     };
 
     const validateAndSubmit = (): void => {

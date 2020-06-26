@@ -6,7 +6,7 @@ import { notify } from 'react-notify-toast';
 import { MoreVertical } from 'preact-feather';
 
 import { Modal } from 'components/Modal';
-import { Sprint, SprintStatus } from 'models/Sprint';
+import { isSprint, Sprint, SprintStatus } from 'models/Sprint';
 import { apiUpdateSprint } from 'services/api/sprints';
 import { errorColour } from 'services/notification/colours';
 import { RootState } from 'stores';
@@ -51,12 +51,13 @@ export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
             ...props.sprint,
             status: sprintStatus(),
         });
-        if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
-        else {
+        if (isSprint(result)) {
             props.updateSprint(result);
             setShowClosureModal(false);
             setShowOpeningModal(false);
             notify.show('Status updated!', 'success', 5000);
+        } else {
+            notify.show(result, 'error', 5000, errorColour);
         }
     };
 
@@ -94,8 +95,11 @@ export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
                 </div>
                 <div class="px-4 py-2 flex min-w-0 justify-between">
                     <p class="itm-description">
-                        {`${new Date(props.sprint.startDate).toLocaleDateString('en-GB')} 
-                        - ${new Date(props.sprint.dueDate).toLocaleDateString('en-GB')}`}
+                        {props.sprint.startDate && props.sprint.dueDate
+                            ? `${new Date(props.sprint.startDate).toLocaleDateString('en-GB')} - ${new Date(
+                                  props.sprint.dueDate,
+                              ).toLocaleDateString('en-GB')}`
+                            : null}
                     </p>
                     <div>
                         <span class="num-issues tooltip">

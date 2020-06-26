@@ -1,7 +1,7 @@
 import { Fragment, FunctionalComponent, h, VNode } from 'preact';
 
 interface IProps {
-    metricsContent: VNode;
+    metricsContent: VNode | null;
 }
 
 export const GenericMetrics: FunctionalComponent<IProps> = (props: IProps) => {

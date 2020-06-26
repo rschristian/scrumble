@@ -23,3 +23,11 @@ export interface Issue {
     assignee?: User;
     createdAt: Date | string;
 }
+
+export function isIssue(result: Issue | string): result is Issue {
+    return !!(result as Issue).iid;
+}
+
+export function isIssueArray(result: Issue[] | string): result is Issue[] {
+    return Array.isArray(result);
+}

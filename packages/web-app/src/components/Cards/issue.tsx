@@ -1,6 +1,6 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
 import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
@@ -22,7 +22,7 @@ const unassigned: User = {
     id: 0,
     name: 'Unassigned',
     username: 'unassigned',
-    avatarUrl: null,
+    avatarUrl: '',
     projectIds: [],
 };
 
@@ -94,7 +94,7 @@ export const IssueBoardCardList: FunctionalComponent<IssuesBoardProps> = (props:
                             </p>
                             <p>
                                 <span class="font-semibold">Assignee:</span>{' '}
-                                {issue.assignee !== null ? issue.assignee.name : 'Unassigned'}
+                                {issue.assignee?.name ? issue.assignee.name : 'Unassigned'}
                             </p>
                         </div>
                         <div class="bottom-0 left-0 px-4 py-2">
@@ -184,7 +184,7 @@ export const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
                         </span>
                         <span class="float-left text-gray-700 py-2">
                             <span class="font-medium">Assignee:</span>{' '}
-                            {props.issue.assignee !== null ? props.issue.assignee.name : 'Unassigned'}
+                            {props.issue.assignee?.name ? props.issue.assignee.name : 'Unassigned'}
                         </span>
                     </div>
                 </div>
@@ -219,7 +219,7 @@ export const IssueInformation: FunctionalComponent<InformationProps> = (props: I
                         <div class="table-cell">
                             <span class="info-label"> Assigned To: </span>
                             <span class="text-gray-700">
-                                {props.issue.assignee !== null ? props.issue.assignee.name : 'Unassigned'}
+                                {props.issue.assignee?.name ? props.issue.assignee.name : 'Unassigned'}
                             </span>
                         </div>
                     </div>
@@ -241,7 +241,7 @@ export const IssueInformation: FunctionalComponent<InformationProps> = (props: I
                 <span class="info-label"> Description: </span>
                 <div class="table-row normal-case">
                     <span class="text-gray-700">
-                        {props.issue.description.trim() !== '' ? (
+                        {props.issue.description?.trim() !== '' ? (
                             props.issue.description
                         ) : (
                             <span class="italic"> No Description Given</span>

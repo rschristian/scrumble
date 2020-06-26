@@ -7,7 +7,7 @@ import { WorkspaceCard } from 'components/Cards/workspace';
 import { CreateOrEditWorkspace } from 'components/CreateOrEdit/workspace';
 import { Modal } from 'components/Modal';
 import { SearchBar } from 'components/SearchBar';
-import { Workspace } from 'models/Workspace';
+import { isWorkspace, isWorkspaceArray, Workspace } from 'models/Workspace';
 import { apiCreateWorkspace, apiFetchWorkspaces } from 'services/api/workspaces';
 import { errorColour, successColour, warningColour } from 'services/notification/colours';
 import { reduxSetActiveSideBarMenuItem } from 'stores/userLocationStore';
@@ -22,7 +22,7 @@ const Home: FunctionalComponent = () => {
         dispatch(reduxSetActiveSideBarMenuItem(0));
         async function getAllWorkspaces(): Promise<void> {
             const result = await apiFetchWorkspaces();
-            typeof result === 'string' ? notify.show(result, 'error', 5000, errorColour) : setWorkspacesArray(result);
+            isWorkspaceArray(result) ? setWorkspacesArray(result) : notify.show(result, 'error', 5000, errorColour);
         }
         getAllWorkspaces();
     }, [dispatch]);
@@ -32,12 +32,12 @@ const Home: FunctionalComponent = () => {
             notify.show('You must provide a name', 'warning', 5000, warningColour);
         } else {
             const result = await apiCreateWorkspace(newWorkspace);
-            if (typeof result === 'string') {
-                notify.show(result, 'error', 5000, errorColour);
-            } else {
+            if (isWorkspace(result)) {
                 setWorkspacesArray([...workspacesArray, result]);
                 setShowCreateModal(false);
                 notify.show('Workspace created!', 'success', 5000, successColour);
+            } else {
+                notify.show(result, 'error', 5000, errorColour);
             }
         }
     };

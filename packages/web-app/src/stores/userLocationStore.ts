@@ -2,17 +2,29 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppDispatch } from 'stores';
 
 import { Workspace } from 'models/Workspace';
-import { Sprint } from 'models/Sprint';
+import { Sprint, SprintStatus } from 'models/Sprint';
 
 type State = {
-    currentWorkspace: Workspace | undefined;
-    currentSprint: Sprint | undefined;
+    currentWorkspace: Workspace;
+    currentSprint: Sprint;
     activeSideBarItem: number;
 };
 
 const initialState: State = {
-    currentWorkspace: undefined,
-    currentSprint: undefined,
+    currentWorkspace: {
+        id: -1,
+        name: '',
+        description: '',
+        projectIds: [],
+        users: [],
+    },
+    currentSprint: {
+        id: -1,
+        title: '',
+        description: '',
+        status: SprintStatus.active,
+        projectIdToMilestoneIds: {},
+    },
     activeSideBarItem: 0,
 };
 

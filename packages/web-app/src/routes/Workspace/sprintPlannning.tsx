@@ -7,7 +7,7 @@ import { SprintCard } from 'components/Cards/sprint';
 import { CreateOrEditSprint } from 'components/CreateOrEdit/sprint';
 import { SprintFilter } from 'components/Filter/sprint';
 import { Modal } from 'components/Modal';
-import { Sprint, SprintStatus } from 'models/Sprint';
+import { isSprint, isSprintArray, Sprint, SprintStatus } from 'models/Sprint';
 import { apiCreateSprint, apiFetchSprints } from 'services/api/sprints';
 import { errorColour, successColour } from 'services/notification/colours';
 import { RootState } from 'stores';
@@ -20,28 +20,28 @@ const SprintPlanning: FunctionalComponent = () => {
     const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
     // For mobile
-    const [isSprintView, setIsSprintView] = useState(false);
-
-    const [showNewSprintModal, setShowNewSprintModal] = useState(false);
-    const [sprintFilter, setSprintFilter] = useState(SprintStatus.active.toString());
+    const [isSprintView, setIsSprintView] = useState<boolean>(false);
+    const [showNewSprintModal, setShowNewSprintModal] = useState<boolean>(false);
+    const [sprintFilter, setSprintFilter] = useState<string>(SprintStatus.active.toString());
     const [sprints, setSprints] = useState<Sprint[]>([]);
 
     useEffect(() => {
         dispatch(reduxSetActiveSideBarMenuItem(0));
         async function fetchSprints(): Promise<void> {
             const result = await apiFetchSprints(currentWorkspace.id, 'none');
-            typeof result === 'string' ? notify.show(result, 'error', 5000, errorColour) : setSprints(result);
+            isSprintArray(result) ? setSprints(result) : notify.show(result, 'error', 5000, errorColour);
         }
         fetchSprints();
-    }, [currentWorkspace.id, dispatch]);
+    }, [currentWorkspace, dispatch]);
 
     const handleSprintCreation = async (newSprint: Sprint): Promise<void> => {
         const result = await apiCreateSprint(currentWorkspace.id, newSprint);
-        if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
-        else {
+        if (isSprint(result)) {
             notify.show('New sprint created!', 'success', 5000, successColour);
             setShowNewSprintModal(false);
             setSprints([...sprints, result]);
+        } else {
+            notify.show(result, 'error', 5000, errorColour);
         }
     };
 

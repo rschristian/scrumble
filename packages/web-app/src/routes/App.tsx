@@ -53,7 +53,7 @@ const Fallback: FunctionalComponent = () => {
     );
 };
 
-const AuthenticatedRoute = (props: { path: string; component: FunctionalComponent<unknown> }): VNode => {
+const AuthenticatedRoute = (props: { path: string; component: FunctionalComponent<any> }): VNode => {
     const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {

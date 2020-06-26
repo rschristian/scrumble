@@ -8,7 +8,7 @@ interface IProps {
 }
 
 export const SearchBar: FunctionalComponent<IProps> = (props: IProps) => {
-    const [debouncedCallback] = useDebouncedCallback((value: string) => props.handleOnInput(value), 2000);
+    const debouncedSearchTerm = useDebouncedCallback((value: string) => props.handleOnInput(value), 500);
 
     return (
         <div class="search-bar">
@@ -20,7 +20,7 @@ export const SearchBar: FunctionalComponent<IProps> = (props: IProps) => {
                 placeholder="Search by title or description"
                 class="ml-5 bg-transparent search-input"
                 aria-label="Search for content by title or description"
-                onInput={(e): void => debouncedCallback((e.target as HTMLInputElement).value)}
+                onInput={(e): void => debouncedSearchTerm((e.target as HTMLInputElement).value)}
             />
         </div>
     );

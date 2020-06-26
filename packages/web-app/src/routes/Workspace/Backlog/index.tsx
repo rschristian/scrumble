@@ -1,6 +1,6 @@
 import { FunctionalComponent, h } from 'preact';
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
 import { IssueCard } from 'components/Cards/issue';
@@ -13,7 +13,6 @@ import { errorColour, infoColour, successColour } from 'services/notification/co
 import { RootState } from 'stores';
 
 const Backlog: FunctionalComponent = () => {
-    const dispatch = useDispatch();
     const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);

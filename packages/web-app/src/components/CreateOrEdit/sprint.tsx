@@ -15,14 +15,23 @@ interface IProps {
 export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) => {
     const [title, setTitle] = useState(props.sprint?.title || '');
     const [description, setDescription] = useState(props.sprint?.description || '');
-    const [startDate, setStartDate] = useState(new Date(props.sprint?.startDate) || new Date());
+    const [startDate, setStartDate] = useState(
+        (): Date => {
+            if (props.sprint?.startDate) {
+                return new Date(props.sprint?.startDate);
+            }
+            return new Date();
+        },
+    );
     const [dueDate, setDueDate] = useState(
-        new Date(props.sprint?.dueDate) ||
-            ((): Date => {
-                const today = new Date();
-                today.setDate(today.getDate() + 7);
-                return today;
-            }),
+        (): Date => {
+            if (props.sprint?.dueDate) {
+                return new Date(props.sprint?.dueDate);
+            }
+            const today = new Date();
+            today.setDate(today.getDate() + 7);
+            return today;
+        },
     );
 
     const createSprint = (): Sprint => {

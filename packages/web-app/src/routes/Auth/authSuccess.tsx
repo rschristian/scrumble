@@ -1,6 +1,6 @@
 import { FunctionalComponent, h } from 'preact';
 import { useEffect } from 'preact/hooks';
-import { getCurrentUrl } from 'preact-router';
+import { getCurrentUrl, route } from 'preact-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Error } from 'components/Error';
@@ -12,12 +12,16 @@ const AuthSuccess: FunctionalComponent = () => {
     const { error } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
-        const token = getCurrentUrl()
-            .match(/token=(.*)/)[0]
-            .substring(6);
+        function getToken(): string | undefined {
+            const tokenFromUrl = getCurrentUrl().match(/token=(.*)/);
+            if (tokenFromUrl && tokenFromUrl[0]) {
+                return tokenFromUrl[0].substring(6);
+            }
+        }
 
         async function login(): Promise<void> {
-            await dispatch(reduxLoginAndFetchUserInfo(token));
+            const token = getToken();
+            token ? await dispatch(reduxLoginAndFetchUserInfo(token)) : route('/', true);
         }
 
         login();

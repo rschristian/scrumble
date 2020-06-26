@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
 import { IssueBoardCardList } from 'components/Cards/issue';
-import { Issue, IssueStatus } from 'models/Issue';
+import { isIssueArray, Issue, IssueStatus } from 'models/Issue';
 import { apiUpdateIssue, apiFetchSprintIssues } from 'services/api/issues';
 import { errorColour } from 'services/notification/colours';
 import { RootState } from 'stores';
@@ -31,9 +31,7 @@ const IssuesBoard: FunctionalComponent = () => {
 
     const fetchIssues = async (): Promise<void> => {
         const result = await apiFetchSprintIssues(currentWorkspace.id, currentSprint);
-        typeof result === 'string'
-            ? notify.show(result, 'error', 5000, errorColour)
-            : setIssuesArray(result as Issue[]);
+        isIssueArray(result) ? setIssuesArray(result) : notify.show(result, 'error', 5000, errorColour);
     };
 
     useEffect(() => {

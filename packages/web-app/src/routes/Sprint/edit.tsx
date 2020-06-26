@@ -4,7 +4,7 @@ import { notify } from 'react-notify-toast';
 
 import { GenericEdit } from 'components/CommonRoutes/Edit';
 import { CreateOrEditSprint } from 'components/CreateOrEdit/sprint';
-import { Sprint } from 'models/Sprint';
+import { isSprint, Sprint } from 'models/Sprint';
 import { apiUpdateSprint } from 'services/api/sprints';
 import { errorColour, successColour } from 'services/notification/colours';
 import { RootState } from 'stores';
@@ -16,10 +16,11 @@ const SprintEdit: FunctionalComponent = () => {
 
     const onSubmit = async (updatedSprint: Sprint): Promise<void> => {
         const result = await apiUpdateSprint(currentWorkspace.id, updatedSprint);
-        if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
-        else {
+        if (isSprint(result)) {
             dispatch(reduxSetCurrentSprint(result));
             notify.show('Sprint has been updated!', 'success', 5000, successColour);
+        } else {
+            notify.show(result, 'error', 5000, errorColour);
         }
     };
 

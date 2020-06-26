@@ -9,7 +9,8 @@
     "jsxFactory": "h",
     "moduleResolution": "node",
     "noImplicitAny": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "strict": true
   },
   "include": ["src/**/*"]
 }

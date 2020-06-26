@@ -1,89 +1,36 @@
-import { useRef, useCallback, useEffect } from 'preact/hooks';
+import { useRef, useEffect } from 'preact/hooks';
 
-export default function useDebouncedCallback<T extends unknown[]>(
-    callback: (...args: T) => unknown,
-    delay: number,
-    options: { maxWait?: number; leading?: boolean; trailing?: boolean } = {},
-): [(...args: T) => void, () => void, () => void] {
-    const maxWait = options.maxWait;
-    const maxWaitHandler = useRef(null);
-    const maxWaitArgs = useRef<T | []>([]);
+// https://github.com/xnimorz/use-debounce
+export default function useDebouncedCallback<A extends unknown[]>(
+    callback: (...args: A) => void,
+    wait: number,
+): (...args: A) => void {
+    // track args & timeout handle between calls
+    const argsRef = useRef<A>();
+    const timeout = useRef<ReturnType<typeof setTimeout>>();
 
-    const leading = options.leading;
-    const trailing = options.trailing === undefined ? true : options.trailing;
-    const leadingCall = useRef(false);
-
-    const functionTimeoutHandler = useRef(null);
-    const isComponentUnmounted = useRef(false);
-
-    const debouncedFunction = useRef(callback);
-    debouncedFunction.current = callback;
-
-    const cancelDebouncedCallback: () => void = useCallback(() => {
-        clearTimeout(functionTimeoutHandler.current);
-        clearTimeout(maxWaitHandler.current);
-        maxWaitHandler.current = null;
-        maxWaitArgs.current = [];
-        functionTimeoutHandler.current = null;
-        leadingCall.current = false;
-    }, []);
-
-    useEffect(
-        () => (): void => {
-            // we use flag, as we allow to call callPending outside the hook
-            isComponentUnmounted.current = true;
-        },
-        [],
-    );
-
-    const debouncedCallback = useCallback(
-        (...args: T) => {
-            maxWaitArgs.current = args;
-            clearTimeout(functionTimeoutHandler.current);
-            if (leadingCall.current) {
-                leadingCall.current = false;
-            }
-            if (!functionTimeoutHandler.current && leading && !leadingCall.current) {
-                debouncedFunction.current(...args);
-                leadingCall.current = true;
-            }
-
-            functionTimeoutHandler.current = setTimeout(() => {
-                let shouldCallFunction = true;
-                if (leading && leadingCall.current) {
-                    shouldCallFunction = false;
-                }
-                cancelDebouncedCallback();
-
-                if (!isComponentUnmounted.current && trailing && shouldCallFunction) {
-                    debouncedFunction.current(...args);
-                }
-            }, delay);
-
-            if (maxWait && !maxWaitHandler.current && trailing) {
-                maxWaitHandler.current = setTimeout(() => {
-                    const args = maxWaitArgs.current;
-                    cancelDebouncedCallback();
-
-                    if (!isComponentUnmounted.current) {
-                        debouncedFunction.current.apply(null, args);
-                    }
-                }, maxWait);
-            }
-        },
-        [maxWait, delay, cancelDebouncedCallback, leading, trailing],
-    );
-
-    const callPending = useCallback(() => {
-        // Call pending callback only if we have anything in our queue
-        if (!functionTimeoutHandler.current) {
-            return;
+    function cleanup(): void {
+        if (timeout.current) {
+            clearTimeout(timeout.current);
         }
+    }
 
-        debouncedFunction.current.apply(null, maxWaitArgs.current);
-        cancelDebouncedCallback();
-    }, [cancelDebouncedCallback]);
+    // make sure our timeout gets cleared if
+    // our consuming component gets unmounted
+    useEffect(() => cleanup, []);
 
-    // At the moment, we use 3 args array so that we save backward compatibility
-    return [debouncedCallback, cancelDebouncedCallback, callPending];
+    return function debouncedCallback(...args: A): void {
+        // capture latest args
+        argsRef.current = args;
+
+        // clear debounce timer
+        cleanup();
+
+        // start waiting again
+        timeout.current = setTimeout(() => {
+            if (argsRef.current) {
+                callback(...argsRef.current);
+            }
+        }, wait);
+    };
 }

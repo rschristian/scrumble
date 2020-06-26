@@ -6,15 +6,23 @@ import { apiFetchUserInfo, apiLogin, destroyOAuthToken } from 'services/api/auth
 import { route } from 'preact-router';
 import { authStorageService } from 'ts-api-toolkit';
 
+const defaultUser: User = {
+    id: -1,
+    name: '',
+    username: '',
+    avatarUrl: '',
+    projectIds: [],
+};
+
 type State = {
     isAuthenticated: boolean;
-    currentUser: User | undefined;
+    currentUser: User;
     error: string;
 };
 
 const initialState: State = {
     isAuthenticated: false,
-    currentUser: undefined,
+    currentUser: defaultUser,
     error: '',
 };
 
@@ -25,7 +33,7 @@ const slice = createSlice({
         logout: (state: State): void => {
             authStorageService.destroyToken();
             state.isAuthenticated = false;
-            state.currentUser = undefined;
+            state.currentUser = defaultUser;
         },
         loginSuccess: (state: State, action: PayloadAction<{ jwt: string }>): void => {
             authStorageService.saveToken(action.payload.jwt);
