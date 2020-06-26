@@ -1,3 +1,9 @@
-declare module '*.jpg';
-declare module '*.png';
-declare module 'multiselect-react-dropdown';
+declare module '*.jpg' {
+    const content: string;
+    export = content;
+}
+declare module '*.png' {
+    const content: string;
+    export = content;
+}
+declare module 'react-select';

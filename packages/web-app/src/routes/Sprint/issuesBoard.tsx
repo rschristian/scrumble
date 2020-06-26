@@ -1,16 +1,17 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { useSelector } from 'react-redux';
+import { notify } from 'react-notify-toast';
 
 import { IssueBoardCardList } from 'components/Cards/issue';
 import { Issue, IssueStatus } from 'models/Issue';
-import { editIssue } from 'services/api/issues';
-import { useStore } from 'stores';
-import { notify } from 'react-notify-toast';
+import { apiUpdateIssue, apiFetchSprintIssues } from 'services/api/issues';
 import { errorColour } from 'services/notification/colours';
-import { getSprintIssues } from 'services/api/sprints';
+import { RootState } from 'stores';
 
 const IssuesBoard: FunctionalComponent = () => {
-    const userLocationStore = useStore().userLocationStore;
+    const { currentSprint, currentWorkspace } = useSelector((state: RootState) => state.userLocation);
+
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
 
     const updateIssueBoard = (updatedIssue: Issue): void => {
@@ -23,27 +24,21 @@ const IssuesBoard: FunctionalComponent = () => {
         });
     };
 
-    const updateIssue = async (issue: Issue): Promise<void> => {
-        return await editIssue(userLocationStore.currentWorkspace.id, issue).then((error) => {
-            if (error) notify.show(error, 'error', 5000, errorColour);
-            else {
-                updateIssueBoard(issue);
-            }
-        });
+    const updateIssue = async (updatedIssue: Issue): Promise<void> => {
+        const result = await apiUpdateIssue(currentWorkspace.id, updatedIssue);
+        result ? notify.show(result, 'error', 5000, errorColour) : updateIssueBoard(updatedIssue);
     };
 
     const fetchIssues = async (): Promise<void> => {
-        getSprintIssues(userLocationStore.currentWorkspace.id, userLocationStore.currentSprint).then((result) => {
-            if (typeof result == 'string') {
-                notify.show(result, 'error', 5000, errorColour);
-            } else {
-                setIssuesArray(result as Issue[]);
-            }
-        });
+        const result = await apiFetchSprintIssues(currentWorkspace.id, currentSprint);
+        typeof result === 'string'
+            ? notify.show(result, 'error', 5000, errorColour)
+            : setIssuesArray(result as Issue[]);
     };
 
     useEffect(() => {
         fetchIssues();
+        // TODO Look at this. I seem to remember an issue here
     }, []);
 
     return (
@@ -54,25 +49,25 @@ const IssuesBoard: FunctionalComponent = () => {
             <div class="issue-board">
                 <IssueBoardCardList
                     status={IssueStatus.open}
-                    headingColour="green"
+                    headingColour="bg-green-300"
                     issues={issuesArray}
                     updateIssueBoard={updateIssue}
                 />
                 <IssueBoardCardList
                     status={IssueStatus.todo}
-                    headingColour="yellow"
+                    headingColour="bg-yellow-300"
                     issues={issuesArray}
                     updateIssueBoard={updateIssue}
                 />
                 <IssueBoardCardList
                     status={IssueStatus.doing}
-                    headingColour="orange"
+                    headingColour="bg-orange-300"
                     issues={issuesArray}
                     updateIssueBoard={updateIssue}
                 />
                 <IssueBoardCardList
                     status={IssueStatus.closed}
-                    headingColour="red"
+                    headingColour="bg-red-300"
                     issues={issuesArray}
                     updateIssueBoard={updateIssue}
                 />

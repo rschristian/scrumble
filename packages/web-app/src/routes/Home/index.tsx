@@ -1,5 +1,6 @@
 import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { useDispatch } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
 import { WorkspaceCard } from 'components/Cards/workspace';
@@ -7,43 +8,39 @@ import { CreateOrEditWorkspace } from 'components/CreateOrEdit/workspace';
 import { Modal } from 'components/Modal';
 import { SearchBar } from 'components/SearchBar';
 import { Workspace } from 'models/Workspace';
-import { fetchUserInfo } from 'services/api/auth';
-import { createWorkspace, getWorkspaces } from 'services/api/workspaces';
+import { apiCreateWorkspace, apiFetchWorkspaces } from 'services/api/workspaces';
 import { errorColour, successColour, warningColour } from 'services/notification/colours';
-import { useStore } from 'stores';
+import { reduxSetActiveSideBarMenuItem } from 'stores/userLocationStore';
 
 const Home: FunctionalComponent = () => {
-    const rootStore = useStore();
-    const { authStore, userLocationStore } = rootStore;
+    const dispatch = useDispatch();
 
     const [workspacesArray, setWorkspacesArray] = useState<Workspace[]>([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
 
     useEffect(() => {
-        getWorkspaces().then((res) => {
-            if (typeof res !== 'string') setWorkspacesArray(res);
-            else notify.show(res, 'error', 5000, errorColour);
-        });
-    }, []);
+        dispatch(reduxSetActiveSideBarMenuItem(0));
+        async function getAllWorkspaces(): Promise<void> {
+            const result = await apiFetchWorkspaces();
+            typeof result === 'string' ? notify.show(result, 'error', 5000, errorColour) : setWorkspacesArray(result);
+        }
+        getAllWorkspaces();
+    }, [dispatch]);
 
-    const submitNewWorkspace = (newWorkspace: Workspace): void => {
-        if (newWorkspace.name === '') notify.show('You must provide a name', 'warning', 5000, warningColour);
-        else {
-            createWorkspace(newWorkspace).then((res) => {
-                if (typeof res === 'string') notify.show(res, 'error', 5000, errorColour);
-                else {
-                    setWorkspacesArray([...workspacesArray, res]);
-                    setShowCreateModal(false);
-                    notify.show('Workspace created!', 'success', 5000, successColour);
-                }
-            });
+    const submitNewWorkspace = async (newWorkspace: Workspace): Promise<void> => {
+        if (newWorkspace.name === '') {
+            notify.show('You must provide a name', 'warning', 5000, warningColour);
+        } else {
+            const result = await apiCreateWorkspace(newWorkspace);
+            if (typeof result === 'string') {
+                notify.show(result, 'error', 5000, errorColour);
+            } else {
+                setWorkspacesArray([...workspacesArray, result]);
+                setShowCreateModal(false);
+                notify.show('Workspace created!', 'success', 5000, successColour);
+            }
         }
     };
-
-    useEffect(() => {
-        fetchUserInfo().then((response) => authStore.setCurrentUser(response));
-        userLocationStore.setActiveSideBarItem(0);
-    }, [authStore, userLocationStore]);
 
     return (
         <div class="mt-16 flex justify-center bg-blue-100">
@@ -66,6 +63,7 @@ const Home: FunctionalComponent = () => {
                         New Workspace
                     </button>
                 </div>
+                {/* TODO Never implemented workspace search functionality? */}
                 <SearchBar handleOnInput={(term: string): void => console.log(term)} />
                 <div class="rounded bg-white overflow-hidden shadow-lg">
                     {workspacesArray.map((workspace, index) => {

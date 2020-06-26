@@ -1,15 +1,22 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { getCurrentUrl, route } from 'preact-router';
-import { MoreVertical } from 'preact-feather';
+import { useDispatch, useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
+import { MoreVertical } from 'preact-feather';
 
 import { Modal } from 'components/Modal';
 import { Sprint, SprintStatus } from 'models/Sprint';
-import { editSprint } from 'services/api/sprints';
-import { observer } from 'services/mobx';
+import { apiUpdateSprint } from 'services/api/sprints';
 import { errorColour } from 'services/notification/colours';
-import { useStore } from 'stores';
+import { RootState } from 'stores';
+import { reduxSetCurrentSprint } from 'stores/userLocationStore';
+
+const getUrlSubstringAndFix = (): string => {
+    const currentUrl = getCurrentUrl().replace(/\D+$/g, '');
+    if (currentUrl.substring(currentUrl.length - 1) === '/') return currentUrl.substring(0, currentUrl.length - 1);
+    return currentUrl;
+};
 
 interface IProps {
     sprint: Sprint;
@@ -17,15 +24,16 @@ interface IProps {
     updateSprint: (sprint: Sprint) => void;
 }
 
-export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) => {
-    const userLocationStore = useStore().userLocationStore;
+export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
+    const dispatch = useDispatch();
+    const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
     const [showClosureModal, setShowClosureModal] = useState(false);
     const [showOpeningModal, setShowOpeningModal] = useState(false);
 
     const linkTo = (): void => {
         route(`${getUrlSubstringAndFix()}/sprint/${props.sprint.id}/`);
-        userLocationStore.setSprint(props.sprint);
+        dispatch(reduxSetCurrentSprint(props.sprint));
     };
 
     const closureModalContent = <div>Are you sure you want to close this sprint?</div>;
@@ -39,18 +47,17 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
     };
 
     const handleToggleSprintStatus = async (): Promise<void> => {
-        return await editSprint(userLocationStore.currentWorkspace.id, {
+        const result = await apiUpdateSprint(currentWorkspace.id, {
             ...props.sprint,
             status: sprintStatus(),
-        }).then((result) => {
-            if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
-            else {
-                props.updateSprint(result);
-                setShowClosureModal(false);
-                setShowOpeningModal(false);
-                notify.show('Status updated!', 'success', 5000);
-            }
         });
+        if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
+        else {
+            props.updateSprint(result);
+            setShowClosureModal(false);
+            setShowOpeningModal(false);
+            notify.show('Status updated!', 'success', 5000);
+        }
     };
 
     return (
@@ -104,10 +111,4 @@ export const SprintCard: FunctionalComponent<IProps> = observer((props: IProps) 
             </div>
         </Fragment>
     );
-});
-
-const getUrlSubstringAndFix = (): string => {
-    const currentUrl = getCurrentUrl().replace(/\D+$/g, '');
-    if (currentUrl.substring(currentUrl.length - 1) == '/') return currentUrl.substring(0, currentUrl.length - 1);
-    return currentUrl;
 };

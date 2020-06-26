@@ -1,33 +1,45 @@
-import { FunctionalComponent, h, VNode } from 'preact';
-import { useEffect } from 'preact/hooks';
-import { lazy, Suspense } from 'preact/compat';
-import { Route, route, Router } from 'preact-router';
+import { Fragment, FunctionalComponent, h, VNode } from 'preact';
+import { useEffect, useState } from 'preact/hooks';
+import { getCurrentUrl, Route, route, Router, RouterOnChangeArgs } from 'preact-router';
+import { useSelector, Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import Notifications from 'react-notify-toast';
 
 import { TopBar } from 'components/Core/TopBar';
 import Login from 'routes/Auth/login';
-import { useStore } from 'stores';
-
-const AuthSuccess = lazy(() => import('routes/Auth/authSuccess'));
-const Home = lazy(() => import('routes/Home'));
-const Workspace = lazy(() => import('routes/Workspace'));
-const Sprint = lazy(() => import('routes/Sprint'));
+import AuthSuccess from 'routes/Auth/authSuccess';
+import Home from 'routes/Home';
+import Workspace from 'routes/Workspace';
+import Sprint from 'routes/Sprint';
+import redux, { RootState } from 'stores';
 
 const App: FunctionalComponent = () => {
+    const [notLoginPage, setNotLoginPage] = useState<boolean>(getCurrentUrl() !== '/login');
+
+    const handleRoute = (e: RouterOnChangeArgs): void => setNotLoginPage(e.url !== '/login');
+
     return (
-        <div id="app" class="bg-blue-100">
+        <Fragment>
+            <div id="app" class="bg-blue-100">
+                <Provider store={redux.store}>
+                    <PersistGate loading={<Fallback />} persistor={redux.persistor}>
+                        <TopBar notLoginPage={notLoginPage} />
+                        <Router onChange={handleRoute}>
+                            <Route path="/login" component={Login} />
+                            <Route path="/oauth-success" component={AuthSuccess} />
+                            <AuthenticatedRoute path="/" component={Home} />
+                            <AuthenticatedRoute path="/workspace/:workspaceId/:subPage?" component={Workspace} />
+                            <AuthenticatedRoute
+                                path="/workspace/:workspaceId/sprint/:sprintId/:subPage?"
+                                component={Sprint}
+                            />
+                        </Router>
+                    </PersistGate>
+                </Provider>
+            </div>
             <Notifications />
-            <TopBar />
-            <Suspense fallback={<Fallback />}>
-                <Router>
-                    <Route path="/login" component={Login} />
-                    <Route path="/oauth-success" component={AuthSuccess} />
-                    <AuthenticatedRoute path="/" component={Home} />
-                    <AuthenticatedRoute path="/workspace/:workspaceId/:subPage?" component={Workspace} />
-                    <AuthenticatedRoute path="/workspace/:workspaceId/sprint/:sprintId/:subPage?" component={Sprint} />
-                </Router>
-            </Suspense>
-        </div>
+            <div id="modal" />
+        </Fragment>
     );
 };
 
@@ -41,14 +53,12 @@ const Fallback: FunctionalComponent = () => {
     );
 };
 
-const AuthenticatedRoute = (props: { path: string; component: FunctionalComponent }): VNode => {
-    const isLoggedIn = useStore().authStore.isAuthenticated;
+const AuthenticatedRoute = (props: { path: string; component: FunctionalComponent<unknown> }): VNode => {
+    const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
-        if (!isLoggedIn) route('/login', true);
-    }, [isLoggedIn]);
-
-    if (!isLoggedIn) return null;
+        if (!isAuthenticated) route('/login', true);
+    }, [isAuthenticated]);
 
     return <Route {...props} />;
 };

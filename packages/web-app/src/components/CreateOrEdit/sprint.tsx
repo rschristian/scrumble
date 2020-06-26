@@ -1,8 +1,10 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
+import { notify } from 'react-notify-toast';
 
 import { Sprint, SprintStatus } from 'models/Sprint';
-import { notify } from 'react-notify-toast';
+
+const zeroPad = (value: number): string => (value < 10 ? '0' : '') + value;
 
 interface IProps {
     sprint?: Sprint;
@@ -33,12 +35,13 @@ export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) =
             dueDate: dueDate ? dueDate.toISOString() : '',
             totalStoryPoint: props.sprint?.totalStoryPoint || 0,
             totalNumberOfIssues: props.sprint?.totalNumberOfIssues || 0,
+            // TODO Reevaluate this
+            projectIdToMilestoneIds: {},
         };
     };
 
     const validateAndSubmit = (): void => {
-        if (title == '') notify.show('Please give this sprint a title', 'warning', 5000);
-        else props.submit(createSprint());
+        title === '' ? notify.show('Please give this sprint a title', 'warning', 5000) : props.submit(createSprint());
     };
 
     const generateDate = (dateValue: string): Date => {
@@ -64,7 +67,6 @@ export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) =
                 <textarea
                     class="form-input"
                     rows={5}
-                    type="text"
                     placeholder="Description"
                     value={description}
                     onInput={(e): void => setDescription((e.target as HTMLInputElement).value)}
@@ -108,8 +110,4 @@ export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) =
             )}
         </Fragment>
     );
-};
-
-const zeroPad = (value: number): string => {
-    return (value < 10 ? '0' : '') + value;
 };

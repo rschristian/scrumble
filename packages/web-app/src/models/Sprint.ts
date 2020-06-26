@@ -12,4 +12,5 @@ export interface Sprint {
     dueDate?: string;
     totalStoryPoint?: number;
     totalNumberOfIssues?: number;
+    projectIdToMilestoneIds: { [key: string]: number };
 }

@@ -2,45 +2,66 @@ import { apiService } from 'ts-api-toolkit';
 
 import { Issue } from 'models/Issue';
 import { IssuePagination } from 'models/IssuePagination';
+import { Sprint } from 'models/Sprint';
 
-export const getIssues = async (
+// ----------------------------------------
+// Create
+// ----------------------------------------
+
+export const apiCreateIssue = async (workspaceId: number, issue: Issue): Promise<Issue | string> => {
+    try {
+        const { data } = await apiService.post(`/workspace/${workspaceId}/project/${issue.projectId}/issue`, { issue });
+        return data;
+    } catch ({ response }) {
+        return response.data?.message || 'Unknown error while creating issue';
+    }
+};
+
+// ----------------------------------------
+// Read
+// ----------------------------------------
+
+export const apiFetchIssues = async (
     workspaceId: number,
     projectId: number,
     page: number,
     filter: string,
     searchFor: string,
 ): Promise<IssuePagination | string> => {
-    const args = { projectId, page, filter, searchFor };
-    return await apiService
-        .query(`/workspace/${workspaceId}/issues`, { params: args })
-        .then((response) => {
-            return response.data;
-        })
-        .catch(({ response }) => {
-            return response.data?.message || 'Unknown error while fetching workspace issues';
+    try {
+        const { data } = await apiService.query(`/workspace/${workspaceId}/issues`, {
+            params: { projectId, page, filter, searchFor },
         });
+        return data;
+    } catch ({ response }) {
+        return response.data?.message || 'Unknown error while fetching workspace issues';
+    }
 };
 
-// GitLab API: POST /projects/:id/issues
-export const createIssue = async (workspaceId: number, issue: Issue): Promise<Issue | string> => {
-    return await apiService
-        .post(`/workspace/${workspaceId}/project/${issue.projectId}/issue`, issue)
-        .then((response) => {
-            return response.data;
-        })
-        .catch(({ response }) => {
-            return response.data?.message || 'Unknown error while creating issue';
+export const apiFetchSprintIssues = async (workspaceId: number, sprint: Sprint): Promise<Issue[] | string> => {
+    try {
+        const { data } = await apiService.query(`/workspace/${workspaceId}/sprint/issues`, {
+            params: { projectIdToMilestoneIds: sprint.projectIdToMilestoneIds },
         });
+        return data;
+    } catch ({ response }) {
+        return response.data?.message || 'Unknown error while fetching sprint issues';
+    }
 };
 
-// GitLab API: PUT /projects/:id/issues/:issue_iid
-export const editIssue = async (workspaceId: number, issue: Issue): Promise<void | string> => {
-    return await apiService
-        .put(`/workspace/${workspaceId}/project/${issue.projectId}/issue/${issue.iid}`, issue)
-        .then(() => {
-            return;
-        })
-        .catch(({ response }) => {
-            return response.data?.message || 'Unknown error while editing issue';
-        });
+// ----------------------------------------
+// Update
+// ----------------------------------------
+
+export const apiUpdateIssue = async (workspaceId: number, issue: Issue): Promise<void | string> => {
+    try {
+        await apiService.put(`/workspace/${workspaceId}/project/${issue.projectId}/issue/${issue.iid}`, { issue });
+        return;
+    } catch ({ response }) {
+        return response.data?.message || 'Unknown error while editing issue';
+    }
 };
+
+// ----------------------------------------
+// Delete
+// ----------------------------------------

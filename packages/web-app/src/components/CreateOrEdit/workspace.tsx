@@ -1,12 +1,17 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import Select from 'react-select';
 import { notify } from 'react-notify-toast';
-import { Multiselect } from 'multiselect-react-dropdown';
 
-import { getProjects } from 'services/api/projects';
-import { errorColour } from 'services/notification/colours';
 import { Project } from 'models/Project';
 import { Workspace } from 'models/Workspace';
+import { apiFetchProjects } from 'services/api/projects';
+import { errorColour } from 'services/notification/colours';
+
+interface DropdownMenuOption {
+    value: Project;
+    label: string;
+}
 
 interface IProps {
     workspace?: Workspace;
@@ -15,26 +20,32 @@ interface IProps {
 }
 
 export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
-    const [name, setName] = useState(props.workspace?.name || '');
-    const [description, setDescription] = useState(props.workspace?.description || '');
-    const [usersProjects, setUsersProjects] = useState<Project[]>([]);
-    const [selectedProjectIds, setSelectedProjectIds] = useState<number[]>(props.workspace?.projectIds || []);
-    const selected = usersProjects.filter((project) => selectedProjectIds.includes(project.id));
+    const [name, setName] = useState<string>(props.workspace?.name || '');
+    const [description, setDescription] = useState<string>(props.workspace?.description || '');
+
+    const [projectOptions, setProjectOptions] = useState<DropdownMenuOption[]>([]);
+    const [selectedProjectOptions, setSelectedProjectOptions] = useState<DropdownMenuOption[]>([]);
 
     useEffect(() => {
-        getProjects().then((result) => {
+        async function getProjectData(): Promise<void> {
+            const result = await apiFetchProjects();
             if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
-            else setUsersProjects(result);
-        });
-    }, []);
-
-    const onSelect = (selectedProjects: Project[], selectedProject: Project): void => {
-        setSelectedProjectIds([...selectedProjectIds, selectedProject.id]);
-    };
-
-    const onRemove = (selectedProjects: Project[], removedProject: Project): void => {
-        setSelectedProjectIds(selectedProjectIds.filter((id) => id != removedProject.id));
-    };
+            else {
+                const options: DropdownMenuOption[] = [];
+                result.map((project) => {
+                    options.push({
+                        value: project,
+                        label: project.name,
+                    });
+                });
+                setProjectOptions(options);
+                setSelectedProjectOptions(
+                    options.filter((project) => props.workspace?.projectIds.includes(project.value.id)),
+                );
+            }
+        }
+        getProjectData();
+    }, [props.workspace]);
 
     return (
         <Fragment>
@@ -61,16 +72,21 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
                 </div>
                 <div className="m-4">
                     <label className="form-label">Projects in this workspace</label>
-                    <Multiselect
-                        class="z-50"
-                        style={{ position: 'relative' }}
-                        closeOnSelect={false}
-                        avoidHighlightFirstOption={true}
-                        options={usersProjects}
-                        selectedValues={selected}
-                        displayValue="name"
-                        onSelect={onSelect}
-                        onRemove={onRemove}
+                    <Select
+                        styles={{
+                            menuPortal: (provided: object): object => ({
+                                ...provided,
+                                zIndex: 50,
+                            }),
+                        }}
+                        isMulti={true}
+                        options={projectOptions}
+                        menuPortalTarget={document.body}
+                        value={selectedProjectOptions}
+                        onChange={(selectedOptions: DropdownMenuOption[]): void => {
+                            if (selectedOptions !== null) setSelectedProjectOptions(selectedOptions);
+                            else setSelectedProjectOptions([]);
+                        }}
                     />
                 </div>
                 <button
@@ -80,7 +96,8 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
                             id: props.workspace?.id || 0,
                             name,
                             description,
-                            projectIds: selectedProjectIds,
+                            // TODO Ensure this works like I think it does
+                            projectIds: selectedProjectOptions.map((projectOption) => projectOption.value.id),
                             users: props.workspace?.users || [],
                         })
                     }

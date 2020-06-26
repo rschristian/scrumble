@@ -1,18 +1,20 @@
 import { FunctionalComponent, h } from 'preact';
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
+import { useDispatch, useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
+
 import { IssueCard } from 'components/Cards/issue';
 import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
 import { IssueFilter } from 'components/Filter/issue';
 import { Modal } from 'components/Modal';
-import { DateTime } from 'luxon';
 import { Issue, IssueStatus } from 'models/Issue';
-import { createIssue, getIssues } from 'services/api/issues';
+import { apiCreateIssue, apiFetchIssues } from 'services/api/issues';
 import { errorColour, infoColour, successColour } from 'services/notification/colours';
-import { useStore } from 'stores';
+import { RootState } from 'stores';
 
 const Backlog: FunctionalComponent = () => {
-    const currentWorkspace = useStore().userLocationStore.currentWorkspace;
+    const dispatch = useDispatch();
+    const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
 
@@ -23,17 +25,6 @@ const Backlog: FunctionalComponent = () => {
     const projectId = useRef(0);
     const pageNumber = useRef(0);
 
-    const handleIssueCreation = async (newIssue: Issue): Promise<void> => {
-        return await createIssue(currentWorkspace.id, newIssue).then((result) => {
-            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-            else {
-                notify.show('New issue created!', 'success', 5000, successColour);
-                setShowNewIssueModal(false);
-                updateIssue(result);
-            }
-        });
-    };
-
     const updateIssueFilter = useCallback((filterStatus: string, searchTerm: string): void => {
         projectId.current = 0;
         pageNumber.current = 0;
@@ -42,28 +33,31 @@ const Backlog: FunctionalComponent = () => {
         setIssueFilterTerm(searchTerm);
     }, []);
 
-    const fetchIssues = useCallback((): void => {
-        getIssues(currentWorkspace.id, projectId.current, pageNumber.current, issueFilter, issueFilterTerm).then(
-            (result) => {
-                if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-                else if (result.issues.length == 0)
-                    notify.show('No issues found for your filter', 'custom', 5000, infoColour);
-                else {
-                    setIssuesArray((oldValues) => oldValues.concat(result.issues));
-                    projectId.current = result.nextResource.projectId;
-                    pageNumber.current = result.nextResource.pageNumber;
-                }
-            },
+    const fetchIssues = useCallback(async (): Promise<void> => {
+        const result = await apiFetchIssues(
+            currentWorkspace.id,
+            projectId.current,
+            pageNumber.current,
+            issueFilter,
+            issueFilterTerm,
         );
+
+        if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
+        else if (result.issues.length === 0) notify.show('No issues found for your filter', 'custom', 5000, infoColour);
+        else {
+            setIssuesArray((oldValues) => oldValues.concat(result.issues));
+            projectId.current = result.nextResource.projectId;
+            pageNumber.current = result.nextResource.pageNumber;
+        }
     }, [currentWorkspace.id, issueFilter, issueFilterTerm]);
 
     const updateIssue = (updatedIssue: Issue): void => {
         const arrayCopy = [...issuesArray];
-        const found = arrayCopy.some((issue) => updatedIssue.iid === issue.iid);
-        if (found) {
+        if (arrayCopy.some((issue) => updatedIssue.iid === issue.iid)) {
             issuesArray.forEach((issue: Issue, index) => {
                 if (issue.iid === updatedIssue.iid) {
-                    updatedIssue.createdAt = DateTime.local().toLocaleString();
+                    const now = new Date();
+                    updatedIssue.createdAt = `${now.getMonth()}/${now.getDate()}/${now.getFullYear()}`;
                     arrayCopy[index] = updatedIssue;
                     setIssuesArray(arrayCopy);
                 }
@@ -71,6 +65,16 @@ const Backlog: FunctionalComponent = () => {
         } else {
             arrayCopy.unshift(updatedIssue);
             setIssuesArray(arrayCopy);
+        }
+    };
+
+    const handleIssueCreation = async (newIssue: Issue): Promise<void> => {
+        const result = await apiCreateIssue(currentWorkspace.id, newIssue);
+        if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
+        else {
+            notify.show('New issue created!', 'success', 5000, successColour);
+            setShowNewIssueModal(false);
+            updateIssue(result);
         }
     };
 

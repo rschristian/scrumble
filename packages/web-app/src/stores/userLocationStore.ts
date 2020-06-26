@@ -1,24 +1,49 @@
-import { observable, action } from 'mobx';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AppDispatch } from 'stores';
 
 import { Workspace } from 'models/Workspace';
 import { Sprint } from 'models/Sprint';
 
-class UserLocationStore {
-    @observable currentWorkspace: Workspace = null;
-    @observable currentSprint: Sprint = null;
-    @observable activeSideBarItem = 0;
+type State = {
+    currentWorkspace: Workspace | undefined;
+    currentSprint: Sprint | undefined;
+    activeSideBarItem: number;
+};
 
-    @action setWorkspace(workspace: Workspace): void {
-        this.currentWorkspace = workspace;
-    }
+const initialState: State = {
+    currentWorkspace: undefined,
+    currentSprint: undefined,
+    activeSideBarItem: 0,
+};
 
-    @action setSprint(sprint: Sprint): void {
-        this.currentSprint = sprint;
-    }
+const slice = createSlice({
+    name: 'userLocation',
+    initialState,
+    reducers: {
+        setWorkspace: (state: State, action: PayloadAction<Workspace>): void => {
+            state.currentWorkspace = action.payload;
+        },
+        setSprint: (state: State, action: PayloadAction<Sprint>): void => {
+            state.currentSprint = action.payload;
+        },
+        setSideBarItem: (state: State, action: PayloadAction<number>): void => {
+            state.activeSideBarItem = action.payload;
+        },
+    },
+});
+export default slice.reducer;
 
-    @action setActiveSideBarItem(index: number): void {
-        this.activeSideBarItem = index;
-    }
-}
+// Actions
+const { setWorkspace, setSprint, setSideBarItem } = slice.actions;
 
-export const userLocationStore = new UserLocationStore();
+export const reduxSetCurrentWorkspace = (workspace: Workspace) => async (dispatch: AppDispatch): Promise<void> => {
+    dispatch(setWorkspace(workspace));
+};
+
+export const reduxSetCurrentSprint = (sprint: Sprint) => async (dispatch: AppDispatch): Promise<void> => {
+    dispatch(setSprint(sprint));
+};
+
+export const reduxSetActiveSideBarMenuItem = (barItem: number) => async (dispatch: AppDispatch): Promise<void> => {
+    dispatch(setSideBarItem(barItem));
+};

@@ -12,21 +12,21 @@ export default {
      * @param {object} options - this is mainly relevant for plugins (will always be empty in the config), default to an empty object
      **/
     webpack(config, env, helpers, options) {
+        const css = helpers.getLoadersByName(config, 'css-loader')[0];
+        css.loader.options.modules = false;
+
         const purgecss = purgeCss({
             content: ['./src/**/*.tsx', './src/**/*.ts', './src/**/*.scss'],
             defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
         });
 
-        const postCssLoaders = helpers.getLoadersByName(config, 'postcss-loader');
-        postCssLoaders.forEach(({ loader }) => {
-            const plugins = loader.options.plugins;
-            plugins.unshift(tailwindCss);
+        const postCssLoader = helpers.getLoadersByName(config, 'postcss-loader')[0];
+        const plugins = postCssLoader.loader.options.plugins;
+        plugins.unshift(tailwindCss);
+        if (env.production) plugins.push(purgecss);
 
-            if (env.production) plugins.push(purgecss);
-        });
-
-        const css = helpers.getLoadersByName(config, 'css-loader')[0];
-        css.loader.options.modules = false;
+        const critters = helpers.getPluginsByName(config, 'Critters')[0];
+        if (critters) critters.plugin.options.preload = 'body';
 
         // Sets default import to 'src/'
         config.resolve.modules.push(env.src);

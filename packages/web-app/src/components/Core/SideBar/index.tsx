@@ -1,10 +1,11 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
+import { useDispatch, useSelector } from 'react-redux';
 import { Menu, X } from 'preact-feather';
 
 import { SideBarItem } from 'components/Core/SideBar/SideBarItem';
-import { observer } from 'services/mobx';
-import { useStore } from 'stores';
+import { RootState } from 'stores';
+import { reduxSetActiveSideBarMenuItem } from 'stores/userLocationStore';
 
 export interface SideBarLink {
     label: string;
@@ -16,13 +17,14 @@ interface IProps {
     links: SideBarLink[];
 }
 
-export const SideBar: FunctionalComponent<IProps> = observer((props: IProps) => {
-    const userLocationStore = useStore().userLocationStore;
+export const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
+    const dispatch = useDispatch();
+    const { activeSideBarItem } = useSelector((state: RootState) => state.userLocation);
 
     const [isOpen, setIsOpen] = useState(false);
 
     const listItemOnClick = (index: number): void => {
-        userLocationStore.setActiveSideBarItem(index);
+        dispatch(reduxSetActiveSideBarMenuItem(index));
     };
 
     const sensors = props.links.map((menuItem, index) => {
@@ -32,7 +34,7 @@ export const SideBar: FunctionalComponent<IProps> = observer((props: IProps) => 
                 menuItem={menuItem}
                 index={index}
                 isOpen={isOpen}
-                active={userLocationStore.activeSideBarItem == index}
+                active={activeSideBarItem === index}
                 onClick={listItemOnClick}
             />
         );
@@ -56,4 +58,4 @@ export const SideBar: FunctionalComponent<IProps> = observer((props: IProps) => 
             </ul>
         </div>
     );
-});
+};

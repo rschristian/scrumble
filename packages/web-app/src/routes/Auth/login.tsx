@@ -1,13 +1,16 @@
 import { FunctionalComponent, h } from 'preact';
 import { useEffect } from 'preact/hooks';
+import { useDispatch } from 'react-redux';
 
 import scrumCards from 'assets/icons/scrumCards.png';
-import { authStore } from 'stores/authStore';
+import { reduxLogUserOut } from 'stores/authStore';
 
 const Login: FunctionalComponent = () => {
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        authStore.logout().then();
-    });
+        dispatch(reduxLogUserOut());
+    }, [dispatch]);
 
     return (
         <div class="login-page">

@@ -1,16 +1,33 @@
-import { createContext } from 'preact';
-import { useContext } from 'preact/hooks';
+import { Action, configureStore, getDefaultMiddleware, ThunkAction } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-import { authStore } from 'stores/authStore';
-import { userLocationStore } from 'stores/userLocationStore';
+import auth from './authStore';
+import userLocation from './userLocationStore';
 
-export class RootStore {
-    authStore = authStore;
-    userLocationStore = userLocationStore;
-}
+const persistConfig = {
+    key: 'root',
+    storage,
+};
 
-export const rootStore = new RootStore();
+const reducer = combineReducers({
+    auth,
+    userLocation,
+});
 
-export const StoreContext = createContext(rootStore);
-export const StoreProvider = StoreContext.Provider;
-export const useStore = (): RootStore => useContext(StoreContext);
+const persistedReducer = persistReducer(persistConfig, reducer);
+
+const store = configureStore({
+    reducer: persistedReducer,
+    middleware: getDefaultMiddleware({
+        serializableCheck: false,
+    }),
+    devTools: process.env.NODE_ENV === 'development',
+});
+
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof reducer>;
+export type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
+
+export default { store, persistor: persistStore(store) };

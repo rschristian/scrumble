@@ -1,15 +1,15 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
+import { useDispatch, useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
 import { CreateOrEditIssue } from 'components/CreateOrEdit/issue';
 import { Modal } from 'components/Modal';
 import { Issue, IssueStatus } from 'models/Issue';
-import { editIssue } from 'services/api/issues';
-import { observer } from 'services/mobx';
-import { errorColour, successColour } from 'services/notification/colours';
-import { useStore } from 'stores';
 import { User } from 'models/User';
+import { apiUpdateIssue } from 'services/api/issues';
+import { errorColour, successColour } from 'services/notification/colours';
+import { RootState } from 'stores';
 
 interface IssuesBoardProps {
     issues: Issue[];
@@ -25,10 +25,10 @@ const unassigned: User = {
     avatarUrl: null,
     projectIds: [],
 };
+
 export const IssueBoardCardList: FunctionalComponent<IssuesBoardProps> = (props: IssuesBoardProps) => {
-    const userLocationStore = useStore().userLocationStore;
-    const currentWorkspace = userLocationStore.currentWorkspace;
-    const [headingColour] = useState(`issue-list-title-holder bg-${props.headingColour}-300`);
+    const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
+
     const [issuesList, setIssueList] = useState<Issue[]>([]);
 
     unassigned.projectIds = currentWorkspace.projectIds;
@@ -39,7 +39,7 @@ export const IssueBoardCardList: FunctionalComponent<IssuesBoardProps> = (props:
                 setIssueList((oldValues) => oldValues.concat(issue));
             }
         });
-    }, [props.issues]);
+    }, [issuesList, props.issues, props.status]);
 
     const handleUpdate = (updatedIssue: Issue): Issue => {
         const arrayCopy: Issue[] = [...issuesList];
@@ -65,7 +65,7 @@ export const IssueBoardCardList: FunctionalComponent<IssuesBoardProps> = (props:
 
     return (
         <div class="issue-list">
-            <div class={headingColour}>
+            <div className={`issue-list-title-holder ${props.headingColour}`}>
                 <h2 class="capitalize issue-list-title border-l border-deep-space-sparkle">{props.status}</h2>
             </div>
             {issuesList.map((issue) => {
@@ -117,21 +117,20 @@ interface IProps {
     updateIssue: (issue: Issue) => void;
 }
 
-export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) => {
-    const userLocationStore = useStore().userLocationStore;
+export const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
+    const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
     const [showEditIssueModal, setShowEditIssueModal] = useState(false);
     const [showIssueCardInformation, setShowIssueCardInformation] = useState(false);
 
-    const handleIssueEdit = async (issue: Issue): Promise<void> => {
-        return await editIssue(userLocationStore.currentWorkspace.id, issue).then((error) => {
-            if (error) notify.show(error, 'error', 5000, errorColour);
-            else {
-                notify.show('Issue successfully updated!', 'success', 5000, successColour);
-                setShowEditIssueModal(false);
-                props.updateIssue(issue);
-            }
-        });
+    const handleIssueEdit = async (updatedIssue: Issue): Promise<void> => {
+        const result = await apiUpdateIssue(currentWorkspace.id, updatedIssue);
+        if (result) notify.show(result, 'error', 5000, errorColour);
+        else {
+            notify.show('Issue successfully updated!', 'success', 5000, successColour);
+            setShowEditIssueModal(false);
+            props.updateIssue(updatedIssue);
+        }
     };
 
     return (
@@ -192,7 +191,7 @@ export const IssueCard: FunctionalComponent<IProps> = observer((props: IProps) =
             </div>
         </div>
     );
-});
+};
 
 interface InformationProps {
     issue: Issue;
@@ -242,7 +241,7 @@ export const IssueInformation: FunctionalComponent<InformationProps> = (props: I
                 <span class="info-label"> Description: </span>
                 <div class="table-row normal-case">
                     <span class="text-gray-700">
-                        {props.issue.description.trim() != '' ? (
+                        {props.issue.description.trim() !== '' ? (
                             props.issue.description
                         ) : (
                             <span class="italic"> No Description Given</span>

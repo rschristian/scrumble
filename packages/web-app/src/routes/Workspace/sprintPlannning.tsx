@@ -1,5 +1,6 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import { useDispatch, useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
 import { SprintCard } from 'components/Cards/sprint';
@@ -7,14 +8,16 @@ import { CreateOrEditSprint } from 'components/CreateOrEdit/sprint';
 import { SprintFilter } from 'components/Filter/sprint';
 import { Modal } from 'components/Modal';
 import { Sprint, SprintStatus } from 'models/Sprint';
-import { createSprint, getSprints } from 'services/api/sprints';
+import { apiCreateSprint, apiFetchSprints } from 'services/api/sprints';
 import { errorColour, successColour } from 'services/notification/colours';
-import { useStore } from 'stores';
+import { RootState } from 'stores';
+import { reduxSetActiveSideBarMenuItem } from 'stores/userLocationStore';
 
 import Backlog from './Backlog';
 
 const SprintPlanning: FunctionalComponent = () => {
-    const userLocationStore = useStore().userLocationStore;
+    const dispatch = useDispatch();
+    const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
     // For mobile
     const [isSprintView, setIsSprintView] = useState(false);
@@ -24,28 +27,27 @@ const SprintPlanning: FunctionalComponent = () => {
     const [sprints, setSprints] = useState<Sprint[]>([]);
 
     useEffect(() => {
-        userLocationStore.setActiveSideBarItem(0);
-        getSprints(userLocationStore.currentWorkspace.id, 'none').then((result) => {
-            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-            else setSprints(result);
-        });
-    }, [userLocationStore]);
+        dispatch(reduxSetActiveSideBarMenuItem(0));
+        async function fetchSprints(): Promise<void> {
+            const result = await apiFetchSprints(currentWorkspace.id, 'none');
+            typeof result === 'string' ? notify.show(result, 'error', 5000, errorColour) : setSprints(result);
+        }
+        fetchSprints();
+    }, [currentWorkspace.id, dispatch]);
 
     const handleSprintCreation = async (newSprint: Sprint): Promise<void> => {
-        return await createSprint(userLocationStore.currentWorkspace.id, newSprint).then((result) => {
-            if (typeof result == 'string') notify.show(result, 'error', 5000, errorColour);
-            else {
-                notify.show('New sprint created!', 'success', 5000, successColour);
-                setShowNewSprintModal(false);
-                setSprints([...sprints, result]);
-            }
-        });
+        const result = await apiCreateSprint(currentWorkspace.id, newSprint);
+        if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
+        else {
+            notify.show('New sprint created!', 'success', 5000, successColour);
+            setShowNewSprintModal(false);
+            setSprints([...sprints, result]);
+        }
     };
 
     const updateSprint = (updatedSprint: Sprint): void => {
         const arrayCopy = [...sprints];
-        const found = arrayCopy.some((sprint) => updatedSprint.id === sprint.id);
-        if (found) {
+        if (arrayCopy.some((sprint) => updatedSprint.id === sprint.id)) {
             sprints.forEach((sprint: Sprint, index) => {
                 if (sprint.id === updatedSprint.id) {
                     arrayCopy[index] = updatedSprint;
