@@ -9,18 +9,19 @@
     "build:analyze": "yarn build --no-esm --analyze",
     "lint": "yarn eslint --fix && yarn prettier --write",
     "lint:ci": "yarn eslint && yarn prettier",
-    "eslint": "eslint 'src/**/*.{js,ts,tsx}' '*.js'",
+    "eslint": "eslint 'src/**/*.{js,ts,tsx}' '*.{js,mjs}'",
     "prettier": "prettier 'src/**/*.{css,scss,json}' '*.json'",
+    "classEnforcer": "node classEnforcer.mjs",
     "postinstall": "node redux-persist-postinstall.mjs"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "yarn classEnforcer && lint-staged"
     }
   },
   "lint-staged": {
     "*.{css,md,scss}": "prettier --write",
-    "*.{js,jsx,ts,tsx}": "eslint --fix"
+    "*.{js,jsx,ts,tsx,mjs}": "eslint --fix"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.4.0",
@@ -50,6 +51,7 @@
     "node-sass": "^4.14.1",
     "preact-cli": "3.0.0-rc.14",
     "prettier": "^1.19.1",
+    "replace-in-file": "^6.1.0",
     "sass-loader": "^8.0.2",
     "sirv-cli": "^1.0.0-next.9",
     "typescript": "^3.9.5"
