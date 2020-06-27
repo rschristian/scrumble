@@ -1,38 +1,31 @@
-import { Fragment, FunctionalComponent, h } from 'preact';
+import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
+import Modal from 'components/Modal';
 import SprintCard from 'components/Cards/sprint';
 import CreateOrEditSprint from 'components/CreateOrEdit/sprint';
 import SprintFilter from 'components/Filter/sprint';
-import Modal from 'components/Modal';
 import { isSprint, isSprintArray, Sprint, SprintStatus } from 'models/Sprint';
 import { apiCreateSprint, apiFetchSprints } from 'services/api/sprints';
 import { errorColour, successColour } from 'services/notification/colours';
 import { RootState } from 'stores';
-import { reduxSetActiveSideBarMenuItem } from 'stores/userLocationStore';
 
-import Backlog from './Backlog';
-
-const SprintPlanning: FunctionalComponent = () => {
-    const dispatch = useDispatch();
+const SprintList: FunctionalComponent = () => {
     const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
-    // For mobile
-    const [isSprintView, setIsSprintView] = useState<boolean>(false);
     const [showNewSprintModal, setShowNewSprintModal] = useState<boolean>(false);
     const [sprintFilter, setSprintFilter] = useState<string>(SprintStatus.active.toString());
     const [sprints, setSprints] = useState<Sprint[]>([]);
 
     useEffect(() => {
-        dispatch(reduxSetActiveSideBarMenuItem(0));
         async function fetchSprints(): Promise<void> {
             const result = await apiFetchSprints(currentWorkspace.id, 'none');
             isSprintArray(result) ? setSprints(result) : notify.show(result, 'error', 5000, errorColour);
         }
         fetchSprints();
-    }, [currentWorkspace, dispatch]);
+    }, [currentWorkspace.id]);
 
     const handleSprintCreation = async (newSprint: Sprint): Promise<void> => {
         const result = await apiCreateSprint(currentWorkspace.id, newSprint);
@@ -59,9 +52,13 @@ const SprintPlanning: FunctionalComponent = () => {
 
     const updateSprintFilter = (filterFor: string): void => setSprintFilter(filterFor);
 
+    const scrollCheck = (e: HTMLDivElement): void => {
+        // if (e.scrollHeight - e.scrollTop === e.clientHeight && pageNumber.current !== 0) fetchSprints();
+    };
+
     return (
-        <Fragment>
-            {showNewSprintModal ? (
+        <div>
+            {showNewSprintModal && (
                 <Modal
                     title="Create Sprint"
                     content={
@@ -72,48 +69,39 @@ const SprintPlanning: FunctionalComponent = () => {
                     }
                     close={(): void => setShowNewSprintModal(false)}
                 />
-            ) : null}
+            )}
 
-            <div class="flex">
-                <div class={`w-11/12 md:w-1/2 md:block md:mr-4 ${!isSprintView ? '' : 'sm:hidden'}`}>
-                    <Backlog />
-                </div>
-                <div
-                    class={`md:border-l border-gray-300 w-11/12 md:w-1/2 md:block " ${isSprintView ? '' : 'sm:hidden'}`}
-                >
-                    <div class="create-bar">
-                        <h1 class="md:ml-4 page-heading">Sprints</h1>
-                        <button
-                            onClick={(): void => setIsSprintView(!isSprintView)}
-                            class="btn-create md:hidden my-auto mr-4"
-                        >
-                            Backlog
-                        </button>
-                        <button class="btn-create my-auto" onClick={(): void => setShowNewSprintModal(true)}>
-                            New Sprint
-                        </button>
-                    </div>
-                    <div class="md:ml-4">
-                        <SprintFilter setFilter={updateSprintFilter} />
-                    </div>
-                    <div class="md:ml-4 rounded bg-white overflow-hidden shadow-lg">
-                        {sprints.map((sprint, index) => {
-                            if (sprintFilter === 'all' || sprint.status.toString() === sprintFilter) {
-                                return (
-                                    <SprintCard
-                                        key={index}
-                                        sprint={sprint}
-                                        closed={sprint.status === SprintStatus.closed}
-                                        updateSprint={updateSprint}
-                                    />
-                                );
-                            }
-                        })}
-                    </div>
-                </div>
+            <div class="md:mr-4 create-bar">
+                <h1 class="md:ml-4 page-heading">Sprints</h1>
+                <button class="btn-create my-auto" onClick={(): void => setShowNewSprintModal(true)}>
+                    New Sprint
+                </button>
             </div>
-        </Fragment>
+            <div class="md:ml-4">
+                <SprintFilter setFilter={updateSprintFilter} />
+            </div>
+            <div
+                class="md:ml-4 rounded bg-white overflow-hidden shadow-lg"
+                onScroll={(e): void => scrollCheck(e.target as HTMLDivElement)}
+            >
+                {sprints.map((sprint, index) => {
+                    {
+                        /* TODO Replace this with a system like issues. Don't filter on the front end */
+                    }
+                    if (sprintFilter === 'all' || sprint.status.toString() === sprintFilter) {
+                        return (
+                            <SprintCard
+                                key={index}
+                                sprint={sprint}
+                                closed={sprint.status === SprintStatus.closed}
+                                updateSprint={updateSprint}
+                            />
+                        );
+                    }
+                })}
+            </div>
+        </div>
     );
 };
 
-export default SprintPlanning;
+export default SprintList;

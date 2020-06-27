@@ -1,4 +1,4 @@
-import { FunctionalComponent, h } from 'preact';
+import { Fragment, FunctionalComponent, h } from 'preact';
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
@@ -12,7 +12,7 @@ import { apiCreateIssue, apiFetchIssues } from 'services/api/issues';
 import { errorColour, infoColour, successColour } from 'services/notification/colours';
 import { RootState } from 'stores';
 
-const Backlog: FunctionalComponent = () => {
+const IssueList: FunctionalComponent = () => {
     const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
@@ -86,8 +86,8 @@ const Backlog: FunctionalComponent = () => {
     };
 
     return (
-        <div class={showNewIssueModal ? 'modal-active' : ''}>
-            {showNewIssueModal ? (
+        <Fragment>
+            {showNewIssueModal && (
                 <Modal
                     title="Create Issue"
                     content={
@@ -98,27 +98,27 @@ const Backlog: FunctionalComponent = () => {
                     }
                     close={(): void => setShowNewIssueModal(false)}
                 />
-            ) : null}
+            )}
 
-            <div class="create-bar">
-                <h1 class="page-heading">Backlog</h1>
+            <div class="md:mr-4 create-bar">
+                <h1 class="md:mr-4 page-heading">Backlog</h1>
                 <button class="btn-create my-auto" onClick={(): void => setShowNewIssueModal(true)}>
                     New Issue
                 </button>
             </div>
-            <div>
+            <div class="md:mr-4">
                 <IssueFilter setFilter={updateIssueFilter} />
             </div>
             <div
-                class="rounded bg-white overflow-hidden shadow-lg overflow-y-scroll issuesList"
+                class="md:mr-4 rounded bg-white overflow-hidden shadow-lg overflow-y-scroll issuesList"
                 onScroll={(e): void => scrollCheck(e.target as HTMLDivElement)}
             >
                 {issuesArray.map((issue, index) => {
                     return <IssueCard key={index} issue={issue} updateIssue={updateIssue} />;
                 })}
             </div>
-        </div>
+        </Fragment>
     );
 };
 
-export default Backlog;
+export default IssueList;

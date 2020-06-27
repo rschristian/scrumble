@@ -9,7 +9,7 @@ import BreadCrumbs from 'components/BreadCrumbs';
 import SideBar, { SideBarLink } from 'components/Core/SideBar';
 import { RootState } from 'stores';
 
-import SprintPlanning from './sprintPlannning';
+import SprintPlanning from 'routes/Workspace/SprintPlanning';
 import WorkspaceMetrics from './metrics';
 import WorkspaceEdit from './edit';
 
