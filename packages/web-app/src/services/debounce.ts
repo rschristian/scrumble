@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'preact/hooks';
 
-// https://github.com/xnimorz/use-debounce
+// https://stackoverflow.com/questions/56283920/how-to-debounce-a-callback-in-functional-component-using-hooks
 export default function useDebouncedCallback<A extends unknown[]>(
     callback: (...args: A) => void,
     wait: number,
