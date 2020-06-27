@@ -7,7 +7,8 @@ import IssueCard from 'components/Cards/Issue/issueCard';
 import CreateOrEditIssue from 'components/CreateOrEdit/issue';
 import IssueFilter from 'components/Filter/issue';
 import Modal from 'components/Modal';
-import { Issue, IssueStatus } from 'models/Issue';
+import { isIssue, Issue, IssueStatus } from 'models/Issue';
+import { isIssuePagination } from 'models/IssuePagination';
 import { apiCreateIssue, apiFetchIssues } from 'services/api/issues';
 import { errorColour, infoColour, successColour } from 'services/notification/colours';
 import { RootState } from 'stores';
@@ -41,12 +42,16 @@ const IssueList: FunctionalComponent = () => {
             issueFilterTerm,
         );
 
-        if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
-        else if (result.issues.length === 0) notify.show('No issues found for your filter', 'custom', 5000, infoColour);
-        else {
-            setIssuesArray((oldValues) => oldValues.concat(result.issues));
-            projectId.current = result.nextResource.projectId;
-            pageNumber.current = result.nextResource.pageNumber;
+        if (isIssuePagination(result)) {
+            if (result.issues.length === 0) {
+                notify.show('No issues found for your filter', 'custom', 5000, infoColour);
+            } else {
+                setIssuesArray((oldValues) => oldValues.concat(result.issues));
+                projectId.current = result.nextResource.projectId;
+                pageNumber.current = result.nextResource.pageNumber;
+            }
+        } else {
+            notify.show(result, 'error', 5000, errorColour);
         }
     }, [currentWorkspace.id, issueFilter, issueFilterTerm]);
 
@@ -69,11 +74,12 @@ const IssueList: FunctionalComponent = () => {
 
     const handleIssueCreation = async (newIssue: Issue): Promise<void> => {
         const result = await apiCreateIssue(currentWorkspace.id, newIssue);
-        if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
-        else {
+        if (isIssue(result)) {
             notify.show('New issue created!', 'success', 5000, successColour);
             setShowNewIssueModal(false);
             updateIssue(result);
+        } else {
+            notify.show(result, 'error', 5000, errorColour);
         }
     };
 

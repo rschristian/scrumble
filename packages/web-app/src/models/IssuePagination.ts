@@ -10,3 +10,7 @@ export interface IssuePagination {
     issues: Issue[];
     nextResource: ProjectPageData;
 }
+
+export function isIssuePagination(result: IssuePagination | string): result is IssuePagination {
+    return !!(result as IssuePagination).nextResource;
+}
