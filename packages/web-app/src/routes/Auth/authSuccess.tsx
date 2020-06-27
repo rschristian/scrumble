@@ -21,7 +21,7 @@ const AuthSuccess: FunctionalComponent = () => {
 
         async function login(): Promise<void> {
             const token = getToken();
-            token ? await dispatch(reduxLoginAndFetchUserInfo(token)) : route('/', true);
+            token ? await dispatch(reduxLoginAndFetchUserInfo(token)) : route('/login', true);
         }
 
         login();

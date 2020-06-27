@@ -160,43 +160,43 @@ const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
                     );
                 })}
             </select>
-            <div className={`${props.issue ? 'hidden' : 'block'}`}>
-                <label className="form-label">Project to Attach To</label>
+            <div class={`${props.issue ? 'hidden' : 'block'}`}>
+                <label class="form-label">Project to Attach To</label>
                 <select
-                    className="form-input"
+                    class="form-input"
                     placeholder="Project to Attach To"
                     value={projectName}
                     onInput={(e): void => handleProjectChange((e.target as HTMLSelectElement).value)}
                 >
                     {projects.map((project) => {
                         return (
-                            <option className="form-option" value={project.name}>
+                            <option class="form-option" value={project.name}>
                                 {project.name}
                             </option>
                         );
                     })}
                 </select>
             </div>
-            <label className="form-label">Sprint to Attach To</label>
+            <label class="form-label">Sprint to Attach To</label>
             <select
-                className="form-input"
+                class="form-input"
                 placeholder="Project to Attach To"
                 value={sprint.title}
                 onInput={(e): void => handleSprintChange((e.target as HTMLSelectElement).value)}
             >
                 {sprints.map((sprint) => {
                     return (
-                        <option className="form-option" value={sprint.title}>
+                        <option class="form-option" value={sprint.title}>
                             {sprint.title}
                         </option>
                     );
                 })}
             </select>
-            <div className="flex justify-between pt-2">
-                <button className="btn-create mb-4 ml-4" onClick={(): void => validateAndSubmit()}>
+            <div class="flex justify-between pt-2">
+                <button class="btn-create mb-4 ml-4" onClick={(): void => validateAndSubmit()}>
                     Confirm
                 </button>
-                <button className="btn-close bg-transparent mb-4 mr-4" onClick={props.close}>
+                <button class="btn-close bg-transparent mb-4 mr-4" onClick={props.close}>
                     Cancel
                 </button>
             </div>

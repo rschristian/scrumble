@@ -60,7 +60,7 @@ const IssueBoardColumn: FunctionalComponent<IssuesBoardProps> = (props: IssuesBo
 
     return (
         <div class="issue-list">
-            <div className={`issue-list-title-holder ${props.headingColour}`}>
+            <div class={`issue-list-title-holder ${props.headingColour}`}>
                 <h2 class="capitalize issue-list-title border-l border-deep-space-sparkle">{props.status}</h2>
             </div>
             {issuesList.map((issue) => {

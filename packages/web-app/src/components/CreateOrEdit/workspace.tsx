@@ -49,29 +49,29 @@ const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
 
     return (
         <Fragment>
-            <div className="m-4">
-                <div className="m-4">
-                    <label className="form-label">Workspace Name</label>
+            <div class="m-4">
+                <div class="m-4">
+                    <label class="form-label">Workspace Name</label>
                     <input
-                        className="form-input"
+                        class="form-input"
                         type="text"
                         placeholder="Workspace Name"
                         value={name}
                         onInput={(e): void => setName((e.target as HTMLInputElement).value)}
                     />
                 </div>
-                <div className="m-4">
-                    <label className="form-label">Workspace Description</label>
+                <div class="m-4">
+                    <label class="form-label">Workspace Description</label>
                     <input
-                        className="form-input"
+                        class="form-input"
                         type="text"
                         placeholder="Workspace Description"
                         value={description}
                         onInput={(e): void => setDescription((e.target as HTMLInputElement).value)}
                     />
                 </div>
-                <div className="m-4">
-                    <label className="form-label">Projects in this workspace</label>
+                <div class="m-4">
+                    <label class="form-label">Projects in this workspace</label>
                     <Select
                         styles={{
                             menuPortal: (provided: object): object => ({

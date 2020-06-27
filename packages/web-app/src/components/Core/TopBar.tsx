@@ -92,7 +92,7 @@ const TopBar: FunctionalComponent<IProps> = (props: IProps) => {
                     <div class="flex items-center border-b border-gray-300 py-2">
                         <img
                             alt="Your avatar"
-                            className={`avatar ${showAccountDropdown ? 'border-2 border-deep-space-sparkle' : ''}`}
+                            class={`avatar ${showAccountDropdown ? 'border-2 border-deep-space-sparkle' : ''}`}
                             src={currentUser?.avatarUrl}
                         />
                         <span class="ml-3 font-semibold text-deep-space-sparkle">{currentUser?.username}</span>

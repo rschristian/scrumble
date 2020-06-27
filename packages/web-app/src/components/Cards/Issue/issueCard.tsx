@@ -73,10 +73,7 @@ const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
                     {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
                     <span class="text-gray-700"> Project Name: {props.issue.projectName}</span>
                     <div>
-                        <button
-                            className="float-right btn-edit my-auto"
-                            onClick={(): void => setShowEditIssueModal(true)}
-                        >
+                        <button class="float-right btn-edit my-auto" onClick={(): void => setShowEditIssueModal(true)}>
                             Edit
                         </button>
                         <span class="float-right text-gray-700 py-2 px-4">
