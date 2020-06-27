@@ -30,19 +30,19 @@ const SprintFilter: FunctionalComponent<IProps> = (props: IProps) => {
         <div class="my-4 flex flex-col items-start">
             <div class="flex rounded shadow">
                 <button
-                    class={`btn-filter ${filterStatus === filterStatusEnum.active ? 'btn-filter-active' : ''}`}
+                    class={`btn-filter ${filterStatus === filterStatusEnum.active && 'btn-filter-active'}`}
                     onClick={(): void => setFilterStatus(filterStatusEnum.active)}
                 >
                     Open
                 </button>
                 <button
-                    class={`btn-filter ${filterStatus === filterStatusEnum.closed ? 'btn-filter-active' : ''}`}
+                    class={`btn-filter ${filterStatus === filterStatusEnum.closed && 'btn-filter-active'}`}
                     onClick={(): void => setFilterStatus(filterStatusEnum.closed)}
                 >
                     Closed
                 </button>
                 <button
-                    class={`btn-filter ${filterStatus === filterStatusEnum.all ? 'btn-filter-active' : ''}`}
+                    class={`btn-filter ${filterStatus === filterStatusEnum.all && 'btn-filter-active'}`}
                     onClick={(): void => setFilterStatus(filterStatusEnum.all)}
                 >
                     All

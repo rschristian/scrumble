@@ -26,7 +26,7 @@ const SideBarLinkItem: FunctionalComponent<IProps> = (props: IProps) => {
     return (
         <Link
             href={getUrlSubstring(currentUrl) + props.menuItem.path}
-            class={`tooltip ${props.active ? 'bg-gray-500' : ''}`}
+            class={`tooltip ${props.active && 'bg-gray-500'}`}
             onClick={handleOnClick}
         >
             {/*<span class="tooltip-text bg-blue-100 border rounded border-white text-sky-blue -mt-12">*/}

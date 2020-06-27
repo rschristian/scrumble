@@ -70,14 +70,16 @@ const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
                     submit={async (): Promise<void> => await handleToggleSprintStatus()}
                     close={(): void => setShowClosureModal(false)}
                 />
-            ) : showOpeningModal ? (
-                <Modal
-                    title="Open Sprint?"
-                    content={openingModalContent}
-                    submit={async (): Promise<void> => await handleToggleSprintStatus()}
-                    close={(): void => setShowOpeningModal(false)}
-                />
-            ) : null}
+            ) : (
+                showOpeningModal && (
+                    <Modal
+                        title="Open Sprint?"
+                        content={openingModalContent}
+                        submit={async (): Promise<void> => await handleToggleSprintStatus()}
+                        close={(): void => setShowOpeningModal(false)}
+                    />
+                )
+            )}
 
             <div class="lst-itm-container" onClick={linkTo}>
                 <div class="px-4 py-2 flex min-w-0 justify-between">
@@ -95,11 +97,11 @@ const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
                 </div>
                 <div class="px-4 py-2 flex min-w-0 justify-between">
                     <p class="itm-description">
-                        {props.sprint.startDate && props.sprint.dueDate
-                            ? `${new Date(props.sprint.startDate).toLocaleDateString('en-GB')} - ${new Date(
-                                  props.sprint.dueDate,
-                              ).toLocaleDateString('en-GB')}`
-                            : null}
+                        {props.sprint.startDate &&
+                            props.sprint.dueDate &&
+                            `${new Date(props.sprint.startDate).toLocaleDateString('en-GB')} - ${new Date(
+                                props.sprint.dueDate,
+                            ).toLocaleDateString('en-GB')}`}
                     </p>
                     <div>
                         <span class="num-issues tooltip">
