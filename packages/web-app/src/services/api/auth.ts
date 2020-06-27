@@ -1,4 +1,4 @@
-import { apiService, authStorageService } from 'ts-api-toolkit';
+import { apiService } from 'ts-api-toolkit';
 
 import { User } from 'models/User';
 
@@ -10,8 +10,7 @@ import { User } from 'models/User';
 // Read
 // ----------------------------------------
 
-export const apiLogin = async (shortLivedJwt: string): Promise<{ jwt: string } | string> => {
-    authStorageService.saveToken(shortLivedJwt);
+export const apiLogin = async (): Promise<{ jwt: string } | string> => {
     try {
         const { data } = await apiService.get('/auth/token');
         return data;

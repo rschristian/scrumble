@@ -35,6 +35,9 @@ const slice = createSlice({
             state.isAuthenticated = false;
             state.currentUser = defaultUser;
         },
+        loginStart: (state: State, action: PayloadAction<string>): void => {
+            authStorageService.saveToken(action.payload);
+        },
         loginSuccess: (state: State, action: PayloadAction<{ jwt: string }>): void => {
             authStorageService.saveToken(action.payload.jwt);
             state.isAuthenticated = true;
@@ -64,7 +67,7 @@ const slice = createSlice({
 export default slice.reducer;
 
 // Actions
-const { logout, loginSuccess, loginFailure, fetchUserInfoSuccess, fetchUserInfoFailure } = slice.actions;
+const { logout, loginStart, loginSuccess, loginFailure, fetchUserInfoSuccess, fetchUserInfoFailure } = slice.actions;
 
 export const reduxLogUserOut = (): AppThunk => async (dispatch: AppDispatch): Promise<void> => {
     await destroyOAuthToken();
@@ -75,7 +78,8 @@ export const reduxLogUserOut = (): AppThunk => async (dispatch: AppDispatch): Pr
 export const reduxLoginAndFetchUserInfo = (shortLivedJwt: string): AppThunk => async (
     dispatch: AppDispatch,
 ): Promise<void> => {
-    const loginResult = await apiLogin(shortLivedJwt);
+    dispatch(loginStart(shortLivedJwt));
+    const loginResult = await apiLogin();
     typeof loginResult === 'string' ? dispatch(loginFailure(loginResult)) : dispatch(loginSuccess(loginResult));
 
     const userInfoResult = await apiFetchUserInfo();
