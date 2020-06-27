@@ -87,6 +87,7 @@ const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
                             if (selectedOptions !== null) setSelectedProjectOptions(selectedOptions);
                             else setSelectedProjectOptions([]);
                         }}
+                        closeMenuOnSelect={false}
                     />
                 </div>
                 <button

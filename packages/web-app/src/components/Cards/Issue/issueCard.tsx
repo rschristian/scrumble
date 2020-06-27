@@ -35,7 +35,7 @@ const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
 
     return (
         <div class="cursor-default capitalize">
-            {showEditIssueModal ? (
+            {showEditIssueModal && (
                 <Modal
                     title="Edit Issue"
                     content={
@@ -47,15 +47,15 @@ const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
                     }
                     close={(): void => setShowEditIssueModal(false)}
                 />
-            ) : null}
-            {showIssueCardInformation ? (
+            )}
+            {showIssueCardInformation && (
                 <Modal
                     title={props.issue.title}
                     content={<IssueInformation issue={props.issue} />}
                     close={(): void => setShowIssueCardInformation(false)}
                 />
-            ) : null}
-            <div class="lst-itm-container cursor-move">
+            )}
+            <div class="lst-itm-container cursor-default">
                 <div class="px-4 py-2 flex min-w-0">
                     <div
                         class="truncate cursor-pointer underline font-semibold hover:text-blue-500"
