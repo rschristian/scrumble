@@ -89,7 +89,7 @@ export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps
                             if (selectedOptions !== null) setSelectedProjectOptions(selectedOptions);
                             else setSelectedProjectOptions([]);
                         }}
-			closeMenuOnSelect={false}
+                        closeMenuOnSelect={false}
                     />
                 </div>
                 <button class="btn-create mx-auto mb-4 ml-4" onClick={useLtsWarning}>
