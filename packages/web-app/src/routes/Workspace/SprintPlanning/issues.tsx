@@ -7,7 +7,7 @@ import IssueCard from 'components/Cards/Issue/issueCard';
 import CreateOrEditIssue from 'components/CreateOrEdit/issue';
 import IssueFilter from 'components/Filter/issue';
 import Modal from 'components/Modal';
-import { isIssue, Issue, IssueStatus } from 'models/Issue';
+import { isIssue, Issue } from 'models/Issue';
 import { isIssuePagination } from 'models/IssuePagination';
 import { apiCreateIssue, apiFetchIssues } from 'services/api/issues';
 import { errorColour, infoColour, successColour } from 'services/notification/colours';
@@ -18,7 +18,7 @@ const IssueList: FunctionalComponent = () => {
 
     const [showNewIssueModal, setShowNewIssueModal] = useState(false);
 
-    const [issueFilter, setIssueFilter] = useState(IssueStatus.open.toString());
+    const [issueFilter, setIssueFilter] = useState('unplanned');
     const [issueFilterTerm, setIssueFilterTerm] = useState('');
 
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);

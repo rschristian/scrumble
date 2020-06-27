@@ -17,7 +17,7 @@ const filterStatusEnum = {
 };
 
 const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
-    const [filterStatus, setFilterStatus] = useState<filterStatusEnum>(filterStatusEnum.open);
+    const [filterStatus, setFilterStatus] = useState<filterStatusEnum>(filterStatusEnum.unplanned);
     const [searchTerm, setSearchTerm] = useState('');
     const { setFilter } = props;
 
@@ -29,6 +29,12 @@ const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
         <div class="my-4 flex flex-col items-start">
             <div class="flex rounded shadow">
                 <button
+                    className={`btn-filter ${filterStatus === filterStatusEnum.unplanned ? 'btn-filter-active' : ''}`}
+                    onClick={(): void => setFilterStatus(filterStatusEnum.unplanned)}
+                >
+                    Unplanned
+                </button>
+                <button
                     class={`btn-filter ${filterStatus === filterStatusEnum.open ? 'btn-filter-active' : ''}`}
                     onClick={(): void => setFilterStatus(filterStatusEnum.open)}
                 >
@@ -39,12 +45,6 @@ const IssueFilter: FunctionalComponent<IProps> = (props: IProps) => {
                     onClick={(): void => setFilterStatus(filterStatusEnum.closed)}
                 >
                     Closed
-                </button>
-                <button
-                    class={`btn-filter ${filterStatus === filterStatusEnum.unplanned ? 'btn-filter-active' : ''}`}
-                    onClick={(): void => setFilterStatus(filterStatusEnum.unplanned)}
-                >
-                    Unplanned
                 </button>
                 <button
                     class={`btn-filter ${filterStatus === filterStatusEnum.all ? 'btn-filter-active' : ''}`}
