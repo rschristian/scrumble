@@ -1,4 +1,5 @@
-import { apiService } from 'ts-api-toolkit';
+import apiService from './index';
+
 import { Project } from 'models/Project';
 
 // ----------------------------------------

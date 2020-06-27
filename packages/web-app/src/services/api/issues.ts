@@ -1,4 +1,4 @@
-import { apiService } from 'ts-api-toolkit';
+import apiService from './index';
 
 import { Issue } from 'models/Issue';
 import { IssuePagination } from 'models/IssuePagination';

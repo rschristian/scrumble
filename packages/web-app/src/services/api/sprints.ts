@@ -1,4 +1,4 @@
-import { apiService } from 'ts-api-toolkit';
+import apiService from './index';
 
 import { Sprint } from 'models/Sprint';
 
