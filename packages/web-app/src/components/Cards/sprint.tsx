@@ -14,7 +14,9 @@ import { reduxSetCurrentSprint } from 'stores/userLocationStore';
 
 const getUrlSubstringAndFix = (): string => {
     const currentUrl = getCurrentUrl().replace(/\D+$/g, '');
-    if (currentUrl.substring(currentUrl.length - 1) === '/') return currentUrl.substring(0, currentUrl.length - 1);
+    if (currentUrl.substring(currentUrl.length - 1) === '/') {
+        return currentUrl.substring(0, currentUrl.length - 1);
+    }
     return currentUrl;
 };
 
