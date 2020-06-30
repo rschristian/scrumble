@@ -1,4 +1,4 @@
-import apiService from './index';
+import apiService, { ApiResponse } from './index';
 
 import { User } from 'models/User';
 
@@ -10,7 +10,7 @@ import { User } from 'models/User';
 // Read
 // ----------------------------------------
 
-export const apiLogin = async (): Promise<{ jwt: string } | string> => {
+export const apiLogin = async (): ApiResponse<{ jwt: string }> => {
     try {
         const { data } = await apiService.get('/auth/token');
         return data;
@@ -19,7 +19,7 @@ export const apiLogin = async (): Promise<{ jwt: string } | string> => {
     }
 };
 
-export const apiFetchUserInfo = async (): Promise<User | string> => {
+export const apiFetchUserInfo = async (): ApiResponse<User> => {
     try {
         const { data } = await apiService.get('user/info');
         return data;
@@ -36,9 +36,9 @@ export const apiFetchUserInfo = async (): Promise<User | string> => {
 // Delete
 // ----------------------------------------
 
-export const destroyOAuthToken = async (): Promise<void> => {
+export const destroyOAuthToken = async (): ApiResponse<void> => {
     try {
-        await apiService.delete('/auth/token');
+        return await apiService.delete('/auth/token');
     } catch ({ response }) {
         return response.data?.message || 'Unknown error while fetching user info';
     }

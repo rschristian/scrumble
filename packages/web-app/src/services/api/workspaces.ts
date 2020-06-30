@@ -1,4 +1,4 @@
-import apiService from './index';
+import apiService, { ApiResponse } from './index';
 
 import { Workspace } from 'models/Workspace';
 
@@ -6,7 +6,7 @@ import { Workspace } from 'models/Workspace';
 // Create
 // ----------------------------------------
 
-export const apiCreateWorkspace = async (newWorkspace: Workspace): Promise<Workspace | string> => {
+export const apiCreateWorkspace = async (newWorkspace: Workspace): ApiResponse<Workspace> => {
     try {
         const { data } = await apiService.post('/workspace', { newWorkspace });
         return data;
@@ -19,7 +19,7 @@ export const apiCreateWorkspace = async (newWorkspace: Workspace): Promise<Works
 // Read
 // ----------------------------------------
 
-export const apiFetchWorkspaces = async (): Promise<Workspace[] | string> => {
+export const apiFetchWorkspaces = async (): ApiResponse<Workspace[]> => {
     try {
         const { data } = await apiService.get('/workspaces');
         return data;
@@ -32,10 +32,7 @@ export const apiFetchWorkspaces = async (): Promise<Workspace[] | string> => {
 // Update
 // ----------------------------------------
 
-export const apiUpdateWorkspace = async (
-    workspaceId: number,
-    updatedWorkspace: Workspace,
-): Promise<Workspace | string> => {
+export const apiUpdateWorkspace = async (workspaceId: number, updatedWorkspace: Workspace): ApiResponse<Workspace> => {
     try {
         const { data } = await apiService.put(`/workspace/${workspaceId}`, { updatedWorkspace });
         return data;

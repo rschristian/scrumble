@@ -1,4 +1,4 @@
-import apiService from './index';
+import apiService, { ApiResponse } from './index';
 
 import { Sprint } from 'models/Sprint';
 
@@ -6,7 +6,7 @@ import { Sprint } from 'models/Sprint';
 // Create
 // ----------------------------------------
 
-export const apiCreateSprint = async (workspaceId: number, newSprint: Sprint): Promise<Sprint | string> => {
+export const apiCreateSprint = async (workspaceId: number, newSprint: Sprint): ApiResponse<Sprint> => {
     try {
         const { data } = await apiService.post(`/workspace/${workspaceId}/sprint`, { newSprint });
         return data;
@@ -19,7 +19,7 @@ export const apiCreateSprint = async (workspaceId: number, newSprint: Sprint): P
 // Read
 // ----------------------------------------
 
-export const apiFetchSprints = async (workspaceId: number, filter: string): Promise<Sprint[] | string> => {
+export const apiFetchSprints = async (workspaceId: number, filter: string): ApiResponse<Sprint[]> => {
     try {
         const { data } = await apiService.query(`/workspace/${workspaceId}/sprints`, { params: { filter } });
         return data;
@@ -32,7 +32,7 @@ export const apiFetchSprints = async (workspaceId: number, filter: string): Prom
 // Update
 // ----------------------------------------
 
-export const apiUpdateSprint = async (workspaceId: number, updatedSprint: Sprint): Promise<Sprint | string> => {
+export const apiUpdateSprint = async (workspaceId: number, updatedSprint: Sprint): ApiResponse<Sprint> => {
     try {
         const { data } = await apiService.put(`/workspace/${workspaceId}/sprint`, { updatedSprint });
         return data;

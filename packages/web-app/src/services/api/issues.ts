@@ -1,4 +1,4 @@
-import apiService from './index';
+import apiService, { ApiResponse } from './index';
 
 import { Issue } from 'models/Issue';
 import { IssuePagination } from 'models/IssuePagination';
@@ -8,7 +8,7 @@ import { Sprint } from 'models/Sprint';
 // Create
 // ----------------------------------------
 
-export const apiCreateIssue = async (workspaceId: number, issue: Issue): Promise<Issue | string> => {
+export const apiCreateIssue = async (workspaceId: number, issue: Issue): ApiResponse<Issue> => {
     try {
         const { data } = await apiService.post(`/workspace/${workspaceId}/project/${issue.project.id}/issue`, {
             issue,
@@ -29,7 +29,7 @@ export const apiFetchIssues = async (
     page: number,
     filter: string,
     searchFor: string,
-): Promise<IssuePagination | string> => {
+): ApiResponse<IssuePagination> => {
     try {
         const { data } = await apiService.query(`/workspace/${workspaceId}/issues`, {
             params: { projectId, page, filter, searchFor },
@@ -40,7 +40,7 @@ export const apiFetchIssues = async (
     }
 };
 
-export const apiFetchSprintIssues = async (workspaceId: number, sprint: Sprint): Promise<Issue[] | string> => {
+export const apiFetchSprintIssues = async (workspaceId: number, sprint: Sprint): ApiResponse<Issue[]> => {
     try {
         const { data } = await apiService.query(`/workspace/${workspaceId}/sprint/issues`, {
             params: { projectIdToMilestoneIds: sprint.projectIdToMilestoneIds },
@@ -55,10 +55,11 @@ export const apiFetchSprintIssues = async (workspaceId: number, sprint: Sprint):
 // Update
 // ----------------------------------------
 
-export const apiUpdateIssue = async (workspaceId: number, issue: Issue): Promise<void | string> => {
+export const apiUpdateIssue = async (workspaceId: number, issue: Issue): ApiResponse<void> => {
     try {
-        await apiService.put(`/workspace/${workspaceId}/project/${issue.project.id}/issue/${issue.iid}`, { issue });
-        return;
+        return await apiService.put(`/workspace/${workspaceId}/project/${issue.project.id}/issue/${issue.iid}`, {
+            issue,
+        });
     } catch ({ response }) {
         return response.data?.message || 'Unknown error while editing issue';
     }

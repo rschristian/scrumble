@@ -27,12 +27,12 @@ const IssuesBoard: FunctionalComponent = () => {
 
     const updateIssue = async (updatedIssue: Issue): Promise<void> => {
         const result = await apiUpdateIssue(currentWorkspace.id, updatedIssue);
-        result ? notify.show(result, 'error', 5000, errorColour) : updateIssueBoard(updatedIssue);
+        !result.error ? updateIssueBoard(updatedIssue) : notify.show(result.error, 'error', 5000, errorColour);
     };
 
     const fetchIssues = async (): Promise<void> => {
         const result = await apiFetchSprintIssues(currentWorkspace.id, currentSprint);
-        isIssueArray(result) ? setIssuesArray(result) : notify.show(result, 'error', 5000, errorColour);
+        result.data ? setIssuesArray(result.data) : notify.show(result.error, 'error', 5000, errorColour);
     };
 
     useEffect(() => {

@@ -102,15 +102,16 @@ const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
     useEffect(() => {
         async function getWorkspaceProjectsAndSprints(): Promise<void> {
             const workspaceProjectsResult = await apiFetchWorkspaceProjects(currentWorkspace.id);
-            typeof workspaceProjectsResult === 'string'
-                ? notify.show(workspaceProjectsResult, 'error', 5000, errorColour)
-                : setProjects(workspaceProjectsResult);
+            workspaceProjectsResult.data
+                ? setProjects(workspaceProjectsResult.data)
+                : notify.show(workspaceProjectsResult.error, 'error', 5000, errorColour);
 
             const sprintResult = await apiFetchSprints(currentWorkspace.id, 'active');
-            if (typeof sprintResult === 'string') notify.show(sprintResult, 'error', 5000, errorColour);
-            else {
-                sprintResult.unshift(emptySprint());
-                setSprints(sprintResult);
+            if (sprintResult.data) {
+                sprintResult.data.unshift(emptySprint());
+                setSprints(sprintResult.data);
+            } else {
+                notify.show(sprintResult.error, 'error', 5000, errorColour);
             }
         }
         getWorkspaceProjectsAndSprints();

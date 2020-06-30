@@ -4,7 +4,7 @@ import { notify } from 'react-notify-toast';
 
 import CreateOrEditWorkspace from 'components/CreateOrEdit/workspace';
 import GenericEdit from 'components/CommonRoutes/edit';
-import { isWorkspace, Workspace } from 'models/Workspace';
+import { Workspace } from 'models/Workspace';
 import { apiUpdateWorkspace } from 'services/api/workspaces';
 import { errorColour, infoColour } from 'services/notification/colours';
 import { RootState } from 'stores';
@@ -16,11 +16,11 @@ const WorkspaceEdit: FunctionalComponent = () => {
 
     const onSubmit = async (workspace: Workspace): Promise<void> => {
         const result = await apiUpdateWorkspace(currentWorkspace.id, workspace);
-        if (isWorkspace(result)) {
-            dispatch(reduxSetCurrentWorkspace(result));
+        if (result.data) {
+            dispatch(reduxSetCurrentWorkspace(result.data));
             notify.show('Changes saved!', 'custom', 5000, infoColour);
         } else {
-            notify.show(result, 'error', 5000, errorColour);
+            notify.show(result.error, 'error', 5000, errorColour);
         }
     };
 

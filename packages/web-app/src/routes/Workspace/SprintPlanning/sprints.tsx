@@ -7,7 +7,7 @@ import Modal from 'components/Modal';
 import SprintCard from 'components/Cards/sprint';
 import CreateOrEditSprint from 'components/CreateOrEdit/sprint';
 import Filter, { FilterType } from 'components/Filters';
-import { isSprint, isSprintArray, Sprint, SprintStatus } from 'models/Sprint';
+import { Sprint, SprintStatus } from 'models/Sprint';
 import { apiCreateSprint, apiFetchSprints } from 'services/api/sprints';
 import { errorColour, successColour } from 'services/notification/colours';
 import { RootState } from 'stores';
@@ -22,7 +22,7 @@ const SprintList: FunctionalComponent = () => {
 
     const fetchSprints = useCallback(async () => {
         const result = await apiFetchSprints(currentWorkspace.id, 'none');
-        isSprintArray(result) ? setSprints(result) : notify.show(result, 'error', 5000, errorColour);
+        result.data ? setSprints(result.data) : notify.show(result.error, 'error', 5000, errorColour);
     }, [currentWorkspace]);
 
     useEffect(() => {
@@ -31,12 +31,12 @@ const SprintList: FunctionalComponent = () => {
 
     async function handleSprintCreation(newSprint: Sprint): Promise<void> {
         const result = await apiCreateSprint(currentWorkspace.id, newSprint);
-        if (isSprint(result)) {
+        if (result.data) {
             notify.show('New sprint created!', 'success', 5000, successColour);
             setShowNewSprintModal(false);
-            setSprints([...sprints, result]);
+            setSprints((oldSprints) => [...oldSprints, result.data]);
         } else {
-            notify.show(result, 'error', 5000, errorColour);
+            notify.show(result.error, 'error', 5000, errorColour);
         }
     }
 
@@ -57,11 +57,11 @@ const SprintList: FunctionalComponent = () => {
         setSprintTermFilter(sprintTerm);
     }
 
-    const scrollToLoadMore = (e: HTMLDivElement): void => {
+    function scrollToLoadMore(e: HTMLDivElement): void {
         // if (e.scrollHeight - e.scrollTop === e.clientHeight && pageNumber.current !== 0) {
         //     fetchSprints();
         // }
-    };
+    }
 
     return (
         <div>

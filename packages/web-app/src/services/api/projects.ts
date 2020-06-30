@@ -1,4 +1,4 @@
-import apiService from './index';
+import apiService, { ApiResponse } from './index';
 
 import { Project } from 'models/Project';
 
@@ -10,7 +10,7 @@ import { Project } from 'models/Project';
 // Read
 // ----------------------------------------
 
-export const apiFetchProjects = async (): Promise<Project[] | string> => {
+export const apiFetchProjects = async (): ApiResponse<Project[]> => {
     try {
         const { data } = await apiService.get('/projects');
         return data;
@@ -19,7 +19,7 @@ export const apiFetchProjects = async (): Promise<Project[] | string> => {
     }
 };
 
-export const apiFetchWorkspaceProjects = async (workspaceId: number): Promise<Project[] | string> => {
+export const apiFetchWorkspaceProjects = async (workspaceId: number): ApiResponse<Project[]> => {
     try {
         const { data } = await apiService.get(`/workspace/${workspaceId}/projects`);
         return data;

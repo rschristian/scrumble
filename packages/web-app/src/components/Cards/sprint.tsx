@@ -53,13 +53,13 @@ const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
             ...props.sprint,
             status: sprintStatus(),
         });
-        if (isSprint(result)) {
-            props.updateSprint(result);
+        if (result.data) {
+            props.updateSprint(result.data);
             setShowClosureModal(false);
             setShowOpeningModal(false);
             notify.show('Status updated!', 'success', 5000);
         } else {
-            notify.show(result, 'error', 5000, errorColour);
+            notify.show(result.error, 'error', 5000, errorColour);
         }
     };
 

@@ -42,20 +42,20 @@ const IssueList: FunctionalComponent = () => {
                 issueTermFilter,
             );
 
-            if (isIssuePagination(result)) {
-                if (result.issues.length === 0) {
+            if (result.data) {
+                if (result.data.issues.length === 0) {
                     notify.show('No issues found for your filter', 'custom', 5000, infoColour);
                 } else {
                     if (append) {
-                        setIssues((oldValues) => oldValues.concat(result.issues));
+                        setIssues((oldValues) => oldValues.concat(result.data.issues));
                     } else {
-                        setIssues(result.issues);
+                        setIssues(result.data.issues);
                     }
-                    projectId.current = result.nextResource.projectId;
-                    pageNumber.current = result.nextResource.pageNumber;
+                    projectId.current = result.data.nextResource.projectId;
+                    pageNumber.current = result.data.nextResource.pageNumber;
                 }
             } else {
-                notify.show(result, 'error', 5000, errorColour);
+                notify.show(result.error, 'error', 5000, errorColour);
             }
         },
         [currentWorkspace, issueStatusFilter, issueTermFilter],
@@ -67,12 +67,12 @@ const IssueList: FunctionalComponent = () => {
 
     const handleIssueCreation = async (newIssue: Issue): Promise<void> => {
         const result = await apiCreateIssue(currentWorkspace.id, newIssue);
-        if (isIssue(result)) {
+        if (result.data) {
             notify.show('New issue created!', 'success', 5000, successColour);
             setShowNewIssueModal(false);
-            setIssues([...issues, result]);
+            setIssues((oldIssues) => [...oldIssues, result.data]);
         } else {
-            notify.show(result, 'error', 5000, errorColour);
+            notify.show(result.error, 'error', 5000, errorColour);
         }
     };
 

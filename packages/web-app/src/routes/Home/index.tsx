@@ -22,7 +22,7 @@ const Home: FunctionalComponent = () => {
         dispatch(reduxSetActiveSideBarMenuItem(0));
         async function getAllWorkspaces(): Promise<void> {
             const result = await apiFetchWorkspaces();
-            isWorkspaceArray(result) ? setWorkspacesArray(result) : notify.show(result, 'error', 5000, errorColour);
+            result.data ? setWorkspacesArray(result.data) : notify.show(result.error, 'error', 5000, errorColour);
         }
         getAllWorkspaces();
     }, [dispatch]);
@@ -32,12 +32,12 @@ const Home: FunctionalComponent = () => {
             notify.show('You must provide a name', 'warning', 5000, warningColour);
         } else {
             const result = await apiCreateWorkspace(newWorkspace);
-            if (isWorkspace(result)) {
-                setWorkspacesArray([...workspacesArray, result]);
+            if (result.data) {
+                setWorkspacesArray((oldWorkspacesArray) => [...oldWorkspacesArray, result.data]);
                 setShowCreateModal(false);
                 notify.show('Workspace created!', 'success', 5000, successColour);
             } else {
-                notify.show(result, 'error', 5000, errorColour);
+                notify.show(result.error, 'error', 5000, errorColour);
             }
         }
     };

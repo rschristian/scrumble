@@ -80,12 +80,12 @@ export const reduxLoginAndFetchUserInfo = (shortLivedJwt: string): AppThunk => a
 ): Promise<void> => {
     dispatch(loginStart(shortLivedJwt));
     const loginResult = await apiLogin();
-    typeof loginResult === 'string' ? dispatch(loginFailure(loginResult)) : dispatch(loginSuccess(loginResult));
+    loginResult.data ? dispatch(loginSuccess(loginResult.data)) : dispatch(loginFailure(loginResult.error));
 
     const userInfoResult = await apiFetchUserInfo();
-    typeof userInfoResult === 'string'
-        ? dispatch(fetchUserInfoFailure(userInfoResult))
-        : dispatch(fetchUserInfoSuccess(userInfoResult));
+    userInfoResult.data
+        ? dispatch(fetchUserInfoSuccess(userInfoResult.data))
+        : dispatch(fetchUserInfoFailure(userInfoResult.error));
     // TODO This might be an issue, honestly not sure
     route('/', true);
 };

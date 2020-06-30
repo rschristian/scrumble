@@ -29,10 +29,9 @@ const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
     useEffect(() => {
         async function getProjectData(): Promise<void> {
             const result = await apiFetchProjects();
-            if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
-            else {
+            if (result.data) {
                 const options: DropdownMenuOption[] = [];
-                result.map((project) => {
+                result.data.map((project) => {
                     options.push({
                         value: project,
                         label: project.name,
@@ -42,6 +41,8 @@ const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
                 setSelectedProjectOptions(
                     options.filter((project) => props.workspace?.projectIds.includes(project.value.id)),
                 );
+            } else {
+                notify.show(result.error, 'error', 5000, errorColour);
             }
         }
         getProjectData();
