@@ -46,15 +46,14 @@ const IssueBoardColumn: FunctionalComponent<IssuesBoardProps> = (props: IssuesBo
         });
         return {
             iid: updatedIssue.iid || 0,
-            status: updatedIssue.status,
             title: updatedIssue.title,
             description: updatedIssue.description,
-            storyPoint: updatedIssue.storyPoint,
-            projectId: updatedIssue.projectId,
-            projectName: updatedIssue.projectName,
+            status: updatedIssue.status,
             author: updatedIssue.author,
-            createdAt: new Date(),
             assignee: updatedIssue?.assignee || unassigned,
+            createdAt: new Date(),
+            storyPoint: updatedIssue.storyPoint,
+            project: updatedIssue.project,
         };
     };
 
@@ -72,8 +71,12 @@ const IssueBoardColumn: FunctionalComponent<IssuesBoardProps> = (props: IssuesBo
                                 class="form-input capitalize"
                                 value={issue.status}
                                 onInput={(e): void => {
-                                    issue.status = (e.target as HTMLSelectElement).value;
-                                    props.updateIssueBoard(handleUpdate(issue));
+                                    const issueStatus =
+                                        IssueStatus[(e.target as HTMLSelectElement).value as keyof typeof IssueStatus];
+                                    if (issueStatus) {
+                                        issue.status = issueStatus;
+                                        props.updateIssueBoard(handleUpdate(issue));
+                                    }
                                 }}
                             >
                                 {Object.values(IssueStatus).map((issueStatus) => {
@@ -96,7 +99,7 @@ const IssueBoardColumn: FunctionalComponent<IssuesBoardProps> = (props: IssuesBo
                             <div class="flex">
                                 {issue.storyPoint !== 0 && <span class="story-pnt">{issue.storyPoint}</span>}
                                 <p class="text-gray-700">
-                                    {issue.projectName} (#{issue.iid})
+                                    {issue.project.name} (#{issue.iid})
                                 </p>
                             </div>
                         </div>

@@ -41,6 +41,7 @@ const emptyProject = (): Project => {
     return {
         id: 0,
         name: 'Unassigned',
+        description: '',
     };
 };
 
@@ -51,8 +52,7 @@ const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
     const [title, setTitle] = useState(props.issue?.title || '');
     const [description, setDescription] = useState(props.issue?.description || '');
     const [storyPoint, setStoryPoint] = useState(props.issue?.storyPoint || 0);
-    const [projectId, setProjectId] = useState(props.issue?.projectId || 0);
-    const [projectName, setProjectName] = useState(props.issue?.projectName || emptyProject().name);
+    const [project, setProject] = useState<Project>(props.issue?.project || emptyProject);
     const [assignee, setAssignee] = useState<User>(props.issue?.assignee || unassigned);
     const [sprint, setSprint] = useState<Sprint>(props.issue?.sprint || emptySprint);
     const [projects, setProjects] = useState<Project[]>([]);
@@ -61,16 +61,15 @@ const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
     const createIssue = (): Issue => {
         return {
             iid: props.issue?.iid || 0,
-            status: props.issue?.status || IssueStatus.open,
             title,
             description,
-            storyPoint,
-            projectId,
-            projectName,
-            sprint,
+            status: props.issue?.status || IssueStatus.open,
             author: props.issue?.author || currentUser,
-            createdAt: new Date(),
             assignee,
+            createdAt: new Date(),
+            storyPoint,
+            project,
+            sprint,
         };
     };
 
@@ -83,8 +82,7 @@ const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
     const handleProjectChange = (projectName: string): void => {
         const project = projects.find((p) => p.name === projectName);
         if (project) {
-            setProjectId(project.id);
-            setProjectName(project.name);
+            setProject(project);
         }
     };
 
@@ -97,7 +95,7 @@ const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
 
     const validateAndSubmit = (): void => {
         if (title === emptySprint().title) notify.show('Please give this issue a title', 'warning', 5000);
-        else if (projectId === 0) notify.show('Please attach this issue to a project', 'warning', 5000);
+        else if (project.id === 0) notify.show('Please attach this issue to a project', 'warning', 5000);
         else props.submit(createIssue());
     };
 
@@ -119,8 +117,8 @@ const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
     }, [currentWorkspace.id]);
 
     useEffect(() => {
-        unassigned.projectIds = [projectId];
-    }, [projectId]);
+        unassigned.projectIds = [project.id];
+    }, [project]);
 
     return (
         <Fragment>
@@ -165,7 +163,7 @@ const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
                 <select
                     class="form-input"
                     placeholder="Project to Attach To"
-                    value={projectName}
+                    value={project.name}
                     onInput={(e): void => handleProjectChange((e.target as HTMLSelectElement).value)}
                 >
                     {projects.map((project) => {

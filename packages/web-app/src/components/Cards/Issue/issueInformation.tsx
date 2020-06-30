@@ -13,7 +13,7 @@ const IssueInformation: FunctionalComponent<InformationProps> = (props: Informat
                     <div class="table-row">
                         <div class="table-cell py-2">
                             <span class="info-label"> Project: </span>
-                            <span class="text-gray-700"> {props.issue.projectName} </span>
+                            <span class="text-gray-700"> {props.issue.project.name} </span>
                         </div>
                         <div class="table-cell py-2">
                             <span class="info-label"> Created At: </span>

@@ -10,7 +10,9 @@ import { Sprint } from 'models/Sprint';
 
 export const apiCreateIssue = async (workspaceId: number, issue: Issue): Promise<Issue | string> => {
     try {
-        const { data } = await apiService.post(`/workspace/${workspaceId}/project/${issue.projectId}/issue`, { issue });
+        const { data } = await apiService.post(`/workspace/${workspaceId}/project/${issue.project.id}/issue`, {
+            issue,
+        });
         return data;
     } catch ({ response }) {
         return response.data?.message || 'Unknown error while creating issue';
@@ -55,7 +57,7 @@ export const apiFetchSprintIssues = async (workspaceId: number, sprint: Sprint):
 
 export const apiUpdateIssue = async (workspaceId: number, issue: Issue): Promise<void | string> => {
     try {
-        await apiService.put(`/workspace/${workspaceId}/project/${issue.projectId}/issue/${issue.iid}`, { issue });
+        await apiService.put(`/workspace/${workspaceId}/project/${issue.project.id}/issue/${issue.iid}`, { issue });
         return;
     } catch ({ response }) {
         return response.data?.message || 'Unknown error while editing issue';

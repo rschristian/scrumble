@@ -1,27 +1,26 @@
 import { Sprint } from './Sprint';
 import { User } from './User';
+import { Project } from 'models/Project';
 
 export enum IssueStatus {
     open = 'opened',
-    todo = 'To Do', // default label for GitLab issue board
-    doing = 'Doing', // default label for GitLab issue board
+    todo = 'To Do',
+    doing = 'Doing',
     closed = 'closed',
 }
 
 export interface Issue {
-    iid?: number; // Optional only because the frontend won't know what the ID of a new issue might be.
+    iid?: number;
     title: string;
-    description?: string;
-    storyPoint?: number;
-    status: IssueStatus | string;
-    labels?: string[];
-    projectId: number;
-    projectName: string;
-    timeSpent?: number;
-    sprint?: Sprint;
+    description: string;
+    status: IssueStatus;
     author: User;
     assignee?: User;
     createdAt: Date | string;
+    timeSpent?: number;
+    storyPoint: number;
+    project: Project;
+    sprint?: Sprint; // GitLab API, None / Any
 }
 
 export function isIssue(result: Issue | string): result is Issue {

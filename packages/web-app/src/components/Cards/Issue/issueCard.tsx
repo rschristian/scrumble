@@ -71,7 +71,7 @@ const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
                         {props.issue.status === IssueStatus.closed ? 'Closed' : 'Opened'}
                     </span>
                     {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
-                    <span class="text-gray-700"> Project Name: {props.issue.projectName}</span>
+                    <span class="text-gray-700"> Project Name: {props.issue.project.name}</span>
                     <div>
                         <button class="float-right btn-edit my-auto" onClick={(): void => setShowEditIssueModal(true)}>
                             Edit
