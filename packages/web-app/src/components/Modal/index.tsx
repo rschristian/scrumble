@@ -24,7 +24,7 @@ const Modal: FunctionalComponent<IProps> = (props: IProps) => {
 
                     {props.content}
 
-                    {props.submit !== undefined && (
+                    {props.submit && (
                         <div class="flex justify-end pt-2">
                             <button
                                 class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
