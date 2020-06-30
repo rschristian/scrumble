@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Workspace } from 'models/Workspace';
 import { reduxSetCurrentWorkspace } from 'stores/userLocationStore';
 
-export const WorkspaceCard: FunctionalComponent<Workspace> = (props: Workspace) => {
+const WorkspaceCard: FunctionalComponent<Workspace> = (props: Workspace) => {
     const dispatch = useDispatch();
 
     function setWorkspace(): void {
@@ -21,3 +21,5 @@ export const WorkspaceCard: FunctionalComponent<Workspace> = (props: Workspace) 
         </Link>
     );
 };
+
+export default WorkspaceCard;
