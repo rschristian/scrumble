@@ -15,12 +15,12 @@ const WorkspaceEdit: FunctionalComponent = () => {
     const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
 
     const onSubmit = async (workspace: Workspace): Promise<void> => {
-        const result = await apiUpdateWorkspace(currentWorkspace.id, workspace);
-        if (result.data) {
-            dispatch(reduxSetCurrentWorkspace(result.data));
+        try {
+            const result = await apiUpdateWorkspace(currentWorkspace.id, workspace);
+            dispatch(reduxSetCurrentWorkspace(result));
             notify.show('Changes saved!', 'custom', 5000, infoColour);
-        } else {
-            notify.show(result.error, 'error', 5000, errorColour);
+        } catch (error) {
+            notify.show(error, 'error', 5000, errorColour);
         }
     };
 

@@ -24,13 +24,13 @@ const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
     const [showIssueCardInformation, setShowIssueCardInformation] = useState(false);
 
     const handleIssueEdit = async (updatedIssue: Issue): Promise<void> => {
-        const result = await apiUpdateIssue(currentWorkspace.id, updatedIssue);
-        if (!result.error) {
-            notify.show('Issue successfully updated!', 'success', 5000, successColour);
-            setShowEditIssueModal(false);
+        try {
+            await apiUpdateIssue(currentWorkspace.id, updatedIssue);
             props.updateIssue(updatedIssue);
-        } else {
-            notify.show(result.error, 'error', 5000, errorColour);
+            setShowEditIssueModal(false);
+            notify.show('Issue successfully updated!', 'success', 5000, successColour);
+        } catch (error) {
+            notify.show(error, 'error', 5000, errorColour);
         }
     };
 

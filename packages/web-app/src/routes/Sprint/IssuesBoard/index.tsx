@@ -3,7 +3,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
-import { isIssueArray, Issue, IssueStatus } from 'models/Issue';
+import { Issue, IssueStatus } from 'models/Issue';
 import { apiUpdateIssue, apiFetchSprintIssues } from 'services/api/issues';
 import { errorColour } from 'services/notification/colours';
 import { RootState } from 'stores';
@@ -26,13 +26,21 @@ const IssuesBoard: FunctionalComponent = () => {
     };
 
     const updateIssue = async (updatedIssue: Issue): Promise<void> => {
-        const result = await apiUpdateIssue(currentWorkspace.id, updatedIssue);
-        !result.error ? updateIssueBoard(updatedIssue) : notify.show(result.error, 'error', 5000, errorColour);
+        try {
+            await apiUpdateIssue(currentWorkspace.id, updatedIssue);
+            updateIssueBoard(updatedIssue);
+        } catch (error) {
+            notify.show(error, 'error', 5000, errorColour);
+        }
     };
 
     const fetchIssues = async (): Promise<void> => {
-        const result = await apiFetchSprintIssues(currentWorkspace.id, currentSprint);
-        result.data ? setIssuesArray(result.data) : notify.show(result.error, 'error', 5000, errorColour);
+        try {
+            const result = await apiFetchSprintIssues(currentWorkspace.id, currentSprint);
+            setIssuesArray(result);
+        } catch (error) {
+            notify.show(error, 'error', 5000, errorColour);
+        }
     };
 
     useEffect(() => {

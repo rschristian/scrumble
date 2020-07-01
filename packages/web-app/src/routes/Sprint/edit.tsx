@@ -15,12 +15,12 @@ const SprintEdit: FunctionalComponent = () => {
     const { currentWorkspace, currentSprint } = useSelector((state: RootState) => state.userLocation);
 
     const onSubmit = async (updatedSprint: Sprint): Promise<void> => {
-        const result = await apiUpdateSprint(currentWorkspace.id, updatedSprint);
-        if (result.data) {
-            dispatch(reduxSetCurrentSprint(result.data));
+        try {
+            const result = await apiUpdateSprint(currentWorkspace.id, updatedSprint);
+            dispatch(reduxSetCurrentSprint(result));
             notify.show('Sprint has been updated!', 'success', 5000, successColour);
-        } else {
-            notify.show(result.error, 'error', 5000, errorColour);
+        } catch (error) {
+            notify.show(error, 'error', 5000, errorColour);
         }
     };
 

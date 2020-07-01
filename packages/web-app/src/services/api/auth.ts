@@ -15,7 +15,7 @@ export const apiLogin = async (): ApiResponse<{ jwt: string }> => {
         const { data } = await apiService.get('/auth/token');
         return data;
     } catch ({ response }) {
-        return response.data?.message || 'Unknown error while exchanging tokens';
+        throw response.data?.message || 'Unknown error while exchanging tokens';
     }
 };
 
@@ -24,7 +24,7 @@ export const apiFetchUserInfo = async (): ApiResponse<User> => {
         const { data } = await apiService.get('user/info');
         return data;
     } catch ({ response }) {
-        return response.data?.message || 'Unknown error while fetching user info';
+        throw response.data?.message || 'Unknown error while fetching user info';
     }
 };
 
@@ -40,6 +40,6 @@ export const destroyOAuthToken = async (): ApiResponse<void> => {
     try {
         return await apiService.delete('/auth/token');
     } catch ({ response }) {
-        return response.data?.message || 'Unknown error while fetching user info';
+        throw response.data?.message || 'Unknown error while fetching user info';
     }
 };

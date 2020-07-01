@@ -33,28 +33,28 @@ const IssueList: FunctionalComponent = () => {
 
     const fetchIssues = useCallback(
         async (append = false) => {
-            const result = await apiFetchIssues(
-                currentWorkspace.id,
-                projectId.current,
-                pageNumber.current,
-                issueStatusFilter,
-                issueTermFilter,
-            );
+            try {
+                const result = await apiFetchIssues(
+                    currentWorkspace.id,
+                    projectId.current,
+                    pageNumber.current,
+                    issueStatusFilter,
+                    issueTermFilter,
+                );
 
-            if (result.data) {
-                if (result.data.issues.length === 0) {
+                if (result.issues.length === 0) {
                     notify.show('No issues found for your filter', 'custom', 5000, infoColour);
                 } else {
                     if (append) {
-                        setIssues((oldValues) => oldValues.concat(result.data.issues));
+                        setIssues((oldValues) => oldValues.concat(result.issues));
                     } else {
-                        setIssues(result.data.issues);
+                        setIssues(result.issues);
                     }
-                    projectId.current = result.data.nextResource.projectId;
-                    pageNumber.current = result.data.nextResource.pageNumber;
+                    projectId.current = result.nextResource.projectId;
+                    pageNumber.current = result.nextResource.pageNumber;
                 }
-            } else {
-                notify.show(result.error, 'error', 5000, errorColour);
+            } catch (error) {
+                notify.show(error, 'error', 5000, errorColour);
             }
         },
         [currentWorkspace, issueStatusFilter, issueTermFilter],
@@ -65,13 +65,13 @@ const IssueList: FunctionalComponent = () => {
     }, [fetchIssues]);
 
     const handleIssueCreation = async (newIssue: Issue): Promise<void> => {
-        const result = await apiCreateIssue(currentWorkspace.id, newIssue);
-        if (result.data) {
-            notify.show('New issue created!', 'success', 5000, successColour);
+        try {
+            const result = await apiCreateIssue(currentWorkspace.id, newIssue);
+            setIssues((oldIssues) => [...oldIssues, result]);
             setShowNewIssueModal(false);
-            setIssues((oldIssues) => [...oldIssues, result.data]);
-        } else {
-            notify.show(result.error, 'error', 5000, errorColour);
+            notify.show('New issue created!', 'success', 5000, successColour);
+        } catch (error) {
+            notify.show(error, 'error', 5000, errorColour);
         }
     };
 

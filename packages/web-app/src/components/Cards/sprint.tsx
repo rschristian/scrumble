@@ -6,7 +6,7 @@ import { notify } from 'react-notify-toast';
 import { MoreVertical } from 'preact-feather';
 
 import Modal from 'components/Modal';
-import { isSprint, Sprint, SprintStatus } from 'models/Sprint';
+import { Sprint, SprintStatus } from 'models/Sprint';
 import { apiUpdateSprint } from 'services/api/sprints';
 import { errorColour } from 'services/notification/colours';
 import { RootState } from 'stores';
@@ -49,17 +49,18 @@ const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
     };
 
     const handleToggleSprintStatus = async (): Promise<void> => {
-        const result = await apiUpdateSprint(currentWorkspace.id, {
-            ...props.sprint,
-            status: sprintStatus(),
-        });
-        if (result.data) {
-            props.updateSprint(result.data);
+        try {
+            props.updateSprint(
+                await apiUpdateSprint(currentWorkspace.id, {
+                    ...props.sprint,
+                    status: sprintStatus(),
+                }),
+            );
             setShowClosureModal(false);
             setShowOpeningModal(false);
             notify.show('Status updated!', 'success', 5000);
-        } else {
-            notify.show(result.error, 'error', 5000, errorColour);
+        } catch (error) {
+            notify.show(error, 'error', 5000, errorColour);
         }
     };
 

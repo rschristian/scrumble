@@ -15,7 +15,7 @@ export const apiCreateIssue = async (workspaceId: number, issue: Issue): ApiResp
         });
         return data;
     } catch ({ response }) {
-        return response.data?.message || 'Unknown error while creating issue';
+        throw response.data?.message || 'Unknown error while creating issue';
     }
 };
 
@@ -36,7 +36,7 @@ export const apiFetchIssues = async (
         });
         return data;
     } catch ({ response }) {
-        return response.data?.message || 'Unknown error while fetching workspace issues';
+        throw response.data?.message || 'Unknown error while fetching workspace issues';
     }
 };
 
@@ -47,7 +47,7 @@ export const apiFetchSprintIssues = async (workspaceId: number, sprint: Sprint):
         });
         return data;
     } catch ({ response }) {
-        return response.data?.message || 'Unknown error while fetching sprint issues';
+        throw response.data?.message || 'Unknown error while fetching sprint issues';
     }
 };
 
@@ -61,7 +61,7 @@ export const apiUpdateIssue = async (workspaceId: number, issue: Issue): ApiResp
             issue,
         });
     } catch ({ response }) {
-        return response.data?.message || 'Unknown error while editing issue';
+        throw response.data?.message || 'Unknown error while editing issue';
     }
 };
 

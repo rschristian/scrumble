@@ -21,8 +21,11 @@ const SprintList: FunctionalComponent = () => {
     const [sprints, setSprints] = useState<Sprint[]>([]);
 
     const fetchSprints = useCallback(async () => {
-        const result = await apiFetchSprints(currentWorkspace.id, 'none');
-        result.data ? setSprints(result.data) : notify.show(result.error, 'error', 5000, errorColour);
+        try {
+            setSprints(await apiFetchSprints(currentWorkspace.id, 'none'));
+        } catch (error) {
+            notify.show(error, 'error', 5000, errorColour);
+        }
     }, [currentWorkspace]);
 
     useEffect(() => {
@@ -30,13 +33,13 @@ const SprintList: FunctionalComponent = () => {
     }, [fetchSprints]);
 
     async function handleSprintCreation(newSprint: Sprint): Promise<void> {
-        const result = await apiCreateSprint(currentWorkspace.id, newSprint);
-        if (result.data) {
-            notify.show('New sprint created!', 'success', 5000, successColour);
+        try {
+            const result = await apiCreateSprint(currentWorkspace.id, newSprint);
+            setSprints((oldSprints) => [...oldSprints, result]);
             setShowNewSprintModal(false);
-            setSprints((oldSprints) => [...oldSprints, result.data]);
-        } else {
-            notify.show(result.error, 'error', 5000, errorColour);
+            notify.show('New sprint created!', 'success', 5000, successColour);
+        } catch (error) {
+            notify.show(error, 'error', 5000, errorColour);
         }
     }
 

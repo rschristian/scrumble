@@ -11,7 +11,7 @@ export const apiCreateSprint = async (workspaceId: number, newSprint: Sprint): A
         const { data } = await apiService.post(`/workspace/${workspaceId}/sprint`, { newSprint });
         return data;
     } catch ({ response }) {
-        return response.data?.message || 'Unknown error while creating sprint';
+        throw response.data?.message || 'Unknown error while creating sprint';
     }
 };
 
@@ -24,7 +24,7 @@ export const apiFetchSprints = async (workspaceId: number, filter: string): ApiR
         const { data } = await apiService.query(`/workspace/${workspaceId}/sprints`, { params: { filter } });
         return data;
     } catch ({ response }) {
-        return response.data?.message || 'Unknown error while fetching sprints';
+        throw response.data?.message || 'Unknown error while fetching sprints';
     }
 };
 
@@ -37,7 +37,7 @@ export const apiUpdateSprint = async (workspaceId: number, updatedSprint: Sprint
         const { data } = await apiService.put(`/workspace/${workspaceId}/sprint`, { updatedSprint });
         return data;
     } catch ({ response }) {
-        return response.data?.message || 'Unknown error while updating sprint details';
+        throw response.data?.message || 'Unknown error while updating sprint details';
     }
 };
 

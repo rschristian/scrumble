@@ -11,7 +11,7 @@ export const apiCreateWorkspace = async (newWorkspace: Workspace): ApiResponse<W
         const { data } = await apiService.post('/workspace', { newWorkspace });
         return data;
     } catch ({ response }) {
-        return response.data?.message || 'Unknown error while creating workspaces';
+        throw response.data?.message || 'Unknown error while creating workspaces';
     }
 };
 
@@ -24,7 +24,7 @@ export const apiFetchWorkspaces = async (): ApiResponse<Workspace[]> => {
         const { data } = await apiService.get('/workspaces');
         return data;
     } catch ({ response }) {
-        return response.data?.message || 'Unknown error while fetching workspaces';
+        throw response.data?.message || 'Unknown error while fetching workspaces';
     }
 };
 
@@ -37,7 +37,7 @@ export const apiUpdateWorkspace = async (workspaceId: number, updatedWorkspace: 
         const { data } = await apiService.put(`/workspace/${workspaceId}`, { updatedWorkspace });
         return data;
     } catch ({ response }) {
-        return response.data?.message || 'Unknown error while updating workspace details';
+        throw response.data?.message || 'Unknown error while updating workspace details';
     }
 };
 
