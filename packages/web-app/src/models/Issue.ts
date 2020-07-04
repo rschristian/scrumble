@@ -2,7 +2,7 @@ import { Sprint } from './Sprint';
 import { User } from './User';
 import { Project } from 'models/Project';
 
-export enum IssueStatus {
+export enum IssueState {
     open = 'opened',
     todo = 'To Do',
     doing = 'Doing',
@@ -13,7 +13,7 @@ export interface Issue {
     iid?: number;
     title: string;
     description: string;
-    status: IssueStatus;
+    state: IssueState;
     author: User;
     assignee?: User;
     createdAt: Date | string;

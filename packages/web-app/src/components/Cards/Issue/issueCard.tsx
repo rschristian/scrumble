@@ -5,7 +5,7 @@ import { notify } from 'react-notify-toast';
 
 import CreateOrEditIssue from 'components/CreateOrEdit/issue';
 import Modal from 'components/Modal';
-import { Issue, IssueStatus } from 'models/Issue';
+import { Issue, IssueState } from 'models/Issue';
 import { apiUpdateIssue } from 'services/api/issues';
 import { errorColour, successColour } from 'services/notification/colours';
 import { RootState } from 'stores';
@@ -68,8 +68,8 @@ const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
                     </div>
                 </div>
                 <div class="px-4 py-2 z-1">
-                    <span class={props.issue.status === IssueStatus.closed ? 'closed' : 'open'}>
-                        {props.issue.status === IssueStatus.closed ? 'Closed' : 'Opened'}
+                    <span class={props.issue.state === IssueState.closed ? 'closed' : 'open'}>
+                        {props.issue.state === IssueState.closed ? 'Closed' : 'Opened'}
                     </span>
                     {props.issue.storyPoint !== 0 && <span class="story-pnt">{props.issue.storyPoint}</span>}
                     <span class="text-gray-700"> Project Name: {props.issue.project.name}</span>

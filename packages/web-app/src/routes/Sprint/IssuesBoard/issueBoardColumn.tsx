@@ -2,7 +2,7 @@ import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { useSelector } from 'react-redux';
 
-import { Issue, IssueStatus } from 'models/Issue';
+import { Issue, IssueState } from 'models/Issue';
 import { User } from 'models/User';
 import { RootState } from 'stores';
 
@@ -30,7 +30,7 @@ const IssueBoardColumn: FunctionalComponent<IssuesBoardProps> = (props: IssuesBo
 
     useEffect(() => {
         props.issues.map((issue) => {
-            if (issue.status === props.status && !issuesList.includes(issue)) {
+            if (issue.state === props.status && !issuesList.includes(issue)) {
                 setIssueList((oldValues) => oldValues.concat(issue));
             }
         });
@@ -48,7 +48,7 @@ const IssueBoardColumn: FunctionalComponent<IssuesBoardProps> = (props: IssuesBo
             iid: updatedIssue.iid || 0,
             title: updatedIssue.title,
             description: updatedIssue.description,
-            status: updatedIssue.status,
+            state: updatedIssue.state,
             author: updatedIssue.author,
             assignee: updatedIssue?.assignee || unassigned,
             createdAt: new Date(),
@@ -69,17 +69,17 @@ const IssueBoardColumn: FunctionalComponent<IssuesBoardProps> = (props: IssuesBo
                             <p class="capitalize">{issue.title}</p>
                             <select
                                 class="form-input capitalize"
-                                value={issue.status}
+                                value={issue.state}
                                 onInput={(e): void => {
                                     const issueStatus =
-                                        IssueStatus[(e.target as HTMLSelectElement).value as keyof typeof IssueStatus];
+                                        IssueState[(e.target as HTMLSelectElement).value as keyof typeof IssueState];
                                     if (issueStatus) {
-                                        issue.status = issueStatus;
+                                        issue.state = issueStatus;
                                         props.updateIssueBoard(handleUpdate(issue));
                                     }
                                 }}
                             >
-                                {Object.values(IssueStatus).map((issueStatus) => {
+                                {Object.values(IssueState).map((issueStatus) => {
                                     return (
                                         <option class="form-option capitalize" value={issueStatus}>
                                             {issueStatus}

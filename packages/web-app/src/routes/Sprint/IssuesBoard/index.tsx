@@ -3,7 +3,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
-import { Issue, IssueStatus } from 'models/Issue';
+import { Issue, IssueState } from 'models/Issue';
 import { apiUpdateIssue, apiFetchSprintIssues } from 'services/api/issues';
 import { errorColour } from 'services/notification/colours';
 import { RootState } from 'stores';
@@ -55,25 +55,25 @@ const IssuesBoard: FunctionalComponent = () => {
             </div>
             <div class="issue-board">
                 <IssueBoardColumn
-                    status={IssueStatus.open}
+                    status={IssueState.open}
                     headingColour="bg-green-300"
                     issues={issuesArray}
                     updateIssueBoard={updateIssue}
                 />
                 <IssueBoardColumn
-                    status={IssueStatus.todo}
+                    status={IssueState.todo}
                     headingColour="bg-yellow-300"
                     issues={issuesArray}
                     updateIssueBoard={updateIssue}
                 />
                 <IssueBoardColumn
-                    status={IssueStatus.doing}
+                    status={IssueState.doing}
                     headingColour="bg-orange-300"
                     issues={issuesArray}
                     updateIssueBoard={updateIssue}
                 />
                 <IssueBoardColumn
-                    status={IssueStatus.closed}
+                    status={IssueState.closed}
                     headingColour="bg-red-300"
                     issues={issuesArray}
                     updateIssueBoard={updateIssue}

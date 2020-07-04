@@ -1,5 +1,6 @@
-import { Issue, IssueStatus } from 'models/Issue';
 import { Fragment, FunctionalComponent, h } from 'preact';
+
+import { Issue, IssueState } from 'models/Issue';
 
 interface InformationProps {
     issue: Issue;
@@ -39,8 +40,8 @@ const IssueInformation: FunctionalComponent<InformationProps> = (props: Informat
                         </div>
                         <div class="table-cell py-2">
                             <span class="info-label"> State: </span>
-                            <span class={props.issue.status === IssueStatus.closed ? 'closed' : 'open'}>
-                                {props.issue.status === IssueStatus.closed ? 'Closed' : 'Opened'}
+                            <span class={props.issue.state === IssueState.closed ? 'closed' : 'open'}>
+                                {props.issue.state === IssueState.closed ? 'Closed' : 'Opened'}
                             </span>
                         </div>
                     </div>

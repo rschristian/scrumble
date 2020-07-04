@@ -3,7 +3,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
-import { Issue, IssueStatus } from 'models/Issue';
+import { Issue, IssueState } from 'models/Issue';
 import { Project } from 'models/Project';
 import { Sprint, SprintStatus } from 'models/Sprint';
 import { User } from 'models/User';
@@ -63,7 +63,7 @@ const CreateOrEditIssue: FunctionalComponent<IProps> = (props: IProps) => {
             iid: props.issue?.iid || 0,
             title,
             description,
-            status: props.issue?.status || IssueStatus.open,
+            state: props.issue?.state || IssueState.open,
             author: props.issue?.author || currentUser,
             assignee,
             createdAt: new Date(),
