@@ -72,7 +72,7 @@ const { logout, loginStart, loginSuccess, loginFailure, fetchUserInfoSuccess, fe
 export const reduxLogUserOut = (): AppThunk => async (dispatch: AppDispatch): Promise<void> => {
     await destroyOAuthToken();
     dispatch(logout());
-    route('/login', true);
+    route('/auth/login', true);
 };
 
 export const reduxLoginAndFetchUserInfo = (shortLivedJwt: string): AppThunk => async (

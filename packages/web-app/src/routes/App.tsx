@@ -6,17 +6,16 @@ import { PersistGate } from 'redux-persist/integration/react';
 import Notifications from 'react-notify-toast';
 
 import TopBar from 'components/Core/TopBar';
-import Login from 'routes/Auth/login';
-import AuthSuccess from 'routes/Auth/authSuccess';
+import Auth from 'routes/Auth';
 import Home from 'routes/Home';
 import Workspace from 'routes/Workspace';
 import Sprint from 'routes/Sprint';
 import redux, { RootState } from 'stores';
 
 const App: FunctionalComponent = () => {
-    const [notLoginPage, setNotLoginPage] = useState<boolean>(getCurrentUrl() !== '/login');
+    const [notLoginPage, setNotLoginPage] = useState<boolean>(getCurrentUrl() !== '/auth/login');
 
-    const handleRoute = (e: RouterOnChangeArgs): void => setNotLoginPage(e.url !== '/login');
+    const handleRoute = (e: RouterOnChangeArgs): void => setNotLoginPage(e.url !== '/auth/login');
 
     return (
         <Fragment>
@@ -25,8 +24,7 @@ const App: FunctionalComponent = () => {
                     <PersistGate loading={<Fallback />} persistor={redux.persistor}>
                         <TopBar notLoginPage={notLoginPage} />
                         <Router onChange={handleRoute}>
-                            <Route path="/login" component={Login} />
-                            <Route path="/oauth-success" component={AuthSuccess} />
+                            <Route path="/auth/:subPage?" component={Auth} />
                             <AuthenticatedRoute path="/" component={Home} />
                             <AuthenticatedRoute path="/workspace/:workspaceId/:subPage?" component={Workspace} />
                             <AuthenticatedRoute
@@ -57,7 +55,7 @@ const AuthenticatedRoute = (props: { path: string; component: FunctionalComponen
     const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
-        if (!isAuthenticated) route('/login', true);
+        if (!isAuthenticated) route('/auth/login', true);
     }, [isAuthenticated]);
 
     return <Route {...props} />;

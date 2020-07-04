@@ -1,4 +1,4 @@
-import { FunctionalComponent, h } from 'preact';
+import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { getCurrentUrl, route } from 'preact-router';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,14 +21,14 @@ const AuthSuccess: FunctionalComponent = () => {
 
         async function login(): Promise<void> {
             const token = getToken();
-            token ? await dispatch(reduxLoginAndFetchUserInfo(token)) : route('/login', true);
+            token ? await dispatch(reduxLoginAndFetchUserInfo(token)) : route('/auth/login', true);
         }
 
         login();
     }, [dispatch]);
 
     return (
-        <div class="main-content overflow-hidden">
+        <Fragment>
             {!error ? (
                 <div class="loader mx-auto mt-20 block" />
             ) : (
@@ -36,7 +36,7 @@ const AuthSuccess: FunctionalComponent = () => {
                     <Error message={error} />
                 </div>
             )}
-        </div>
+        </Fragment>
     );
 };
 
