@@ -1,8 +1,9 @@
 import { FunctionalComponent, h } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
-import SearchBar from 'components/Filters/searchBar';
-import IssueFilter from 'components/Filters/issue';
-import SprintFilter from 'components/Filters/sprint';
+
+import IssueFilter from './issue';
+import SprintFilter from './sprint';
+import SearchBar from './searchBar';
 
 export enum FilterType {
     issue,

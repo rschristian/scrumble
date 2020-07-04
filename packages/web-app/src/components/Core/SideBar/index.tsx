@@ -3,9 +3,10 @@ import { useState } from 'preact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { Menu, X } from 'preact-feather';
 
-import SideBarLinkItem from 'components/Core/SideBar/SideBarLinkItem';
 import { RootState } from 'stores';
 import { reduxSetActiveSideBarMenuItem } from 'stores/userLocationStore';
+
+import SideBarLinkItem from './SideBarLinkItem';
 
 export interface SideBarLink {
     label: string;

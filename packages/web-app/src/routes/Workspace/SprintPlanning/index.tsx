@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux';
 
 import { reduxSetActiveSideBarMenuItem } from 'stores/userLocationStore';
 
-import Backlog from 'routes/Workspace/SprintPlanning/issues';
-import SprintList from 'routes/Workspace/SprintPlanning/sprints';
+import Backlog from './issues';
+import SprintList from './sprints';
 
 const SprintPlanning: FunctionalComponent = () => {
     const dispatch = useDispatch();
