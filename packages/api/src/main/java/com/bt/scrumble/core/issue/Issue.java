@@ -2,6 +2,7 @@ package com.bt.scrumble.core.issue;
 
 import com.bt.scrumble.application.data.SprintData;
 import com.bt.scrumble.application.data.UserData;
+import com.bt.scrumble.core.project.Project;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -21,39 +22,31 @@ import java.util.Map;
 @AllArgsConstructor
 public class Issue implements Serializable {
   private int iid;
-
-  @JsonAlias("milestone")
-  private SprintData sprint;
-
-  @JsonAlias("project_id")
-  private int projectId;
-
-  private String projectName;
   private String title;
   private String description;
-  private int storyPoint;
-
-  @JsonAlias("state")
-  private String status;
-
-  private ArrayList<String> labels;
-
-  @JsonAlias("timeSpent")
-  private int timeSpent;
-
+  private String state;
   private Object author;
-
+  private UserData assignee;
   @JsonAlias("created_at")
   private String createdAt;
+  @JsonAlias("timeSpent")
+  private int timeSpent;
+  private int storyPoint;
+  private Project project = new Project();
+  @JsonAlias("milestone")
+  private SprintData sprint;
+  private ArrayList<String> labels;
 
-  private UserData assignee;
-
-  public Issue(int projectId, String title, String description, int storyPoint, String status) {
-    this.projectId = projectId;
+  public Issue(String title, String description, int storyPoint, String state) {
     this.title = title;
     this.description = description;
     this.storyPoint = storyPoint;
-    this.status = status;
+    this.state = state;
+  }
+
+  @JsonProperty("project_id")
+  public void setProjectId(int projectId) {
+    this.project.setId(projectId);
   }
 
   @JsonProperty("time_stats")
