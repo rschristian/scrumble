@@ -12,7 +12,7 @@ import { Sprint } from 'models/Sprint';
 
 export const apiCreateIssue = async (workspaceId: number, issue: Issue): ApiResponse<Issue> => {
     try {
-        const { data } = await apiService.post(`/workspace/${workspaceId}/project/${issue.project.id}/issue`, {
+        const { data } = await apiService.post(`workspace/${workspaceId}/project/${issue.project.id}/issue`, {
             issue,
         });
         return data;
@@ -33,8 +33,11 @@ export const apiFetchIssues = async (
     searchFor: string,
 ): ApiResponse<IssuePagination> => {
     try {
-        const { data } = await apiService.query(`/workspace/${workspaceId}/issues`, {
-            params: { projectId, page, filter, searchFor },
+        const { data } = await apiService.query(`workspace/${workspaceId}/issues`, {
+            projectId,
+            page,
+            filter,
+            searchFor,
         });
         return data;
     } catch ({ response }) {
@@ -44,8 +47,8 @@ export const apiFetchIssues = async (
 
 export const apiFetchSprintIssues = async (workspaceId: number, sprint: Sprint): ApiResponse<Issue[]> => {
     try {
-        const { data } = await apiService.query(`/workspace/${workspaceId}/sprint/issues`, {
-            params: { projectIdToMilestoneIds: sprint.projectIdToMilestoneIds },
+        const { data } = await apiService.query(`workspace/${workspaceId}/sprint/issues`, {
+            projectIdToMilestoneIds: JSON.stringify(sprint.projectIdToMilestoneIds),
         });
         return data;
     } catch ({ response }) {
@@ -59,7 +62,7 @@ export const apiFetchSprintIssues = async (workspaceId: number, sprint: Sprint):
 
 export const apiUpdateIssue = async (workspaceId: number, issue: Issue): ApiResponse<void> => {
     try {
-        return await apiService.put(`/workspace/${workspaceId}/project/${issue.project.id}/issue/${issue.iid}`, {
+        return await apiService.put(`workspace/${workspaceId}/project/${issue.project.id}/issue/${issue.iid}`, {
             issue,
         });
     } catch ({ response }) {

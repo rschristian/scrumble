@@ -14,7 +14,7 @@ import { User } from 'models/User';
 
 export const apiLogin = async (): ApiResponse<{ jwt: string }> => {
     try {
-        const { data } = await apiService.get('/auth/token');
+        const { data } = await apiService.get('auth/token');
         return data;
     } catch ({ response }) {
         throw response.data?.message || 'Unknown error while exchanging tokens';

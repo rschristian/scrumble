@@ -10,7 +10,7 @@ import { Workspace } from 'models/Workspace';
 
 export const apiCreateWorkspace = async (newWorkspace: Workspace): ApiResponse<Workspace> => {
     try {
-        const { data } = await apiService.post('/workspace', { newWorkspace });
+        const { data } = await apiService.post('workspace', { newWorkspace });
         return data;
     } catch ({ response }) {
         throw response.data?.message || 'Unknown error while creating workspaces';
@@ -23,7 +23,7 @@ export const apiCreateWorkspace = async (newWorkspace: Workspace): ApiResponse<W
 
 export const apiFetchWorkspaces = async (): ApiResponse<Workspace[]> => {
     try {
-        const { data } = await apiService.get('/workspaces');
+        const { data } = await apiService.get('workspaces');
         return data;
     } catch ({ response }) {
         throw response.data?.message || 'Unknown error while fetching workspaces';

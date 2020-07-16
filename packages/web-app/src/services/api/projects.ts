@@ -14,7 +14,7 @@ import { Project } from 'models/Project';
 
 export const apiFetchProjects = async (): ApiResponse<Project[]> => {
     try {
-        const { data } = await apiService.get('/projects');
+        const { data } = await apiService.get('projects');
         return data;
     } catch ({ response }) {
         throw response.data?.message || 'Unknown error while fetching projects';
@@ -23,7 +23,7 @@ export const apiFetchProjects = async (): ApiResponse<Project[]> => {
 
 export const apiFetchWorkspaceProjects = async (workspaceId: number): ApiResponse<Project[]> => {
     try {
-        const { data } = await apiService.get(`/workspace/${workspaceId}/projects`);
+        const { data } = await apiService.get(`workspace/${workspaceId}/projects`);
         return data;
     } catch ({ response }) {
         throw response.data?.message || 'Unknown error while fetching workspace projects';

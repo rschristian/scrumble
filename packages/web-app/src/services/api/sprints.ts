@@ -23,7 +23,7 @@ export const apiCreateSprint = async (workspaceId: number, newSprint: Sprint): A
 
 export const apiFetchSprints = async (workspaceId: number, filter: string): ApiResponse<Sprint[]> => {
     try {
-        const { data } = await apiService.query(`/workspace/${workspaceId}/sprints`, { params: { filter } });
+        const { data } = await apiService.query(`workspace/${workspaceId}/sprints`, { filter });
         return data;
     } catch ({ response }) {
         throw response.data?.message || 'Unknown error while fetching sprints';
@@ -36,7 +36,7 @@ export const apiFetchSprints = async (workspaceId: number, filter: string): ApiR
 
 export const apiUpdateSprint = async (workspaceId: number, updatedSprint: Sprint): ApiResponse<Sprint> => {
     try {
-        const { data } = await apiService.put(`/workspace/${workspaceId}/sprint`, { updatedSprint });
+        const { data } = await apiService.put(`workspace/${workspaceId}/sprint`, { updatedSprint });
         return data;
     } catch ({ response }) {
         throw response.data?.message || 'Unknown error while updating sprint details';
