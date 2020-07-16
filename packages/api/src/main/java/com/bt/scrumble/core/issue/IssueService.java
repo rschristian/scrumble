@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public interface IssueService {
   void setStoryPoint(Issue issue);
 
-  void setProjectName(Issue issue, Project[] projects);
+  void setProjectDetails(Issue issue, Project[] projects);
 
   void setStatus(Issue issue);
 

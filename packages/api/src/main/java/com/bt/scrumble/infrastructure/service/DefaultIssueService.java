@@ -10,10 +10,6 @@ import java.util.OptionalInt;
 @Service
 public class DefaultIssueService implements IssueService {
 
-  private static final String UNPLANNED = "unplanned";
-  private static final String OPENED = "opened";
-  private static final String CLOSED = "closed";
-
   // Ref: https://stackoverflow.com/a/5439547/11679751
   public static boolean isInteger(String s) {
     if (s.isEmpty()) {
@@ -50,11 +46,11 @@ public class DefaultIssueService implements IssueService {
   @Override
   public String getFilterQuery(String filter) {
     switch (filter) {
-      case UNPLANNED:
-        return "labels=unplanned";
-      case OPENED:
+      case "None":
+        return "milestone=None";
+      case "opened":
         return "state=opened";
-      case CLOSED:
+      case "closed":
         return "state=closed";
       default:
         return "scope=all";
@@ -62,10 +58,12 @@ public class DefaultIssueService implements IssueService {
   }
 
   @Override
-  public void setProjectName(Issue issue, Project[] projects) {
+  public void setProjectDetails(Issue issue, Project[] projects) {
     for (Project project : projects) {
-      if (issue.getProjectId() == project.getId()) {
-        issue.setProjectName(project.getName());
+      if (issue.getProject().getId() == project.getId()) {
+        issue.getProject().setName(project.getName());
+        issue.getProject().setDescription(project.getDescription());
+        issue.getProject().setAvatarUrl(project.getAvatarUrl());
         return;
       }
     }
@@ -75,9 +73,9 @@ public class DefaultIssueService implements IssueService {
   @Override
   public void setStatus(Issue issue) {
     if (issue.getLabels().contains("To Do")) {
-      issue.setStatus("To Do");
+      issue.setState("To Do");
     } else if (issue.getLabels().contains("Doing")) {
-      issue.setStatus("Doing");
+      issue.setState("Doing");
     }
   }
 }

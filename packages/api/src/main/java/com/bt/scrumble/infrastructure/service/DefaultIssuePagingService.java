@@ -185,7 +185,7 @@ public class DefaultIssuePagingService implements IssuePagingService {
 
   @Override
   public IssuePageResult getPageOfIssues(
-      int workspaceId, int projectId, int page, String filter, String searchTerm) {
+    int workspaceId, int projectId, int page, String filter, String searchTerm) {
     // Initial call for a workspaces issues will pass number 0 for page and project id.
     // SB works out which project it should start from
     page = (page == 0) ? 1 : page;
@@ -221,7 +221,7 @@ public class DefaultIssuePagingService implements IssuePagingService {
         for (var issue : issues) {
           issueService.setStoryPoint(issue);
           issueService.setStatus(issue);
-          issueService.setProjectName(issue, projects);
+          issueService.setProjectDetails(issue, projects);
           sprintService.setSprintForIssue(workspaceId, issue, openSprints);
           if (issue.getAssignee() != null) {
             userService.setProjectId(workspaceId, issue);

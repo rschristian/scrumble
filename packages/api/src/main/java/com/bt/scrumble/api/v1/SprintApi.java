@@ -31,15 +31,4 @@ public class SprintApi {
       @RequestParam(value = "filter") String filter) {
     return ResponseEntity.ok().body(sprintService.getSprintsForWorkspace(workspaceId, filter));
   }
-
-  @GetMapping("/workspace/{workspaceId}/sprint/issues")
-  public ResponseEntity<Object> getSprintIssues(
-      @PathVariable(value = "workspaceId") int workspaceId,
-      @RequestParam(value = "projectIdToMilestoneIds") String projectIdToMilestoneIds) throws JsonProcessingException {
-    ObjectMapper mapper = new ObjectMapper();
-    Map<String, Integer> result =
-        mapper.readValue(projectIdToMilestoneIds, new TypeReference<>() {
-        });
-    return ResponseEntity.ok().body(sprintService.getSprintIssues(workspaceId, result));
-  }
 }

@@ -102,7 +102,7 @@ public class DefaultSprintService implements SprintService {
             (issue) -> {
               issueService.setStoryPoint(issue);
               issueService.setStatus(issue);
-              issueService.setProjectName(issue, projects);
+              issueService.setProjectDetails(issue, projects);
               if (issue.getAssignee() != null) {
                 userService.setProjectId(workspaceId, issue);
               }
