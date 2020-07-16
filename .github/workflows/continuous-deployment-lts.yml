@@ -9,7 +9,7 @@ on:
     paths: 'packages/lts/**'
     
 jobs:
-  build:
+  docker-deploy:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -32,6 +32,7 @@ jobs:
           
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+
     - name: Build with Gradle
       run: ./gradlew jar
 
