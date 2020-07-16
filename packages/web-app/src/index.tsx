@@ -1,4 +1,4 @@
-import App from 'routes/App';
+import App from 'components/App';
 
 import 'style/index.scss';
 
