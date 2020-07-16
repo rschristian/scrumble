@@ -1,8 +1,8 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 
 import burndown from 'assets/burndown.png';
-import GenericMetrics from 'components/CommonRoutes/Metrics';
-import MetricBubble from 'components/CommonRoutes/Metrics/bubble';
+import { GenericMetrics } from 'components/CommonRoutes/Metrics';
+import { MetricBubble } from 'components/CommonRoutes/Metrics/bubble';
 
 const SprintMetrics: FunctionalComponent = () => {
     return (
@@ -45,7 +45,7 @@ const SprintMetrics: FunctionalComponent = () => {
                         <img
                             src={burndown}
                             class="mt-10 mb-5 mx-auto shadow-xl w-5/6"
-                            alt="Placeholder burndown chart"
+                            alt="Static burndown chart image, not dynamic"
                         />
                     </div>
                 </Fragment>

@@ -2,13 +2,13 @@ import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { useDispatch } from 'react-redux';
 
-import { reduxSetActiveSideBarMenuItem } from 'stores/userLocationStore';
+import { setActiveSideBarMenuItem } from 'stores/userLocationStore';
 
 const DailyStandUp: FunctionalComponent = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(reduxSetActiveSideBarMenuItem(0));
+        dispatch(setActiveSideBarMenuItem(0));
     }, [dispatch]);
 
     return (

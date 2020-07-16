@@ -5,14 +5,18 @@ services:
     container_name: 'postgres'
     image: postgres:12-alpine
     environment:
-      POSTGRES_USER: 'scrumble-api'
-      POSTGRES_PASSWORD: 'admin'
-      POSTGRES_DB: 'scrumble'
+      POSTGRES_USER: "scrumble-api"
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_DB: "scrumble"
 
   scrumble:
     container_name: 'scrumble'
-    build: .
+    image: ryanchristian4427/scrumble-api
     depends_on:
       - postgres
     ports:
-      - '8000:8000'
+      - "8000:8000"
+
+  scrumble-lts:
+      container_name: 'scrumble-lts'
+      image: ryanchristian4427/scrumble-lts

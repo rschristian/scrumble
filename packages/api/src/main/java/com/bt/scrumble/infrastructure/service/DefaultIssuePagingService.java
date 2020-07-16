@@ -33,6 +33,7 @@ public class DefaultIssuePagingService implements IssuePagingService {
   private final SprintService sprintService;
   private final UserService userService;
   private final RestTemplate restTemplate;
+
   @Value("${app.issues.provider.gitlab.baseUrl.api}")
   private String gitLabApiUrl;
 
@@ -87,8 +88,8 @@ public class DefaultIssuePagingService implements IssuePagingService {
     return nextResource;
   }
 
-  private GitLabLinksData parseLink(String linkHeader) {
-    GitLabLinksData gitLabLinks = new GitLabLinksData();
+  public GitLabLinksData parseLink(String linkHeader) {
+    var gitLabLinks = new GitLabLinksData();
     String[] links = linkHeader.split(",");
     for (String link : links) {
       String[] segments = link.split(";");
@@ -100,6 +101,7 @@ public class DefaultIssuePagingService implements IssuePagingService {
       if (!linkPart.startsWith("<") || !linkPart.endsWith(">")) {
         continue;
       }
+
       linkPart = linkPart.substring(1, linkPart.length() - 1);
       linkPart = linkPart.replaceAll("http://10.72.98.102", "https://gitlab.ryanchristian.dev");
 
@@ -114,21 +116,8 @@ public class DefaultIssuePagingService implements IssuePagingService {
           relValue = relValue.substring(1, relValue.length() - 1);
         }
 
-        switch (relValue) {
-          case "next":
-            gitLabLinks.setNext(linkPart);
-            break;
-          case "last":
-            gitLabLinks.setLast(linkPart);
-            break;
-          case "first":
-            gitLabLinks.setFirst(linkPart);
-            break;
-          case "prev":
-            gitLabLinks.setPrev(linkPart);
-            break;
-          default:
-            break;
+        if ("next".equals(relValue)) {
+          gitLabLinks.setNext(linkPart);
         }
       }
     }
@@ -164,16 +153,18 @@ public class DefaultIssuePagingService implements IssuePagingService {
               new ParameterizedTypeReference<>() { });
 
       issues = issuesResponse.getBody();
-      for (var issue : issues) {
-        issueService.setStoryPoint(issue);
-      }
-      if (!issues.isEmpty()) {
-        nextResource.setProjectId(projectId);
-        nextResource.setPageNumber(1);
-        emptyResponse = false;
-      } else if (isLastProject(workspaceId, projectId)) {
-        nextResource.setProjectId(0);
-        nextResource.setPageNumber(0);
+      if (issues != null) {
+        for (var issue : issues) {
+          issueService.setStoryPoint(issue);
+        }
+        if (!issues.isEmpty()) {
+          nextResource.setProjectId(projectId);
+          nextResource.setPageNumber(1);
+          emptyResponse = false;
+        } else if (isLastProject(workspaceId, projectId)) {
+          nextResource.setProjectId(0);
+          nextResource.setPageNumber(0);
+        }
       }
     }
     return nextResource;
@@ -189,17 +180,12 @@ public class DefaultIssuePagingService implements IssuePagingService {
   private HttpEntity<String> getApplicationJsonHeaders() {
     var headers = new HttpHeaders();
     headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-    return new HttpEntity(headers);
+    return new HttpEntity<>(headers);
   }
 
   @Override
   public IssuePageResult getPageOfIssues(
-      int workspaceId,
-      int projectId,
-      int page,
-      String filter,
-      String searchTerm,
-      String accessToken) {
+    int workspaceId, int projectId, int page, String filter, String searchTerm) {
     // Initial call for a workspaces issues will pass number 0 for page and project id.
     // SB works out which project it should start from
     page = (page == 0) ? 1 : page;
@@ -208,22 +194,15 @@ public class DefaultIssuePagingService implements IssuePagingService {
             ? workspaceService.getProjectIdsForWorkspace(workspaceId).get(0)
             : projectId;
 
-    String uri =
-        String.format(
-            "%s/projects?access_token=%s&simple=true&membership=true", gitLabApiUrl, accessToken);
+    String uri = String.format("%s/projects", gitLabApiUrl);
     ResponseEntity<Project[]> userProjectsResponse =
         restTemplate.getForEntity(uri, Project[].class);
     Project[] projects = userProjectsResponse.getBody();
 
     String queryUri =
         String.format(
-            "%s/projects/%d/issues?%s&search=%s&page=%d&access_token=%s",
-            gitLabApiUrl,
-            projectId,
-            issueService.getFilterQuery(filter),
-            searchTerm,
-            page,
-            accessToken);
+            "%s/projects/%d/issues?%s&search=%s&page=%d",
+            gitLabApiUrl, projectId, issueService.getFilterQuery(filter), searchTerm, page);
 
     ArrayList<Issue> issues;
     IssuePageResult issuePageResult = new IssuePageResult();
@@ -238,33 +217,35 @@ public class DefaultIssuePagingService implements IssuePagingService {
       var openSprints = sprintService.getSprintsForWorkspace(workspaceId, "active");
 
       issues = issuesResponse.getBody();
-      for (var issue : issues) {
-        issueService.setStoryPoint(issue);
-        issueService.setStatus(issue);
-        issueService.setProjectName(issue, projects);
-        sprintService.setSprintForIssue(workspaceId, issue, openSprints);
-        if (issue.getAssignee() != null) {
-          userService.setProjectId(workspaceId, issue);
+      if (issues != null) {
+        for (var issue : issues) {
+          issueService.setStoryPoint(issue);
+          issueService.setStatus(issue);
+          issueService.setProjectDetails(issue, projects);
+          sprintService.setSprintForIssue(workspaceId, issue, openSprints);
+          if (issue.getAssignee() != null) {
+            userService.setProjectId(workspaceId, issue);
+          }
         }
-      }
-      issuePageResult.appendIssues(issues);
+        issuePageResult.appendIssues(issues);
 
-      if (!issues.isEmpty() && issuePageResult.getIssues().size() >= 20) {
-        issuePageResult.setNextResource(
-            getNextResource(
-                queryUri,
-                issuesResponse.getHeaders().getFirst("Link"),
-                workspaceId,
-                projectId,
-                page));
+        if (!issues.isEmpty() && issuePageResult.getIssues().size() >= 10) {
+          issuePageResult.setNextResource(
+              getNextResource(
+                  queryUri,
+                  issuesResponse.getHeaders().getFirst("Link"),
+                  workspaceId,
+                  projectId,
+                  page));
 
-        return issuePageResult;
-      } else if (isLastProject(workspaceId, projectId)) {
-        // If last project and it doesn't have any results for the query, send back 0 values to
-        // indicate this to client
-        issuePageResult.setNextResource(new NextResource());
+          return issuePageResult;
+        } else if (isLastProject(workspaceId, projectId)) {
+          // If last project and it doesn't have any results for the query, send back 0 values to
+          // indicate this to client
+          issuePageResult.setNextResource(new NextResource());
 
-        return issuePageResult;
+          return issuePageResult;
+        }
       }
       // Prep next iteration
       projectId = getNextProjectId(workspaceId, projectId);

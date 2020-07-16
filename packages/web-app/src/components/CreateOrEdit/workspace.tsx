@@ -1,12 +1,13 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
-import Select from 'react-select';
 import { notify } from 'react-notify-toast';
+import Select from 'react-select';
 
-import { Project } from 'models/Project';
-import { Workspace } from 'models/Workspace';
 import { apiFetchProjects } from 'services/api/projects';
 import { errorColour } from 'services/notification/colours';
+import { Project } from 'models/Project';
+import { Workspace } from 'models/Workspace';
+import { useLtsWarning } from 'services/notification/hooks';
 
 interface DropdownMenuOption {
     value: Project;
@@ -19,7 +20,7 @@ interface IProps {
     submit: (workspace: Workspace) => void;
 }
 
-const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
+export const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
     const [name, setName] = useState<string>(props.workspace?.name || '');
     const [description, setDescription] = useState<string>(props.workspace?.description || '');
 
@@ -28,8 +29,9 @@ const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
 
     useEffect(() => {
         async function getProjectData(): Promise<void> {
-            try {
-                const result = await apiFetchProjects();
+            const result = await apiFetchProjects();
+            if (typeof result === 'string') notify.show(result, 'error', 5000, errorColour);
+            else {
                 const options: DropdownMenuOption[] = [];
                 result.map((project) => {
                     options.push({
@@ -41,38 +43,37 @@ const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
                 setSelectedProjectOptions(
                     options.filter((project) => props.workspace?.projectIds.includes(project.value.id)),
                 );
-            } catch (error) {
-                notify.show(error, 'error', 5000, errorColour);
             }
         }
+
         getProjectData();
     }, [props.workspace]);
 
     return (
         <Fragment>
-            <div class="m-4">
-                <div class="m-4">
-                    <label class="form-label">Workspace Name</label>
+            <div className="m-4">
+                <div className="m-4">
+                    <label className="form-label">Workspace Name</label>
                     <input
-                        class="form-input"
+                        className="form-input"
                         type="text"
                         placeholder="Workspace Name"
                         value={name}
                         onInput={(e): void => setName((e.target as HTMLInputElement).value)}
                     />
                 </div>
-                <div class="m-4">
-                    <label class="form-label">Workspace Description</label>
+                <div className="m-4">
+                    <label className="form-label">Workspace Description</label>
                     <input
-                        class="form-input"
+                        className="form-input"
                         type="text"
                         placeholder="Workspace Description"
                         value={description}
                         onInput={(e): void => setDescription((e.target as HTMLInputElement).value)}
                     />
                 </div>
-                <div class="m-4">
-                    <label class="form-label">Projects in this workspace</label>
+                <div className="m-4">
+                    <label className="form-label">Projects in this workspace</label>
                     <Select
                         styles={{
                             menuPortal: (provided: object): object => ({
@@ -91,24 +92,10 @@ const CreateOrEditWorkspace: FunctionalComponent<IProps> = (props: IProps) => {
                         closeMenuOnSelect={false}
                     />
                 </div>
-                <button
-                    class="btn-create mx-auto mb-4 ml-4"
-                    onClick={(): void =>
-                        props.submit({
-                            id: props.workspace?.id || 0,
-                            name,
-                            description,
-                            // TODO Ensure this works like I think it does
-                            projectIds: selectedProjectOptions.map((projectOption) => projectOption.value.id),
-                            users: props.workspace?.users || [],
-                        })
-                    }
-                >
+                <button class="btn-create mx-auto mb-4 ml-4" onClick={useLtsWarning}>
                     Submit
                 </button>
             </div>
         </Fragment>
     );
 };
-
-export default CreateOrEditWorkspace;

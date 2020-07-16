@@ -2,29 +2,17 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppDispatch } from 'stores';
 
 import { Workspace } from 'models/Workspace';
-import { Sprint, SprintStatus } from 'models/Sprint';
+import { Sprint } from 'models/Sprint';
 
 type State = {
-    currentWorkspace: Workspace;
-    currentSprint: Sprint;
+    currentWorkspace: Workspace | undefined;
+    currentSprint: Sprint | undefined;
     activeSideBarItem: number;
 };
 
 const initialState: State = {
-    currentWorkspace: {
-        id: -1,
-        name: '',
-        description: '',
-        projectIds: [],
-        users: [],
-    },
-    currentSprint: {
-        id: -1,
-        title: '',
-        description: '',
-        status: SprintStatus.active,
-        projectIdToMilestoneIds: {},
-    },
+    currentWorkspace: undefined,
+    currentSprint: undefined,
     activeSideBarItem: 0,
 };
 
@@ -48,14 +36,14 @@ export default slice.reducer;
 // Actions
 const { setWorkspace, setSprint, setSideBarItem } = slice.actions;
 
-export const reduxSetCurrentWorkspace = (workspace: Workspace) => async (dispatch: AppDispatch): Promise<void> => {
+export const setCurrentWorkspace = (workspace: Workspace) => async (dispatch: AppDispatch): Promise<void> => {
     dispatch(setWorkspace(workspace));
 };
 
-export const reduxSetCurrentSprint = (sprint: Sprint) => async (dispatch: AppDispatch): Promise<void> => {
+export const setCurrentSprint = (sprint: Sprint) => async (dispatch: AppDispatch): Promise<void> => {
     dispatch(setSprint(sprint));
 };
 
-export const reduxSetActiveSideBarMenuItem = (barItem: number) => async (dispatch: AppDispatch): Promise<void> => {
+export const setActiveSideBarMenuItem = (barItem: number) => async (dispatch: AppDispatch): Promise<void> => {
     dispatch(setSideBarItem(barItem));
 };

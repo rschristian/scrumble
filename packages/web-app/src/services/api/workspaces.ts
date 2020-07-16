@@ -1,48 +1,12 @@
 import { apiService } from 'ts-api-toolkit';
 
-import { ApiResponse } from './index';
-
 import { Workspace } from 'models/Workspace';
 
-// ----------------------------------------
-// Create
-// ----------------------------------------
-
-export const apiCreateWorkspace = async (newWorkspace: Workspace): ApiResponse<Workspace> => {
+export const apiFetchWorkspaces = async (): Promise<Workspace[] | string> => {
     try {
-        const { data } = await apiService.post('workspace', { newWorkspace });
+        const { data } = await apiService.get('/workspaces');
         return data;
     } catch ({ response }) {
-        throw response.data?.message || 'Unknown error while creating workspaces';
+        return response.data?.message || 'Unknown error while fetching workspaces';
     }
 };
-
-// ----------------------------------------
-// Read
-// ----------------------------------------
-
-export const apiFetchWorkspaces = async (): ApiResponse<Workspace[]> => {
-    try {
-        const { data } = await apiService.get('workspaces');
-        return data;
-    } catch ({ response }) {
-        throw response.data?.message || 'Unknown error while fetching workspaces';
-    }
-};
-
-// ----------------------------------------
-// Update
-// ----------------------------------------
-
-export const apiUpdateWorkspace = async (workspaceId: number, updatedWorkspace: Workspace): ApiResponse<Workspace> => {
-    try {
-        const { data } = await apiService.put(`/workspace/${workspaceId}`, { updatedWorkspace });
-        return data;
-    } catch ({ response }) {
-        throw response.data?.message || 'Unknown error while updating workspace details';
-    }
-};
-
-// ----------------------------------------
-// Delete
-// ----------------------------------------

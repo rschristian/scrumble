@@ -5,17 +5,18 @@ import { useSelector, Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import Notifications from 'react-notify-toast';
 
-import TopBar from 'components/Core/TopBar';
-import Auth from 'routes/Auth';
+import { TopBar } from 'components/Core/TopBar';
+import Login from 'routes/Auth/login';
 import Home from 'routes/Home';
+import NotFound from 'routes/errors/404';
 import Workspace from 'routes/Workspace';
 import Sprint from 'routes/Sprint';
 import redux, { RootState } from 'stores';
 
 const App: FunctionalComponent = () => {
-    const [notLoginPage, setNotLoginPage] = useState<boolean>(getCurrentUrl() !== '/auth/login');
+    const [notLoginPage, setNotLoginPage] = useState<boolean>(getCurrentUrl() != '/login');
 
-    const handleRoute = (e: RouterOnChangeArgs): void => setNotLoginPage(e.url !== '/auth/login');
+    const handleRoute = (e: RouterOnChangeArgs): void => setNotLoginPage(e.url != '/login');
 
     return (
         <Fragment>
@@ -24,13 +25,14 @@ const App: FunctionalComponent = () => {
                     <PersistGate loading={<Fallback />} persistor={redux.persistor}>
                         <TopBar notLoginPage={notLoginPage} />
                         <Router onChange={handleRoute}>
-                            <Route path="/auth/:subPage?" component={Auth} />
+                            <Route path="/login" component={Login} />
                             <AuthenticatedRoute path="/" component={Home} />
                             <AuthenticatedRoute path="/workspace/:workspaceId/:subPage?" component={Workspace} />
                             <AuthenticatedRoute
                                 path="/workspace/:workspaceId/sprint/:sprintId/:subPage?"
                                 component={Sprint}
                             />
+                            <Route default component={NotFound} />
                         </Router>
                     </PersistGate>
                 </Provider>
@@ -55,7 +57,7 @@ const AuthenticatedRoute = (props: { path: string; component: FunctionalComponen
     const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
-        if (!isAuthenticated) route('/auth/login', true);
+        if (!isAuthenticated) route('/login', true);
     }, [isAuthenticated]);
 
     return <Route {...props} />;

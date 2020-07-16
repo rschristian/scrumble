@@ -4,7 +4,9 @@ import { notify } from 'react-notify-toast';
 
 import { Sprint, SprintStatus } from 'models/Sprint';
 
-const zeroPad = (value: number): string => (value < 10 ? '0' : '') + value;
+function zeroPad(value: number): string {
+    return (value < 10 ? '0' : '') + value;
+}
 
 interface IProps {
     sprint?: Sprint;
@@ -12,26 +14,17 @@ interface IProps {
     close?: () => void;
 }
 
-const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) => {
+export const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) => {
     const [title, setTitle] = useState(props.sprint?.title || '');
     const [description, setDescription] = useState(props.sprint?.description || '');
-    const [startDate, setStartDate] = useState(
-        (): Date => {
-            if (props.sprint?.startDate) {
-                return new Date(props.sprint?.startDate);
-            }
-            return new Date();
-        },
-    );
+    const [startDate, setStartDate] = useState(new Date(props.sprint?.startDate) || new Date());
     const [dueDate, setDueDate] = useState(
-        (): Date => {
-            if (props.sprint?.dueDate) {
-                return new Date(props.sprint?.dueDate);
-            }
-            const today = new Date();
-            today.setDate(today.getDate() + 7);
-            return today;
-        },
+        new Date(props.sprint?.dueDate) ||
+            ((): Date => {
+                const today = new Date();
+                today.setDate(today.getDate() + 7);
+                return today;
+            }),
     );
 
     const createSprint = (): Sprint => {
@@ -44,13 +37,13 @@ const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) => {
             dueDate: dueDate ? dueDate.toISOString() : '',
             totalStoryPoint: props.sprint?.totalStoryPoint || 0,
             totalNumberOfIssues: props.sprint?.totalNumberOfIssues || 0,
-            // TODO Reevaluate this
             projectIdToMilestoneIds: {},
         };
     };
 
     const validateAndSubmit = (): void => {
-        title === '' ? notify.show('Please give this sprint a title', 'warning', 5000) : props.submit(createSprint());
+        if (title == '') notify.show('Please give this sprint a title', 'warning', 5000);
+        else props.submit(createSprint());
     };
 
     const generateDate = (dateValue: string): Date => {
@@ -120,5 +113,3 @@ const CreateOrEditSprint: FunctionalComponent<IProps> = (props: IProps) => {
         </Fragment>
     );
 };
-
-export default CreateOrEditSprint;

@@ -3,13 +3,13 @@ import { Link } from 'preact-router';
 import { useDispatch } from 'react-redux';
 
 import { Workspace } from 'models/Workspace';
-import { reduxSetCurrentWorkspace } from 'stores/userLocationStore';
+import { setCurrentWorkspace } from 'stores/userLocationStore';
 
-const WorkspaceCard: FunctionalComponent<Workspace> = (props: Workspace) => {
+export const WorkspaceCard: FunctionalComponent<Workspace> = (props: Workspace) => {
     const dispatch = useDispatch();
 
     function setWorkspace(): void {
-        dispatch(reduxSetCurrentWorkspace(props));
+        dispatch(setCurrentWorkspace(props));
     }
 
     return (
@@ -21,5 +21,3 @@ const WorkspaceCard: FunctionalComponent<Workspace> = (props: Workspace) => {
         </Link>
     );
 };
-
-export default WorkspaceCard;

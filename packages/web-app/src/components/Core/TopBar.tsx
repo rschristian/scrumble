@@ -6,20 +6,20 @@ import { Menu, X } from 'preact-feather';
 
 import scrumCards from 'assets/icons/scrumCards.png';
 import { RootState } from 'stores';
-import { reduxLogUserOut } from 'stores/authStore';
+import { logUserOut } from 'stores/authStore';
 
 interface IProps {
     notLoginPage: boolean;
 }
 
-const TopBar: FunctionalComponent<IProps> = (props: IProps) => {
+export const TopBar: FunctionalComponent<IProps> = (props: IProps) => {
     const dispatch = useDispatch();
     const { isAuthenticated, currentUser } = useSelector((state: RootState) => state.auth);
 
-    const [showAccountDropdown, setShowAccountDropdown] = useState(false);
+    const [showAccountDropdown, setShowAccountDropdown] = useState<boolean>(false);
 
     const logout = (): void => {
-        dispatch(reduxLogUserOut());
+        dispatch(logUserOut());
         setShowAccountDropdown(false);
     };
 
@@ -52,7 +52,7 @@ const TopBar: FunctionalComponent<IProps> = (props: IProps) => {
                     )}
                 </div>
                 {props.notLoginPage && isAuthenticated && (
-                    <nav class={`sm:block ${!showAccountDropdown && 'hidden'}`}>
+                    <nav class={`sm:block ${showAccountDropdown ? '' : 'hidden'}`}>
                         <div class="sm:flex sm:p-0">
                             <div class="hidden sm:block sm:ml-6">
                                 <div class="relative">
@@ -63,8 +63,9 @@ const TopBar: FunctionalComponent<IProps> = (props: IProps) => {
                                     >
                                         <img
                                             alt="Your avatar"
-                                            class={`avatar ${showAccountDropdown &&
-                                                'border-2 border-deep-space-sparkle'}`}
+                                            class={`avatar ${
+                                                showAccountDropdown ? 'border-2 border-deep-space-sparkle' : ''
+                                            }`}
                                             src={currentUser?.avatarUrl}
                                         />
                                     </button>
@@ -91,7 +92,7 @@ const TopBar: FunctionalComponent<IProps> = (props: IProps) => {
                     <div class="flex items-center border-b border-gray-300 py-2">
                         <img
                             alt="Your avatar"
-                            class={`avatar ${showAccountDropdown && 'border-2 border-deep-space-sparkle'}`}
+                            className={`avatar ${showAccountDropdown ? 'border-2 border-deep-space-sparkle' : ''}`}
                             src={currentUser?.avatarUrl}
                         />
                         <span class="ml-3 font-semibold text-deep-space-sparkle">{currentUser?.username}</span>
@@ -104,5 +105,3 @@ const TopBar: FunctionalComponent<IProps> = (props: IProps) => {
         </header>
     );
 };
-
-export default TopBar;

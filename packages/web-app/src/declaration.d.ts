@@ -1,9 +1,3 @@
-declare module '*.jpg' {
-    const content: string;
-    export = content;
-}
-declare module '*.png' {
-    const content: string;
-    export = content;
-}
+declare module '*.jpg';
+declare module '*.png';
 declare module 'react-select';

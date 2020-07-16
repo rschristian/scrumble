@@ -12,15 +12,6 @@ import { User } from 'models/User';
 // Read
 // ----------------------------------------
 
-export const apiLogin = async (): ApiResponse<{ jwt: string }> => {
-    try {
-        const { data } = await apiService.get('auth/token');
-        return data;
-    } catch ({ response }) {
-        throw response.data?.message || 'Unknown error while exchanging tokens';
-    }
-};
-
 export const apiFetchUserInfo = async (): ApiResponse<User> => {
     try {
         const { data } = await apiService.get('user/info');
@@ -37,11 +28,3 @@ export const apiFetchUserInfo = async (): ApiResponse<User> => {
 // ----------------------------------------
 // Delete
 // ----------------------------------------
-
-export const destroyOAuthToken = async (): ApiResponse<void> => {
-    try {
-        return await apiService.delete('/auth/token');
-    } catch ({ response }) {
-        throw response.data?.message || 'Unknown error while fetching user info';
-    }
-};

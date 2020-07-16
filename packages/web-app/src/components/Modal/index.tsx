@@ -9,7 +9,7 @@ interface IProps {
     close: () => void;
 }
 
-const Modal: FunctionalComponent<IProps> = (props: IProps) => {
+export const Modal: FunctionalComponent<IProps> = (props: IProps) => {
     return createPortal(
         <div class="modal">
             <div class="modal-overlay" onClick={props.close} />
@@ -24,7 +24,7 @@ const Modal: FunctionalComponent<IProps> = (props: IProps) => {
 
                     {props.content}
 
-                    {props.submit && (
+                    {props.submit !== undefined && (
                         <div class="flex justify-end pt-2">
                             <button
                                 class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
@@ -43,9 +43,6 @@ const Modal: FunctionalComponent<IProps> = (props: IProps) => {
                 </div>
             </div>
         </div>,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        document.getElementById('modal')!,
+        document.getElementById('modal'),
     );
 };
-
-export default Modal;

@@ -12,9 +12,5 @@ public interface WorkspaceRepository {
 
   ArrayList<Integer> projectIdsForWorkspace(int workspaceId);
 
-  WorkspaceData createWorkspace(WorkspaceData workspace, UserData user);
-
-  void editWorkspace(WorkspaceData updatedWorkspace);
-
   List<UserData> workspaceUserList(int workspaceId);
 }

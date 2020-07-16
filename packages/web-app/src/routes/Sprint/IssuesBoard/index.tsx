@@ -3,50 +3,26 @@ import { useEffect, useState } from 'preact/hooks';
 import { useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
-import { Issue, IssueState } from 'models/Issue';
-import { apiUpdateIssue, apiFetchSprintIssues } from 'services/api/issues';
+import { IssueBoardCardList } from 'components/Cards/issue';
+import { Issue, IssueStatus } from 'models/Issue';
+import { apiFetchSprintIssues } from 'services/api/issues';
 import { errorColour } from 'services/notification/colours';
 import { RootState } from 'stores';
-
-import IssueBoardColumn from './issueBoardColumn';
+import { useLtsWarning } from 'services/notification/hooks';
 
 const IssuesBoard: FunctionalComponent = () => {
-    const { currentSprint, currentWorkspace } = useSelector((state: RootState) => state.userLocation);
-
+    const { currentWorkspace, currentSprint } = useSelector((state: RootState) => state.userLocation);
     const [issuesArray, setIssuesArray] = useState<Issue[]>([]);
 
-    const updateIssueBoard = (updatedIssue: Issue): void => {
-        const arrayCopy = [...issuesArray];
-        issuesArray.forEach((issue: Issue, index) => {
-            if (issue.iid === updatedIssue.iid) {
-                arrayCopy[index] = updatedIssue;
-                setIssuesArray(arrayCopy);
+    useEffect(() => {
+        apiFetchSprintIssues(currentWorkspace.id, currentSprint).then((result) => {
+            if (typeof result === 'string') {
+                notify.show(result, 'error', 5000, errorColour);
+            } else {
+                setIssuesArray(result as Issue[]);
             }
         });
-    };
-
-    const updateIssue = async (updatedIssue: Issue): Promise<void> => {
-        try {
-            await apiUpdateIssue(currentWorkspace.id, updatedIssue);
-            updateIssueBoard(updatedIssue);
-        } catch (error) {
-            notify.show(error, 'error', 5000, errorColour);
-        }
-    };
-
-    const fetchIssues = async (): Promise<void> => {
-        try {
-            const result = await apiFetchSprintIssues(currentWorkspace.id, currentSprint);
-            setIssuesArray(result);
-        } catch (error) {
-            notify.show(error, 'error', 5000, errorColour);
-        }
-    };
-
-    useEffect(() => {
-        fetchIssues();
-        // TODO Look at this. I seem to remember an issue here
-    }, []);
+    }, [currentSprint, currentWorkspace.id]);
 
     return (
         <Fragment>
@@ -54,29 +30,29 @@ const IssuesBoard: FunctionalComponent = () => {
                 <h1 class="page-heading">Issues Board</h1>
             </div>
             <div class="issue-board">
-                <IssueBoardColumn
-                    status={IssueState.open}
+                <IssueBoardCardList
+                    status={IssueStatus.open}
                     headingColour="bg-green-300"
                     issues={issuesArray}
-                    updateIssueBoard={updateIssue}
+                    updateIssueBoard={useLtsWarning}
                 />
-                <IssueBoardColumn
-                    status={IssueState.todo}
+                <IssueBoardCardList
+                    status={IssueStatus.todo}
                     headingColour="bg-yellow-300"
                     issues={issuesArray}
-                    updateIssueBoard={updateIssue}
+                    updateIssueBoard={useLtsWarning}
                 />
-                <IssueBoardColumn
-                    status={IssueState.doing}
+                <IssueBoardCardList
+                    status={IssueStatus.doing}
                     headingColour="bg-orange-300"
                     issues={issuesArray}
-                    updateIssueBoard={updateIssue}
+                    updateIssueBoard={useLtsWarning}
                 />
-                <IssueBoardColumn
-                    status={IssueState.closed}
+                <IssueBoardCardList
+                    status={IssueStatus.closed}
                     headingColour="bg-red-300"
                     issues={issuesArray}
-                    updateIssueBoard={updateIssue}
+                    updateIssueBoard={useLtsWarning}
                 />
             </div>
         </Fragment>

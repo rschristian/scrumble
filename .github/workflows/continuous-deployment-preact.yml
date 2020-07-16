@@ -9,7 +9,7 @@ on:
     paths: 'packages/web-app/**'
     
 jobs:
-  rsync-deploy::
+  rsync-deploy:
     runs-on: ubuntu-latest
     defaults:
       run:

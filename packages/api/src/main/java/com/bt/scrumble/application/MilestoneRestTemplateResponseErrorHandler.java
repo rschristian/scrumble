@@ -33,7 +33,7 @@ public class MilestoneRestTemplateResponseErrorHandler implements ResponseErrorH
     BufferedReader reader = new BufferedReader(new InputStreamReader(httpResponse.getBody()));
     String httpBodyResponse = reader.lines().collect(Collectors.joining(""));
     if (httpBodyResponse.contains(milestoneNameInUseError) && httpBodyResponse.contains("title")) {
-      throw new RestTemplateException("SprintData name in use");
+      throw new RestTemplateException("Sprint name in use");
     } else {
       LOGGER.error(httpBodyResponse);
       throw new RestTemplateException(httpBodyResponse);

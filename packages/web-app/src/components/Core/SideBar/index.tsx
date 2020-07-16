@@ -1,12 +1,11 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
-import { useDispatch, useSelector } from 'react-redux';
 import { Menu, X } from 'preact-feather';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { SideBarItem } from 'components/Core/SideBar/SideBarItem';
 import { RootState } from 'stores';
-import { reduxSetActiveSideBarMenuItem } from 'stores/userLocationStore';
-
-import SideBarLinkItem from './SideBarLinkItem';
+import { setActiveSideBarMenuItem } from 'stores/userLocationStore';
 
 export interface SideBarLink {
     label: string;
@@ -18,24 +17,24 @@ interface IProps {
     links: SideBarLink[];
 }
 
-const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
+export const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
     const dispatch = useDispatch();
     const { activeSideBarItem } = useSelector((state: RootState) => state.userLocation);
 
     const [isOpen, setIsOpen] = useState(false);
 
     const listItemOnClick = (index: number): void => {
-        dispatch(reduxSetActiveSideBarMenuItem(index));
+        dispatch(setActiveSideBarMenuItem(index));
     };
 
-    const sideBarLinks = props.links.map((menuItem, index) => {
+    const sensors = props.links.map((menuItem, index) => {
         return (
-            <SideBarLinkItem
+            <SideBarItem
                 key={index}
                 menuItem={menuItem}
                 index={index}
                 isOpen={isOpen}
-                active={activeSideBarItem === index}
+                active={activeSideBarItem == index}
                 onClick={listItemOnClick}
             />
         );
@@ -55,10 +54,8 @@ const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
                         <p class={`ml-3 my-auto ${isOpen ? 'block' : 'hidden'}`}>Close sidebar</p>
                     </div>
                 </li>
-                {sideBarLinks}
+                {sensors}
             </ul>
         </div>
     );
 };
-
-export default SideBar;

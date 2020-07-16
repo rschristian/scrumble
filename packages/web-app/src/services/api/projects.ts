@@ -1,39 +1,21 @@
 import { apiService } from 'ts-api-toolkit';
 
-import { ApiResponse } from './index';
-
 import { Project } from 'models/Project';
 
-// ----------------------------------------
-// Create
-// ----------------------------------------
-
-// ----------------------------------------
-// Read
-// ----------------------------------------
-
-export const apiFetchProjects = async (): ApiResponse<Project[]> => {
+export const apiFetchProjects = async (): Promise<Project[] | string> => {
     try {
-        const { data } = await apiService.get('projects');
+        const { data } = await apiService.get('/projects');
         return data;
     } catch ({ response }) {
-        throw response.data?.message || 'Unknown error while fetching projects';
+        return response.data?.message || 'Unknown error while fetching projects';
     }
 };
 
-export const apiFetchWorkspaceProjects = async (workspaceId: number): ApiResponse<Project[]> => {
+export const apiFetchWorkspaceProjects = async (workspaceId: number): Promise<Project[] | string> => {
     try {
-        const { data } = await apiService.get(`workspace/${workspaceId}/projects`);
+        const { data } = await apiService.get(`/workspace/${workspaceId}/projects`);
         return data;
     } catch ({ response }) {
-        throw response.data?.message || 'Unknown error while fetching workspace projects';
+        return response.data?.message || 'Unknown error while fetching workspace projects';
     }
 };
-
-// ----------------------------------------
-// Update
-// ----------------------------------------
-
-// ----------------------------------------
-// Delete
-// ----------------------------------------
