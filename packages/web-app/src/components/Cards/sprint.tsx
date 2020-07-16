@@ -108,7 +108,7 @@ const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
                     </p>
                     <div>
                         <span class="num-issues tooltip">
-                            {props.sprint.totalNumberOfIssues ? props.sprint.totalNumberOfIssues : 0}
+                            {props.sprint.totalNumberOfIssues ? props.sprint.totalNumberOfIssues : 25}
                             <span class="tooltip-text">Total Number of Issues Assigned to Sprint</span>
                         </span>
                         <span class="story-pnt tooltip">
