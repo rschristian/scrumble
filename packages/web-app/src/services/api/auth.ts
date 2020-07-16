@@ -1,4 +1,6 @@
-import apiService, { ApiResponse } from './index';
+import { apiService } from 'ts-api-toolkit';
+
+import { ApiResponse } from './index';
 
 import { User } from 'models/User';
 

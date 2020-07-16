@@ -1221,6 +1221,11 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
+"@ryanchristian4427/redaxios@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@ryanchristian4427/redaxios/-/redaxios-0.2.1.tgz#6f5736c9e39f1646df8536930bcb490c9cddfcd5"
+  integrity sha512-1B2JM+4ye3Av/DSbeTicpDr+PB35Igq9RL0I59xpUvD4boOi4M0YJMegQEi1Nh2PvAH7Ox9ZeYBqPK4xkiT8sQ==
+
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
@@ -1910,7 +1915,7 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.10.0.tgz#a17b3a8ea811060e74d47d306122400ad4497ae2"
   integrity sha512-3YDiu347mtVtjpyV3u5kVqQLP242c06zwDOgpeRnybmXlYYsLbtTrUBUm8i8srONt+FWobl5aibnU1030PeeuA==
 
-axios@^0.19.0, axios@^0.19.2:
+axios@^0.19.0:
   version "0.19.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
   integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
@@ -9724,12 +9729,12 @@ tryer@^1.0.1:
   resolved "https://registry.yarnpkg.com/tryer/-/tryer-1.0.1.tgz#f2c85406800b9b0f74c9f7465b81eaad241252f8"
   integrity sha512-c3zayb8/kWWpycWYg87P71E1S1ZL6b6IJxfb5fvsUgsf0S2MVGaDhDXXjDMpdCpfWXqptc+4mXwmiy1ypXqRAA==
 
-ts-api-toolkit@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/ts-api-toolkit/-/ts-api-toolkit-2.0.4.tgz#211135a4c44f46a5fb656ac4ac50e4334c87d279"
-  integrity sha512-6k9zc4gGsA44zNsXxz1VJqrH4NUxkmoG0uypyrBdr6th6nkmrHE+VLZBesdljS8oMreCDmHs3BYyJpsZMNmPxw==
+ts-api-toolkit@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/ts-api-toolkit/-/ts-api-toolkit-2.0.7.tgz#67513fd8da839fb2f35fe7ff584194ef9e1d4ba6"
+  integrity sha512-x2ILPpBgt6y4Klzp+WBqkuPyHF4/uK2bvGurYY34rrtJOQsHh0hRgyNyZQpdwIbhPZ50w+vmeWabtkLmzaAuuA==
   dependencies:
-    axios "^0.19.2"
+    "@ryanchristian4427/redaxios" "^0.2.1"
 
 tslib@^1.8.1, tslib@^1.9.0:
   version "1.13.0"
