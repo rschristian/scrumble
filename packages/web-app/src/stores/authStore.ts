@@ -5,14 +5,24 @@ import { User } from 'models/User';
 import { apiFetchUserInfo } from 'services/api/auth';
 import { route } from 'preact-router';
 
+const defaultUser: User = {
+    id: -1,
+    name: '',
+    username: '',
+    avatarUrl: '',
+    projectIds: [],
+};
+
 type State = {
     isAuthenticated: boolean;
-    currentUser: User | undefined;
+    currentUser: User;
+    error: string;
 };
 
 const initialState: State = {
     isAuthenticated: false,
-    currentUser: undefined,
+    currentUser: defaultUser,
+    error: '',
 };
 
 const slice = createSlice({
@@ -21,7 +31,7 @@ const slice = createSlice({
     reducers: {
         logout: (state: State): void => {
             state.isAuthenticated = false;
-            state.currentUser = undefined;
+            state.currentUser = defaultUser;
         },
         login: (state: State): void => {
             state.isAuthenticated = true;

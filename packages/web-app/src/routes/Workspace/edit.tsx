@@ -2,7 +2,7 @@ import { FunctionalComponent, h } from 'preact';
 import { useSelector } from 'react-redux';
 
 import { CreateOrEditWorkspace } from 'components/CreateOrEdit/workspace';
-import { GenericEdit } from 'components/CommonRoutes/Edit';
+import GenericEdit from 'components/CommonRoutes/edit';
 import { RootState } from 'stores';
 import { useLtsWarning } from 'services/notification/hooks';
 

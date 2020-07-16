@@ -9,8 +9,9 @@ import Filter, { FilterType } from 'components/Filters';
 import Modal from 'components/Modal';
 import { Issue } from 'models/Issue';
 import { IssueFilterStatus } from 'models/IssueFilterStatus';
-import { apiCreateIssue, apiFetchIssues } from 'services/api/issues';
-import { errorColour, infoColour, successColour } from 'services/notification/colours';
+import { apiFetchIssues } from 'services/api/issues';
+import { errorColour, infoColour } from 'services/notification/colours';
+import { useLtsWarning } from 'services/notification/hooks';
 import { RootState } from 'stores';
 
 const IssueList: FunctionalComponent = () => {
@@ -64,34 +65,6 @@ const IssueList: FunctionalComponent = () => {
         fetchIssues();
     }, [fetchIssues]);
 
-    const handleIssueCreation = async (newIssue: Issue): Promise<void> => {
-        try {
-            const result = await apiCreateIssue(currentWorkspace.id, newIssue);
-            setIssues((oldIssues) => [...oldIssues, result]);
-            setShowNewIssueModal(false);
-            notify.show('New issue created!', 'success', 5000, successColour);
-        } catch (error) {
-            notify.show(error, 'error', 5000, errorColour);
-        }
-    };
-
-    function updateIssue(updatedIssue: Issue): void {
-        const arrayCopy = [...issues];
-        if (arrayCopy.some((issue) => updatedIssue.iid === issue.iid)) {
-            issues.forEach((issue: Issue, index) => {
-                if (issue.iid === updatedIssue.iid) {
-                    const now = new Date();
-                    updatedIssue.createdAt = `${now.getMonth()}/${now.getDate()}/${now.getFullYear()}`;
-                    arrayCopy[index] = updatedIssue;
-                    setIssues(arrayCopy);
-                }
-            });
-        } else {
-            arrayCopy.unshift(updatedIssue);
-            setIssues(arrayCopy);
-        }
-    }
-
     function scrollToLoadMore(e: HTMLDivElement): void {
         if (e.scrollHeight - e.scrollTop === e.clientHeight && pageNumber.current !== 0) {
             fetchIssues(true);
@@ -104,10 +77,7 @@ const IssueList: FunctionalComponent = () => {
                 <Modal
                     title="Create Issue"
                     content={
-                        <CreateOrEditIssue
-                            submit={handleIssueCreation}
-                            close={(): void => setShowNewIssueModal(false)}
-                        />
+                        <CreateOrEditIssue submit={useLtsWarning} close={(): void => setShowNewIssueModal(false)} />
                     }
                     close={(): void => setShowNewIssueModal(false)}
                 />
@@ -127,7 +97,7 @@ const IssueList: FunctionalComponent = () => {
                 onScroll={(e): void => scrollToLoadMore(e.target as HTMLDivElement)}
             >
                 {issues.map((issue, index) => {
-                    return <IssueCard key={index} issue={issue} updateIssue={updateIssue} />;
+                    return <IssueCard key={index} issue={issue} updateIssue={useLtsWarning} />;
                 })}
             </div>
         </Fragment>

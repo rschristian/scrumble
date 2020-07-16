@@ -1,8 +1,8 @@
 import { Fragment, FunctionalComponent, h } from 'preact';
 
 import burndown from 'assets/burndown.png';
-import { GenericMetrics } from 'components/CommonRoutes/Metrics';
-import { MetricBubble } from 'components/CommonRoutes/Metrics/bubble';
+import GenericMetrics from 'components/CommonRoutes/Metrics';
+import MetricBubble from 'components/CommonRoutes/Metrics/bubble';
 
 const SprintMetrics: FunctionalComponent = () => {
     return (

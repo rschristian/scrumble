@@ -4,7 +4,7 @@ import { getCurrentUrl, route } from 'preact-router';
 import { MoreVertical } from 'preact-feather';
 import { useDispatch } from 'react-redux';
 
-import { Modal } from 'components/Modal';
+import Modal from 'components/Modal';
 import { Sprint } from 'models/Sprint';
 import { setCurrentSprint } from 'stores/userLocationStore';
 import { useLtsWarning } from 'services/notification/hooks';
@@ -21,7 +21,7 @@ interface IProps {
     updateSprint: (sprint: Sprint) => void;
 }
 
-export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
+const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
     const dispatch = useDispatch();
 
     const [showClosureModal, setShowClosureModal] = useState(false);
@@ -69,8 +69,11 @@ export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
                 </div>
                 <div class="px-4 py-2 flex min-w-0 justify-between">
                     <p class="itm-description">
-                        {`${new Date(props.sprint.startDate).toLocaleDateString('en-GB')} 
-                        - ${new Date(props.sprint.dueDate).toLocaleDateString('en-GB')}`}
+                        {props.sprint.startDate &&
+                            props.sprint.dueDate &&
+                            `${new Date(props.sprint.startDate).toLocaleDateString('en-GB')} - ${new Date(
+                                props.sprint.dueDate,
+                            ).toLocaleDateString('en-GB')}`}
                     </p>
                     <div>
                         <span class="num-issues tooltip">
@@ -87,3 +90,5 @@ export const SprintCard: FunctionalComponent<IProps> = (props: IProps) => {
         </Fragment>
     );
 };
+
+export default SprintCard;

@@ -22,11 +22,3 @@ export interface Issue {
     project: Project;
     sprint?: Sprint; // GitLab API, None / Any
 }
-
-export function isIssue(result: Issue | string): result is Issue {
-    return !!(result as Issue).iid;
-}
-
-export function isIssueArray(result: Issue[] | string): result is Issue[] {
-    return Array.isArray(result);
-}

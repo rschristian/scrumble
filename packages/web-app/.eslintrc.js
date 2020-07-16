@@ -23,7 +23,6 @@ module.exports = {
         '@typescript-eslint/quotes': ['warn', 'single'],
         '@typescript-eslint/interface-name-prefix': 'off',
         'no-console': 'warn',
-        eqeqeq: ['warn'],
     },
     overrides: [
         {

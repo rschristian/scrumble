@@ -5,8 +5,8 @@ import { notify } from 'react-notify-toast';
 
 import { WorkspaceCard } from 'components/Cards/workspace';
 import { CreateOrEditWorkspace } from 'components/CreateOrEdit/workspace';
-import { Modal } from 'components/Modal';
-import { SearchBar } from 'components/SearchBar';
+import Modal from 'components/Modal';
+import SearchBar from 'components/Filters/searchBar';
 import { Workspace } from 'models/Workspace';
 import { apiFetchWorkspaces } from 'services/api/workspaces';
 import { errorColour } from 'services/notification/colours';

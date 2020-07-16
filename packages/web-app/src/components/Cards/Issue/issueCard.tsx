@@ -1,14 +1,10 @@
 import { FunctionalComponent, h } from 'preact';
 import { useState } from 'preact/hooks';
-import { useSelector } from 'react-redux';
-import { notify } from 'react-notify-toast';
 
 import CreateOrEditIssue from 'components/CreateOrEdit/issue';
 import Modal from 'components/Modal';
 import { Issue, IssueState } from 'models/Issue';
-import { apiUpdateIssue } from 'services/api/issues';
-import { errorColour, successColour } from 'services/notification/colours';
-import { RootState } from 'stores';
+import { useLtsWarning } from 'services/notification/hooks';
 
 import IssueInformation from './issueInformation';
 
@@ -18,21 +14,8 @@ interface IProps {
 }
 
 const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
-    const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
-
     const [showEditIssueModal, setShowEditIssueModal] = useState(false);
     const [showIssueCardInformation, setShowIssueCardInformation] = useState(false);
-
-    const handleIssueEdit = async (updatedIssue: Issue): Promise<void> => {
-        try {
-            await apiUpdateIssue(currentWorkspace.id, updatedIssue);
-            props.updateIssue(updatedIssue);
-            setShowEditIssueModal(false);
-            notify.show('Issue successfully updated!', 'success', 5000, successColour);
-        } catch (error) {
-            notify.show(error, 'error', 5000, errorColour);
-        }
-    };
 
     return (
         <div class="cursor-default capitalize">
@@ -42,7 +25,7 @@ const IssueCard: FunctionalComponent<IProps> = (props: IProps) => {
                     content={
                         <CreateOrEditIssue
                             issue={props.issue}
-                            submit={handleIssueEdit}
+                            submit={useLtsWarning}
                             close={(): void => setShowEditIssueModal(false)}
                         />
                     }

@@ -3,12 +3,13 @@ import { useEffect, useState } from 'preact/hooks';
 import { useSelector } from 'react-redux';
 import { notify } from 'react-notify-toast';
 
-import { IssueBoardCardList } from 'components/Cards/issue';
-import { Issue, IssueStatus } from 'models/Issue';
+import { Issue, IssueState } from 'models/Issue';
 import { apiFetchSprintIssues } from 'services/api/issues';
 import { errorColour } from 'services/notification/colours';
 import { RootState } from 'stores';
 import { useLtsWarning } from 'services/notification/hooks';
+
+import IssueBoardColumn from './issueBoardColumn';
 
 const IssuesBoard: FunctionalComponent = () => {
     const { currentWorkspace, currentSprint } = useSelector((state: RootState) => state.userLocation);
@@ -30,26 +31,26 @@ const IssuesBoard: FunctionalComponent = () => {
                 <h1 class="page-heading">Issues Board</h1>
             </div>
             <div class="issue-board">
-                <IssueBoardCardList
-                    status={IssueStatus.open}
+                <IssueBoardColumn
+                    status={IssueState.open}
                     headingColour="bg-green-300"
                     issues={issuesArray}
                     updateIssueBoard={useLtsWarning}
                 />
-                <IssueBoardCardList
-                    status={IssueStatus.todo}
+                <IssueBoardColumn
+                    status={IssueState.todo}
                     headingColour="bg-yellow-300"
                     issues={issuesArray}
                     updateIssueBoard={useLtsWarning}
                 />
-                <IssueBoardCardList
-                    status={IssueStatus.doing}
+                <IssueBoardColumn
+                    status={IssueState.doing}
                     headingColour="bg-orange-300"
                     issues={issuesArray}
                     updateIssueBoard={useLtsWarning}
                 />
-                <IssueBoardCardList
-                    status={IssueStatus.closed}
+                <IssueBoardColumn
+                    status={IssueState.closed}
                     headingColour="bg-red-300"
                     issues={issuesArray}
                     updateIssueBoard={useLtsWarning}

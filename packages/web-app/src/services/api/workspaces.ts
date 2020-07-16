@@ -1,12 +1,13 @@
 import { apiService } from 'ts-api-toolkit';
 
 import { Workspace } from 'models/Workspace';
+import { ApiResponse } from 'services/api/index';
 
-export const apiFetchWorkspaces = async (): Promise<Workspace[] | string> => {
+export const apiFetchWorkspaces = async (): ApiResponse<Workspace[]> => {
     try {
-        const { data } = await apiService.get('/workspaces');
+        const { data } = await apiService.get('workspaces');
         return data;
     } catch ({ response }) {
-        return response.data?.message || 'Unknown error while fetching workspaces';
+        throw response.data?.message || 'Unknown error while fetching workspaces';
     }
 };

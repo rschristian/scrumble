@@ -8,9 +8,10 @@ import SprintCard from 'components/Cards/sprint';
 import CreateOrEditSprint from 'components/CreateOrEdit/sprint';
 import Filter, { FilterType } from 'components/Filters';
 import { Sprint, SprintStatus } from 'models/Sprint';
-import { apiCreateSprint, apiFetchSprints } from 'services/api/sprints';
-import { errorColour, successColour } from 'services/notification/colours';
+import { apiFetchSprints } from 'services/api/sprints';
+import { errorColour } from 'services/notification/colours';
 import { RootState } from 'stores';
+import { useLtsWarning } from 'services/notification/hooks';
 
 const SprintList: FunctionalComponent = () => {
     const { currentWorkspace } = useSelector((state: RootState) => state.userLocation);
@@ -32,29 +33,6 @@ const SprintList: FunctionalComponent = () => {
         fetchSprints();
     }, [fetchSprints]);
 
-    async function handleSprintCreation(newSprint: Sprint): Promise<void> {
-        try {
-            const result = await apiCreateSprint(currentWorkspace.id, newSprint);
-            setSprints((oldSprints) => [...oldSprints, result]);
-            setShowNewSprintModal(false);
-            notify.show('New sprint created!', 'success', 5000, successColour);
-        } catch (error) {
-            notify.show(error, 'error', 5000, errorColour);
-        }
-    }
-
-    function updateSprint(updatedSprint: Sprint): void {
-        const arrayCopy = [...sprints];
-        if (arrayCopy.some((sprint) => updatedSprint.id === sprint.id)) {
-            sprints.forEach((sprint: Sprint, index) => {
-                if (sprint.id === updatedSprint.id) {
-                    arrayCopy[index] = updatedSprint;
-                    setSprints(arrayCopy);
-                }
-            });
-        }
-    }
-
     function updateSprintFilter(sprintStatus: string, sprintTerm: string): void {
         setSprintStatusFilter(sprintStatus);
         setSprintTermFilter(sprintTerm);
@@ -72,10 +50,7 @@ const SprintList: FunctionalComponent = () => {
                 <Modal
                     title="Create Sprint"
                     content={
-                        <CreateOrEditSprint
-                            submit={handleSprintCreation}
-                            close={(): void => setShowNewSprintModal(false)}
-                        />
+                        <CreateOrEditSprint submit={useLtsWarning} close={(): void => setShowNewSprintModal(false)} />
                     }
                     close={(): void => setShowNewSprintModal(false)}
                 />
@@ -104,7 +79,7 @@ const SprintList: FunctionalComponent = () => {
                                 key={index}
                                 sprint={sprint}
                                 closed={sprint.status === SprintStatus.closed}
-                                updateSprint={updateSprint}
+                                updateSprint={useLtsWarning}
                             />
                         );
                     }

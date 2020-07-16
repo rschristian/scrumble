@@ -4,14 +4,6 @@ import { ApiResponse } from './index';
 
 import { User } from 'models/User';
 
-// ----------------------------------------
-// Create
-// ----------------------------------------
-
-// ----------------------------------------
-// Read
-// ----------------------------------------
-
 export const apiFetchUserInfo = async (): ApiResponse<User> => {
     try {
         const { data } = await apiService.get('user/info');
@@ -20,11 +12,3 @@ export const apiFetchUserInfo = async (): ApiResponse<User> => {
         throw response.data?.message || 'Unknown error while fetching user info';
     }
 };
-
-// ----------------------------------------
-// Update
-// ----------------------------------------
-
-// ----------------------------------------
-// Delete
-// ----------------------------------------

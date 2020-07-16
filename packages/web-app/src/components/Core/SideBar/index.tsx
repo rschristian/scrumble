@@ -3,7 +3,7 @@ import { useState } from 'preact/hooks';
 import { Menu, X } from 'preact-feather';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { SideBarItem } from 'components/Core/SideBar/SideBarItem';
+import SideBarLinkItem from 'components/Core/SideBar/SideBarLinkItem';
 import { RootState } from 'stores';
 import { setActiveSideBarMenuItem } from 'stores/userLocationStore';
 
@@ -29,7 +29,7 @@ export const SideBar: FunctionalComponent<IProps> = (props: IProps) => {
 
     const sensors = props.links.map((menuItem, index) => {
         return (
-            <SideBarItem
+            <SideBarLinkItem
                 key={index}
                 menuItem={menuItem}
                 index={index}
