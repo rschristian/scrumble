@@ -9729,10 +9729,10 @@ tryer@^1.0.1:
   resolved "https://registry.yarnpkg.com/tryer/-/tryer-1.0.1.tgz#f2c85406800b9b0f74c9f7465b81eaad241252f8"
   integrity sha512-c3zayb8/kWWpycWYg87P71E1S1ZL6b6IJxfb5fvsUgsf0S2MVGaDhDXXjDMpdCpfWXqptc+4mXwmiy1ypXqRAA==
 
-ts-api-toolkit@^2.0.7:
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/ts-api-toolkit/-/ts-api-toolkit-2.0.7.tgz#67513fd8da839fb2f35fe7ff584194ef9e1d4ba6"
-  integrity sha512-x2ILPpBgt6y4Klzp+WBqkuPyHF4/uK2bvGurYY34rrtJOQsHh0hRgyNyZQpdwIbhPZ50w+vmeWabtkLmzaAuuA==
+ts-api-toolkit@^2.0.9:
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/ts-api-toolkit/-/ts-api-toolkit-2.0.9.tgz#4f68c5283a94ca8a7e475fee633e69a3b0ed171e"
+  integrity sha512-bxJxqSvOBrM0YTByGPoOqJ+YrrArI+KjiyFInHRi4UApL+jG4lFINS5sVXYlc+unmVOqE1zKVv88YMgg0ZgbkA==
   dependencies:
     "@ryanchristian4427/redaxios" "^0.2.1"
 
