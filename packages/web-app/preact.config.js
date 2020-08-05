@@ -17,6 +17,7 @@ export default {
 
         const purgecss = purgeCss({
             content: ['src/**/*.tsx', 'src/**/*.ts', 'src/**/*.scss'],
+            defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
         });
 
         const postCssLoader = helpers.getLoadersByName(config, 'postcss-loader')[0];
