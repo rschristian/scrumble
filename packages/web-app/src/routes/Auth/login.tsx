@@ -22,7 +22,7 @@ const Login: FunctionalComponent = () => {
                 <h1 class="login-title">Scrumble</h1>
                 <img class="h-20 w-20 mx-auto" src={scrumCards} alt="Image of Scrum Cards" />
                 <button class="btn-create mx-auto my-auto" onClick={linkTo}>
-                    Login with GitLab
+                    Enter Scrumble
                 </button>
             </div>
         </div>

@@ -16,17 +16,13 @@ export default {
         css.loader.options.modules = false;
 
         const purgecss = purgeCss({
-            content: ['./src/**/*.tsx', './src/**/*.ts', './src/**/*.scss'],
-            defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
+            content: ['src/**/*.tsx', 'src/**/*.ts', 'src/**/*.scss'],
         });
 
         const postCssLoader = helpers.getLoadersByName(config, 'postcss-loader')[0];
         const plugins = postCssLoader.loader.options.plugins;
         plugins.unshift(tailwindCss);
         if (env.production) plugins.push(purgecss);
-
-        const critters = helpers.getPluginsByName(config, 'Critters')[0];
-        if (critters) critters.plugin.options.preload = 'body';
 
         // Sets default import to 'src/'
         config.resolve.modules.push(env.src);
