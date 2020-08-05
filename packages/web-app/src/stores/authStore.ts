@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppDispatch, AppThunk } from 'stores';
+import { route } from 'preact-router';
+import { authStorageService } from 'ts-api-toolkit';
 
 import { User } from 'models/User';
 import { apiFetchUserInfo, apiLogin, destroyOAuthToken } from 'services/api/auth';
-import { route } from 'preact-router';
-import { authStorageService } from 'ts-api-toolkit';
+import { AppDispatch, AppThunk } from 'stores';
 
 const defaultUser: User = {
     id: -1,
@@ -79,18 +79,16 @@ export const reduxLoginAndFetchUserInfo = (shortLivedJwt: string): AppThunk => a
     dispatch: AppDispatch,
 ): Promise<void> => {
     dispatch(loginStart(shortLivedJwt));
-    const loginResult = await apiLogin().catch((error) => {
+    try {
+        dispatch(loginSuccess(await apiLogin()));
+    } catch (error) {
         dispatch(loginFailure(error));
-    });
-    if (loginResult) {
-        dispatch(loginSuccess(loginResult));
     }
 
-    const userInfoResult = await apiFetchUserInfo().catch((error) => {
+    try {
+        dispatch(fetchUserInfoSuccess(await apiFetchUserInfo()));
+    } catch (error) {
         dispatch(fetchUserInfoFailure(error));
-    });
-    if (userInfoResult) {
-        dispatch(fetchUserInfoSuccess(userInfoResult));
     }
     // TODO This might be an issue, honestly not sure
     route('/', true);
