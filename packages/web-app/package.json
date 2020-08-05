@@ -5,8 +5,8 @@
   "scripts": {
     "serve:dev": "preact watch -p 3000 --template src/index.html",
     "serve:prod": "yarn build && sirv build -p 3000 --single",
-    "build": "preact build --no-prerender --template src/index.html",
-    "build:analyze": "yarn build --no-esm --analyze",
+    "build": "preact build --template src/index.html",
+    "build:analyze": "yarn build --no-prerender --analyze",
     "lint": "yarn eslint --fix && yarn prettier --write",
     "lint:ci": "yarn eslint && yarn prettier",
     "eslint": "eslint 'src/**/*.{js,ts,tsx}' '*.js'",
@@ -50,7 +50,7 @@
     "preact-cli": "^3.0.1",
     "prettier": "^1.19.1",
     "sass-loader": "^8.0.2",
-    "sirv-cli": "^1.0.0-next.9",
+    "sirv-cli": "^1.0.5",
     "typescript": "^3.9.5"
   }
 }
