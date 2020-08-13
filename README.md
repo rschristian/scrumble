@@ -19,8 +19,8 @@ Please see [running.md](running.md) for instructions on how to build the project
 
 ## Authors
 
-* **Ryan Christian** - *Preact and Tracing* - [Ryan Christian](https://github.com/RyanChristian4427)
-* **Lauren Heymer** - *Preact and Spring Boot API* - [Lauren Heymer](https://github.com/renHeymer)
+* **Ryan Christian** - *Front End, Architecture, Tooling* - [Ryan Christian](https://github.com/RyanChristian4427)
+* **Lauren Heymer** - *Front End, Spring Boot API, GitLab Administration* - [Lauren Heymer](https://github.com/renHeymer)
 * **James Buckland**
 
 ## Acknowledgments
