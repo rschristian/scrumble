@@ -22,7 +22,7 @@ Please see [running.md](running.md) for instructions on how to build the project
 
 * **Ryan Christian** - *Front End, Architecture, Tooling* - [Ryan Christian](https://github.com/RyanChristian4427)
 * **Lauren Heymer** - *Front End, Spring Boot API, GitLab Administration* - [Lauren Heymer](https://github.com/renHeymer)
-* **James Buckland**
+* **James Buckland** - *Front End, Spring Boot API* - [James Buckland](https://github.com/JamesBuckland98)
 
 ## Acknowledgments
 
