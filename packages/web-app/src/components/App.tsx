@@ -22,7 +22,7 @@ const App: FunctionalComponent = () => {
         <Fragment>
             <div id="app" class="bg-blue-100">
                 <Provider store={redux.store}>
-                    <PersistGate loading={<Fallback />} persistor={redux.persistor}>
+                    <PersistGate persistor={redux.persistor}>
                         <TopBar notLoginPage={notLoginPage} />
                         <Router onChange={handleRoute}>
                             <Route path="/login" component={Login} />
@@ -40,16 +40,6 @@ const App: FunctionalComponent = () => {
             <Notifications />
             <div id="modal" />
         </Fragment>
-    );
-};
-
-const Fallback: FunctionalComponent = () => {
-    return (
-        <div class="w-screen block">
-            <div class="flex">
-                <div class="main-content" />
-            </div>
-        </div>
     );
 };
 

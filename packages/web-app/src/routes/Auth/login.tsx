@@ -21,9 +21,10 @@ const Login: FunctionalComponent = () => {
             <div class="form-container login-form">
                 <h1 class="login-title">Scrumble</h1>
                 <img class="h-20 w-20 mx-auto" src={scrumCards} alt="Image of Scrum Cards" />
-                <button class="btn-create mx-auto my-auto" onClick={linkTo}>
+                <button class="btn-disable mx-auto my-auto" onClick={linkTo}>
                     Enter Scrumble
                 </button>
+                <div style={{ color: 'red', textAlign: 'center' }}>Temporarily down for maintenance</div>
             </div>
         </div>
     );
